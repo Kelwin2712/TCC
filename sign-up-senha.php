@@ -152,101 +152,116 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script>
   const senhaInput = document.getElementById('senha-input');
-  const confirmarSenhaInput = document.getElementById('confirmar-senha-input');
-  const regraSenha1 = document.getElementById('regra-senha-1');
-  const regraSenha2 = document.getElementById('regra-senha-2');
-  const regraSenha3 = document.getElementById('regra-senha-3');
-  const regraSenha4 = document.getElementById('regra-senha-4');
-  const form = document.getElementById('form-senha');
+const confirmarSenhaInput = document.getElementById('confirmar-senha-input');
+const regraSenha1 = document.getElementById('regra-senha-1');
+const regraSenha2 = document.getElementById('regra-senha-2');
+const regraSenha3 = document.getElementById('regra-senha-3');
+const regraSenha4 = document.getElementById('regra-senha-4');
+const form = document.getElementById('form-senha');
 
-  function validar(submit) {
-    const senha = senhaInput.value;
-    const confirmarSenha = confirmarSenhaInput.value;
+function validar(submit = false) {
+  const senha = senhaInput.value;
+  const confirmarSenha = confirmarSenhaInput.value;
 
-    let valido = true;
+  let valido = true;
+  let senha1Ok = false;
+  let senha2Ok = false;
+  let senha3Ok = false;
+  let senha4Ok = false;
 
-    if (senha === confirmarSenha && senha !== '') {
-      regraSenha1.classList.remove('text-secondary');
-      regraSenha1.classList.remove('text-danger');
-      regraSenha1.classList.add('text-success');
-      regraSenha1.innerHTML = '<i class="bi bi-check-circle"></i> Senhas coincidem';
+  if (senha === confirmarSenha && senha !== '') {
+    senha1Ok = true;
+    regraSenha1.className = 'text-success';
+    regraSenha1.innerHTML = '<i class="bi bi-check-circle"></i> Senhas coincidem';
+  } else {
+    senha1Ok = false;
+    if (submit) {
+      regraSenha1.className = 'text-danger';
+      regraSenha1.innerHTML = '<i class="bi bi-exclamation-circle"></i> Senhas coincidem';
     } else {
-      if (submit == true) {
-        regraSenha1.classList.remove('text-success');
-        regraSenha1.classList.add('text-danger');
-        regraSenha1.innerHTML = '<i class="bi bi-exclamation-circle"></i> Senhas coincidem';
-      } else {
-        regraSenha1.classList.remove('text-success');
-        regraSenha1.classList.add('text-secondary');
-        regraSenha1.innerHTML = '<i class="bi bi-dash-circle"></i> Senhas coincidem';
-      }
-      valido = false;
+      regraSenha1.className = 'text-secondary';
+      regraSenha1.innerHTML = '<i class="bi bi-dash-circle"></i> Senhas coincidem';
     }
-
-    if (senha.length >= 8) {
-      regraSenha2.classList.remove('text-secondary');
-      regraSenha2.classList.remove('text-danger');
-      regraSenha2.classList.add('text-success');
-      regraSenha2.innerHTML = '<i class="bi bi-check-circle"></i> Mínimo 8 caracteres';
-    } else {
-      if (submit == true) {
-        regraSenha2.classList.remove('text-success');
-        regraSenha2.classList.add('text-danger');
-        regraSenha2.innerHTML = '<i class="bi bi-exclamation-circle"></i> Mínimo 8 caracteres';
-      } else {
-        regraSenha2.classList.remove('text-success');
-        regraSenha2.classList.add('text-secondary');
-        regraSenha2.innerHTML = '<i class="bi bi-dash-circle"></i> Mínimo 8 caracteres';
-      }
-      valido = false;
-    }
-
-    if (/\d/.test(senha)) {
-      regraSenha3.classList.remove('text-secondary');
-      regraSenha3.classList.remove('text-danger');
-      regraSenha3.classList.add('text-success');
-      regraSenha3.innerHTML = '<i class="bi bi-check-circle"></i> Pelo menos um número';
-    } else {
-      if (submit == true) {
-        regraSenha3.classList.remove('text-success');
-        regraSenha3.classList.add('text-danger');
-        regraSenha3.innerHTML = '<i class="bi bi-exclamation-circle"></i> Pelo menos um número';
-      } else {
-        regraSenha3.classList.remove('text-success');
-        regraSenha3.classList.add('text-secondary');
-        regraSenha3.innerHTML = '<i class="bi bi-dash-circle"></i> Pelo menos um número';
-      }
-      valido = false;
-    }
-
-    if (/[A-Z]/.test(senha)) {
-      regraSenha4.classList.remove('text-secondary');
-      regraSenha4.classList.remove('text-danger');
-      regraSenha4.classList.add('text-success');
-      regraSenha4.innerHTML = '<i class="bi bi-check-circle"></i> Pelo menos uma letra maiúscula';
-    } else {
-      if (submit == true) {
-        regraSenha4.classList.remove('text-success');
-        regraSenha4.classList.add('text-danger');
-        regraSenha4.innerHTML = '<i class="bi bi-exclamation-circle"></i> Pelo menos uma letra maiúscula';
-      } else {
-        regraSenha4.classList.remove('text-success');
-        regraSenha4.classList.add('text-secondary');
-        regraSenha4.innerHTML = '<i class="bi bi-dash-circle"></i> Pelo menos uma letra maiúscula';
-      }
-      valido = false;
-    }
-
-    return valido;
+    valido = false;
   }
 
-  form.addEventListener('submit', function(e) {
-    if (!validar(true)) {
-      e.preventDefault();
+  if (senha.length >= 8) {
+    senha2Ok = true;
+    regraSenha2.className = 'text-success';
+    regraSenha2.innerHTML = '<i class="bi bi-check-circle"></i> Mínimo 8 caracteres';
+  } else {
+    senha2Ok = false;
+    if (submit) {
+      regraSenha2.className = 'text-danger';
+      regraSenha2.innerHTML = '<i class="bi bi-exclamation-circle"></i> Mínimo 8 caracteres';
+    } else {
+      regraSenha2.className = 'text-secondary';
+      regraSenha2.innerHTML = '<i class="bi bi-dash-circle"></i> Mínimo 8 caracteres';
     }
-  });
-  senhaInput.addEventListener('input', validar);
-  confirmarSenhaInput.addEventListener('input', validar);
+    valido = false;
+  }
+
+  if (/\d/.test(senha)) {
+    senha3Ok = true;
+    regraSenha3.className = 'text-success';
+    regraSenha3.innerHTML = '<i class="bi bi-check-circle"></i> Pelo menos um número';
+  } else {
+    senha3Ok = false;
+    if (submit) {
+      regraSenha3.className = 'text-danger';
+      regraSenha3.innerHTML = '<i class="bi bi-exclamation-circle"></i> Pelo menos um número';
+    } else {
+      regraSenha3.className = 'text-secondary';
+      regraSenha3.innerHTML = '<i class="bi bi-dash-circle"></i> Pelo menos um número';
+    }
+    valido = false;
+  }
+
+  if (/[A-Z]/.test(senha)) {
+    senha4Ok = true;
+    regraSenha4.className = 'text-success';
+    regraSenha4.innerHTML = '<i class="bi bi-check-circle"></i> Pelo menos uma letra maiúscula';
+  } else {
+    senha4Ok = false;
+    if (submit) {
+      regraSenha4.className = 'text-danger';
+      regraSenha4.innerHTML = '<i class="bi bi-exclamation-circle"></i> Pelo menos uma letra maiúscula';
+    } else {
+      regraSenha4.className = 'text-secondary';
+      regraSenha4.innerHTML = '<i class="bi bi-dash-circle"></i> Pelo menos uma letra maiúscula';
+    }
+    valido = false;
+  }
+
+  if (senha1Ok) {
+    confirmarSenhaInput.classList.remove('is-invalid');
+    confirmarSenhaInput.classList.add('is-valid');
+  } else {
+    confirmarSenhaInput.classList.remove('is-valid');
+    if (submit || confirmarSenha !== '') confirmarSenhaInput.classList.add('is-invalid');
+  }
+
+  if (senha2Ok && senha3Ok && senha4Ok) {
+    senhaInput.classList.remove('is-invalid');
+    senhaInput.classList.add('is-valid');
+  } else {
+    senhaInput.classList.remove('is-valid');
+    if (submit || senha !== '') senhaInput.classList.add('is-invalid');
+  }
+
+  return valido;
+}
+
+form.addEventListener('submit', function(e) {
+  if (!validar(true)) {
+    e.preventDefault();
+  } else {
+    form.reset();
+  }
+});
+senhaInput.addEventListener('input', () => validar(false));
+confirmarSenhaInput.addEventListener('input', () => validar(false));
+
 </script>
 <script src="script.js"></script>
 
