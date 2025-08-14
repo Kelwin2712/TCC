@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <title>Fahren</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm sticky-top" data-bs-theme="light">
+    <div class="container-xxl">
+      <a class="navbar-brand" href="index.php">
+        <img src="./img/logo-fahren.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top" style="filter: invert(1);">
+        Fahren
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Comprar
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="bi bi-car-front"></i>
+                  Carros usados
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="bi bi-car-front-fill"></i>
+                  Carros novos
+                </a>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="bi bi-bicycle"></i>
+                  Motos usadas
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="bi bi-bicycle"></i>
+                  Motos novas
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Vender
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="bi bi-car-front-fill"></i>
+                  Vender carro
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <i class="bi bi-bicycle"></i>
+                  Vender moto
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Link</a>
+          </li>
+        </ul>
+        <div class="d-flex gap-2">
+          <form action="sign-in.php">
+            <button class="btn btn-dark d-flex align-items-center gap-2" type="submit">
+              <i class="bi bi-person-fill"></i>
+              <span>Entrar</span>
+            </button>
+          </form>
+          <form action="sign-up.php">
+            <button class="btn btn-outline-dark d-flex align-items-center gap-2" type="submit">
+              <i class="bi bi-person-fill-add"></i>
+              <span>Cadastrar-se</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main class="bg-body-tertiary fs-nav">
+    <div id="banner-carousel" class="carousel slide carousel-fade carousel-dark" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="./img/banner/carousel-1.png" class="d-block w-100 c-img">
+        </div>
+        <div class="carousel-item">
+          <img src="./img/banner/carousel-2.png" class="d-block w-100 c-img">
+        </div>
+        <div class="carousel-item">
+          <img src="./img/banner/carousel-3.png" class="d-block w-100 c-img">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#banner-carousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#banner-carousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <div class="container py-4">
+      <div class="card p-3 rounded border-0 shadow-sm">
+        <div class="card-body">
+          <p class="fs-4 fw-semibold mb-4">Encontre o seu veículo dos sonhos</p>
+          <form class="row g-2 align-items-center flex-nowrap" role="search">
+            <div class="col-auto">
+              <select class="form-select">
+                <option value="0" selected>Carros</option>
+                <option value="1">Motos</option>
+                <option value="2">Caminhões</option>
+                <option value="3">Vans</option>
+              </select>
+            </div>
+            <div class="col-auto">
+              <select class="form-select">
+                <option value="0">Qualquer marca</option>
+                <option value="0">Alfa Romeo</option>
+                <option value="0">Audi</option>
+                <option value="0">Bentley</option>
+                <option value="0">BMW</option>
+                <option value="0">Cadillac</option>
+                <option value="0">Chevrolet</option>
+                <option value="0">Dodge</option>
+                <option value="0">Ferrari</option>
+                <option value="0">Fiat</option>
+                <option value="0">Ford</option>
+                <option value="0">GMC</option>
+                <option value="0">GWM</option>
+                <option value="0">Haval</option>
+                <option value="0">Honda</option>
+                <option value="0">Hummer</option>
+                <option value="0">Hyundai</option>
+                <option value="0">Infiniti</option>
+              </select>
+            </div>
+
+            <div class="col-auto">
+              <select class="form-select" disabled>
+                <option selected>Modelo</option>
+                <option value="0">Audi R8 Spyder</option>
+                <option value="1">Ferrari 488</option>
+                <option value="2">Porsche Macan</option>
+                <option value="3">Mercedes-Benz AMG GT63</option>
+                <option value="4">Lamborghini Gallardo</option>
+                <option value="5">BMW X7</option>
+              </select>
+            </div>
+            <div class="col-auto">
+              <div class="input-group">
+                <span class="input-group-text bg-white border-end-0">De</span>
+                <input type="text" id="preco-de" class="form-control border-start-0" placeholder="R$10.000" aria-label="Preço mínimo" style="max-width: 110px;">
+                <span class="input-group-text bg-white border-end-0">Até</span>
+                <input type="text" id="preco-ate" class="form-control border-start-0" placeholder="R$100.000" aria-label="Preço máximo" style="max-width: 110px;">
+              </div>
+            </div>
+            <div class="col-auto">
+              <select class="form-select">
+                <option value="0">Qualquer estados</option>
+                <option value="1">Acre</option>
+                <option value="2">Alagoas</option>
+                <option value="3">Amapá</option>
+                <option value="4">Amazonas</option>
+                <option value="5">Bahia</option>
+                <option value="6">Ceará</option>
+                <option value="7">Distrito Federal</option>
+                <option value="8">Espírito Santo</option>
+                <option value="9">Goiás</option>
+                <option value="10">Maranhão</option>
+                <option value="11">Mato Grosso</option>
+                <option value="12">Mato Grosso do Sul</option>
+                <option value="13">Minas Gerais</option>
+                <option value="14">Pará</option>
+                <option value="15">Paraíba</option>
+                <option value="16">Paraná</option>
+                <option value="17">Pernambuco</option>
+                <option value="18">Piauí</option>
+                <option value="19">Rio de Janeiro</option>
+                <option value="20">Rio Grande do Norte</option>
+                <option value="21">Rio Grande do Sul</option>
+                <option value="22">Rondônia</option>
+                <option value="23">Roraima</option>
+                <option value="24">Santa Catarina</option>
+                <option value="25">São Paulo</option>
+                <option value="26">Sergipe</option>
+                <option value="27">Tocantins</option>
+              </select>
+            </div>
+            <div class="col-auto ms-auto">
+              <button class="btn btn-dark px-5" type="submit">Procurar</button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+    </div>
+    <div class="container py-4">
+      <div class="row mb-4 align-items-center">
+        <h4 class="col-8">Categorias</h4>
+        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="#">
+          (Ver todas as categorias)
+        </a>
+      </div>
+      <div id="categorias-carousel" class="carousel carousel-dark multi-carousel multi-carousel-6 px-4">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <a href="#" class="card-hover card">
+              <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
+                <h5 class="card-title fw-bold">Elétricos</h5>
+              </div>
+              <img src="./img/categorias/categorias-1.png" class="card-img">
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card-hover card">
+              <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
+                <h5 class="card-title fw-bold">Sedans</h5>
+              </div>
+              <img src="./img/categorias/categorias-2.png" class="card-img">
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card-hover card">
+              <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
+                <h5 class="card-title fw-bold">Hatchbacks</h5>
+              </div>
+              <img src="./img/categorias/categorias-3.png" class="card-img">
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card-hover card">
+              <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
+                <h5 class="card-title fw-bold">Pickups</h5>
+              </div>
+              <img src="./img/categorias/categorias-4.png" class="card-img">
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card-hover card">
+              <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
+                <h5 class="card-title fw-bold">Coupés</h5>
+              </div>
+              <img src="./img/categorias/categorias-5.png" class="card-img">
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card-hover card">
+              <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
+                <h5 class="card-title fw-bold">Minivans</h5>
+              </div>
+              <img src="./img/categorias/categorias-6.png" class="card-img">
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card-hover card">
+              <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
+                <h5 class="card-title fw-bold">Híbridos</h5>
+              </div>
+              <img src="./img/categorias/categorias-7.png" class="card-img">
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card-hover card">
+              <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
+                <h5 class="card-title fw-bold">Supercarros</h5>
+              </div>
+              <img src="./img/categorias/categorias-8.png" class="card-img">
+            </a>
+          </div>
+        </div>
+        <button class="carousel-control-prev d-flex justify-content-start" type="button" data-bs-target="#categorias-carousel" id="categorias-prev" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next d-flex justify-content-end" type="button" data-bs-target="#categorias-carousel" id="categorias-next" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+    <div class="container py-4">
+      <div class="row mb-4 align-items-center">
+        <h4 class="col-8">Principais marcas</h4>
+        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="#">
+          (Ver todas as marcas)
+        </a>
+      </div>
+      <div class="row g-3 align-items-stretch justify-content-between">
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <img src="./img/marcas/toyota-logo.png" alt="Toyota" class="img-fluid" style="max-height: 60px; width: auto;">
+          </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <img src="./img/marcas/honda-logo.png" alt="Honda" class="img-fluid" style="max-height: 50px; width: auto;">
+          </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <img src="./img/marcas/kia-logo.png" alt="Kia" class="img-fluid" style="max-height: 55px; width: auto;">
+          </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <img src="./img/marcas/renault-logo.png" alt="Renault" class="img-fluid" style="max-height: 65px; width: auto;">
+          </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <img src="./img/marcas/chevrolet-logo.png" alt="Chevrolet" class="img-fluid" style="max-height: 45px; width: auto;">
+          </a>
+        </div>
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <img src="./img/marcas/volkswagen-logo.png" alt="Volkswagen" class="img-fluid" style="max-height: 70px; width: auto;">
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="container py-4">
+      <div class="row mb-4 align-items-center">
+        <h4 class="col-8">Carros mais procurados</h4>
+        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="#">
+          (Ver todas as marcas)
+        </a>
+      </div>
+      <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <a href="#" class="card card-hover" style="text-decoration: none;">
+              <img src="./img/carros/img-1.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">TOYOTA GT86</h5>
+                <p class="card-text" style="font-size: .8em;">2.0 GASOLINA COUPÉ DYNAMIC AUTOMÁTICO</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-4.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">AUDI A5</h5>
+                <p class="card-text" style="font-size: .8em;">2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-3.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">AUDI A5</h5>
+                <p class="card-text" style="font-size: .8em;">2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-2.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">TOYOTA CAMRY</h5>
+                <p class="card-text" style="font-size: .8em;">2.5 HÍBRIDO SEDAN XSE CVT</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-3.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">TOYOTA C-HR</h5>
+                <p class="card-text" style="font-size: .8em;">1.8 HÍBRIDO SUV XLE CVT</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-5.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">LAMBORGUINI AVENTADOR SVJ</h5>
+                <p class="card-text" style="font-size: .8em;">1.8 HÍBRIDO SUV XLE CVT</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-5.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">LAMBORGUINI AVENTADOR SVJ</h5>
+                <p class="card-text" style="font-size: .8em;">1.8 HÍBRIDO SUV XLE CVT</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-5.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">LAMBORGUINI AVENTADOR SVJ</h5>
+                <p class="card-text" style="font-size: .8em;">1.8 HÍBRIDO SUV XLE CVT</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-5.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">LAMBORGUINI AVENTADOR SVJ</h5>
+                <p class="card-text" style="font-size: .8em;">1.8 HÍBRIDO SUV XLE CVT</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-5.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">LAMBORGUINI AVENTADOR SVJ</h5>
+                <p class="card-text" style="font-size: .8em;">1.8 HÍBRIDO SUV XLE CVT</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+          <div class="carousel-item">
+            <a href="#" class="card card-hover produto" style="text-decoration: none;">
+              <img src="./img/carros/img-5.png" class="card-img-top" alt="">
+              <div class="card-body">
+                <h5 class="card-title fw-bold mb-0">LAMBORGUINI AVENTADOR SVJ</h5>
+                <p class="card-text" style="font-size: .8em;">1.8 HÍBRIDO SUV XLE CVT</p>
+              </div>
+              <div class="card-body">
+                <p class="card-text h5 fw-bold mb-0">R$ 100.000</p>
+                <div class="row">
+                  <div class="col-4">
+                    <p class="card-text text-nowrap" style="font-size: .8em;">2019/2020</p>
+                  </div>
+                  <div class="col-8">
+                    <p class="card-text text-end" style="font-size: .8em;">52.751 km</p>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer bg-body d-flex align-items-center gap-2">
+                <i class="bi bi-geo-alt-fill"></i>
+                <p class="card-text text-nowrap" style="font-size: .8em;">São Paulo - SP</p>
+              </div>
+            </a>
+          </div>
+        </div>
+        <button class="carousel-control-prev d-flex justify-content-start" type="button" data-bs-target="#populares-carousel" id="populares-prev" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next d-flex justify-content-end" type="button" data-bs-target="#populares-carousel" id="populares-next" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </main>
+  <div class="container-fluid bg-body-secondary">
+    <div class="container">
+      <footer class="pt-4">
+        <div class="row">
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Título 1</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Título 1</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-6 col-md-2 mb-3">
+            <h5>Título 1</h5>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+              <li class="nav-item mb-2">
+                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-md-5 offset-md-1 mb-3">
+            <form>
+              <h5>Receba as últimas notícias do mundo automotivo</h5>
+              <p>Junte-se à nossa comunidade e fique por dentro de tudo!</p>
+              <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+                <label for="newsletter1" class="visually-hidden">Email</label>
+                <input id="newsletter1" type="email" class="form-control" placeholder="Email">
+                <button class="btn btn-dark" type="button">Participar</button>
+              </div>
+            </form>
+          </div>
+          <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+            <p>© 2025 Fahren. Todos os diretos reservados.</p>
+            <ul class="list-unstyled d-flex">
+              <li class="ms-3">
+                <a class="link-body-emphasis" href="#" aria-label="Instagram">
+                  <i class="bi bi-instagram"></i>
+                </a>
+              </li>
+              <li class="ms-3">
+                <a class="link-body-emphasis" href="#" aria-label="Facebook">
+                  <i class="bi bi-facebook"></i>
+                </a>
+              </li>
+              <li class="ms-3">
+                <a class="link-body-emphasis" href="#" aria-label="Youtube">
+                  <i class="bi bi-youtube"></i>
+                </a>
+              </li>
+              <li class="ms-3">
+                <a class="link-body-emphasis" href="#" aria-label="Tiktok">
+                  <i class="bi bi-tiktok"></i>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+<script src="script.js"></script>
+
+</html>

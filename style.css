@@ -1,0 +1,71 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.c-img {
+    min-height: 150px;
+}
+
+.no-deco {
+    text-decoration: none;
+}
+
+.no-deco:hover {
+    text-decoration: underline;
+}
+
+#categorias-carousel {
+  position: relative;
+}
+
+.img-hover:hover {
+  transform: scale(1.025);
+  transition: transform 0.2s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1)
+}
+
+.card-hover:hover {
+  transform: scale(1.025);
+  transition: transform 0.2s ease;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1)
+  }
+
+@media screen and (min-width:576px) {
+  .multi-carousel .carousel-inner {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .multi-carousel .carousel-item {
+    margin-right: 1%;
+  }
+
+  .multi-carousel.multi-carousel-5 .carousel-item {
+    display: block;
+    flex: 0 0 calc((100% - (0.75% * 4)) / 5);
+  }
+
+  .multi-carousel.multi-carousel-6 .carousel-item {
+    display: block;
+    flex: 0 0 calc((100% - (0.75% * 5)) / 6);
+  }
+}
+
+
+.multi-carousel .carousel-inner {
+  padding: 1em;
+}
+
+.multi-carousel .carousel-item:last-child {
+  margin-right: 0 !important;
+}
+
+.fs-7 {
+  font-size: 0.875rem !important;
+}
+
+.code:focus {
+  background-color: blue;
+}
