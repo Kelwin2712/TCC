@@ -101,7 +101,10 @@
                       </div>
                       <div class="mb-1">
                         <label for="password-input" class="form-label mb-0">Senha</label>
-                        <input type="password" class="form-control rounded-3 border-2" id="password-input" placeholder="Senha" required>
+                        <div class="input-group rounded-3">
+                          <input type="password" class="form-control border-2 border-end-0" id="password-input" placeholder="Senha" required>
+                          <span class="input-group-text border-2 border-start-0 bg-transparent" id="basic-addon1"><button type="button" class="btn p-0"><i class="bi bi-eye-slash"></i></button></span>
+                        </div>
                       </div>
                       <p class="text-end mb-5"><a href="sign-in-esq-senha.php" class="link-dark link-opacity-75 link-underline-opacity-0 link-underline-opacity-75-hover link-opacity-100-hover">Esqueceu a senha?</a></p>
                       <button type="submit" class="btn btn-dark w-100 mb-3">Entrar</button>
