@@ -217,32 +217,32 @@
         </a>
       </div>
       <div class="row g-3 align-items-stretch justify-content-between">
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+        <div class="col-4 col-md-3 col-lg-2 d-flex">
           <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/toyota-logo.png" alt="Toyota" class="img-fluid" style="max-height: 60px; width: auto;">
           </a>
         </div>
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+        <div class="col-4 col-md-3 col-lg-2 d-flex">
           <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/honda-logo.png" alt="Honda" class="img-fluid" style="max-height: 50px; width: auto;">
           </a>
         </div>
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+        <div class="col-4 col-md-3 col-lg-2 d-flex">
           <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/kia-logo.png" alt="Kia" class="img-fluid" style="max-height: 55px; width: auto;">
           </a>
         </div>
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+        <div class="col-4 col-md-3 col-lg-2 d-flex">
           <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/renault-logo.png" alt="Renault" class="img-fluid" style="max-height: 65px; width: auto;">
           </a>
         </div>
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+        <div class="col-4 col-md-3 col-lg-2 d-flex">
           <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/chevrolet-logo.png" alt="Chevrolet" class="img-fluid" style="max-height: 45px; width: auto;">
           </a>
         </div>
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+        <div class="col-4 col-md-3 col-lg-2 d-flex">
           <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/volkswagen-logo.png" alt="Volkswagen" class="img-fluid" style="max-height: 70px; width: auto;">
           </a>

@@ -77,19 +77,10 @@ body {
   }
 }
 
-
 .multi-carousel .carousel-inner {
   padding: 1em;
 }
 
 .multi-carousel .carousel-item:last-child {
   margin-right: 0 !important;
-}
-
-.fs-7 {
-  font-size: 0.875rem !important;
-}
-
-.code:focus {
-  background-color: blue;
 }

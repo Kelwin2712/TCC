@@ -4,13 +4,13 @@
             </a>
             <ul class="dropdown-menu">
               <li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="compras.php">
                   <i class="bi bi-car-front"></i>
                   Carros usados
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="compras.php">
                   <i class="bi bi-car-front-fill"></i>
                   Carros novos
                 </a>
@@ -19,13 +19,13 @@
                 <hr class="dropdown-divider">
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="compras.php">
                   <i class="bi bi-bicycle"></i>
                   Motos usadas
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="compras.php">
                   <i class="bi bi-bicycle"></i>
                   Motos novas
                 </a>

@@ -1,50 +1,50 @@
-document.querySelectorAll('.multi-carousel').forEach(function (multipleItemCarousel) {
-    if (window.matchMedia("(min-width:576px)").matches) {
-        // Inicializa o carousel sem autoplay
-        new bootstrap.Carousel(multipleItemCarousel, { interval: false });
-        
-        // Evento para os botões de controle
-        $('.carousel-control-prev, .carousel-control-next').on('click', function () {
-            var targetId = $(this).data('bs-target');
-            var $carousel = $(targetId);
-            var classMatch = $carousel.attr('class').match(/multi-carousel-(\d+)/);
-            var itemsToShow = classMatch ? parseInt(classMatch[1]) : 1;
-            
-            var $carouselInner = $carousel.find('.carousel-inner');
-            var cards = $carousel.find('.carousel-item');
-            
-            if (cards.length < 2) return; // não dá pra medir se só tem 1 item
-            
-            // Agora o cardWidth inclui gap real
-            var cardWidth = cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left;
-            var scrollPosition = $carouselInner.scrollLeft();
-            var maxScroll = $carouselInner[0].scrollWidth - $carouselInner[0].clientWidth;
-            
-            var scrollStep = cardWidth * itemsToShow * 0.5;
-            
-            if ($(this).hasClass('carousel-control-next')) {
-                if (scrollPosition + scrollStep <= maxScroll) {
-                    $carouselInner.stop().animate({ scrollLeft: scrollPosition + scrollStep }, 400);
-                } else {
-                    // Rolar até o fim com segurança
-                    $carouselInner.stop().animate({ scrollLeft: maxScroll }, 400);
-                }
-            } else {
-                if (scrollPosition - scrollStep >= 0) {
-                    $carouselInner.stop().animate({ scrollLeft: scrollPosition - scrollStep }, 400);
-                } else {
-                    // Voltar para o início com segurança
-                    $carouselInner.stop().animate({ scrollLeft: 0 }, 400);
-                }
-            }
-        });
-        
-        
-    } else {
-        // Em telas pequenas, usa o modo padrão do Bootstrap (slide)
-        $(multipleItemCarousel).addClass('slide');
-    }
-});
+  document.querySelectorAll('.multi-carousel').forEach(function (multipleItemCarousel) {
+      if (window.matchMedia("(min-width:576px)").matches) {
+          // Inicializa o carousel sem autoplay
+          new bootstrap.Carousel(multipleItemCarousel, { interval: false });
+          
+          // Evento para os botões de controle
+          $('.carousel-control-prev, .carousel-control-next').on('click', function () {
+              var targetId = $(this).data('bs-target');
+              var $carousel = $(targetId);
+              var classMatch = $carousel.attr('class').match(/multi-carousel-(\d+)/);
+              var itemsToShow = classMatch ? parseInt(classMatch[1]) : 1;
+              
+              var $carouselInner = $carousel.find('.carousel-inner');
+              var cards = $carousel.find('.carousel-item');
+              
+              if (cards.length < 2) return; // não dá pra medir se só tem 1 item
+              
+              // Agora o cardWidth inclui gap real
+              var cardWidth = cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left;
+              var scrollPosition = $carouselInner.scrollLeft();
+              var maxScroll = $carouselInner[0].scrollWidth - $carouselInner[0].clientWidth;
+              
+              var scrollStep = cardWidth * itemsToShow * 500;
+              
+              if ($(this).hasClass('carousel-control-next')) {
+                  if (scrollPosition + scrollStep <= maxScroll) {
+                      $carouselInner.stop().animate({ scrollLeft: scrollPosition + scrollStep }, 400);
+                  } else {
+                      // Rolar até o fim com segurança
+                      $carouselInner.stop().animate({ scrollLeft: maxScroll }, 400);
+                  }
+              } else {
+                  if (scrollPosition - scrollStep >= 0) {
+                      $carouselInner.stop().animate({ scrollLeft: scrollPosition - scrollStep }, 400);
+                  } else {
+                      // Voltar para o início com segurança
+                      $carouselInner.stop().animate({ scrollLeft: 0 }, 400);
+                  }
+              }
+          });
+          
+          
+      } else {
+          // Em telas pequenas, usa o modo padrão do Bootstrap (slide)
+          $(multipleItemCarousel).addClass('slide');
+      }
+  });
 
 //Tela de login e cadastro
 

@@ -16,6 +16,7 @@
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
       <div class="row h-100 g-0 d-flex align-items-center justify-content-center">
+        <!-- PC -->
         <div class="col-xl-10 col d-none d-lg-block">
           <div class="card shadow border-0 h-100">
             <div class="card-body p-0 h-100">
@@ -28,17 +29,11 @@
                         <p class="mb-5 text-secondary text-center">Coloque o código recebido no email</p>
                       </div>
                       <div class="row mb-5 px-lg-2 px-xxl-4">
-                        <div class="col-3">
-                          <input type="text" class="form-control py-2 p- rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-1" required>
-                        </div>
-                        <div class="col-3">
-                          <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-2" required>
-                        </div>
-                        <div class="col-3">
-                          <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-3" required>
-                        </div>
-                        <div class="col-3">
-                          <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-4" required>
+                        <div class="input-group rounded-3">
+                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-1" required>
+                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-2" required>
+                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-3" required>
+                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-4" required>
                         </div>
                       </div>
                       <div class="row">
@@ -72,6 +67,7 @@
             </div>
           </div>
         </div>
+        <!-- Mobile -->
         <div class="col-12 d-lg-none d-block">
           <div class="row w-100 h-100 d-flex align-items-center">
             <form action="" class="w-100 h-100 d-flex flex-column justify-content-between">
@@ -80,11 +76,11 @@
                 <p class="mb-5 text-secondary text-center">Coloque o código recebido no email</p>
               </div>
               <div class="row mb-5 px-lg-2 px-xxl-4">
-                <div class="input-group">
-                  <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-1" required>
-                  <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-2" required>
-                  <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-3" required>
-                  <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-4" required>
+                <div class="input-group rounded-3">
+                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-1" required>
+                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-2" required>
+                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-3" required>
+                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-4" required>
                 </div>
               </div>
               <div class="row">

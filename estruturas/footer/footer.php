@@ -1,4 +1,4 @@
-<div class="container-fluid bg-body-secondary">
+<div class="container-fluid bg-body-secondary pt-4">
   <div class="container">
     <footer class="pt-4">
       <div class="row">
