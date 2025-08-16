@@ -8,18 +8,19 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ms-auto me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav ms-auto me-4 mb-3 mb-lg-0">
           <?php include 'options.php'?>
         </ul>
         <div class="d-flex gap-2">
-          <form action="sign-in.php">
-            <button class="btn btn-dark d-flex align-items-center gap-2" type="submit">
+          <div class="vr"></div>
+          <form action="sign-in.php" class="ms-4">
+            <button class="btn d-flex align-items-center gap-2" type="submit">
               <i class="bi bi-person-fill"></i>
               <span>Entrar</span>
             </button>
           </form>
           <form action="sign-up.php">
-            <button class="btn btn-outline-dark d-flex align-items-center gap-2" type="submit">
+            <button class="btn btn-dark d-flex align-items-center gap-2" type="submit">
               <i class="bi bi-person-fill-add"></i>
               <span>Cadastrar-se</span>
             </button>

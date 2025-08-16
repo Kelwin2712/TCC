@@ -9,6 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Fahren</title>
+
 </head>
 
 <body>
@@ -22,7 +23,30 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="ratio ratio-16x9">
-                                        <img src="img/vendas/911-1.jpg" alt="Carro principal" class="img-fluid object-fit-cover">
+                                        <div id="imagems-carro" class="carousel slide">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <img src="img/vendas/911-1.jpg" class="d-block w-100" alt="Imagem 1">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img src="img/vendas/911-2.jpg" class="d-block w-100" alt="Imagem 2">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img src="img/vendas/911-1.jpg" class="d-block w-100" alt="Imagem 3">
+                                                </div>
+                                                <div class="carousel-item">
+                                                    <img src="img/vendas/911-2.jpg" class="d-block w-100" alt="Imagem 4">
+                                                </div>
+                                            </div>
+                                            <button class="carousel-control-prev" type="button" data-bs-target="#imagems-carro" data-bs-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Previous</span>
+                                            </button>
+                                            <button class="carousel-control-next" type="button" data-bs-target="#imagems-carro" data-bs-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="visually-hidden">Next</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -92,161 +116,137 @@
             <div class="row g-5 mb-3">
                 <div class="col-lg-8">
                     <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body px-5">
-                            <div class="row mb-5 d-flex justify-content-between">
+                        <div class="card-body py-4">
+                            <div class="row mb-4 d-flex justify-content-between px-4">
                                 <div class="col">
                                     <h2 class="fw-bold mb-0 text-uppercase">PORSCHE 911</h2>
                                     <p class="text-uppercase">3.0 24V H6 GASOLINA CARRERA S PDK</p>
                                 </div>
                                 <div class="col">
-                                    <p class="text-uppercase text-end"><i class="bi bi-geo-alt"></i> São José dos Campos - SP</p>
+                                    <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> São José dos Campos - SP</p>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row px-4 pt-3">
                                 <p>Informações</p>
-                                <div class="col-3">
-                                    <div class="row">
-                                        <small class="text-center">Ano</small>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <p class="mb-0">Ano</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="fw-semibold ">2020/2021</p>
+                                        </div>
                                     </div>
-                                    <div class="row">
-                                        <p class="fw-semibold text-center">2020/2021</p>
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <p class="mb-0">KM</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="fw-semibold ">2.500</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <p class="mb-0">Cor</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="fw-semibold ">Preta</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <p class="mb-0">Câmbio</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="fw-semibold ">Automático</p>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-3">
-                                    <div class="row">
-                                        <small class="text-center">KM</small>
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <p class="mb-0">Blindando</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="fw-semibold ">Não</p>
+                                        </div>
                                     </div>
-                                    <div class="row">
-                                        <p class="fw-semibold text-center">2.500</p>
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <p class="mb-0">Aceita troca</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="fw-semibold ">Sim</p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="row">
-                                        <small class="text-center">Cor</small>
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <p class="mb-0">Revisão feita</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="fw-semibold ">Sim</p>
+                                        </div>
                                     </div>
-                                    <div class="row">
-                                        <p class="fw-semibold text-center">Preta</p>
-                                    </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="row">
-                                        <small class="text-center">Câmbio</small>
-                                    </div>
-                                    <div class="row">
-                                        <p class="fw-semibold text-center">Automático</p>
+                                    <div class="col-3">
+                                        <div class="row">
+                                            <p class="mb-0">Combustível</p>
+                                        </div>
+                                        <div class="row">
+                                            <p class="fw-semibold ">Gasolina</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <hr class="w-100">
+                            <div class="row px-4 pt-3">
+                                <p>Descrição do veículo</p>
+                                <p class="text-secondary">Blindado DVB (Divena) com vidros AGP B33; Downpipe, Stage 2 by Soldera, filtro K&N; Cor Preta GT com PPF Full transparente/fosco; Faróis LED PDLS Plus; Rodas RS Spyder em cinza acetinado; Interno Cinza Ardósia; Bancos elétricos com memória; Pacote Sport Chrono; Sistema de áudio BOSE; Sport Exhaust; PASM; Câmbio PDK; Teto Solar Panorâmico blindado; Painel e Multimídia TFT; Apple Car Play e Android Auto; Drive Mode no volante; Ar-condicionado Dual-Zone; Revisado Outros Opcionais: Comando de áudio no volante, Controle de estabilidade, Direção Elétrica, Distribuição eletrônica de frenagem, Kit Multimídia, Pára-choques na cor do veículo, Porta-copos.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card border-0 shadow-sm h-auto">
+                        <div class="card-body py-4">
+                            <div class="row d-flex justify-content-between">
+                                <div class="col">
+                                    <p>Vendedor</p>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn bg-primary-subtle text-primary fs-7 px-2 float-end" style="padding-top: .125rem; padding-bottom: .125rem;">Seguir</button>
+                                </div>
+                            </div>
+                            <a href="#" class="row px-2 text-decoration-none text-dark">
+                                <div class="rounded-3 border-2">
+                                    <div class="row">
+                                        <div class="col p-2 d-flex align-items-center justify-content-center">
+                                            <div class="ratio ratio-1x1">
+                                                <img src="img/logo-fahren-bg.jpg" alt="" class="img-fluid rounded-3 shadow-sm">
+                                            </div></i>
+                                        </div>
+                                        <div class="col-7 py-2">
+                                            <div class="row">
+                                                <p class="fw-semibold mb-0">Fahren imports</p>
+                                            </div>
+                                            <div class="row">
+                                                <small class="fw-semibold mb-0">4.63 <i class="bi bi-star-fill"></i></small>
+                                            </div>
+                                        </div>
+                                        <div class="col-3 d-inline-flex align-items-center">
+                                            <small>Aberto <i class="bi bi-circle-fill text-success" style="font-size: 0.5rem !important; vertical-align: middle;"></i></small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    <div class="container-fluid bg-body-secondary">
-        <div class="container">
-            <footer class="pt-4">
-                <div class="row">
-                    <div class="col-6 col-md-2 mb-3">
-                        <h5>Título 1</h5>
-                        <ul class="nav flex-column">
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-6 col-md-2 mb-3">
-                        <h5>Título 1</h5>
-                        <ul class="nav flex-column">
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-6 col-md-2 mb-3">
-                        <h5>Título 1</h5>
-                        <ul class="nav flex-column">
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                            <li class="nav-item mb-2">
-                                <a href="#" class="nav-link p-0 text-body-secondary">Opção 1</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="col-md-5 offset-md-1 mb-3">
-                        <form>
-                            <h5>Receba as últimas notícias do mundo automotivo</h5>
-                            <p>Junte-se à nossa comunidade e fique por dentro de tudo!</p>
-                            <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                                <label for="newsletter1" class="visually-hidden">Email</label>
-                                <input id="newsletter1" type="email" class="form-control" placeholder="Email">
-                                <button class="btn btn-dark" type="button">Participar</button>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-                        <p>© 2025 Fahren. Todos os diretos reservados.</p>
-                        <ul class="list-unstyled d-flex">
-                            <li class="ms-3">
-                                <a class="link-body-emphasis" href="#" aria-label="Instagram">
-                                    <i class="bi bi-instagram"></i>
-                                </a>
-                            </li>
-                            <li class="ms-3">
-                                <a class="link-body-emphasis" href="#" aria-label="Facebook">
-                                    <i class="bi bi-facebook"></i>
-                                </a>
-                            </li>
-                            <li class="ms-3">
-                                <a class="link-body-emphasis" href="#" aria-label="Youtube">
-                                    <i class="bi bi-youtube"></i>
-                                </a>
-                            </li>
-                            <li class="ms-3">
-                                <a class="link-body-emphasis" href="#" aria-label="Tiktok">
-                                    <i class="bi bi-tiktok"></i>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </footer>
-        </div>
-    </div>
+    <?php include 'estruturas/footer/footer.php' ?>
+
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>

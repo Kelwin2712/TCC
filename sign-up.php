@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <?php include 'estruturas/navbar/navbar-no-login.php'?>
+  <?php include 'estruturas/navbar/navbar-no-login.php' ?>
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
       <div class="row h-100 g-0 d-flex align-items-center justify-content-center">
@@ -38,19 +38,19 @@
                 <div class="col-6 px-5 py-4 d-flex align-items-center">
                   <div class="row w-100">
                     <form action="sign-up-senha.php">
-                    <h3 class="mb-1 text-center">Cadastre-se</h3>
-                    <p class="mb-5 text-secondary text-center">Utilize o seu email para ter acesso</p>
-                    <div class="mb-3">
-                      <label for="email-input" class="form-label mb-0">Nome completo</label>
+                      <h3 class="mb-1 text-center">Cadastre-se</h3>
+                      <p class="mb-5 text-secondary text-center">Utilize o seu email para ter acesso</p>
+                      <div class="mb-3">
+                        <label for="email-input" class="form-label mb-0">Nome completo</label>
                         <input type="text" class="form-control rounded-3 border-2" id="nome-input" placeholder="Nome completo" required>
-                    </div>
-                    <div class="mb-5">
-                      <label for="email-input" class="form-label mb-0">Email</label>
+                      </div>
+                      <div class="mb-5">
+                        <label for="email-input" class="form-label mb-0">Email</label>
                         <input type="email" class="form-control rounded-3 border-2" id="email-input" placeholder="Email" required>
-                    </div>
-                    <button type="submit" class="btn btn-dark w-100 mb-3">Cadastrar-se</button>
-                    <p class="text-center">Já tem uma conta? <a href="sign-in.php" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fw-semibold mb-5">Entrar</a></p>
-                  </form>
+                      </div>
+                      <button type="submit" class="btn btn-dark w-100 mb-3">Cadastrar-se</button>
+                      <p class="text-center">Já tem uma conta? <a href="sign-in.php" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fw-semibold mb-5">Entrar</a></p>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -78,6 +78,7 @@
       </div>
     </div>
   </main>
+  <?php include 'estruturas/footer/footer.php' ?>
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>

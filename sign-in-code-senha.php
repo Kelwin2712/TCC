@@ -12,7 +12,7 @@
 </head>
 
 <body>
-  <?php include 'estruturas/navbar/navbar-no-login.php'?>
+  <?php include 'estruturas/navbar/navbar-no-login.php' ?>
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
       <div class="row h-100 g-0 d-flex align-items-center justify-content-center">
@@ -80,16 +80,10 @@
                 <p class="mb-5 text-secondary text-center">Coloque o código recebido no email</p>
               </div>
               <div class="row mb-5 px-lg-2 px-xxl-4">
-                <div class="col-3">
-                  <input type="text" class="form-control py-2 p- rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-1" required>
-                </div>
-                <div class="col-3">
+                <div class="input-group">
+                  <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-1" required>
                   <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-2" required>
-                </div>
-                <div class="col-3">
                   <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-3" required>
-                </div>
-                <div class="col-3">
                   <input type="text" class="form-control py-2 rounded-3 border-2 code text-center fs-1 fw-semibold" maxlength="1" id="num-4" required>
                 </div>
               </div>
@@ -108,6 +102,7 @@
       </div>
     </div>
   </main>
+  <?php include 'estruturas/footer/footer.php' ?>
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
