@@ -27,17 +27,17 @@
             <div class="col-2">
               <div class="card">
                 <div class="card-body p-0">
-                  <div class="overflow-auto">
+                  <div class="overflow-auto" style="max-height: 100vh;">
                     <div class="accordion w-100" id="accordionPanelsStayOpenExample">
                       <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                            Accordion Item #1
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            Modelo
                           </button>
                         </h2>
-                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show">
                           <div class="accordion-body">
-                            <div class="row">
+                            <div class="row mb-4">
                               <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
                                 <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
                                 <label class="btn btn-outline-dark" for="btnradio1"><i class="bi bi-car-front-fill"></i> Carros</label>
@@ -46,45 +46,14 @@
                                 <label class="btn btn-outline-dark" for="btnradio2"><i class="bi bi-bicycle"></i> Motos</label>
                               </div>
                             </div>
+                            <hr class="mb-3">
+                            <div class="row">
+                              <h6>Marca</h6>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="accordion-item border-0 border-bottom">
-                        <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                            Accordion Item #2
-                          </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse">
-                          <div class="accordion-body">
-                            <strong>This is the second item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                          </div>
-                        </div>
-                      </div>
-                      <div class="accordion-item border-0 border-bottom">
-                        <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                            Accordion Item #3
-                          </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-                          <div class="accordion-body">
-                            <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                          </div>
-                        </div>
-                      </div>
-                      <div class="accordion-item border-0 border-bottom">
-                        <h2 class="accordion-header">
-                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">
-                            Accordion Item #3
-                          </button>
-                        </h2>
-                        <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
-                          <div class="accordion-body">
-                            <strong>This is the third item’s accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It’s also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                          </div>
-                        </div>
-                      </div>
+                      
                     </div>
                   </div>
                 </div>
