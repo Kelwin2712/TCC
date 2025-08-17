@@ -266,7 +266,7 @@
           $km = '52.524';
           $loc = 'São Paulo - SP';
           $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card.php'?>
+          include 'estruturas/card-compra/card-index.php'?>
           <?php
           $nome = 'AUDI A5';
           $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -275,7 +275,7 @@
           $km = '52.524';
           $loc = 'São Paulo - SP';
           $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card.php'?>
+          include 'estruturas/card-compra/card-index.php'?>
           <?php
           $nome = 'AUDI A5';
           $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -284,7 +284,7 @@
           $km = '52.524';
           $loc = 'São Paulo - SP';
           $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card.php'?>
+          include 'estruturas/card-compra/card-index.php'?>
           <?php
           $nome = 'AUDI A5';
           $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -293,7 +293,7 @@
           $km = '52.524';
           $loc = 'São Paulo - SP';
           $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card.php'?>
+          include 'estruturas/card-compra/card-index.php'?>
           <?php
           $nome = 'AUDI A5';
           $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -302,7 +302,7 @@
           $km = '52.524';
           $loc = 'São Paulo - SP';
           $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card.php'?>
+          include 'estruturas/card-compra/card-index.php'?>
           <?php
           $nome = 'AUDI A5';
           $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -311,7 +311,7 @@
           $km = '52.524';
           $loc = 'São Paulo - SP';
           $img = './img/carros/img-1.png';
-           include'estruturas/card-compra/card.php'?>
+           include'estruturas/card-compra/card-index.php'?>
           <?php
           $nome = 'AUDI A5';
           $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -320,7 +320,7 @@
           $km = '52.524';
           $loc = 'São Paulo - SP';
           $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card.php'?>
+          include 'estruturas/card-compra/card-index.php'?>
           <?php
           $nome = 'AUDI A5';
           $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -329,7 +329,7 @@
           $km = '52.524';
           $loc = 'São Paulo - SP';
           $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card.php'?>
+          include 'estruturas/card-compra/card-index.php'?>
         </div>
         <button class="carousel-control-prev d-flex justify-content-start w-auto" type="button" data-bs-target="#populares-carousel" id="populares-prev" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>

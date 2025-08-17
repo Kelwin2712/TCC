@@ -20,6 +20,11 @@ body {
     min-height: 150px;
 }
 
+.col-2-5 {
+    flex: 0 0 auto;
+    max-width: 20%;
+}
+
 .fs-7 {
     font-size: 0.875rem !important;
 }
