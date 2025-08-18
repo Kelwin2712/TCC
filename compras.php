@@ -46,7 +46,6 @@
                                 <label class="btn btn-outline-dark" for="btnradio2"><i class="bi bi-bicycle"></i> Motos</label>
                               </div>
                             </div>
-                            <hr class="mb-4">
                             <div class="row px-1">
                               <div class="mb-3">
                                 <h6>Estado</h6>
@@ -138,6 +137,66 @@
                       </div>
                       <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header">
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#preco" aria-expanded="true" aria-controls="preco">
+                            Preço
+                          </button>
+                        </h2>
+                        <div id="preco" class="accordion-collapse collapse show">
+                          <div class="accordion-body">
+                            <div class="row">
+                              <div class="mb-1">
+                                <h6>Intervalo de preço</h6>
+                              </div>
+                              <div class="row px-2 g-0 gap-2">
+                                <div class="col">
+                                  <input type="text" class="form-control" id="preco-min" placeholder="Preço mínimo">
+                                </div>
+                                <div class="col">
+                                  <input type="text" class="form-control" id="preco-max" placeholder="Preço máximo">
+                                </div>
+                              </div>
+                              <div class="row mt-3">
+                                <h6 class="small mb-0">Faixa de preço específico</h6>
+                                <div class="row row-cols-2 row-cols-xxl-3 gy-1">
+                                  <div class="col">
+                                    <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
+                                      <div class="small text-nowrap">≤ 50 mil</div>
+                                    </button>
+                                  </div>
+                                  <div class="col">
+                                    <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
+                                      <div class="small text-nowrap">≤ 75 mil</div>
+                                    </button>
+                                  </div>
+                                  <div class="col">
+                                    <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
+                                      <div class="small text-nowrap">≤ 100 mil</div>
+                                    </button>
+                                  </div>
+                                  <div class="col">
+                                    <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
+                                      <div class="small text-nowrap">≤ 150 mil</div>
+                                    </button>
+                                  </div>
+                                  <div class="col">
+                                    <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
+                                      <div class="small text-nowrap">≤ 250 mil</div>
+                                    </button>
+                                  </div>
+                                  <div class="col">
+                                    <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
+                                      <div class="small text-nowrap">≤ 500 mil</div>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="accordion-item border-0 border-bottom">
+                        <h2 class="accordion-header">
                           <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ano" aria-expanded="true" aria-controls="ano">
                             Ano
                           </button>
@@ -158,80 +217,80 @@
                               </div>
                               <div class="row mt-3">
                                 <h6 class="small mb-0">Ano específico</h6>
-                                <div class="row row-cols-4 gy-1">
+                                <div class="row row-cols-2 row-cols-xxl-4 gy-1">
                                   <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2025</div>
+                                      <div class="small text-nowrap">2025</div>
                                     </button>
                                   </div>
                                   <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2024</div>
+                                      <div class="small text-nowrap">2024</div>
                                     </button>
                                   </div>
                                   <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2023</div>
+                                      <div class="small text-nowrap">2023</div>
                                     </button>
                                   </div>
                                   <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2022</div>
+                                      <div class="small text-nowrap">2022</div>
                                     </button>
                                   </div>
                                   <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2021</div>
+                                      <div class="small text-nowrap">2021</div>
                                     </button>
                                   </div>
                                   <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2020</div>
+                                      <div class="small text-nowrap">2020</div>
                                     </button>
                                   </div>
                                   <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2019</div>
+                                      <div class="small text-nowrap">2019</div>
                                     </button>
                                   </div>
                                   <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2018</div>
+                                      <div class="small text-nowrap">2018</div>
                                     </button>
                                   </div>
                                 </div>
                               </div>
                               <div class="row mt-3">
-                                <h6 class="small mb-0">Intervalos de tempo</h6>
-                                <div class="row ps-1 gx-0">
-                                  <div class="col-4">
+                                <h6 class="small mb-2">Intervalos de tempo</h6>
+                                <div class="row row-cols-1 row-cols-md-2 ps-1 gx-0">
+                                  <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2025-2022</div>
+                                      <div class="small text-nowrap">2025-2022</div>
                                     </button>
                                   </div>
-                                  <div class="col-4">
+                                  <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2022-2019</div>
+                                      <div class="small text-nowrap">2022-2019</div>
                                     </button>
                                   </div>
-                                  <div class="col-4">
+                                  <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2019-2016</div>
+                                      <div class="small text-nowrap">2019-2016</div>
                                     </button>
                                   </div>
-                                  <div class="col-4">
+                                  <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2016-2013</div>
+                                      <div class="small text-nowrap">2016-2013</div>
                                     </button>
                                   </div>
-                                  <div class="col-4">
+                                  <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2013-2010</div>
+                                      <div class="small text-nowrap">2013-2010</div>
                                     </button>
                                   </div>
-                                  <div class="col-4">
+                                  <div class="col">
                                     <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                      <div class="small">2010-2000</div>
+                                      <div class="small text-nowrap">2010-2000</div>
                                     </button>
                                   </div>
                                 </div>
@@ -291,6 +350,72 @@
                         </div>
 
                       </div>
+                      <div class="accordion-item border-0 border-bottom">
+                        <h2 class="accordion-header">
+                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#cor" aria-expanded="true" aria-controls="cor">
+                            Cor
+                          </button>
+                        </h2>
+                        <div id="cor" class="accordion-collapse collapse show">
+                          <div class="accordion-body">
+                            <div class="row ps-3">
+                              <?php
+                              $cor = 'Branco';
+                              $id = 'branco';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Preto';
+                              $id = 'preto';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Vermelho';
+                              $id = 'verm';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Azul';
+                              $id = 'azul';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Cinza';
+                              $id = 'cinza';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Prata';
+                              $id = 'prata';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Vinho';
+                              $id = 'vinho';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Marrom';
+                              $id = 'marrom';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Laranja';
+                              $id = 'laranja';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Amarelo';
+                              $id = 'amarelo';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Dourado';
+                              $id = 'dourado';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Verde';
+                              $id = 'verde';
+                              include 'estruturas/cor/cor.php' ?>
+                              <?php
+                              $cor = 'Bege';
+                              $id = 'bege';
+                              include 'estruturas/cor/cor.php' ?>
+                            </div>
+                          </div>
+                        </div>
+
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -303,18 +428,21 @@
                     1.234 resultados encontrados
                   </div>
                 </div>
-                  <div class="col-auto d-flex align-items-center">
-                    <i class="bi bi-arrow-down-up me-2"></i>
-                    <div class="small">Ordenar por: </div>
+                <div class="col-auto d-flex align-items-center">
+                  <i class="bi bi-arrow-down-up me-2"></i>
+                  <div class="small">Ordenar por: </div>
                   <div class="col-auto">
                     <select class="form-select form-select-sm bg-transparent border-0 fw-semibold">
                       <option value="relevancia" selected>Relevância</option>
-                      <option value="preco">Preço</option>
-                      <option value="ano">Ano</option>
-                      <option value="km">Quilometragem</option>
+                      <option value="maior-preco">Maior preço</option>
+                      <option value="menor-preco">Menor preço</option>
+                      <option value="maior-ano">Maior ano</option>
+                      <option value="menor-ano">Menor ano</option>
+                      <option value="maior-km">Maior KM</option>
+                      <option value="menor-km">Menor KM</option>
                     </select>
                   </div>
-                  </div>
+                </div>
               </div>
               <div id="area-compra" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-1">
                 <div class="col">
