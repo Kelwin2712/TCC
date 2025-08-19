@@ -18,16 +18,16 @@
 </style>
 
 <body>
-  <?php include 'estruturas/navbar/navbar-default.php' ?>
+  <?php $sticky = true; include 'estruturas/navbar/navbar-default.php' ?>
   <main class="bg-body-tertiary fs-nav">
-    <div class="container-fluid py-5">
+    <div class="container-fluid">
       <div class="row d-flex justify-content-center">
         <div class="col-12 col-lg-10 col-lg-10">
           <div class="row g-4">
-            <div class="col-4 col-xl-3 col-xxl-2">
-              <div class="card">
-                <div class="card-body p-0">
-                  <div class="overflow-auto" style="max-height: 100vh;">
+            <div class="col-4 col-xl-3 col-xxl-2 pt-5 pb-2 vh-100">
+              <div class="card h-100">
+                <div class="card-body p-0 h-100">
+                  <div class="overflow-auto h-100">
                     <div class="accordion w-100" id="accordionPanelsStayOpenExample">
                       <div class="accordion-item border-0 border-bottom">
                         <h2 class="accordion-header">
@@ -421,7 +421,7 @@
                 </div>
               </div>
             </div>
-            <div class="col">
+            <div class="col pt-5 pb-3">
               <div class="row">
                 <div class="col-auto me-auto">
                   <div class="fw-semibold small py-2">
@@ -461,7 +461,7 @@
           </div>
         </div>
       </div>
-      <div class="container-fluid mt-5">
+      <div class="container-fluid mt-5 pb-5">
         <div class="row">
           <div class="col-12 d-flex justify-content-center">
             <nav aria-label="Page navigation example">

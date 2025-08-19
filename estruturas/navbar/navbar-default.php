@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm sticky-top" data-bs-theme="light">
+<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm <?php if ($sticky == false) {echo 'sticky-top';}?>" data-bs-theme="light">
     <div class="container-fluid px-lg-5">
       <a class="navbar-brand" href="index.php">
         <img src="./img/logo-fahren.png" alt="Logo" width="30" height="24" class="d-inline-block align-text-top" style="filter: invert(1);">

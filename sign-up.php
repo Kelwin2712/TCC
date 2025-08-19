@@ -16,6 +16,7 @@
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
       <div class="row h-100 g-0 d-flex align-items-center justify-content-center">
+        <!-- PC -->
         <div class="col-xl-10 col d-none d-lg-block">
           <div class="card shadow border-0 h-100">
             <div class="card-body p-0 h-100">
@@ -57,6 +58,7 @@
             </div>
           </div>
         </div>
+        <!-- Mobile -->
         <div class="col-12 d-lg-none d-block">
           <div class="row w-100">
             <form action="sign-up-senha.php">
