@@ -46,34 +46,31 @@ document.querySelectorAll('.multi-carousel').forEach(function (multipleItemCarou
   }
 });
 
-
-
-function mosescFunc(button) {
-  const input = button.closest('.form-floating').querySelector('input');
+function toggleSenha(button, InputID) {
+  const input = document.querySelector(`#${InputID}`);
   const icon = button.querySelector('i');
 
-  if (input.type === 'password') {
-    input.type = 'text';
-    icon.className = 'bi bi-eye-fill';
-  } else {
-    input.type = 'password';
-    icon.className = 'bi bi-eye-slash';
-  }
+
+  const type = input.type === 'password' ? 'text' : 'password';
+  input.type = type;
+
+  icon.classList.toggle('bi-eye-slash');
+  icon.classList.toggle('bi-eye-fill');
 }
 
-function showMosesc(input) {
-  const container = input.closest('.form-floating');
-  const button = container.querySelector('button');
+function showToggleSenha(input, ButtonID) {
+  const button = document.querySelector(`#${ButtonID}`);
   const icon = button.querySelector('i');
 
-  if (input.value.length === 0) {
-    button.disabled = true;
-    button.classList.add('opacity-0');
-    input.type = 'password';
-    icon.className = 'bi bi-eye-slash';
-  } else {
-    button.disabled = false;
+  if (input.value.length > 0) {
     button.classList.remove('opacity-0');
+    button.disabled = false;
+  }
+  else {
+    button.classList.add('opacity-0');
+    button.disabled = true;
+    icon.classList.remove('bi-eye-fill');
+    icon.classList.add('bi-eye-slash');
   }
 }
 

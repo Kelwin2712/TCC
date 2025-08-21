@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $_SESSION['nome'] = $_POST['nome'];
+    $_SESSION['email'] = $_POST['email'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -38,11 +47,11 @@
                 </div>
                 <div class="col-6 px-5 py-4 d-flex align-items-center">
                   <div class="row w-100">
-                    <form id="form-senha" action="sign-in.php">
+                    <form id="form-senha" action="sign-in.php" method="post">
                       <h3 class="mb-5 text-center">Defina sua senha</h3>
                       <div class="mb-3">
                         <label for="senha-input" class="form-label mb-0">Senha</label>
-                        <input type="password" class="form-control rounded-3 border-2" id="senha-input" placeholder="Senha" required>
+                        <input type="password" class="form-control rounded-3 border-2" id="senha-input" name="senha" placeholder="Senha" required>
                       </div>
                       <div class="mb-1">
                         <label for="confirmar-senha-input" class="form-label mb-0">Confirmar senha</label>
@@ -66,15 +75,15 @@
         <!-- Mobile -->
         <div class="col-12 d-block d-lg-none">
           <div class="row w-100">
-            <form id="form-senha" action="sign-in.php">
+            <form id="mobile-form-senha" action="sign-in.php">
               <h3 class="mb-5 text-center">Defina sua senha</h3>
               <div class="mb-3">
                 <label for="senha-input" class="form-label mb-0">Senha</label>
-                <input type="password" class="form-control rounded-3 border-2" id="senha-input" placeholder="Senha" required>
+                <input type="password" class="form-control rounded-3 border-2" id="mobile-senha-input" placeholder="Senha" required>
               </div>
               <div class="mb-1">
                 <label for="confirmar-senha-input" class="form-label mb-0">Confirmar senha</label>
-                <input type="password" class="form-control rounded-3 border-2" id="confirmar-senha-input" placeholder="Confirmar senha" required>
+                <input type="password" class="form-control rounded-3 border-2" id="mobile-confirmar-senha-input" placeholder="Confirmar senha" required>
               </div>
           </div>
         </div>
@@ -188,8 +197,6 @@
   form.addEventListener('submit', function(e) {
     if (!validar(true)) {
       e.preventDefault();
-    } else {
-      form.reset();
     }
   });
   senhaInput.addEventListener('input', () => validar(false));

@@ -71,7 +71,7 @@
               <p class="mb-5 text-secondary text-center">Sem problemas, iremos enviar instruções para troca-la</p>
               <div class="mb-5">
                 <label for="email-input" class="form-label mb-0">Email</label>
-                <input type="email" class="form-control rounded-3 border-2" id="email-input" placeholder="Email" required>
+                <input type="email" class="form-control rounded-3 border-2" id="mobile-email-input" placeholder="Email" required>
               </div>
               <div class="row">
                 <div class="col">

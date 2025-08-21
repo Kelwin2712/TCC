@@ -1,3 +1,42 @@
+<?php
+session_start();
+include('conexao_bd.php');
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  if (isset($_POST['email'])) {
+    $email = $_POST['email'];
+    $senha = $_POST['senha'];
+
+    $sql = "SELECT * FROM usuarios WHERE senha = '$senha' AND email = '$email'";
+    $resultado = mysqli_query($conexao, $sql);
+
+    if (mysqli_num_rows($resultado) > 0) {
+      $linha = mysqli_fetch_array($resultado);
+      $_SESSION['id'] = $linha['id'];
+      $_SESSION['nome'] = $linha['nome'];
+      $_SESSION['email'] = $linha['email'];
+      header('Location: index.php');
+    } else {
+      echo "<script>alert('Email ou senha incorretos');</script>";
+    }
+
+  } else {
+    $_SESSION['senha'] = $_POST['senha'];
+
+    $nome = $_SESSION['nome'];
+    $email = $_SESSION['email'];
+    $senha = $_SESSION['senha'];
+    $sql = "INSERT INTO usuarios(nome, senha, email) VALUES ('$nome', '$senha', '$email')";
+    if (!mysqli_query($conexao, $sql)) {
+      echo "Erro: " . $sql . "<br>" . mysqli_error($conexao);
+    }
+  }
+}
+mysqli_close($conexao);
+  
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -12,7 +51,7 @@
 </head>
 
 <body>
-  <?php include 'estruturas/navbar/navbar-no-login.php'?>
+  <?php include 'estruturas/navbar/navbar-no-login.php' ?>
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
       <div class="row h-100 g-0 d-flex align-items-center justify-content-center">
@@ -23,18 +62,18 @@
               <div class="row h-100 g-0">
                 <div class="col-6 px-5 py-4 d-flex align-items-center">
                   <div class="row w-100">
-                    <form action="">
+                    <form action="sign-in.php" method="post">
                       <h3 class="mb-1 text-center">Login</h3>
                       <p class="mb-5 text-secondary text-center">Utilize o seu email para ter acesso</p>
                       <div class="mb-3">
                         <label for="email-input" class="form-label mb-0">Email</label>
-                        <input type="email" class="form-control rounded-3 border-2" id="email-input" placeholder="Email" required>
+                        <input type="email" class="form-control rounded-3 border-2" id="email-input" name="email" placeholder="Email" required>
                       </div>
                       <div class="mb-1">
                         <label for="password-input" class="form-label mb-0">Senha</label>
                         <div class="input-group rounded-3">
-                          <input type="password" class="form-control border-2 border-end-0" id="password-input" placeholder="Senha" required>
-                          <span class="input-group-text border-2 border-start-0 bg-transparent" id="basic-addon1"><button type="button" class="btn p-0"><i class="bi bi-eye-slash"></i></button></span>
+                          <input type="password" class="form-control border-2 border-end-0" oninput="showToggleSenha(this, 'password-button')" id="password-input" placeholder="Senha" name="senha" required>
+                          <div class="input-group-text border-2 border-start-0 bg-transparent p-0" id="basic-addon1"><button id="password-button" type="button" class="btn px-3 opacity-0" onclick="toggleSenha(this, 'password-input')" disabled><i class="bi bi-eye-slash"></i></button></div>
                         </div>
                       </div>
                       <p class="text-end mb-5"><a href="sign-in-esq-senha.php" class="link-dark link-opacity-75 link-underline-opacity-0 link-underline-opacity-75-hover link-opacity-100-hover">Esqueceu a senha?</a></p>
@@ -70,11 +109,11 @@
               <p class="mb-5 text-secondary text-center">Utilize o seu email para ter acesso</p>
               <div class="mb-3">
                 <label for="email-input" class="form-label mb-0">Email</label>
-                <input type="email" class="form-control rounded-3 border-2" id="email-input" placeholder="Email" required>
+                <input type="email" class="form-control rounded-3 border-2" id="mobile-email-input" placeholder="Email" required>
               </div>
               <div class="mb-1">
                 <label for="password-input" class="form-label mb-0">Senha</label>
-                <input type="password" class="form-control rounded-3 border-2" id="password-input" placeholder="Senha" required>
+                <input type="password" class="form-control rounded-3 border-2" id="mobile-password-input" placeholder="Senha" required>
               </div>
               <p class="text-end mb-5"><a href="sign-in-esq-senha.php" class="link-dark link-opacity-75 link-underline-opacity-0 link-underline-opacity-75-hover link-opacity-100-hover">Esqueceu a senha?</a></p>
               <button type="submit" class="btn btn-dark w-100 mb-3">Entrar</button>

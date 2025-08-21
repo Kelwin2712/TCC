@@ -1,3 +1,4 @@
+<?php session_start(); ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -38,16 +39,16 @@
                 </div>
                 <div class="col-6 px-5 py-4 d-flex align-items-center">
                   <div class="row w-100">
-                    <form action="sign-up-senha.php">
+                    <form action="sign-up-senha.php" method="post">
                       <h3 class="mb-1 text-center">Cadastre-se</h3>
                       <p class="mb-5 text-secondary text-center">Utilize o seu email para ter acesso</p>
                       <div class="mb-3">
                         <label for="email-input" class="form-label mb-0">Nome completo</label>
-                        <input type="text" class="form-control rounded-3 border-2" id="nome-input" placeholder="Nome completo" required>
+                        <input type="text" class="form-control rounded-3 border-2" id="nome-input" name="nome" placeholder="Nome completo" required>
                       </div>
                       <div class="mb-5">
                         <label for="email-input" class="form-label mb-0">Email</label>
-                        <input type="email" class="form-control rounded-3 border-2" id="email-input" placeholder="Email" required>
+                        <input type="email" class="form-control rounded-3 border-2" id="email-input" name="email" placeholder="Email" required>
                       </div>
                       <button type="submit" class="btn btn-dark w-100 mb-3">Cadastrar-se</button>
                       <p class="text-center">Já tem uma conta? <a href="sign-in.php" class="link-dark link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover fw-semibold mb-5">Entrar</a></p>
