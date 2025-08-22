@@ -22,11 +22,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
   } else {
     $_SESSION['senha'] = $_POST['senha'];
+    $data_criacao_conta = date('Y-m-d H:i:s');
 
     $nome = $_SESSION['nome'];
     $email = $_SESSION['email'];
     $senha = $_SESSION['senha'];
-    $sql = "INSERT INTO usuarios(nome, senha, email) VALUES ('$nome', '$senha', '$email')";
+    $sql = "INSERT INTO usuarios(nome, senha, email, data_criacao_conta) VALUES ('$nome', '$senha', '$email', '$data_criacao_conta')";
     if (!mysqli_query($conexao, $sql)) {
       echo "Erro: " . $sql . "<br>" . mysqli_error($conexao);
     }

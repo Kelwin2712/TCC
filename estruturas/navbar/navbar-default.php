@@ -15,21 +15,20 @@
           <div class="vr"></div>
           <?php 
               if (isset($_SESSION['nome'])) {
-                echo "<div class=\"dropdown\">
+                echo "<div class=\"nav-item dropdown\">
                   <button class=\"btn dropdown-toggle\" type=\"button\" data-bs-toggle=\"dropdown\" aria-expanded=\"false\"><i class=\"bi bi-person-fill me-1\"></i>"
                   .  $_SESSION['nome'] .
                   "</button>
                   <ul class=\"dropdown-menu\">
-                    <li><a class=\"dropdown-item\" href=\"#\">Perfil</a></li>
-                    <li><a class=\"dropdown-item\" href=\"#\">Configurações</a></li>
-                    <li><a class=\"dropdown-item\" href=\"#\">Sair</a></li>
+                    <li><a class=\"dropdown-item\" href=\"configuracoes.php\"><i class=\"bi bi-gear-fill me-2\"></i>Configurações</a></li>
+                    <li><a class=\"dropdown-item\" href=\"funcoes_php/logout.php\"><i class=\"bi bi-door-open me-2\"></i>Sair</a></li>
                   </ul>
                 </div>";
               } else {
           echo '<form action="sign-in.php" class="ms-4">
             <button class="btn d-flex align-items-center gap-2" type="submit">
               <i class="bi bi-person-fill"></i>
-              <span></span>
+              <span>Entrar</span>
             </button>
           </form>';
               }

@@ -10,31 +10,24 @@ body {
   box-sizing: border-box;
 }
 
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
 .c-img {
     min-height: 150px;
 }
+
+.pagination {
+  --bs-pagination-active-color: #fff;
+  --bs-pagination-active-bg: #212529;
+  --bs-pagination-active-border-color: #212529;
+}
+
 
 .col-2-5 {
     flex: 0 0 auto;
     max-width: 20%;
 }
 
-.fs-7 {
-    font-size: 0.875rem !important;
-}
-
-.fs-8 {
-    font-size: 0.75rem !important;
-}
-
-.fs-9 {
-    font-size: 0.5rem !important;
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
 }
 
 .no-deco {

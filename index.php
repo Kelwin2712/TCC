@@ -132,14 +132,14 @@ session_start();
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
         <h4 class="col-8">Categorias</h4>
-        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="#">
+        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php">
           (Ver todas as categorias)
         </a>
       </div>
       <div id="categorias-carousel" class="carousel carousel-dark multi-carousel multi-carousel-6 px-4">
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <a href="#" class="card-hover card">
+            <a href="compras.php" class="card-hover card">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Elétricos</h5>
               </div>
@@ -147,7 +147,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="#" class="card-hover card">
+            <a href="compras.php" class="card-hover card">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Sedans</h5>
               </div>
@@ -155,7 +155,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="#" class="card-hover card">
+            <a href="compras.php" class="card-hover card">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Hatchbacks</h5>
               </div>
@@ -163,7 +163,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="#" class="card-hover card">
+            <a href="compras.php" class="card-hover card">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Pickups</h5>
               </div>
@@ -171,7 +171,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="#" class="card-hover card">
+            <a href="compras.php" class="card-hover card">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Coupés</h5>
               </div>
@@ -179,7 +179,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="#" class="card-hover card">
+            <a href="compras.php" class="card-hover card">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Minivans</h5>
               </div>
@@ -187,7 +187,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="#" class="card-hover card">
+            <a href="compras.php" class="card-hover card">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Híbridos</h5>
               </div>
@@ -195,7 +195,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="#" class="card-hover card">
+            <a href="compras.php" class="card-hover card">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Supercarros</h5>
               </div>
@@ -216,38 +216,38 @@ session_start();
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
         <h4 class="col-8">Principais marcas</h4>
-        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="#">
+        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php"">
           (Ver todas as marcas)
         </a>
       </div>
       <div class="row g-3 align-items-stretch justify-content-between">
         <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/toyota-logo.png" alt="Toyota" class="img-fluid" style="max-height: 60px; width: auto;">
           </a>
         </div>
         <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/honda-logo.png" alt="Honda" class="img-fluid" style="max-height: 50px; width: auto;">
           </a>
         </div>
         <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/kia-logo.png" alt="Kia" class="img-fluid" style="max-height: 55px; width: auto;">
           </a>
         </div>
         <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/renault-logo.png" alt="Renault" class="img-fluid" style="max-height: 65px; width: auto;">
           </a>
         </div>
         <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/chevrolet-logo.png" alt="Chevrolet" class="img-fluid" style="max-height: 45px; width: auto;">
           </a>
         </div>
         <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="#" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
             <img src="./img/marcas/volkswagen-logo.png" alt="Volkswagen" class="img-fluid" style="max-height: 70px; width: auto;">
           </a>
         </div>
@@ -256,7 +256,7 @@ session_start();
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
         <h4 class="col-8">Carros mais procurados</h4>
-        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="#">
+        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php"">
           (Ver todas as marcas)
         </a>
       </div>

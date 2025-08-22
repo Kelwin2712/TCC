@@ -469,13 +469,13 @@
             <nav aria-label="Page navigation example">
               <ul class="pagination pagination-dark">
                 <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                  <a class="page-link link-dark" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
                 </li>
                 <li class="page-item active"><a class="page-link" href="#">1</a></li>
                 <li class="page-item"><a class="page-link link-dark" href="#">2</a></li>
                 <li class="page-item"><a class="page-link link-dark" href="#">3</a></li>
                 <li class="page-item">
-                  <a class="page-link" href="#">Próximo</a>
+                  <a class="page-link link-dark" href="#">Próximo</a>
                 </li>
               </ul>
             </nav>
@@ -499,7 +499,7 @@
     }
   }
 
-  duplicarCard(5);
+  duplicarCard(3);
 </script>
 
 </html>
