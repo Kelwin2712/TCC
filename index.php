@@ -65,7 +65,7 @@ session_start();
                 <div class="input-group-text pe-0 bg-transparent rounded-start-5">
                   <i class="bi bi-buildings"></i>
                 </div>
-                <select id="marca-select" class="form-select border-start-0 rounded-end-5">
+                <select id="marca-select" class="form-select border-start-0 rounded-end-5 shadow-sm">
                   <option value="">Marca</option>
                   <option value="0">Alfa Romeo</option>
                   <option value="0">Audi</option>
@@ -92,7 +92,7 @@ session_start();
                 <div class="input-group-text pe-0 bg-transparent border-end-0 rounded-start-5">
                   <i class="bi bi-car-front"></i>
                 </div>
-                <select id="modelo-select" class="form-select bg-transparent border-start-0 rounded-end-5" disabled>
+                <select id="modelo-select" class="form-select bg-transparent border-start-0 rounded-end-5 shadow-sm" disabled>
                   <option value="" selected>Modelo</option>
                   <option value="0">Audi R8 Spyder</option>
                   <option value="1">Ferrari 488</option>
@@ -108,7 +108,7 @@ session_start();
                 <div class="input-group-text pe-0 bg-transparent rounded-start-5">
                   <i class="bi bi-pin-map"></i>
                 </div>
-                <select class="form-select border-start-0 rounded-end-5">
+                <select class="form-select border-start-0 rounded-end-5 shadow-sm">
                   <option value="">Estado</option>
                   <option value="1">Acre</option>
                   <option value="2">Alagoas</option>
@@ -141,15 +141,15 @@ session_start();
               </div>
             </div>
             <div class="col-auto">
-              <div class="input-group shadow-sm">
-                <span class="input-group-text bg-transparent border rounded-start-5">De</span>
+              <div class="input-group">
+                <span class="input-group-text bg-transparent border rounded-start-5 shadow-sm">De</span>
                 <input type="text" id="preco-de" class="form-control border border-start-0 ps-0" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 100px;">
                 <span class="input-group-text bg-transparent border">Até</span>
-                <input type="text" id="preco-ate" class="form-control border border-start-0 ps-0 rounded-end-5" placeholder="R$--" aria-label="Preço máximo" style="max-width: 100px;">
+                <input type="text" id="preco-ate" class="form-control border border-start-0 ps-0 rounded-end-5 shadow-sm" placeholder="R$--" aria-label="Preço máximo" style="max-width: 100px;">
               </div>
             </div>
             <div class="col-auto ms-auto">
-              <button class="btn btn-dark rounded-pill"><i class="bi bi-search me-2"></i>Pesquisar</button>
+              <button class="btn btn-dark rounded-pill px-3"><i class="bi bi-search me-2"></i>Pesquisar</button>
             </div>
           </div>
         </div>
