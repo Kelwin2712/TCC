@@ -14,12 +14,27 @@ body {
     min-height: 150px;
 }
 
-.pagination {
+.pagination-dark {
   --bs-pagination-active-color: #fff;
   --bs-pagination-active-bg: #212529;
   --bs-pagination-active-border-color: #212529;
 }
 
+.pagination-dark .page-link {
+  color: var(--bs-dark) !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  border-radius: var(--bs-border-radius) !important;
+}
+
+.pagination-dark .page-item.active .page-link {
+  background-color: var(--bs-dark) !important;
+  color: #fff !important;
+}
+
+.pagination-dark .page-item.disabled .page-link {
+  color: var(--bs-secondary-color) !important;
+}
 
 .col-2-5 {
     flex: 0 0 auto;

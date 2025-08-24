@@ -90,19 +90,19 @@
                             </div>
                             <div class="row">
                                 <div class="mb-2">
-                                    <label for="nome-input" class="form-label mb-0">Nome</label>
+                                    <label for="nome-input" class="form-label mb-0">Nome<sup class="text-danger">*</sup></label>
                                     <input type="text" class="form-control rounded-3 border-2" id="nome-input" placeholder="Nome" required>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="email-input" class="form-label mb-0">Email</label>
+                                    <label for="email-input" class="form-label mb-0">Email<sup class="text-danger">*</sup></label>
                                     <input type="email" class="form-control rounded-3 border-2" id="email-input" placeholder="Email" required>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="telefone-input" class="form-label mb-0">Telefone</label>
+                                    <label for="telefone-input" class="form-label mb-0">Telefone<sup class="text-danger">*</sup></label>
                                     <input type="email" class="form-control rounded-3 border-2" id="telefone-input" placeholder="Telefone" required>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="mensagem-input" class="form-label mb-0">Mensagem</label>
+                                    <label for="mensagem-input" class="form-label mb-0">Mensagem<sup class="text-danger">*</sup></label>
                                     <input type="text" class="form-control rounded-3 border-2 pb-5" id="mensagem-input" placeholder="Mensagem" required>
                                 </div>
                             </div>
@@ -216,7 +216,7 @@
                                     <p>Vendedor</p>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn bg-primary-subtle text-primary fs-7 px-2 float-end" style="padding-top: .125rem; padding-bottom: .125rem;">Seguir</button>
+                                    <button type="button" class="btn bg-primary-subtle text-primary px-2 float-end" style="padding-top: .125rem; padding-bottom: .125rem;"><div class="small">Seguir</div></button>
                                 </div>
                             </div>
                             <a href="#" class="row px-2 text-decoration-none text-dark">

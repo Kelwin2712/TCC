@@ -14,11 +14,17 @@ session_start();
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <title>Fahren</title>
 </head>
+<style>
+  .card-footer .btn {
+    position: relative;
+    z-index: 2;
+  }
+</style>
 
 <body>
   <?php include 'estruturas/navbar/navbar-default.php' ?>
   <main class="bg-body-tertiary fs-nav">
-    <div id="banner-carousel" class="carousel slide carousel-fade carousel-dark" data-bs-ride="carousel">
+    <div id="banner-carousel" class="carousel carousel-fade" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img src="./img/banner/carousel-1.png" class="d-block w-100 c-img">
@@ -30,24 +36,37 @@ session_start();
           <img src="./img/banner/carousel-3.png" class="d-block w-100 c-img">
         </div>
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#banner-carousel" data-bs-slide="prev">
+      <button class="carousel-control-prev" style="width: 10%;" type="button" data-bs-target="#banner-carousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#banner-carousel" data-bs-slide="next">
+      <button class="carousel-control-next" style="width: 10%;" type="button" data-bs-target="#banner-carousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
     </div>
     <div class="container py-4">
-      <div class="card p-3 rounded border-0 shadow-sm">
-        <div class="card-body">
-          <p class="fs-4 fw-semibold mb-4">Encontre o seu veículo dos sonhos</p>
-          <form class="row g-2" role="search">
-            <div class="row d-flex justify-content-between mb-3">
-              <div class="col">
-                <select class="form-select border-0 shadow-sm">
-                  <option value="0">Qualquer marca</option>
+      <div class="card rounded-5 border-0 shadow-sm">
+        <div class="card-body px-4 py-2">
+          <div class="row bg-body-tertiary shadow-sm rounded-top-4 rounded-bottom-3 px-1 py-2 align-items-center d-flex">
+            <div class="col">
+              <span><i class="bi bi-stars me-2"></i>Recomendação: Lamborghini Aventador SVJ </span>
+            </div>
+            <div class="col-auto ">
+              <button type="button" class="btn-close" aria-label="Close"></button>
+            </div>
+          </div>
+          <div class="row">
+            <input type="text" class="form-control border-0 my-3" placeholder="Encontre o modelo que você procura...">
+          </div>
+          <div class="row g-2">
+            <div class="col-auto">
+              <div class="input-group">
+                <div class="input-group-text pe-0 bg-transparent rounded-start-5">
+                  <i class="bi bi-buildings"></i>
+                </div>
+                <select id="marca-select" class="form-select border-start-0 rounded-end-5">
+                  <option value="">Marca</option>
                   <option value="0">Alfa Romeo</option>
                   <option value="0">Audi</option>
                   <option value="0">Bentley</option>
@@ -67,9 +86,14 @@ session_start();
                   <option value="0">Infiniti</option>
                 </select>
               </div>
-              <div class="col">
-                <select class="form-select border-0 shadow-sm" disabled>
-                  <option selected>Modelo</option>
+            </div>
+            <div class="col-2">
+              <div class="input-group">
+                <div class="input-group-text pe-0 bg-transparent border-end-0 rounded-start-5">
+                  <i class="bi bi-car-front"></i>
+                </div>
+                <select id="modelo-select" class="form-select bg-transparent border-start-0 rounded-end-5" disabled>
+                  <option value="" selected>Modelo</option>
                   <option value="0">Audi R8 Spyder</option>
                   <option value="1">Ferrari 488</option>
                   <option value="2">Porsche Macan</option>
@@ -78,17 +102,14 @@ session_start();
                   <option value="5">BMW X7</option>
                 </select>
               </div>
-              <div class="col-auto">
-                <div class="input-group shadow-sm">
-                  <span class="input-group-text bg-white border-0">De</span>
-                  <input type="text" id="preco-de" class="form-control border-0 ps-0" placeholder="R$10.000" aria-label="Preço mínimo" style="max-width: 100px;">
-                  <span class="input-group-text bg-white border-0">Até</span>
-                  <input type="text" id="preco-ate" class="form-control border-0 ps-0" placeholder="R$100.000" aria-label="Preço máximo" style="max-width: 100px;">
+            </div>
+            <div class="col-auto">
+              <div class="input-group">
+                <div class="input-group-text pe-0 bg-transparent rounded-start-5">
+                  <i class="bi bi-pin-map"></i>
                 </div>
-              </div>
-              <div class="col">
-                <select class="form-select border-0 shadow-sm">
-                  <option value="0">Qualquer estados</option>
+                <select class="form-select border-start-0 rounded-end-5">
+                  <option value="">Estado</option>
                   <option value="1">Acre</option>
                   <option value="2">Alagoas</option>
                   <option value="3">Amapá</option>
@@ -119,15 +140,20 @@ session_start();
                 </select>
               </div>
             </div>
-            <div class="row w-100">
-              <div class="col-12">
-                <button class="btn btn-dark w-100" type="submit">Buscar</button>
+            <div class="col-auto">
+              <div class="input-group shadow-sm">
+                <span class="input-group-text bg-transparent border rounded-start-5">De</span>
+                <input type="text" id="preco-de" class="form-control border border-start-0 ps-0" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 100px;">
+                <span class="input-group-text bg-transparent border">Até</span>
+                <input type="text" id="preco-ate" class="form-control border border-start-0 ps-0 rounded-end-5" placeholder="R$--" aria-label="Preço máximo" style="max-width: 100px;">
               </div>
             </div>
-          </form>
+            <div class="col-auto ms-auto">
+              <button class="btn btn-dark rounded-pill"><i class="bi bi-search me-2"></i>Pesquisar</button>
+            </div>
+          </div>
         </div>
       </div>
-
     </div>
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
@@ -220,37 +246,37 @@ session_start();
           (Ver todas as marcas)
         </a>
       </div>
-      <div class="row g-3 align-items-stretch justify-content-between">
-        <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
-            <img src="./img/marcas/toyota-logo.png" alt="Toyota" class="img-fluid" style="max-height: 60px; width: auto;">
-          </a>
-        </div>
-        <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
-            <img src="./img/marcas/honda-logo.png" alt="Honda" class="img-fluid" style="max-height: 50px; width: auto;">
-          </a>
-        </div>
-        <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
-            <img src="./img/marcas/kia-logo.png" alt="Kia" class="img-fluid" style="max-height: 55px; width: auto;">
-          </a>
-        </div>
-        <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
-            <img src="./img/marcas/renault-logo.png" alt="Renault" class="img-fluid" style="max-height: 65px; width: auto;">
-          </a>
-        </div>
-        <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
-            <img src="./img/marcas/chevrolet-logo.png" alt="Chevrolet" class="img-fluid" style="max-height: 45px; width: auto;">
-          </a>
-        </div>
-        <div class="col-4 col-md-3 col-lg-2 d-flex">
-          <a href="compras.php"" class="bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
-            <img src="./img/marcas/volkswagen-logo.png" alt="Volkswagen" class="img-fluid" style="max-height: 70px; width: auto;">
-          </a>
-        </div>
+      <div class=" row g-3 align-items-stretch justify-content-between">
+          <div class="col-4 col-md-3 col-lg-2 d-flex">
+            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+              <img src="./img/marcas/toyota-logo.png" alt="Toyota" class="img-fluid" style="max-height: 60px; width: auto;">
+            </a>
+          </div>
+          <div class="col-4 col-md-3 col-lg-2 d-flex">
+            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+              <img src="./img/marcas/honda-logo.png" alt="Honda" class="img-fluid" style="max-height: 50px; width: auto;">
+            </a>
+          </div>
+          <div class="col-4 col-md-3 col-lg-2 d-flex">
+            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+              <img src="./img/marcas/kia-logo.png" alt="Kia" class="img-fluid" style="max-height: 55px; width: auto;">
+            </a>
+          </div>
+          <div class="col-4 col-md-3 col-lg-2 d-flex">
+            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+              <img src="./img/marcas/renault-logo.png" alt="Renault" class="img-fluid" style="max-height: 65px; width: auto;">
+            </a>
+          </div>
+          <div class="col-4 col-md-3 col-lg-2 d-flex">
+            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+              <img src="./img/marcas/chevrolet-logo.png" alt="Chevrolet" class="img-fluid" style="max-height: 45px; width: auto;">
+            </a>
+          </div>
+          <div class="col-4 col-md-3 col-lg-2 d-flex">
+            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+              <img src="./img/marcas/volkswagen-logo.png" alt="Volkswagen" class="img-fluid" style="max-height: 70px; width: auto;">
+            </a>
+          </div>
       </div>
     </div>
     <div class="container py-4">
@@ -260,89 +286,89 @@ session_start();
           (Ver todas as marcas)
         </a>
       </div>
-      <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
-        <div class="carousel-inner">
-          <?php
-          $nome = 'AUDI RS6';
-          $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-          $preco = 'R$ 100.000';
-          $ano = '2020/2021';
-          $km = '52.524';
-          $loc = 'São Paulo - SP';
-          $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card-index.php'?>
-          <?php
-          $nome = 'AUDI A5';
-          $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-          $preco = 'R$ 100.000';
-          $ano = '2020/2021';
-          $km = '52.524';
-          $loc = 'São Paulo - SP';
-          $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card-index.php'?>
-          <?php
-          $nome = 'AUDI A5';
-          $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-          $preco = 'R$ 100.000';
-          $ano = '2020/2021';
-          $km = '52.524';
-          $loc = 'São Paulo - SP';
-          $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card-index.php'?>
-          <?php
-          $nome = 'AUDI A5';
-          $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-          $preco = 'R$ 100.000';
-          $ano = '2020/2021';
-          $km = '52.524';
-          $loc = 'São Paulo - SP';
-          $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card-index.php'?>
-          <?php
-          $nome = 'AUDI A5';
-          $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-          $preco = 'R$ 100.000';
-          $ano = '2020/2021';
-          $km = '52.524';
-          $loc = 'São Paulo - SP';
-          $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card-index.php'?>
-          <?php
-          $nome = 'AUDI A5';
-          $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-          $preco = 'R$ 100.000';
-          $ano = '2020/2021';
-          $km = '52.524';
-          $loc = 'São Paulo - SP';
-          $img = './img/carros/img-1.png';
-           include'estruturas/card-compra/card-index.php'?>
-          <?php
-          $nome = 'AUDI A5';
-          $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-          $preco = 'R$ 100.000';
-          $ano = '2020/2021';
-          $km = '52.524';
-          $loc = 'São Paulo - SP';
-          $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card-index.php'?>
-          <?php
-          $nome = 'AUDI A5';
-          $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-          $preco = 'R$ 100.000';
-          $ano = '2020/2021';
-          $km = '52.524';
-          $loc = 'São Paulo - SP';
-          $img = './img/carros/img-1.png';
-          include 'estruturas/card-compra/card-index.php'?>
-        </div>
-        <button class="carousel-control-prev d-flex justify-content-start w-auto" type="button" data-bs-target="#populares-carousel" id="populares-prev" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next d-flex justify-content-end w-auto" type="button" data-bs-target="#populares-carousel" id="populares-next" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
+      <div id=" populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
+          <div class="carousel-inner">
+            <?php
+            $nome = 'AUDI RS6';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php' ?>
+            <?php
+            $nome = 'AUDI A5';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php' ?>
+            <?php
+            $nome = 'AUDI A5';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php' ?>
+            <?php
+            $nome = 'AUDI A5';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php' ?>
+            <?php
+            $nome = 'AUDI A5';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php' ?>
+            <?php
+            $nome = 'AUDI A5';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php' ?>
+            <?php
+            $nome = 'AUDI A5';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php' ?>
+            <?php
+            $nome = 'AUDI A5';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php' ?>
+          </div>
+          <button class="carousel-control-prev d-flex justify-content-start w-auto" type="button" data-bs-target="#populares-carousel" id="populares-prev" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next d-flex justify-content-end w-auto" type="button" data-bs-target="#populares-carousel" id="populares-next" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
       </div>
     </div>
   </main>
@@ -351,5 +377,22 @@ session_start();
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
+<script>
+  $(function() {
+    $(".favoritar").click(function() {
+      $(this).find("i").toggleClass("bi-heart bi-heart-fill text-danger");
+    });
+
+    $("#marca-select").change(function() {
+      var selectedMarca = $(this).val();
+      if (selectedMarca) {
+        $("#modelo-select").prop("disabled", false);
+      } else {
+        $("#modelo-select").prop("disabled", true);
+        $("#modelo-select").val("");
+      }
+    });
+  });
+</script>
 
 </html>
