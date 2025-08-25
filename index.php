@@ -60,7 +60,7 @@ session_start();
             <input type="text" class="form-control border-0 my-3" placeholder="Encontre o modelo que você procura...">
           </div>
           <div class="row g-2">
-            <div class="col-auto">
+            <div class="col-2 col-xl-auto">
               <div class="input-group">
                 <div class="input-group-text pe-0 bg-transparent rounded-start-5">
                   <i class="bi bi-buildings"></i>
@@ -103,7 +103,7 @@ session_start();
                 </select>
               </div>
             </div>
-            <div class="col-auto">
+            <div class="col-2 col-xl-auto">
               <div class="input-group">
                 <div class="input-group-text pe-0 bg-transparent rounded-start-5">
                   <i class="bi bi-pin-map"></i>
@@ -140,7 +140,7 @@ session_start();
                 </select>
               </div>
             </div>
-            <div class="col-auto">
+            <div class="col-2 col-xl-auto">
               <div class="input-group">
                 <span class="input-group-text bg-transparent border rounded-start-5 shadow-sm">De</span>
                 <input type="text" id="preco-de" class="form-control border border-start-0 ps-0" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 100px;">
@@ -148,8 +148,8 @@ session_start();
                 <input type="text" id="preco-ate" class="form-control border border-start-0 ps-0 rounded-end-5 shadow-sm" placeholder="R$--" aria-label="Preço máximo" style="max-width: 100px;">
               </div>
             </div>
-            <div class="col-auto ms-auto">
-              <button class="btn btn-dark rounded-pill px-3"><i class="bi bi-search me-2"></i>Pesquisar</button>
+            <div class="col-2 col-xl-auto ms-auto">
+              <button class="btn btn-dark rounded-pill shadow-sm px-3"><i class="bi bi-search me-2"></i>Pesquisar</button>
             </div>
           </div>
         </div>
