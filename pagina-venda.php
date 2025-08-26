@@ -15,7 +15,7 @@
 </head>
 
 <body>
-    <?php include 'estruturas/navbar/navbar-default.php' ?>
+    <?php include 'estruturas/navbar/navbar-compras.php' ?>
     <main class="bg-body-tertiary fs-nav">
         <div class="container py-5">
             <div class="row g-5 mb-3">
@@ -81,7 +81,7 @@
                         <div class="card-body px-4 d-flex flex-column justify-content-between">
                             <div class="row d-flex justify-content-between">
                                 <div class="col-auto">
-                                    <p class="fs-1 fw-semibold mb-0">R$892.500</p>
+                                    <p class="fs-1 fw-semibold mb-0">R$1.190.000</p>
                                 </div>
                                 <div class="col-auto">
                                     <span class="badge rounded-pill text-bg-success"><i class="bi bi-shield-check"></i> Confiável</span>
@@ -122,7 +122,7 @@
                             <div class="row mb-4 d-flex justify-content-between px-4">
                                 <div class="col">
                                     <h2 class="fw-bold mb-0 text-uppercase">PORSCHE 911</h2>
-                                    <p class="text-uppercase">3.0 24V H6 GASOLINA CARRERA S PDK</p>
+                                    <p class="text-uppercase">3.8 24V H6 GASOLINA TURBO PDK</p>
                                 </div>
                                 <div class="col">
                                     <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> São José dos Campos - SP</p>

@@ -17,16 +17,29 @@
     background-color: transparent;
     color: #212529;
   }
+
+  .card .carousel {
+    z-index: 2;
+  }
 </style>
 
 <body>
-  <?php $sticky = true;
-  include 'estruturas/navbar/navbar-default.php' ?>
+  <?php
+  include 'estruturas/navbar/navbar-compras.php' ?>
   <main class="bg-body-tertiary fs-nav">
     <div class="container-fluid">
       <div class="row d-flex justify-content-center">
         <div class="col-12 col-lg-10 col-lg-10">
-          <div class="row g-4 pt-4">
+          <div class="row pt-5">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.php" class="link-dark">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Carros</li>
+              </ol>
+              <h4>Carros de todo o Brasil!</h4>
+            </nav>
+          </div>
+          <div class="row g-4">
             <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-flex flex-column" style="max-height: 100vh;">
               <div id="filtros-over" class="overflow-auto border rounded-2" style="max-height: 100%;">
                 <div class="accordion w-100" id="accordionPanelsStayOpenExample">
@@ -78,16 +91,65 @@
                               <div class="input-group">
                                 <select name="" id="" class="form-select">
                                   <option value="" selected hidden>Selecione a marca</option>
-                                  <option value="audi">Audi</option>
-                                  <option value="bmw">BMW</option>
-                                  <option value="ferrari">Ferrari</option>
-                                  <option value="ford">Ford</option>
-                                  <option value="lamborghini">Lamborghini</option>
-                                  <option value="mercedes-benz">Mercedes-Benz</option>
-                                  <option value="porsche">Porsche</option>
-                                  <option value="rolls-royce">Rolls-Royce</option>
-                                  <option value="tesla">Tesla</option>
-                                  <option value="volkswagen">Volkswagen</option>
+                                  <option value="">Marca</option>
+                                  <option value="0">Abarth</option>
+                                  <option value="0">Alfa Romeo</option>
+                                  <option value="0">Aston Martin</option>
+                                  <option value="0">Audi</option>
+                                  <option value="0">Bentley</option>
+                                  <option value="0">BMW</option>
+                                  <option value="0">Bugatti</option>
+                                  <option value="0">BYD</option>
+                                  <option value="0">Cadillac</option>
+                                  <option value="0">Chevrolet</option>
+                                  <option value="0">Chrysler</option>
+                                  <option value="0">Citroën</option>
+                                  <option value="0">Corvette</option>
+                                  <option value="0">Dacia</option>
+                                  <option value="0">Dodge</option>
+                                  <option value="0">Ferrari</option>
+                                  <option value="0">Fiat</option>
+                                  <option value="0">Ford</option>
+                                  <option value="0">Genesis</option>
+                                  <option value="0">GMC</option>
+                                  <option value="0">GWM</option>
+                                  <option value="0">Honda</option>
+                                  <option value="0">Hummer</option>
+                                  <option value="0">Hyundai</option>
+                                  <option value="0">Infiniti</option>
+                                  <option value="0">JAECOO</option>
+                                  <option value="0">Jaguar</option>
+                                  <option value="0">Jeep</option>
+                                  <option value="0">Kia</option>
+                                  <option value="0">Koenigsegg</option>
+                                  <option value="0">Lamborghini</option>
+                                  <option value="0">Lacia</option>
+                                  <option value="0">Land Rover</option>
+                                  <option value="0">Lexus</option>
+                                  <option value="0">Lincoln</option>
+                                  <option value="0">Lotus</option>
+                                  <option value="0">Maserati</option>
+                                  <option value="0">Mazda</option>
+                                  <option value="0">McLaren</option>
+                                  <option value="0">Mercedes-Benz</option>
+                                  <option value="0">MINI</option>
+                                  <option value="0">Mitsubishi</option>
+                                  <option value="0">Nissan</option>
+                                  <option value="0">Omoda</option>
+                                  <option value="0">Opel</option>
+                                  <option value="0">Peugeot</option>
+                                  <option value="0">Porsche</option>
+                                  <option value="0">Ram</option>
+                                  <option value="0">Renault</option>
+                                  <option value="0">Rolls-Royce</option>
+                                  <option value="0">Skoda</option>
+                                  <option value="0">Smart</option>
+                                  <option value="0">Subaru</option>
+                                  <option value="0">Suzuki</option>
+                                  <option value="0">Tesla</option>
+                                  <option value="0">Toyota</option>
+                                  <option value="0">Volkswagen</option>
+                                  <option value="0">Volvo</option>
                                 </select>
                                 <button class="btn bg-white border d-none">X</button>
                               </div>
@@ -423,7 +485,7 @@
             <div class="col">
               <div class="row pt-4">
                 <div class="col-auto me-auto">
-                  <div class="fw-semibold small py-2">
+                  <div class="fw-semibold small py-3">
                     1.234 resultados encontrados
                   </div>
                 </div>
@@ -443,16 +505,21 @@
                   </div>
                 </div>
               </div>
-              <div id="area-compra" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-1">
+              <div id="area-compra" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-2">
                 <div class="col">
                   <?php
-                  $nome = 'AUDI RS6';
-                  $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-                  $preco = 'R$ 100.000';
+                  $nome = 'PORSCHE 911';
+                  $info = '3.8 24V H6 GASOLINA TURBO PDK';
+                  $preco = 'R$ 1.190.000';
                   $ano = '2020/2021';
-                  $km = '52.524';
-                  $loc = 'São Paulo - SP';
-                  $img = './img/carros/img-1.png';
+                  $km = '2.500';
+                  $loc = 'São José dos Campos - SP';
+                  $img1 = 'img/compras/1.png';
+                  $img2 = 'img/compras/2.png';
+                  $img3 = 'img/compras/3.png';
+                  $img4 = 'img/compras/4.png';
+                  $img5 = 'img/compras/5.png';
+                  $img6 = 'img/compras/6.png';
                   include 'estruturas/card-compra/card-compra.php' ?>
                 </div>
               </div>
@@ -478,7 +545,6 @@
             </nav>
           </div>
         </div>
-        <button id="teste">Sumir</button>
   </main>
   <?php include 'estruturas/footer/footer.php' ?>
 </body>

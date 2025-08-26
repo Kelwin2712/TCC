@@ -48,9 +48,9 @@ session_start();
     <div class="container py-4">
       <div class="card rounded-5 border-0 shadow-sm">
         <div class="card-body px-4 py-2">
-          <div class="row bg-body-tertiary shadow-sm rounded-top-4 rounded-bottom-3 px-1 py-2 align-items-center d-flex">
+          <div id="recomendacao" class="row bg-body-tertiary shadow-sm rounded-top-4 rounded-bottom-3 px-1 py-2 align-items-center d-flex">
             <div class="col">
-              <span><i class="bi bi-stars me-2"></i>Recomendação: Lamborghini Aventador SVJ </span>
+              <span><i class="bi bi-arrow-right me-2"></i>Recomendação: Lamborghini Aventador SVJ </span>
             </div>
             <div class="col-auto ">
               <button type="button" class="btn-close" aria-label="Close"></button>
@@ -67,23 +67,64 @@ session_start();
                 </div>
                 <select id="marca-select" class="form-select border-start-0 rounded-end-5 shadow-sm">
                   <option value="">Marca</option>
+                  <option value="0">Abarth</option>
                   <option value="0">Alfa Romeo</option>
+                  <option value="0">Aston Martin</option>
                   <option value="0">Audi</option>
                   <option value="0">Bentley</option>
                   <option value="0">BMW</option>
+                  <option value="0">Bugatti</option>
+                  <option value="0">BYD</option>
                   <option value="0">Cadillac</option>
                   <option value="0">Chevrolet</option>
+                  <option value="0">Chrysler</option>
+                  <option value="0">Citroën</option>
+                  <option value="0">Corvette</option>
+                  <option value="0">Dacia</option>
                   <option value="0">Dodge</option>
                   <option value="0">Ferrari</option>
                   <option value="0">Fiat</option>
                   <option value="0">Ford</option>
+                  <option value="0">Genesis</option>
                   <option value="0">GMC</option>
                   <option value="0">GWM</option>
-                  <option value="0">Haval</option>
                   <option value="0">Honda</option>
                   <option value="0">Hummer</option>
                   <option value="0">Hyundai</option>
                   <option value="0">Infiniti</option>
+                  <option value="0">JAECOO</option>
+                  <option value="0">Jaguar</option>
+                  <option value="0">Jeep</option>
+                  <option value="0">Kia</option>
+                  <option value="0">Koenigsegg</option>
+                  <option value="0">Lamborghini</option>
+                  <option value="0">Lacia</option>
+                  <option value="0">Land Rover</option>
+                  <option value="0">Lexus</option>
+                  <option value="0">Lincoln</option>
+                  <option value="0">Lotus</option>
+                  <option value="0">Maserati</option>
+                  <option value="0">Mazda</option>
+                  <option value="0">McLaren</option>
+                  <option value="0">Mercedes-Benz</option>
+                  <option value="0">MINI</option>
+                  <option value="0">Mitsubishi</option>
+                  <option value="0">Nissan</option>
+                  <option value="0">Omoda</option>
+                  <option value="0">Opel</option>
+                  <option value="0">Peugeot</option>
+                  <option value="0">Porsche</option>
+                  <option value="0">Ram</option>
+                  <option value="0">Renault</option>
+                  <option value="0">Rolls-Royce</option>
+                  <option value="0">Skoda</option>
+                  <option value="0">Smart</option>
+                  <option value="0">Subaru</option>
+                  <option value="0">Suzuki</option>
+                  <option value="0">Tesla</option>
+                  <option value="0">Toyota</option>
+                  <option value="0">Volkswagen</option>
+                  <option value="0">Volvo</option>
                 </select>
               </div>
             </div>
@@ -157,7 +198,7 @@ session_start();
     </div>
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
-        <h4 class="col-8">Categorias</h4>
+        <h4 class="col-8 fw-semibold">Categorias</h4>
         <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php">
           (Ver todas as categorias)
         </a>
@@ -241,7 +282,7 @@ session_start();
     </div>
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
-        <h4 class="col-8">Principais marcas</h4>
+        <h4 class="col-8 fw-semibold">Principais marcas</h4>
         <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php"">
           (Ver todas as marcas)
         </a>
@@ -281,7 +322,7 @@ session_start();
     </div>
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
-        <h4 class="col-8">Carros mais procurados</h4>
+        <h4 class="col-8 fw-semibold">Carros mais procurados</h4>
         <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php"">
           (Ver todas as marcas)
         </a>
@@ -391,6 +432,10 @@ session_start();
         $("#modelo-select").prop("disabled", true);
         $("#modelo-select").val("");
       }
+    });
+
+    $("#recomendacao .btn-close").click(function() {
+      $("#recomendacao").addClass("d-none");
     });
   });
 </script>
