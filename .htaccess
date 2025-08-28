@@ -1,0 +1,3 @@
+ErrorDocument 404 /sites/TCC/404.php
+ErrorDocument 500 /sites/TCC/500.php
+ErrorDocument 403 /sites/TCC/403.php

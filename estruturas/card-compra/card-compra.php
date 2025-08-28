@@ -3,22 +3,34 @@
         <div class="carousel-inner">
             <a href="pagina-venda.php">
                 <div class="carousel-item active">
-                    <img src="<?php echo $img1; ?>" class="d-block w-100" alt="Imagem 1">
+                    <div class="ratio ratio-4x3">
+                        <img src="<?php echo $img1; ?>" class="d-block w-100 h-100 object-fit-cover" alt="Imagem 1">
+                    </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $img2; ?>" class="d-block w-100" alt="Imagem 2">
+                    <div class="ratio ratio-4x3">
+                        <img src="<?php echo $img2; ?>" class="d-block w-100 h-100 object-fit-cover" alt="Imagem 2">
+                    </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $img3; ?>" class="d-block w-100" alt="Imagem 3">
+                    <div class="ratio ratio-4x3">
+                        <img src="<?php echo $img3; ?>" class="d-block w-100 h-100 object-fit-cover" alt="Imagem 3">
+                    </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $img4; ?>" class="d-block w-100" alt="Imagem 4">
+                    <div class="ratio ratio-4x3">
+                        <img src="<?php echo $img4; ?>" class="d-block w-100 h-100 object-fit-cover" alt="Imagem 4">
+                    </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $img5; ?>" class="d-block w-100" alt="Imagem 5">
+                    <div class="ratio ratio-4x3">
+                        <img src="<?php echo $img5; ?>" class="d-block w-100 h-100 object-fit-cover" alt="Imagem 5">
+                    </div>
                 </div>
                 <div class="carousel-item">
-                    <img src="<?php echo $img6; ?>" class="d-block w-100" alt="Imagem 6">
+                    <div class="ratio ratio-4x3">
+                        <img src="<?php echo $img6; ?>" class="d-block w-100 h-100 object-fit-cover" alt="Imagem 6">
+                    </div>
                 </div>
             </a>
         </div>

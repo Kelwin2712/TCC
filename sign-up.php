@@ -26,13 +26,13 @@
                   <div id="images" class="carousel slide h-100" data-bs-ride="carousel">
                     <div class="carousel-inner h-100">
                       <div class="carousel-item h-100 active" data-bs-interval="5000">
-                        <img src="img/login/1.jpg" class="d-block w-100 rounded-end-1 h-100" alt="g63">
+                        <img src="img/login/1.jpg" class="d-block w-100 rounded-start-1 h-100" alt="g63">
                       </div>
                       <div class="carousel-item h-100" data-bs-interval="5000">
-                        <img src="img/login/2.jpg" class="d-block w-100 rounded-end-1 h-100" alt="revuelto">
+                        <img src="img/login/2.jpg" class="d-block w-100 rounded-start-1 h-100" alt="revuelto">
                       </div>
                       <div class="carousel-item h-100" data-bs-interval="5000">
-                        <img src="img/login/3.jpg" class="d-block w-100 rounded-end-1 h-100" alt="cullinan">
+                        <img src="img/login/3.jpg" class="d-block w-100 rounded-start-1 h-100" alt="cullinan">
                       </div>
                     </div>
                   </div>

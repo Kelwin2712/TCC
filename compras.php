@@ -1,4 +1,10 @@
-<?php session_start(); ?>
+<?php session_start();
+$filter_check_caminho = 'estruturas/filter/filter-checkbox.php';
+
+$tipo = $_GET['tipo'] ?? 'carro';
+$codicao = $_GET['codicao'] ?? 'usado';
+$categoria = $_GET['categoria'] ?? null;
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -33,16 +39,17 @@
           <div class="row pt-5">
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.php" class="link-dark">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Carros</li>
+                <li class="breadcrumb-item"><a href="index.php" class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Home</a></li>
+                <li class="breadcrumb-item active text-dark" aria-current="page">Carros</li>
               </ol>
               <h4>Carros de todo o Brasil!</h4>
             </nav>
           </div>
           <div class="row g-4">
             <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-flex flex-column" style="max-height: 100vh;">
-              <div id="filtros-over" class="overflow-auto border rounded-2" style="max-height: 100%;">
+              <div id="filtros-over" class="overflow-auto rounded-2 border border-opacity-25 shadow-sm" style="max-height: 100%;">
                 <div class="accordion w-100" id="accordionPanelsStayOpenExample">
+                  <!-- Modelo ⬇️ -->
                   <div class="accordion-item border-0 border-bottom">
                     <h2 class="accordion-header">
                       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#modelo" aria-expanded="true" aria-controls="modelo">
@@ -53,10 +60,14 @@
                       <div class="accordion-body">
                         <div class="row mb-4">
                           <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" <?php if ($tipo == 'carro') {
+                                                                                                                      echo 'checked';
+                                                                                                                    } ?>>
                             <label class="btn btn-outline-dark" for="btnradio1"><i class="bi bi-car-front-fill"></i> Carros</label>
 
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" <?php if ($tipo == 'moto') {
+                                                                                                                      echo 'checked';
+                                                                                                                    } ?>>
                             <label class="btn btn-outline-dark" for="btnradio2"><i class="bi bi-bicycle"></i> Motos</label>
                           </div>
                         </div>
@@ -65,7 +76,9 @@
                             <h6>Estado</h6>
                             <div class="row ps-3">
                               <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="checkDefault">
+                                <input class="form-check-input" type="checkbox" value="" id="checkDefault" <?php if ($codicao == 'usado') {
+                                                                                                              echo 'checked';
+                                                                                                            } ?>>
                                 <label class="form-check-label" for="checkDefault">
                                   Usados
                                 </label>
@@ -74,7 +87,9 @@
                                 </small>
                               </div>
                               <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="checkChecked" checked>
+                                <input class="form-check-input" type="checkbox" value="" id="checkChecked" <?php if ($codicao == 'novo') {
+                                                                                                              echo 'checked';
+                                                                                                            } ?>>
                                 <label class="form-check-label" for="checkChecked">
                                   Novos
                                 </label>
@@ -91,7 +106,6 @@
                               <div class="input-group">
                                 <select name="" id="" class="form-select">
                                   <option value="" selected hidden>Selecione a marca</option>
-                                  <option value="">Marca</option>
                                   <option value="0">Abarth</option>
                                   <option value="0">Alfa Romeo</option>
                                   <option value="0">Aston Martin</option>
@@ -198,6 +212,7 @@
                     </div>
 
                   </div>
+                  <!-- Preço ⬇️ -->
                   <div class="accordion-item border-0 border-bottom">
                     <h2 class="accordion-header">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#preco" aria-expanded="true" aria-controls="preco">
@@ -258,6 +273,7 @@
                     </div>
 
                   </div>
+                  <!-- Ano ⬇️ -->
                   <div class="accordion-item border-0 border-bottom">
                     <h2 class="accordion-header">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ano" aria-expanded="true" aria-controls="ano">
@@ -363,6 +379,7 @@
                     </div>
 
                   </div>
+                  <!-- Quilometragem ⬇️ -->
                   <div class="accordion-item border-0 border-bottom">
                     <h2 class="accordion-header">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#km" aria-expanded="true" aria-controls="km">
@@ -413,6 +430,7 @@
                     </div>
 
                   </div>
+                  <!-- Cor ⬇️ -->
                   <div class="accordion-item border-0 border-bottom">
                     <h2 class="accordion-header">
                       <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cor" aria-expanded="true" aria-controls="cor">
@@ -423,61 +441,232 @@
                       <div class="accordion-body">
                         <div class="row ps-3">
                           <?php
-                          $cor = 'Branco';
+                          $text = 'Branco';
                           $id = 'branco';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Preto';
+                          $text = 'Preto';
                           $id = 'preto';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Vermelho';
+                          $text = 'Vermelho';
                           $id = 'verm';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Azul';
+                          $text = 'Azul';
                           $id = 'azul';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Cinza';
+                          $text = 'Cinza';
                           $id = 'cinza';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Prata';
+                          $text = 'Prata';
                           $id = 'prata';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Vinho';
+                          $text = 'Vinho';
                           $id = 'vinho';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Marrom';
+                          $text = 'Marrom';
                           $id = 'marrom';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Laranja';
+                          $text = 'Laranja';
                           $id = 'laranja';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Amarelo';
+                          $text = 'Amarelo';
                           $id = 'amarelo';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Dourado';
+                          $text = 'Dourado';
                           $id = 'dourado';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Verde';
+                          $text = 'Verde';
                           $id = 'verde';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                           <?php
-                          $cor = 'Bege';
+                          $text = 'Bege';
                           $id = 'bege';
-                          include 'estruturas/cor/cor.php' ?>
+                          include $filter_check_caminho ?>
                         </div>
                       </div>
                     </div>
-
+                  </div>
+                  <!-- Carroceria ⬇️ -->
+                  <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button <?php if ($categoria == null or $categoria == 'ele' or $categoria == 'hib') {
+                                                        echo ' collapsed';
+                                                      } ?>" type="button" data-bs-toggle="collapse" data-bs-target="#carroceria" aria-expanded="true" aria-controls="carroceria">
+                        Carroceria
+                      </button>
+                    </h2>
+                    <div id="carroceria" class="accordion-collapse collapse <?php if ($categoria != null and $categoria != 'ele' and $categoria != 'hib') {
+                                                                              echo 'show';
+                                                                            } ?>">
+                      <div class="accordion-body">
+                        <div class="row ps-3">
+                          <?php
+                          $text = 'Sedan';
+                          $id = 'sed';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Hatchback';
+                          $id = 'hat';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Pickup';
+                          $id = 'pic';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Coupé';
+                          $id = 'cou';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Minivan';
+                          $id = 'min';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Supercarro';
+                          $id = 'sup';
+                          include $filter_check_caminho ?>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Propulsão ⬇️ -->
+                  <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button<?php if ($categoria != 'ele' and $categoria != 'hib') {
+                                                        echo ' collapsed';
+                                                      } ?>" type="button" data-bs-toggle="collapse" data-bs-target="#propulsao" aria-expanded="true" aria-controls="propulsao">
+                        Propulsão
+                      </button>
+                    </h2>
+                    <div id="propulsao" class="accordion-collapse collapse<?php if ($categoria == 'ele' or $categoria == 'hib') {
+                                                                            echo ' show';
+                                                                          } ?>">
+                      <div class="accordion-body">
+                        <div class="row ps-3">
+                          <?php
+                          $text = 'Combustão';
+                          $id = 'comb';
+                          include $filter_check_caminho ?>
+                          <div id="comb-tipos" class="ps-3">
+                            <?php
+                            $text = 'Gasolina';
+                            $id = 'gas';
+                            include $filter_check_caminho;
+                            ?>
+                            <?php
+                            $text = 'Álcool';
+                            $id = 'alc';
+                            include $filter_check_caminho;
+                            ?>
+                            <?php
+                            $text = 'Flex';
+                            $id = 'fle';
+                            include $filter_check_caminho;
+                            ?>
+                            <?php
+                            $text = 'Diesel';
+                            $id = 'die';
+                            include $filter_check_caminho;
+                            ?>
+                            <?php
+                            $text = 'GNV';
+                            $id = 'gnv';
+                            include $filter_check_caminho;
+                            ?>
+                          </div>
+                          <?php
+                          $text = 'Híbrido';
+                          $id = 'hib';
+                          include $filter_check_caminho ?>
+                          <div id="hib-tipos" class="ps-3">
+                            <?php
+                            $text = 'HEV';
+                            $id = 'hev';
+                            include $filter_check_caminho;
+                            ?>
+                            <?php
+                            $text = 'PHEV';
+                            $id = 'phe';
+                            include $filter_check_caminho;
+                            ?>
+                            <?php
+                            $text = 'MHEV';
+                            $id = 'mhe';
+                            include $filter_check_caminho;
+                            ?>
+                          </div>
+                          <?php
+                          $text = 'Elétrico';
+                          $id = 'ele';
+                          include $filter_check_caminho ?>
+                          <div id="ele-tipos" class="ps-3">
+                            <?php
+                            $text = 'BEV';
+                            $id = 'bev';
+                            include $filter_check_caminho;
+                            ?>
+                            <?php
+                            $text = 'FCEV';
+                            $id = 'fce';
+                            include $filter_check_caminho;
+                            ?>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Câmbio ⬇️ -->
+                  <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cambio" aria-expanded="true" aria-controls="cambio">
+                        Câmbio
+                      </button>
+                    </h2>
+                    <div id="cambio" class="accordion-collapse collapse">
+                      <div class="accordion-body">
+                        <div class="row ps-3">
+                          <?php
+                          $text = 'Automático';
+                          $id = 'aut';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Manual';
+                          $id = 'man';
+                          include $filter_check_caminho ?>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Blindagem ⬇️ -->
+                  <div class="accordion-item border-0 border-bottom">
+                    <h2 class="accordion-header">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#blindagem" aria-expanded="true" aria-controls="blindagem">
+                        Blindagem
+                      </button>
+                    </h2>
+                    <div id="blindagem" class="accordion-collapse collapse">
+                      <div class="accordion-body">
+                        <div class="row ps-3">
+                          <?php
+                          $text = 'Sim';
+                          $id = 'bli';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Não';
+                          $id = 'n-bli';
+                          include $filter_check_caminho ?>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -490,17 +679,14 @@
                   </div>
                 </div>
                 <div class="col-auto d-flex align-items-center">
-                  <i class="bi bi-arrow-down-up me-2"></i>
+                  <button id="ordenar-btn" class="btn btn-light border me-2"><i class="bi bi-filter"></i></button>
                   <div class="small">Ordenar por: </div>
                   <div class="col-auto">
-                    <select class="form-select form-select-sm bg-transparent border-0 fw-semibold">
+                    <select id="ordenar-input" class="form-select form-select-sm bg-transparent border-0 fw-semibold">
                       <option value="relevancia" selected>Relevância</option>
-                      <option value="maior-preco">Maior preço</option>
-                      <option value="menor-preco">Menor preço</option>
-                      <option value="maior-ano">Maior ano</option>
-                      <option value="menor-ano">Menor ano</option>
-                      <option value="maior-km">Maior KM</option>
-                      <option value="menor-km">Menor KM</option>
+                      <option value="preco">Preço</option>
+                      <option value="ano">Ano</option>
+                      <option value="km">KM</option>
                     </select>
                   </div>
                 </div>
@@ -566,6 +752,49 @@
   duplicarCard(3);
 
   $(function() {
+    $("#ele").addClass('propulsao');
+    $("#hib").addClass('propulsao');
+    $("#comb").addClass('propulsao');
+
+    $('.propulsao:checked').each(function() {
+      $("#" + $(this).attr('id') + "-tipos").children().each(function(index, elem) {
+        $(elem).find('input').prop('checked', true);
+      });
+    });
+
+    $('.propulsao').each(function() {
+      $(this).on("change", function() {
+        const propu = this;
+        $("#" + $(this).attr('id') + "-tipos").children().each(function(index, elem) {
+          $(elem).find('input').prop('checked', $(propu).prop('checked'));
+        });
+      })
+    });
+
+    const order_btn = $('#ordenar-btn');
+    const order_i = $(order_btn).find("i");
+
+    $('#ordenar-input').on('change', function() {
+      if ($(this).val() === 'relevancia') {
+        $(order_i).removeClass('bi-sort-up');
+        $(order_i).removeClass('bi-sort-down');
+        $(order_i).addClass('bi-filter');
+        $(order_btn).prop('disabled', true);
+      } else {
+        $(order_i).addClass('bi-sort-up');
+        $(order_i).removeClass('bi-sort-down');
+        $(order_i).removeClass('bi-filter');
+        $(order_btn).prop('disabled', false);
+      };
+    });
+
+    $(order_btn).on('click', function() {
+      if ($(this).val() != 'relevancia') {
+        $(order_i).toggleClass('bi-sort-up');
+        $(order_i).toggleClass('bi-sort-down');
+      };
+    });
+
     $(window).on("scroll", function() {
       const filtrosCol = $("#filtros-col");
       const filtrosOver = $("#filtros-over");

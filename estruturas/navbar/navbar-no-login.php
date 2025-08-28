@@ -1,4 +1,4 @@
-
+<header class="sticky-top">
   <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm sticky-top" data-bs-theme="light">
     <div class="container-fluid px-lg-5">
       <a class="navbar-brand" href="index.php">
@@ -10,8 +10,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <?php include 'options.php'?>
+          <?php include 'config/options.php' ?>
         </ul>
       </div>
     </div>
   </nav>
+</header>

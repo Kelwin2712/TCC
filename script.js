@@ -20,21 +20,21 @@ document.querySelectorAll('.multi-carousel').forEach(function (multipleItemCarou
       var scrollPosition = $carouselInner.scrollLeft();
       var maxScroll = $carouselInner[0].scrollWidth - $carouselInner[0].clientWidth;
 
-      var scrollStep = cardWidth * itemsToShow * 500;
+      var scrollStep = cardWidth * itemsToShow * 1;
 
       if ($(this).hasClass('carousel-control-next')) {
         if (scrollPosition + scrollStep <= maxScroll) {
-          $carouselInner.stop().animate({ scrollLeft: scrollPosition + scrollStep }, 400);
+          $carouselInner.stop().animate({ scrollLeft: scrollPosition + scrollStep }, 500);
         } else {
 
-          $carouselInner.stop().animate({ scrollLeft: maxScroll }, 400);
+          $carouselInner.stop().animate({ scrollLeft: maxScroll }, 500);
         }
       } else {
         if (scrollPosition - scrollStep >= 0) {
-          $carouselInner.stop().animate({ scrollLeft: scrollPosition - scrollStep }, 400);
+          $carouselInner.stop().animate({ scrollLeft: scrollPosition - scrollStep }, 500);
         } else {
 
-          $carouselInner.stop().animate({ scrollLeft: 0 }, 400);
+          $carouselInner.stop().animate({ scrollLeft: 0 }, 500);
         }
       }
     });

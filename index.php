@@ -22,17 +22,17 @@ session_start();
 </style>
 
 <body>
-  <?php include 'estruturas/navbar/navbar-default.php' ?>
+  <?php include 'estruturas/navbar/navbar-default.php'?>
   <main class="bg-body-tertiary fs-nav">
     <div id="banner-carousel" class="carousel carousel-fade" data-bs-ride="carousel">
       <div class="carousel-inner">
-        <div class="carousel-item active">
+        <div class="carousel-item active" data-bs-interval="7500">
           <img src="./img/banner/carousel-1.png" class="d-block w-100 c-img">
         </div>
-        <div class="carousel-item">
+        <div class="carousel-item" data-bs-interval="7500">
           <img src="./img/banner/carousel-2.png" class="d-block w-100 c-img">
         </div>
-        <div class="carousel-item">
+        <div class="carousel-item" data-bs-interval="7500">
           <img src="./img/banner/carousel-3.png" class="d-block w-100 c-img">
         </div>
       </div>
@@ -60,7 +60,7 @@ session_start();
             <input type="text" class="form-control border-0 my-3" placeholder="Encontre o modelo que você procura...">
           </div>
           <div class="row g-2">
-            <div class="col-2 col-xl-auto">
+            <div class="ps-0 col-2 col-xl-auto">
               <div class="input-group">
                 <div class="input-group-text pe-0 bg-transparent rounded-start-5">
                   <i class="bi bi-buildings"></i>
@@ -190,7 +190,7 @@ session_start();
               </div>
             </div>
             <div class="col-2 col-xl-auto ms-auto">
-              <button class="btn btn-dark rounded-pill shadow-sm px-3"><i class="bi bi-search me-2"></i>Pesquisar</button>
+              <a href="compras.php" class="btn btn-dark rounded-pill shadow-sm px-3"><i class="bi bi-search me-2"></i>Pesquisar</a>
             </div>
           </div>
         </div>
@@ -206,7 +206,7 @@ session_start();
       <div id="categorias-carousel" class="carousel carousel-dark multi-carousel multi-carousel-6 px-4">
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <a href="compras.php" class="card-hover card">
+            <a href="compras.php?categoria=ele" class="card-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Elétricos</h5>
               </div>
@@ -214,7 +214,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php" class="card-hover card">
+            <a href="compras.php?categoria=sed" class="card-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Sedans</h5>
               </div>
@@ -222,7 +222,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php" class="card-hover card">
+            <a href="compras.php?categoria=hat" class="card-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Hatchbacks</h5>
               </div>
@@ -230,7 +230,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php" class="card-hover card">
+            <a href="compras.php?categoria=pic" class="card-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Pickups</h5>
               </div>
@@ -238,7 +238,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php" class="card-hover card">
+            <a href="compras.php?categoria=cou" class="card-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Coupés</h5>
               </div>
@@ -246,7 +246,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php" class="card-hover card">
+            <a href="compras.php?categoria=min" class="card-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Minivans</h5>
               </div>
@@ -254,7 +254,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php" class="card-hover card">
+            <a href="compras.php?categoria=hib" class="card-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Híbridos</h5>
               </div>
@@ -262,7 +262,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php" class="card-hover card">
+            <a href="compras.php?categoria=sup" class="card-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Supercarros</h5>
               </div>
@@ -327,7 +327,7 @@ session_start();
           (Ver todas as marcas)
         </a>
       </div>
-      <div id=" populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
+      <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
           <div class="carousel-inner">
             <?php
             $nome = 'AUDI RS6';
@@ -337,70 +337,160 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php' ?>
+            include 'estruturas/card-compra/card-index.php'?>
             <?php
-            $nome = 'AUDI A5';
+            $nome = 'AUDI RS5';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php' ?>
+            include 'estruturas/card-compra/card-index.php'?>
             <?php
-            $nome = 'AUDI A5';
+            $nome = 'AUDI RS4';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php' ?>
+            include 'estruturas/card-compra/card-index.php'?>
             <?php
-            $nome = 'AUDI A5';
+            $nome = 'AUDI RS3';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php' ?>
+            include 'estruturas/card-compra/card-index.php'?>
             <?php
-            $nome = 'AUDI A5';
+            $nome = 'AUDI RS2';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php' ?>
+            include 'estruturas/card-compra/card-index.php'?>
             <?php
-            $nome = 'AUDI A5';
+            $nome = 'AUDI RS1';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php' ?>
+            include 'estruturas/card-compra/card-index.php'?>
             <?php
-            $nome = 'AUDI A5';
+            $nome = 'AUDI RS6';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php' ?>
+            include 'estruturas/card-compra/card-index.php'?>
             <?php
-            $nome = 'AUDI A5';
+            $nome = 'AUDI RS5';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php' ?>
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS4';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS3';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS2';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS1';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS6';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS5';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS4';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS3';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS2';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
+            <?php
+            $nome = 'AUDI RS1';
+            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
+            $preco = 'R$ 100.000';
+            $ano = '2020/2021';
+            $km = '52.524';
+            $loc = 'São Paulo - SP';
+            $img = './img/carros/img-1.png';
+            include 'estruturas/card-compra/card-index.php'?>
           </div>
           <button class="carousel-control-prev d-flex justify-content-start w-auto" type="button" data-bs-target="#populares-carousel" id="populares-prev" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
