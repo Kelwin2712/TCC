@@ -199,7 +199,7 @@ session_start();
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
         <h4 class="col-8 fw-semibold">Categorias</h4>
-        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php">
+        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php?categoria">
           (Ver todas as categorias)
         </a>
       </div>

@@ -679,7 +679,7 @@ $categoria = $_GET['categoria'] ?? null;
                   </div>
                 </div>
                 <div class="col-auto d-flex align-items-center">
-                  <button id="ordenar-btn" class="btn btn-light border me-2"><i class="bi bi-filter"></i></button>
+                  <button id="ordenar-btn" class="btn btn-light border me-2" disabled><i class="bi bi-filter"></i></button>
                   <div class="small">Ordenar por: </div>
                   <div class="col-auto">
                     <select id="ordenar-input" class="form-select form-select-sm bg-transparent border-0 fw-semibold">
