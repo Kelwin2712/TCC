@@ -1,4 +1,4 @@
-<?php session_start();?>
+<?php session_start(); ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -24,20 +24,28 @@
                         <div class="card-body px-5">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="ratio ratio-16x9">
+                                    <div class="">
                                         <div id="imagems-carro" class="carousel slide">
                                             <div class="carousel-inner">
                                                 <div class="carousel-item active">
-                                                    <img src="img/vendas/911-1.jpg" class="d-block w-100" alt="Imagem 1">
+                                                    <div class="ratio ratio-16x9">
+                                                        <img src="img/compras/1.png" class="d-block img-fluid object-fit-cover" alt="Imagem 1">
+                                                    </div>
                                                 </div>
                                                 <div class="carousel-item">
-                                                    <img src="img/vendas/911-2.jpg" class="d-block w-100" alt="Imagem 2">
+                                                    <div class="ratio ratio-16x9">
+                                                        <img src="img/compras/2.png" class="d-block img-fluid object-fit-cover" alt="Imagem 2">
+                                                    </div>
                                                 </div>
                                                 <div class="carousel-item">
-                                                    <img src="img/vendas/911-1.jpg" class="d-block w-100" alt="Imagem 3">
+                                                    <div class="ratio ratio-16x9">
+                                                        <img src="img/compras/3.png" class="d-block img-fluid object-fit-cover" alt="Imagem 3">
+                                                    </div>
                                                 </div>
                                                 <div class="carousel-item">
-                                                    <img src="img/vendas/911-2.jpg" class="d-block w-100" alt="Imagem 4">
+                                                    <div class="ratio ratio-16x9">
+                                                        <img src="img/compras/4.png" class="d-block img-fluid object-fit-cover" alt="Imagem 4">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <button class="carousel-control-prev" type="button" data-bs-target="#imagems-carro" data-bs-slide="prev">
@@ -61,16 +69,24 @@
                             </div>
                             <div class="row g-0">
                                 <div class="col-3">
-                                    <img src="img/vendas/911-2.jpg" alt="" class="img-fluid">
+                                    <div class="ratio ratio-16x9">
+                                        <img src="img/compras/1.png" alt="" class="img-fluid object-fit-cover">
+                                    </div>
                                 </div>
                                 <div class="col-3">
-                                    <img src="img/vendas/911-1.jpg" alt="" class="img-fluid opacity-50">
+                                    <div class="ratio ratio-16x9">
+                                        <img src="img/compras/2.png" alt="" class="img-fluid object-fit-cover opacity-50">
+                                    </div>
                                 </div>
                                 <div class="col-3">
-                                    <img src="img/vendas/911-2.jpg" alt="" class="img-fluid opacity-50">
+                                    <div class="ratio ratio-16x9">
+                                        <img src="img/compras/3.png" alt="" class="img-fluid object-fit-cover opacity-50">
+                                    </div>
                                 </div>
                                 <div class="col-3">
-                                    <img src="img/vendas/911-1.jpg" alt="" class="img-fluid opacity-50">
+                                    <div class="ratio ratio-16x9">
+                                        <img src="img/compras/4.png" alt="" class="img-fluid object-fit-cover opacity-50">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -216,7 +232,9 @@
                                     <p>Vendedor</p>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn bg-primary-subtle text-primary px-2 float-end" style="padding-top: .125rem; padding-bottom: .125rem;"><div class="small">Seguir</div></button>
+                                    <button type="button" class="btn bg-primary-subtle text-primary px-2 float-end" style="padding-top: .125rem; padding-bottom: .125rem;">
+                                        <div id="seguir-btn" class="small">Seguir</div>
+                                    </button>
                                 </div>
                             </div>
                             <a href="#" class="row px-2 text-decoration-none text-dark">
@@ -253,5 +271,21 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
-
+<script>
+    const info = $("#seguir-btn")
+    const btn = $(info).parent();
+    $(btn).on('click', function(){
+        if ($(info).html() == 'Seguir') {
+            $(info).html('Seguindo <i class="bi bi-check"></i>');
+            $(btn).removeClass('text-primary');
+            $(btn).removeClass('bg-primary-subtle');
+            $(btn).addClass('text-secondary');
+        } else {
+            $(info).html('Seguir');
+            $(btn).addClass('text-primary');
+            $(btn).addClass('bg-primary-subtle');
+            $(btn).removeClass('text-secondary');
+        };
+    })
+</script>
 </html>

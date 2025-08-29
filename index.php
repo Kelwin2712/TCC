@@ -330,22 +330,13 @@ session_start();
       <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
           <div class="carousel-inner">
             <?php
-            $nome = 'AUDI RS6';
-            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-            $preco = 'R$ 100.000';
-            $ano = '2020/2021';
-            $km = '52.524';
-            $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php'?>
-            <?php
             $nome = 'AUDI RS5';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-5.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS4';
@@ -354,7 +345,7 @@ session_start();
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-4.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS3';
@@ -363,7 +354,7 @@ session_start();
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-3.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS2';
@@ -372,7 +363,7 @@ session_start();
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-2.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS1';
@@ -384,22 +375,13 @@ session_start();
             $img = './img/carros/img-1.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
-            $nome = 'AUDI RS6';
-            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-            $preco = 'R$ 100.000';
-            $ano = '2020/2021';
-            $km = '52.524';
-            $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php'?>
-            <?php
             $nome = 'AUDI RS5';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-5.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS4';
@@ -408,7 +390,7 @@ session_start();
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-4.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS3';
@@ -417,7 +399,7 @@ session_start();
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-3.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS2';
@@ -426,7 +408,7 @@ session_start();
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-2.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS1';
@@ -438,22 +420,13 @@ session_start();
             $img = './img/carros/img-1.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
-            $nome = 'AUDI RS6';
-            $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
-            $preco = 'R$ 100.000';
-            $ano = '2020/2021';
-            $km = '52.524';
-            $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php'?>
-            <?php
             $nome = 'AUDI RS5';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
             $preco = 'R$ 100.000';
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-5.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS4';
@@ -462,7 +435,7 @@ session_start();
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-4.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS3';
@@ -471,7 +444,7 @@ session_start();
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-3.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS2';
@@ -480,7 +453,7 @@ session_start();
             $ano = '2020/2021';
             $km = '52.524';
             $loc = 'São Paulo - SP';
-            $img = './img/carros/img-1.png';
+            $img = './img/carros/img-2.png';
             include 'estruturas/card-compra/card-index.php'?>
             <?php
             $nome = 'AUDI RS1';
@@ -525,7 +498,7 @@ session_start();
     });
 
     $("#recomendacao .btn-close").click(function() {
-      $("#recomendacao").addClass("d-none");
+      $("#recomendacao").remove();
     });
   });
 </script>
