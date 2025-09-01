@@ -40,7 +40,7 @@
             </div>
             <div class="row position-absolute top-0 end-0 p-2 favoritar-btn">
                 <div class="col-auto">
-                    <button type="button" class="btn text-bg-dark rounded-circle bg-opacity-50 p-2 position-relative favoritar">
+                    <button type="button" class="btn text-bg-dark bg-opacity-50 position-relative favoritar rounded-circle">
                         <i class="bi bi-heart"></i>
                     </button>
                 </div>
