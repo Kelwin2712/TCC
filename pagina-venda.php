@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+<?php session_start();
+$vendedor = 'Fahren Imports';
+$vendedor_img = 'img/logo-fahren-bg.jpg';
+$vendedor_est = '4.63';
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -6,12 +10,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <title>Fahren</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .carro-img {
+            cursor: pointer;
+        }
 
+        #img-row .col-3 img {
+            opacity: .5 !important;
+        }
+
+        #img-row .col-3.selecionado img {
+            opacity: 1 !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -24,68 +40,86 @@
                         <div class="card-body px-5">
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="">
-                                        <div id="imagems-carro" class="carousel slide">
-                                            <div class="carousel-inner">
-                                                <div class="carousel-item active">
-                                                    <div class="ratio ratio-16x9">
-                                                        <img src="img/compras/1.png" class="d-block img-fluid object-fit-cover" alt="Imagem 1">
-                                                    </div>
-                                                </div>
-                                                <div class="carousel-item">
-                                                    <div class="ratio ratio-16x9">
-                                                        <img src="img/compras/2.png" class="d-block img-fluid object-fit-cover" alt="Imagem 2">
-                                                    </div>
-                                                </div>
-                                                <div class="carousel-item">
-                                                    <div class="ratio ratio-16x9">
-                                                        <img src="img/compras/3.png" class="d-block img-fluid object-fit-cover" alt="Imagem 3">
-                                                    </div>
-                                                </div>
-                                                <div class="carousel-item">
-                                                    <div class="ratio ratio-16x9">
-                                                        <img src="img/compras/4.png" class="d-block img-fluid object-fit-cover" alt="Imagem 4">
-                                                    </div>
+                                    <div id="imagems-carro" class="carousel slide" data-quant="1" data-bs-touch="false">
+                                        <div class="carousel-inner">
+                                            <div id="crl-1" class="carousel-item active">
+                                                <div class="ratio ratio-16x9">
+                                                    <img src="img/compras/1.png" class="d-block img-fluid object-fit-cover" alt="Imagem 1">
                                                 </div>
                                             </div>
-                                            <button class="carousel-control-prev" type="button" data-bs-target="#imagems-carro" data-bs-slide="prev">
-                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                                <span class="visually-hidden">Previous</span>
-                                            </button>
-                                            <button class="carousel-control-next" type="button" data-bs-target="#imagems-carro" data-bs-slide="next">
-                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                                <span class="visually-hidden">Next</span>
-                                            </button>
+                                            <div id="crl-2" class="carousel-item">
+                                                <div class="ratio ratio-16x9">
+                                                    <img src="img/compras/2.png" class="d-block img-fluid object-fit-cover" alt="Imagem 2">
+                                                </div>
+                                            </div>
+                                            <div id="crl-3" class="carousel-item">
+                                                <div class="ratio ratio-16x9">
+                                                    <img src="img/compras/3.png" class="d-block img-fluid object-fit-cover" alt="Imagem 3">
+                                                </div>
+                                            </div>
+                                            <div id="crl-4" class="carousel-item">
+                                                <div class="ratio ratio-16x9">
+                                                    <img src="img/compras/4.png" class="d-block img-fluid object-fit-cover" alt="Imagem 4">
+                                                </div>
+                                            </div>
+                                            <div id="crl-5" class="carousel-item">
+                                                <div class="ratio ratio-16x9">
+                                                    <img src="img/compras/5.png" class="d-block img-fluid object-fit-cover" alt="Imagem 5">
+                                                </div>
+                                            </div>
+                                            <div id="crl-6" class="carousel-item">
+                                                <div class="ratio ratio-16x9">
+                                                    <img src="img/compras/6.png" class="d-block img-fluid object-fit-cover" alt="Imagem 6">
+                                                </div>
+                                            </div>
                                         </div>
+                                        <div class="row position-absolute bottom-0 p-2">
+                                            <div class="col-auto">
+                                                <div class="text-bg-dark bg-opacity-50 rounded-pill py-1" style="font-size: .8rem; padding-left: .75rem; padding-right: .75rem;"><span class="min">1</span>/<span class="max"></span></div>
+                                            </div>
+                                        </div>
+                                        <button class="carousel-control-prev" type="button" data-bs-target="#imagems-carro" data-bs-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Previous</span>
+                                        </button>
+                                        <button class="carousel-control-next" type="button" data-bs-target="#imagems-carro" data-bs-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="visually-hidden">Next</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="progress" role="progressbar" aria-label="Example 1px high" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="height: 4px">
-                                        <div class="progress-bar bg-dark" style="width: 0%"></div>
+                                    <div class="progress-stacked" style="height: 4px;">
+                                        <div class="progress" role="progressbar" style="width: 0%">
+                                            <div class="progress-bar bg-transparent"></div>
+                                        </div>
+                                        <div class="progress" role="progressbar" style="width: 25%">
+                                            <div class="progress-bar bg-dark-subtle"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row g-0">
-                                <div class="col-3">
-                                    <div class="ratio ratio-16x9">
+                            <div id="img-row" class="row g-0">
+                                <div class="col-3 selecionado">
+                                    <div class="carro-img ratio ratio-16x9" data-img="1">
                                         <img src="img/compras/1.png" alt="" class="img-fluid object-fit-cover">
                                     </div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="ratio ratio-16x9">
-                                        <img src="img/compras/2.png" alt="" class="img-fluid object-fit-cover opacity-50">
+                                    <div class="carro-img ratio ratio-16x9" data-img="2">
+                                        <img src="img/compras/2.png" alt="" class="img-fluid object-fit-cover">
                                     </div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="ratio ratio-16x9">
-                                        <img src="img/compras/3.png" alt="" class="img-fluid object-fit-cover opacity-50">
+                                    <div class="carro-img ratio ratio-16x9" data-img="3">
+                                        <img src="img/compras/3.png" alt="" class="img-fluid object-fit-cover">
                                     </div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="ratio ratio-16x9">
-                                        <img src="img/compras/4.png" alt="" class="img-fluid object-fit-cover opacity-50">
+                                    <div class="carro-img ratio ratio-16x9" data-img="4">
+                                        <img src="img/compras/4.png" alt="" class="img-fluid object-fit-cover">
                                     </div>
                                 </div>
                             </div>
@@ -100,31 +134,31 @@
                                     <p class="fs-1 fw-semibold mb-0">R$1.190.000</p>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="badge rounded-pill text-bg-success"><i class="bi bi-shield-check"></i> Confiável</span>
+                                    <span class="badge rounded-pill text-bg-primary py-2 user-select-none"><i class="bi bi-shield-check"></i> Confiável</span>
                                 </div>
                                 <p>Envie uma mensagem para o vendedor</p>
                             </div>
                             <div class="row">
                                 <div class="mb-2">
                                     <label for="nome-input" class="form-label mb-0">Nome<sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control rounded-3 border-2" id="nome-input" placeholder="Nome" required>
+                                    <input type="text" class="form-control rounded-4 border-2" id="nome-input" placeholder="Nome" required>
                                 </div>
                                 <div class="mb-2">
                                     <label for="email-input" class="form-label mb-0">Email<sup class="text-danger">*</sup></label>
-                                    <input type="email" class="form-control rounded-3 border-2" id="email-input" placeholder="Email" required>
+                                    <input type="email" class="form-control rounded-4 border-2" id="email-input" placeholder="Email" required>
                                 </div>
                                 <div class="mb-2">
                                     <label for="telefone-input" class="form-label mb-0">Telefone<sup class="text-danger">*</sup></label>
-                                    <input type="email" class="form-control rounded-3 border-2" id="telefone-input" placeholder="Telefone" required>
+                                    <input type="email" class="form-control rounded-4 border-2" id="telefone-input" placeholder="Telefone" required>
                                 </div>
                                 <div class="mb-2">
                                     <label for="mensagem-input" class="form-label mb-0">Mensagem<sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control rounded-3 border-2 pb-5" id="mensagem-input" placeholder="Mensagem" required>
+                                    <input type="text" class="form-control rounded-4 border-2 pb-5" id="mensagem-input" placeholder="Mensagem" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-dark w-100 mb-3 py-2">Enviar mensagem</button>
+                                    <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2">Enviar mensagem</button>
                                 </div>
                             </div>
                         </div>
@@ -136,12 +170,17 @@
                     <div class="card border-0 shadow-sm h-100">
                         <div class="card-body py-4">
                             <div class="row mb-4 d-flex justify-content-between px-4">
-                                <div class="col">
+                                <div class="col-auto pe-0">
                                     <h2 class="fw-bold mb-0 text-uppercase">PORSCHE 911</h2>
                                     <p class="text-uppercase">3.8 24V H6 GASOLINA TURBO PDK</p>
                                 </div>
                                 <div class="col">
                                     <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> São José dos Campos - SP</p>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="button" class="btn p-0 favoritar favoritar-danger">
+                                        <i class="bi bi-heart text-secondary fs-5"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="row px-4 pt-3">
@@ -232,28 +271,28 @@
                                     <p>Vendedor</p>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn bg-primary-subtle text-primary px-2 float-end" style="padding-top: .125rem; padding-bottom: .125rem;">
+                                    <button type="button" class="btn bg-primary-subtle text-primary px-2 float-end rounded-pill" style="padding-top: .125rem; padding-bottom: .125rem;">
                                         <div id="seguir-btn" class="small">Seguir</div>
                                     </button>
                                 </div>
                             </div>
-                            <a href="#" class="row px-2 text-decoration-none text-dark">
+                            <a href="compras.php?vendedor=<?= $vendedor ?>&vendedor_img=<?= $vendedor_img ?>&vendedor_est=<?= $vendedor_est ?>" class="row px-2 text-decoration-none text-dark">
                                 <div class="rounded-3 border-2">
                                     <div class="row">
                                         <div class="col p-2 d-flex align-items-center justify-content-center">
                                             <div class="ratio ratio-1x1">
-                                                <img src="img/logo-fahren-bg.jpg" alt="" class="img-fluid rounded-3 shadow-sm">
+                                                <img src="<?= $vendedor_img ?>" alt="" class="img-fluid rounded-3 shadow-sm">
                                             </div></i>
                                         </div>
                                         <div class="col-7 py-2">
                                             <div class="row">
-                                                <p class="fw-semibold mb-0">Fahren imports</p>
+                                                <p class="fw-semibold mb-0"><?= $vendedor ?></p>
                                             </div>
                                             <div class="row">
-                                                <small class="fw-semibold mb-0">4.63 <i class="bi bi-star-fill"></i></small>
+                                                <small class="fw-semibold mb-0"><?= $vendedor_est ?> <i class="bi bi-star-fill"></i></small>
                                             </div>
                                         </div>
-                                        <div class="col-3 d-inline-flex align-items-center">
+                                        <div class="col-3 d-inline-flex align-items-center text-nowrap">
                                             <small>Aberto <i class="bi bi-circle-fill text-success" style="font-size: 0.5rem !important; vertical-align: middle;"></i></small>
                                         </div>
                                     </div>
@@ -272,20 +311,140 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
 <script>
-    const info = $("#seguir-btn")
-    const btn = $(info).parent();
-    $(btn).on('click', function(){
-        if ($(info).html() == 'Seguir') {
-            $(info).html('Seguindo <i class="bi bi-check"></i>');
-            $(btn).removeClass('text-primary');
-            $(btn).removeClass('bg-primary-subtle');
-            $(btn).addClass('text-secondary');
-        } else {
-            $(info).html('Seguir');
-            $(btn).addClass('text-primary');
-            $(btn).addClass('bg-primary-subtle');
-            $(btn).removeClass('text-secondary');
-        };
+    $(function() {
+        const carousel = $('.carousel');
+        let carousel_imgs = [];
+        let selecionado = 1;
+
+        $('.carousel-item .ratio img').each(function(i) {
+            carousel_imgs[i] = $(this).attr('src');
+        });
+
+        $(carousel).data('quant', $(carousel).find('.carousel-inner').children().length);
+        const quant = $(carousel).data('quant');
+        $(carousel).find('.max').text(quant);
+
+        const seguir_info = $("#seguir-btn");
+        const seguir_btn = seguir_info.parent();
+
+        const progress = $('.progress-bar.bg-transparent').parent();
+
+        seguir_btn.on('click', function() {
+            if (seguir_info.html() == 'Seguir') {
+                seguir_info.html('Seguindo <i class="bi bi-check"></i>');
+                seguir_btn.removeClass('text-primary');
+                seguir_btn.removeClass('bg-primary-subtle');
+                seguir_btn.addClass('text-secondary');
+            } else {
+                seguir_info.html('Seguir');
+                seguir_btn.addClass('text-primary');
+                seguir_btn.addClass('bg-primary-subtle');
+                seguir_btn.removeClass('text-secondary');
+            };
+        });
+
+        $(".carro-img").on('click', function() {
+            let img = $(this).data('img');
+            selecionado = img
+            $(".carousel-item.active").removeClass('active');
+            $('#crl-' + img).addClass('active');
+
+            let sele = $(".selecionado");
+            sele.removeClass('selecionado');
+            $(this).parent().addClass('selecionado');
+            progress.width(25 * (img - 1) + '%');
+            $(carousel).find('.min').text(selecionado);
+        });
+
+        $('.carousel-control-prev').on('click', function() {
+            let atual = $('.col-3.selecionado');
+            let anterior = atual.prev();
+
+            atual.removeClass('selecionado');
+
+            if (anterior.length) {
+                anterior.addClass('selecionado');
+            } else if (selecionado === 1) {
+                anterior = $('#img-row .col-3').last();
+                anterior.addClass('selecionado');
+
+                let data = quant - 3;
+
+                $('.carro-img').each(function() {
+                    $(this).data('img', data);
+                    $(this).children().attr('src', carousel_imgs[data - 1]);
+                    data++;
+                });
+            } else {
+                atual.addClass('selecionado');
+
+                $('.carro-img').each(function() {
+                    let data = $(this).data('img');
+                    if ((data - 1) < 1) {
+                        data = quant
+                    } else {
+                        data--
+                    };
+                    $(this).data('img', data);
+                    $(this).children().attr('src', carousel_imgs[data - 1]);
+                });
+            };
+
+            if (selecionado === 1) {
+                selecionado = quant;
+            } else {
+                selecionado--;
+            };
+
+            progress.width(25 * (anterior.children().data('img') - 1) + '%');
+
+            $(carousel).find('.min').text(selecionado);
+        });
+
+        $('.carousel-control-next').on('click', function() {
+            let atual = $('.col-3.selecionado');
+            let proximo = atual.next();
+
+            atual.removeClass('selecionado');
+
+            if (proximo.length) {
+                proximo.addClass('selecionado');
+            } else if (selecionado === quant) {
+                proximo = $('#img-row .col-3').first();
+                proximo.addClass('selecionado');
+
+                let data = 1;
+
+                $('.carro-img').each(function() {
+                    $(this).data('img', data);
+                    $(this).children().attr('src', carousel_imgs[data - 1]);
+                    data++;
+                });
+            } else {
+                atual.addClass('selecionado');
+
+                $('.carro-img').each(function() {
+                    let data = $(this).data('img');
+                    if ((data + 1) > quant) {
+                        data = 1
+                    } else {
+                        data++
+                    };
+                    $(this).data('img', data);
+                    $(this).children().attr('src', carousel_imgs[data - 1]);
+                });
+            };
+
+            if (selecionado === quant) {
+                selecionado = 1;
+            } else {
+                selecionado++;
+            };
+
+            progress.width(25 * (proximo.children().data('img') - 1) + '%');
+            $(carousel).find('.min').text(selecionado);
+        });
     })
 </script>
+
 </html>

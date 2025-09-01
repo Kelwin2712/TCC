@@ -1,5 +1,5 @@
 <div class="carousel-item">
-    <div class="card card-hover position-relative">
+    <div class="card card-compra card-hover position-relative">
         <img src="<?php echo $img; ?>" class="card-img-top" alt="">
         <div class="card-body pb-1">
             <div class="row mb-4">
@@ -25,7 +25,7 @@
                     <p class="card-text text-nowrap small"><?php echo $loc; ?></p>
                 </div>
                 <div class="col-auto">
-                    <button type="button" class="btn p-0 position-relative favoritar">
+                    <button type="button" class="btn p-0 position-relative favoritar favoritar-danger">
                         <i class="bi bi-heart text-secondary"></i>
                     </button>
                 </div>

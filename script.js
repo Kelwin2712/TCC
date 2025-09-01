@@ -46,6 +46,15 @@ document.querySelectorAll('.multi-carousel').forEach(function (multipleItemCarou
   }
 });
 
+$(".favoritar").click(function () {
+  $(this).find("i").toggleClass("bi-heart bi-heart-fill");
+});
+
+
+$(".favoritar-danger").click(function () {
+  $(this).find("i").toggleClass("text-danger");
+});
+
 function toggleSenha(button, InputID) {
   const input = document.querySelector(`#${InputID}`);
   const icon = button.querySelector('i');

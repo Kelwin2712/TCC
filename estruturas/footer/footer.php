@@ -68,8 +68,8 @@
             <p>Junte-se à nossa comunidade e fique por dentro de tudo!</p>
             <div class="d-flex flex-column flex-sm-row w-100 gap-2">
               <label for="newsletter1" class="visually-hidden">Email</label>
-              <input id="newsletter1" type="email" class="form-control" placeholder="Email">
-              <button class="btn btn-dark" type="button">Participar</button>
+              <input id="newsletter1" type="email" class="form-control rounded-4" placeholder="Email">
+              <button class="btn btn-dark rounded-4" type="button">Participar</button>
             </div>
           </form>
         </div>

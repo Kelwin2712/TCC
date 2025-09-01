@@ -22,9 +22,9 @@ session_start();
 </style>
 
 <body>
-  <?php include 'estruturas/navbar/navbar-default.php'?>
+  <?php include 'estruturas/navbar/navbar-default.php' ?>
   <main class="bg-body-tertiary fs-nav">
-    <div id="banner-carousel" class="carousel carousel-fade" data-bs-ride="carousel">
+    <div id="banner-carousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="7500">
           <img src="./img/banner/carousel-1.png" class="d-block w-100 c-img">
@@ -327,7 +327,7 @@ session_start();
           (Ver todas as marcas)
         </a>
       </div>
-      <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
+      <div id=" populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
           <div class="carousel-inner">
             <?php
             $nome = 'AUDI RS5';
@@ -337,7 +337,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-5.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS4';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -346,7 +346,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-4.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS3';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -355,7 +355,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-3.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS2';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -364,7 +364,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-2.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS1';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -373,7 +373,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS5';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -382,7 +382,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-5.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS4';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -391,7 +391,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-4.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS3';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -400,7 +400,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-3.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS2';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -409,7 +409,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-2.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS1';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -418,7 +418,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS5';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -427,7 +427,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-5.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS4';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -436,7 +436,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-4.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS3';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -445,7 +445,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-3.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS2';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -454,7 +454,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-2.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
             <?php
             $nome = 'AUDI RS1';
             $info = '2.0 TFSI GASOLINA SPORTBACK PRESTIGE PLUS S TRONIC';
@@ -463,7 +463,7 @@ session_start();
             $km = '52.524';
             $loc = 'São Paulo - SP';
             $img = './img/carros/img-1.png';
-            include 'estruturas/card-compra/card-index.php'?>
+            include 'estruturas/card-compra/card-index.php' ?>
           </div>
           <button class="carousel-control-prev d-flex justify-content-start w-auto" type="button" data-bs-target="#populares-carousel" id="populares-prev" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -483,10 +483,6 @@ session_start();
 <script src="script.js"></script>
 <script>
   $(function() {
-    $(".favoritar").click(function() {
-      $(this).find("i").toggleClass("bi-heart bi-heart-fill text-danger");
-    });
-
     $("#marca-select").change(function() {
       var selectedMarca = $(this).val();
       if (selectedMarca) {
@@ -499,6 +495,16 @@ session_start();
 
     $("#recomendacao .btn-close").click(function() {
       $("#recomendacao").remove();
+    });
+
+    $('.favoritar').hide();
+
+    $('.card-compra').on('mouseenter', function() {
+      $(this).find('.favoritar').fadeIn(250);
+    });
+
+    $('.card-compra').on('mouseleave', function() {
+      $(this).find('.favoritar').fadeOut(250);
     });
   });
 </script>

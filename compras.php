@@ -4,6 +4,9 @@ $filter_check_caminho = 'estruturas/filter/filter-checkbox.php';
 $tipo = $_GET['tipo'] ?? 'carro';
 $codicao = $_GET['codicao'] ?? 'usado';
 $categoria = $_GET['categoria'] ?? null;
+$vendedor = $_GET['vendedor'] ?? null;
+$vendedor_img = $_GET['vendedor_img'] ?? null;
+$vendedor_est = $_GET['vendedor_est'] ?? null;
 ?>
 
 <!DOCTYPE html>
@@ -24,8 +27,12 @@ $categoria = $_GET['categoria'] ?? null;
     color: #212529;
   }
 
-  .card .carousel {
+  .card-compra .carousel {
     z-index: 2;
+  }
+
+  .card-compra .favoritar-btn {
+    z-index: 3;
   }
 </style>
 
@@ -40,15 +47,61 @@ $categoria = $_GET['categoria'] ?? null;
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php" class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Home</a></li>
-                <li class="breadcrumb-item active text-dark" aria-current="page">Carros</li>
+                
+                <?php if (isset($vendedor)) {
+                  echo "<li class=\"breadcrumb-item\"><a href=\"compras.php\" class=\"link-dark link-underline-opacity-0 link-underline-opacity-100-hover\">Carros</a></li>
+                <li class=\"breadcrumb-item active text-dark fw-semibold\" aria-current=\"page\">".$vendedor."</li>";
+                } else {
+                  echo "<li class=\"breadcrumb-item active text-dark fw-semibold\" aria-current=\"page\">Carros</li>";
+                };?>
               </ol>
-              <h4>Carros de todo o Brasil!</h4>
+              <h4><?php if (isset($vendedor)) {
+                  echo "Anúncios de ".$vendedor;
+                } else {
+                  echo "Carros de todo o Brasil!";
+                };?></h4>
             </nav>
           </div>
           <div class="row g-4">
             <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-flex flex-column" style="max-height: 100vh;">
               <div id="filtros-over" class="overflow-auto rounded-2 border border-opacity-25 shadow-sm" style="max-height: 100%;">
                 <div class="accordion w-100" id="accordionPanelsStayOpenExample">
+                  <?php if (isset($vendedor)) {
+                  echo "<!-- Vendedor ⬇️ -->
+                  <div class=\"accordion-item border-0 border-bottom\">
+                    <h2 class=\"accordion-header\">
+                      <button class=\"accordion-button\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#vendedor\" aria-expanded=\"true\" aria-controls=\"vendedor\">
+                        Vendedor
+                      </button>
+                    </h2>
+                    <div id=\"vendedor\" class=\"accordion-collapse collapse show\">
+                      <div class=\"accordion-body\">
+                        <div class=\"row\">
+                          <div class=\"rounded-3 border-2\">
+                                    <div class=\"row\">
+                                        <div class=\"col p-2 d-flex align-items-center justify-content-center\">
+                                            <div class=\"ratio ratio-1x1\">
+                                                <img src=\"".$vendedor_img."\" alt=\"\" class=\"img-fluid rounded-3 shadow-sm\">
+                                            </div></i>
+                                        </div>
+                                        <div class=\"col-7 py-2\">
+                                            <div class=\"row\">
+                                                <p class=\"fw-semibold mb-0\">".$vendedor."</p>
+                                            </div>
+                                            <div class=\"row\">
+                                                <small class=\"fw-semibold mb-0\">".$vendedor_est."<i class=\"bi bi-star-fill ms-1\"></i></small>
+                                            </div>
+                                        </div>
+                                        <div class=\"col-3 d-inline-flex align-items-center text-nowrap\">
+                                            <small>Aberto <i class=\"bi bi-circle-fill text-success\" style=\"font-size: 0.5rem !important; vertical-align: middle;\"></i></small>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>";
+                };?>
                   <!-- Modelo ⬇️ -->
                   <div class="accordion-item border-0 border-bottom">
                     <h2 class="accordion-header">
@@ -63,12 +116,12 @@ $categoria = $_GET['categoria'] ?? null;
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" <?php if ($tipo == 'carro') {
                                                                                                                       echo 'checked';
                                                                                                                     } ?>>
-                            <label class="btn btn-outline-dark" for="btnradio1"><i class="bi bi-car-front-fill"></i> Carros</label>
+                            <label class="btn btn-outline-dark rounded-start-5" for="btnradio1"><i class="bi bi-car-front-fill"></i> Carros</label>
 
                             <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" <?php if ($tipo == 'moto') {
                                                                                                                       echo 'checked';
                                                                                                                     } ?>>
-                            <label class="btn btn-outline-dark" for="btnradio2"><i class="bi bi-bicycle"></i> Motos</label>
+                            <label class="btn btn-outline-dark rounded-end-5" for="btnradio2"><i class="bi bi-bicycle"></i> Motos</label>
                           </div>
                         </div>
                         <div class="row px-1">
@@ -76,10 +129,10 @@ $categoria = $_GET['categoria'] ?? null;
                             <h6>Estado</h6>
                             <div class="row ps-3">
                               <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="checkDefault" <?php if ($codicao == 'usado') {
+                                <input class="form-check-input" type="checkbox" id="usados" <?php if ($codicao == 'usado') {
                                                                                                               echo 'checked';
                                                                                                             } ?>>
-                                <label class="form-check-label" for="checkDefault">
+                                <label class="form-check-label" for="usados">
                                   Usados
                                 </label>
                                 <small class="float-end">
@@ -87,10 +140,10 @@ $categoria = $_GET['categoria'] ?? null;
                                 </small>
                               </div>
                               <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="checkChecked" <?php if ($codicao == 'novo') {
+                                <input class="form-check-input" type="checkbox" id="novos" <?php if ($codicao == 'novo') {
                                                                                                               echo 'checked';
                                                                                                             } ?>>
-                                <label class="form-check-label" for="checkChecked">
+                                <label class="form-check-label" for="novos">
                                   Novos
                                 </label>
                                 <small class="float-end">
@@ -692,13 +745,16 @@ $categoria = $_GET['categoria'] ?? null;
                 </div>
               </div>
               <div id="area-compra" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-2">
-                <div class="col">
                   <?php
+                  $quantidade = 3;
+                  for ($i = 1; $i <= $quantidade*12; $i++) {
+                  echo '<div class="col">';
                   $nome = 'PORSCHE 911';
                   $info = '3.8 24V H6 GASOLINA TURBO PDK';
                   $preco = 'R$ 1.190.000';
                   $ano = '2020/2021';
                   $km = '2.500';
+                  $id = 'carro-'.$i;
                   $loc = 'São José dos Campos - SP';
                   $img1 = 'img/compras/1.png';
                   $img2 = 'img/compras/2.png';
@@ -706,8 +762,10 @@ $categoria = $_GET['categoria'] ?? null;
                   $img4 = 'img/compras/4.png';
                   $img5 = 'img/compras/5.png';
                   $img6 = 'img/compras/6.png';
-                  include 'estruturas/card-compra/card-compra.php' ?>
-                </div>
+                  include 'estruturas/card-compra/card-compra.php';
+                  echo '</div>';
+                  };
+                  ?>
               </div>
             </div>
           </div>
@@ -738,35 +796,59 @@ $categoria = $_GET['categoria'] ?? null;
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
 <script>
-  function duplicarCard(vezes) {
-    vezes = vezes * 12
-    const row = document.getElementById("area-compra");
-    const cardOriginal = row.querySelector(".col");
-
-    for (let i = 0; i < vezes - 1; i++) {
-      const clone = cardOriginal.cloneNode(true);
-      row.appendChild(clone);
-    }
-  }
-
-  duplicarCard(3);
 
   $(function() {
+    const cards = $('.card-compra');
+    cards.each(function() {
+      let num = 1;
+      const card = $(this)
+      card.data('quant', card.find('.carro-img').children().length);
+      const quant = card.data('quant');
+      card.find('.max').text(quant);
+      card.find('.carousel-control-prev').on('click', function() {
+        if (num === 1) {
+          num = quant;
+        } else {
+          num --;
+        };
+
+        card.find('.min').text(num);
+      });
+      card.find('.carousel-control-next').on('click', function() {
+        if (num === quant) {
+          num = 1;
+        } else {
+          num ++;
+        };
+        card.find('.min').text(num);
+      });
+
+      card.find('.favoritar-btn').hide();
+      
+      card.on('mouseenter', function() {
+        card.find('.favoritar-btn').fadeIn(250);
+      });
+
+      card.on('mouseleave', function() {
+        card.find('.favoritar-btn').fadeOut(250);
+      });
+    });
+
     $("#ele").addClass('propulsao');
     $("#hib").addClass('propulsao');
     $("#comb").addClass('propulsao');
 
     $('.propulsao:checked').each(function() {
-      $("#" + $(this).attr('id') + "-tipos").children().each(function(index, elem) {
-        $(elem).find('input').prop('checked', true);
+      $("#" + $(this).attr('id') + "-tipos").children().each(function(i, e) {
+        $(e).find('input').prop('checked', true);
       });
     });
 
     $('.propulsao').each(function() {
       $(this).on("change", function() {
         const propu = this;
-        $("#" + $(this).attr('id') + "-tipos").children().each(function(index, elem) {
-          $(elem).find('input').prop('checked', $(propu).prop('checked'));
+        $("#" + $(this).attr('id') + "-tipos").children().each(function(i, e) {
+          $(e).find('input').prop('checked', $(propu).prop('checked'));
         });
       })
     });
