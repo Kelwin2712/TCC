@@ -134,7 +134,7 @@ $vendedor_est = '4.63';
                                     <p class="fs-1 fw-semibold mb-0">R$1.190.000</p>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="badge rounded-pill text-bg-primary py-2 user-select-none"><i class="bi bi-shield-check"></i> Confiável</span>
+                                    <span class="badge text-bg-primary py-2 user-select-none rounded-3"><i class="bi bi-shield-check"></i> Confiável</span>
                                 </div>
                                 <p>Envie uma mensagem para o vendedor</p>
                             </div>
@@ -271,7 +271,7 @@ $vendedor_est = '4.63';
                                     <p>Vendedor</p>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn bg-primary-subtle text-primary px-2 float-end rounded-pill" style="padding-top: .125rem; padding-bottom: .125rem;">
+                                    <button type="button" class="btn bg-primary-subtle text-primary px-2 float-end rounded-3" style="padding-top: .125rem; padding-bottom: .125rem;">
                                         <div id="seguir-btn" class="small">Seguir</div>
                                     </button>
                                 </div>

@@ -779,11 +779,18 @@ $page = $_GET['page'] ?? 1;
             <nav aria-label="Page navigation example">
               <ul class="pagination pagination-dark">
                 <li class="page-item <?php if ($page == 1) {echo 'disabled';} ?>">
-                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
+                  <a class="page-link" href="compras.php?page=<?= $page-1?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
                 </li>
+                <?php if ($page >= 3) {echo '<li class="page-item">
+                  <a class="page-link" href="compras.php?page=1" tabindex="-1" aria-disabled="true">1</a>
+                </li>
+                <li class="page-item disabled">
+                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">...</a>
+                </li>';};?>
                 <li class="page-item <?php if ($page == 1) {echo 'active';} ?>"><a class="page-link border-0" href="compras.php?page=<?php if ($page == 1) {echo $page;} else {echo $page-1;} ?>"><?php if ($page == 1) {echo $page;} else {echo $page-1;} ?></a></li>
                 <li class="page-item <?php if ($page != 1) {echo 'active';} ?>"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {echo $page+1;} else {echo $page;} ?>"><?php if ($page == 1) {echo $page+1;} else {echo $page;} ?></a></li>
                 <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {echo $page+2;} else {echo $page+1;} ?>"><?php if ($page == 1) {echo $page+2;} else {echo $page+1;} ?></a></li>
+                <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {echo $page+3;} else {echo $page+2;} ?>"><?php if ($page == 1) {echo $page+3;} else {echo $page+2;} ?></a></li>
                 <li class="page-item">
                   <a class="page-link" href="compras.php?page=<?= $page+1?>"><i class="bi bi-caret-right-fill"></i></a>
                 </li>
