@@ -1,6 +1,6 @@
 <header class="sticky-top">
   <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm sticky-top" data-bs-theme="light">
-    <div class="container-fluid px-lg-5">
+    <div class="container-xxl px-lg-5">
       <a class="navbar-brand" href="index.php">
         <img src="./img/logo-fahren.png" alt="Logo" width="15" height="20" class="d-inline-block align-text-center" style="filter: invert(1);">
         <span class="ms-1 fw-semibold">Fahren</span>
