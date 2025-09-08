@@ -1,5 +1,5 @@
 <div class="carousel-item">
-    <div class="card card-compra card-hover position-relative">
+    <div class="card card-compra shadow-hover position-relative">
         <img src="<?php echo $img; ?>" class="card-img-top" alt="">
         <div class="card-body pb-1">
             <div class="row mb-4">

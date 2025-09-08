@@ -61,11 +61,9 @@ session_start();
           </div>
           <div class="row g-2">
             <div class="ps-0 col-2 col-xl-auto">
-              <div class="input-group">
-                <div class="input-group-text pe-0 bg-transparent rounded-start-5">
-                  <i class="bi bi-buildings"></i>
-                </div>
-                <select id="marca-select" class="form-select border-start-0 rounded-end-5 shadow-sm">
+              <div class="d-flex align-items-center position-relative">
+                <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
+                <select id="marca-select" class="form-select rounded-pill shadow-sm ps-5 bg-transparent">
                   <option value="">Marca</option>
                   <option value="0">Abarth</option>
                   <option value="0">Alfa Romeo</option>
@@ -129,11 +127,9 @@ session_start();
               </div>
             </div>
             <div class="col-2">
-              <div class="input-group">
-                <div class="input-group-text pe-0 bg-transparent border-end-0 rounded-start-5">
-                  <i class="bi bi-car-front"></i>
-                </div>
-                <select id="modelo-select" class="form-select bg-transparent border-start-0 rounded-end-5 shadow-sm" disabled>
+              <div class="d-flex align-items-center position-relative">
+                <label for="modelo-select" class="d-flex align-items-center"><i class="bi bi-car-front position-absolute px-3"></i></label>
+                <select id="modelo-select" class="form-select rounded-pill shadow-sm ps-5 bg-transparent" disabled>
                   <option value="" selected>Modelo</option>
                   <option value="0">Audi R8 Spyder</option>
                   <option value="1">Ferrari 488</option>
@@ -145,11 +141,9 @@ session_start();
               </div>
             </div>
             <div class="col-2 col-xl-auto">
-              <div class="input-group">
-                <div class="input-group-text pe-0 bg-transparent rounded-start-5">
-                  <i class="bi bi-pin-map"></i>
-                </div>
-                <select class="form-select border-start-0 rounded-end-5 shadow-sm">
+              <div class="d-flex align-items-center position-relative">
+                <label for="estado-select" class="d-flex align-items-center"><i class="bi bi-pin-map position-absolute px-3"></i></label>
+                <select id="estado-select" class="form-select rounded-pill shadow-sm ps-5 bg-transparent">
                   <option value="">Estado</option>
                   <option value="1">Acre</option>
                   <option value="2">Alagoas</option>
@@ -182,14 +176,19 @@ session_start();
               </div>
             </div>
             <div class="col-2 col-xl-auto">
-              <div class="input-group">
-                <span class="input-group-text bg-transparent border rounded-start-5 shadow-sm">De</span>
-                <input type="text" id="preco-de" class="form-control border border-start-0 ps-0" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 100px;">
-                <span class="input-group-text bg-transparent border">Até</span>
-                <input type="text" id="preco-ate" class="form-control border border-start-0 ps-0 rounded-end-5 shadow-sm" placeholder="R$--" aria-label="Preço máximo" style="max-width: 100px;">
+              <div class="input-group flex-nowrap">
+                <div class="d-flex align-items-center position-relative">
+                  <label for="preco-de" class="text-dark position-absolute px-3">De</label>
+                  <input type="text" id="preco-de" class="form-control rounded-start-5 ps-5" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px;">
+                </div>
+                <div class="d-flex align-items-center position-relative">
+                  <label for="preco-ate" class="text-dark position-absolute px-3">Até</label>
+                  <input type="text" id="preco-ate" class="form-control rounded-end-5 ps-5 bg-transparent" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px;">
+                </div>
+
               </div>
             </div>
-            <div class="col-2 col-xl-auto ms-auto">
+            <div class="col-auto ms-auto">
               <a href="compras.php" class="btn btn-dark rounded-pill shadow-sm px-3"><i class="bi bi-search me-2"></i>Pesquisar</a>
             </div>
           </div>
@@ -206,7 +205,7 @@ session_start();
       <div id="categorias-carousel" class="carousel carousel-dark multi-carousel multi-carousel-6 px-4">
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <a href="compras.php?categoria=ele" class="card-hover card border-0">
+            <a href="compras.php?categoria=ele" class="shadow-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Elétricos</h5>
               </div>
@@ -214,7 +213,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php?categoria=sed" class="card-hover card border-0">
+            <a href="compras.php?categoria=sed" class="shadow-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Sedans</h5>
               </div>
@@ -222,7 +221,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php?categoria=hat" class="card-hover card border-0">
+            <a href="compras.php?categoria=hat" class="shadow-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Hatchbacks</h5>
               </div>
@@ -230,7 +229,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php?categoria=pic" class="card-hover card border-0">
+            <a href="compras.php?categoria=pic" class="shadow-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Pickups</h5>
               </div>
@@ -238,7 +237,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php?categoria=cou" class="card-hover card border-0">
+            <a href="compras.php?categoria=cou" class="shadow-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Coupés</h5>
               </div>
@@ -246,7 +245,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php?categoria=min" class="card-hover card border-0">
+            <a href="compras.php?categoria=min" class="shadow-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Minivans</h5>
               </div>
@@ -254,7 +253,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php?categoria=hib" class="card-hover card border-0">
+            <a href="compras.php?categoria=hib" class="shadow-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Híbridos</h5>
               </div>
@@ -262,7 +261,7 @@ session_start();
             </a>
           </div>
           <div class="carousel-item">
-            <a href="compras.php?categoria=sup" class="card-hover card border-0">
+            <a href="compras.php?categoria=sup" class="shadow-hover card border-0">
               <div class="card-img-overlay d-flex flex-column justify-content-end text-white">
                 <h5 class="card-title fw-bold">Supercarros</h5>
               </div>
@@ -289,32 +288,32 @@ session_start();
       </div>
       <div class=" row g-3 align-items-stretch justify-content-between">
           <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/toyota-logo.png" alt="Toyota" class="img-fluid" style="max-height: 60px; width: auto;">
             </a>
           </div>
           <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/honda-logo.png" alt="Honda" class="img-fluid" style="max-height: 50px; width: auto;">
             </a>
           </div>
           <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/kia-logo.png" alt="Kia" class="img-fluid" style="max-height: 55px; width: auto;">
             </a>
           </div>
           <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/renault-logo.png" alt="Renault" class="img-fluid" style="max-height: 65px; width: auto;">
             </a>
           </div>
           <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/chevrolet-logo.png" alt="Chevrolet" class="img-fluid" style="max-height: 45px; width: auto;">
             </a>
           </div>
           <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body img-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/volkswagen-logo.png" alt="Volkswagen" class="img-fluid" style="max-height: 70px; width: auto;">
             </a>
           </div>
@@ -327,7 +326,7 @@ session_start();
           (Ver todas as marcas)
         </a>
       </div>
-      <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
+      <div id=" populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
           <div class="carousel-inner">
             <?php
             $nome = 'AUDI RS5';

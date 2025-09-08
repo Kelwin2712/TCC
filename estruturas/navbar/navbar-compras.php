@@ -5,7 +5,7 @@
         <img src="./img/logo-fahren.png" alt="Logo" width="15" height="20" class="d-inline-block align-text-center" style="filter: invert(1);">
         <span class="ms-1 fw-semibold">Fahren</span>
       </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -14,9 +14,9 @@
         </ul>
         <div class="col-auto">
 
-          <div class="input-group">
-            <div class="input-group-text bg-white rounded-start-4"><i class="bi bi-search text-dark"></i></div>
-            <input type="search" class="form-control ps-0 pe-4 border-start-0 rounded-end-4" placeholder="Buscar modelo ou marca" aria-label="Search">
+          <div class="d-flex align-items-center position-relative">
+            <i class="bi bi-search text-dark position-absolute px-3"></i>
+            <input type="search" class="form-control bg-transparent ps-5 rounded-pill" placeholder="Buscar modelo ou marca" aria-label="Search">
           </div>
         </div>
         <div class="d-flex gap-2">

@@ -1,4 +1,4 @@
-<div class="card card-compra border-1 border-secondary border-opacity-25 shadow-sm position-relative">
+<div class="card card-compra shadow-hover border-1 border-secondary border-opacity-25 position-relative">
     <div id="<?= $id ?>" class="carousel slide card-img-top position-relative" data-quant="1">
         <div class="carousel-inner">
             <a class="carro-img" href="pagina-venda.php">

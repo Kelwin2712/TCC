@@ -66,7 +66,7 @@ $page = $_GET['page'] ?? 1;
           </div>
           <div class="row g-4">
             <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-flex flex-column" style="max-height: 100vh;">
-              <div id="filtros-over" class="overflow-auto rounded-2 border border-opacity-25 shadow-sm" style="max-height: 100%;">
+              <div id="filtros-over" class="overflow-y-auto rounded-2 border border-opacity-25 shadow-sm" style="max-height: 100%;">
                 <div class="accordion w-100" id="accordionPanelsStayOpenExample">
                   <?php if (isset($vendedor)) {
                   echo "<!-- Vendedor ⬇️ -->
