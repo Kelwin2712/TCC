@@ -1,4 +1,4 @@
-<header>
+<header <?php if (empty($float)) {echo 'class="float sticky-top"';}?>>
   <nav class="navbar navbar-expand-lg bg-body shadow-sm" data-bs-theme="light">
     <div class="container-xxl px-lg-5">
       <a class="navbar-brand" href="index.php">

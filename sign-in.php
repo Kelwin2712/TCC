@@ -1,40 +1,10 @@
 <?php
 session_start();
-include('conexao_bd.php');
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  if (isset($_POST['email'])) {
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
-
-    $sql = "SELECT * FROM usuarios WHERE senha = '$senha' AND email = '$email'";
-    $resultado = mysqli_query($conexao, $sql);
-
-    if (mysqli_num_rows($resultado) > 0) {
-      $linha = mysqli_fetch_array($resultado);
-      $_SESSION['id'] = $linha['id'];
-      $_SESSION['nome'] = $linha['nome'];
-      $_SESSION['email'] = $linha['email'];
-      header('Location: index.php');
-    } else {
-      echo "<script>alert('Email ou senha incorretos');</script>";
-    }
-  } else {
-    $_SESSION['senha'] = $_POST['senha'];
-    $data_criacao_conta = date('Y-m-d H:i:s');
-
-    $nome = $_SESSION['nome'];
-    $email = $_SESSION['email'];
-    $senha = $_SESSION['senha'];
-    $sql = "INSERT INTO usuarios(nome, senha, email, data_criacao_conta) VALUES ('$nome', '$senha', '$email', '$data_criacao_conta')";
-    if (!mysqli_query($conexao, $sql)) {
-      echo "Erro: " . $sql . "<br>" . mysqli_error($conexao);
-    }
-  }
+if (isset($_SESSION['id'])) {
+  header('Location: index.php');
+  exit();
 }
-mysqli_close($conexao);
-
-
 ?>
 
 <!DOCTYPE html>
@@ -51,6 +21,7 @@ mysqli_close($conexao);
 </head>
 
 <body>
+  <?php include 'estruturas/alert/alert.php' ?>
   <?php include 'estruturas/navbar/navbar-no-login.php' ?>
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
@@ -62,12 +33,13 @@ mysqli_close($conexao);
               <div class="row h-100 g-0">
                 <div class="col-6 px-5 py-4 d-flex align-items-center">
                   <div class="row w-100">
-                    <form action="sign-in.php" method="post">
+                    <form action="controladores/login.php" method="post">
                       <h3 class="mb-1 text-center">Login</h3>
                       <p class="mb-5 text-secondary text-center">Utilize o seu email para ter acesso</p>
                       <div class="mb-3">
                         <label for="email-input" class="form-label mb-0">Email</label>
-                        <input type="email" class="form-control rounded-3 border-2" id="email-input" name="email" placeholder="Email" required>
+                        <input type="email" class="form-control rounded-3 border-2" id="email-input" name="email" placeholder="Email" required <?php if (isset(
+    $_SESSION['email'])) {echo 'value="'.$_SESSION['email'].'"'; unset($_SESSION['email']);}?>>
                       </div>
                       <div class="mb-1">
                         <label for="password-input" class="form-label mb-0">Senha</label>
@@ -123,24 +95,10 @@ mysqli_close($conexao);
         </div>
       </div>
     </div>
-    <div class="toast-container position-fixed bottom-0 end-0 p-3">
-  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="toast-header">
-      <img src="..." class="rounded me-2" alt="...">
-      <strong class="me-auto">Bootstrap</strong>
-      <small>11 mins ago</small>
-      <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-    </div>
-    <div class="toast-body">
-      Hello, world! This is a toast message.
-    </div>
-  </div>
-</div>
   </main>
   <?php include 'estruturas/footer/footer.php' ?>
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
-
 </html>

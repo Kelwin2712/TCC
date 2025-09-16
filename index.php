@@ -22,6 +22,9 @@ session_start();
 </style>
 
 <body>
+  <?php
+  include 'estruturas/top-button/top-button.php' ?>
+  <?php include 'estruturas/alert/alert.php' ?>
   <?php include 'estruturas/navbar/navbar-default.php' ?>
   <main class="bg-body-tertiary fs-nav">
     <div id="banner-carousel" class="carousel slide" data-bs-ride="carousel">
@@ -60,7 +63,7 @@ session_start();
             <input type="text" class="form-control border-0 my-3" placeholder="Encontre o modelo que você procura...">
           </div>
           <div class="row g-2">
-            <div class="ps-0 col-2 col-xl-auto">
+            <div class="ps-0 col col-md-2 col-xl-auto">
               <div class="d-flex align-items-center position-relative">
                 <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
                 <select id="marca-select" class="form-select rounded-pill shadow-sm ps-5 bg-transparent">
@@ -126,7 +129,7 @@ session_start();
                 </select>
               </div>
             </div>
-            <div class="col-2">
+            <div class="col col-md-2">
               <div class="d-flex align-items-center position-relative">
                 <label for="modelo-select" class="d-flex align-items-center"><i class="bi bi-car-front position-absolute px-3"></i></label>
                 <select id="modelo-select" class="form-select rounded-pill shadow-sm ps-5 bg-transparent" disabled>
@@ -140,7 +143,7 @@ session_start();
                 </select>
               </div>
             </div>
-            <div class="col-2 col-xl-auto">
+            <div class="col col-md-2 col-xl-auto">
               <div class="d-flex align-items-center position-relative">
                 <label for="estado-select" class="d-flex align-items-center"><i class="bi bi-pin-map position-absolute px-3"></i></label>
                 <select id="estado-select" class="form-select rounded-pill shadow-sm ps-5 bg-transparent">
@@ -175,21 +178,21 @@ session_start();
                 </select>
               </div>
             </div>
-            <div class="col-2 col-xl-auto">
+            <div class="col col-md-2 col-xl-auto">
               <div class="input-group flex-nowrap">
                 <div class="d-flex align-items-center position-relative">
                   <label for="preco-de" class="text-dark position-absolute px-3">De</label>
-                  <input type="text" id="preco-de" class="form-control rounded-start-5 ps-5" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px;">
+                  <input type="text" id="preco-de" class="form-control rounded-start-5 rounded-end-0 ps-5" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px;">
                 </div>
                 <div class="d-flex align-items-center position-relative">
                   <label for="preco-ate" class="text-dark position-absolute px-3">Até</label>
-                  <input type="text" id="preco-ate" class="form-control rounded-end-5 ps-5 bg-transparent" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px;">
+                  <input type="text" id="preco-ate" class="form-control rounded-end-5 rounded-start-0 ps-5" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px;">
                 </div>
 
               </div>
             </div>
-            <div class="col-auto ms-auto">
-              <a href="compras.php" class="btn btn-dark rounded-pill shadow-sm px-3"><i class="bi bi-search me-2"></i>Pesquisar</a>
+            <div class="col-12 col-md-auto ms-auto">
+              <a href="compras.php" class="btn btn-dark rounded-pill shadow-sm px-3 w-100"><i class="bi bi-search me-2"></i>Pesquisar</a>
             </div>
           </div>
         </div>
@@ -286,34 +289,34 @@ session_start();
           (Ver todas as marcas)
         </a>
       </div>
-      <div class=" row g-3 align-items-stretch justify-content-between">
-          <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+      <div class="row g-3 align-items-stretch justify-content-between row-cols-3 row-cols-lg-6">
+          <div class="col d-flex">
+            <a href="compras.php?marca=toyota" class="bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/toyota-logo.png" alt="Toyota" class="img-fluid" style="max-height: 60px; width: auto;">
             </a>
           </div>
-          <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <div class="col d-flex">
+            <a href="compras.php?marca=honda" class="bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/honda-logo.png" alt="Honda" class="img-fluid" style="max-height: 50px; width: auto;">
             </a>
           </div>
-          <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <div class="col d-flex">
+            <a href="compras.php?marca=kia" class="bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/kia-logo.png" alt="Kia" class="img-fluid" style="max-height: 55px; width: auto;">
             </a>
           </div>
-          <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <div class="col d-flex">
+            <a href="compras.php?marca=renault" class="bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/renault-logo.png" alt="Renault" class="img-fluid" style="max-height: 65px; width: auto;">
             </a>
           </div>
-          <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <div class="col d-flex">
+            <a href="compras.php?marca=chevrolet" class="bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/chevrolet-logo.png" alt="Chevrolet" class="img-fluid" style="max-height: 45px; width: auto;">
             </a>
           </div>
-          <div class="col-4 col-md-3 col-lg-2 d-flex">
-            <a href="compras.php"" class=" bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
+          <div class="col d-flex">
+            <a href="compras.php?marca=volkswagen" class="bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/volkswagen-logo.png" alt="Volkswagen" class="img-fluid" style="max-height: 70px; width: auto;">
             </a>
           </div>
@@ -326,7 +329,7 @@ session_start();
           (Ver todas as marcas)
         </a>
       </div>
-      <div id=" populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
+      <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
           <div class="carousel-inner">
             <?php
             $nome = 'AUDI RS5';
@@ -477,7 +480,7 @@ session_start();
   </main>
   <?php include 'estruturas/footer/footer.php' ?>
 </body>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
 <script>

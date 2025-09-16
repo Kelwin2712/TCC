@@ -45,6 +45,20 @@ body {
     display: block;
 }
 
+header {
+  transition: none;
+}
+
+header.floating {
+  padding: 1rem;
+  transition: padding 0.3s ease;
+}
+
+header.floating nav {
+  border-radius: 999px;
+  transition: border-radius 0.3s ease;
+}
+
 .no-deco {
     text-decoration: none;
 }

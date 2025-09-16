@@ -1,3 +1,11 @@
+<?php session_start();
+
+if (isset($_SESSION['id'])) {
+  header('Location: index.php');
+  exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -12,7 +20,8 @@
 </head>
 
 <body>
-  <?php include 'estruturas/navbar/navbar-no-login.php'?>
+  <?php include 'estruturas/alert/alert.php' ?>
+  <?php include 'estruturas/navbar/navbar-no-login.php' ?>
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
       <div class="row h-100 g-0 d-flex align-items-center justify-content-center">

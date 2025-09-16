@@ -1,3 +1,11 @@
+<?php 
+session_start();
+
+if (isset($_SESSION['id'])) {
+  header('Location: index.php');
+  exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -12,6 +20,7 @@
 </head>
 
 <body>
+  <?php include 'estruturas/alert/alert.php' ?>
   <?php include 'estruturas/navbar/navbar-no-login.php' ?>
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
@@ -103,5 +112,4 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
-
 </html>

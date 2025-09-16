@@ -13,7 +13,9 @@
 </head>
 
 <body class="min-vh-100">
-    <?php include 'estruturas/navbar/navbar-default.php' ?>
+    <?php
+    $float = true;
+    include 'estruturas/navbar/navbar-default.php' ?>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12 d-flex">
@@ -145,9 +147,9 @@
                         <div class="col-12">
                             <i class="bi bi-exclamation-circle- me-1fill"></i><span>Solicitar <a href="#" style="text-decoration: none;">Informações e Dados sobre a minha Conta</a></span>
                         </div>
-                    <div class="col-12">
-                        <i class="bi bi-trash3-fill me-1"></i><span>Solicitar <a class="delete-account" href="#">Exclusão da minha Conta</a></span>
-                    </div>
+                        <div class="col-12">
+                            <i class="bi bi-trash3-fill me-1"></i><span>Solicitar <a class="delete-account" href="#">Exclusão da minha Conta</a></span>
+                        </div>
                     </div>
                 </section>
             </div>

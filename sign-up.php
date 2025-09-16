@@ -1,4 +1,10 @@
-<?php session_start(); ?>
+<?php session_start();
+
+if (isset($_SESSION['id'])) {
+  header('Location: index.php');
+  exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -13,6 +19,7 @@
 </head>
 
 <body>
+  <?php include 'estruturas/alert/alert.php' ?>
   <?php include 'estruturas/navbar/navbar-no-login.php' ?>
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
@@ -44,7 +51,8 @@
                       <p class="mb-5 text-secondary text-center">Utilize o seu email para ter acesso</p>
                       <div class="mb-3">
                         <label for="email-input" class="form-label mb-0">Nome completo</label>
-                        <input type="text" class="form-control rounded-3 border-2" id="nome-input" name="nome" placeholder="Nome completo" required>
+                        <input type="text" class="form-control rounded-3 border-2" id="nome-input" name="nome" placeholder="Nome completo" required <?php if (isset(
+    $_SESSION['nome'])) {echo 'value="'.$_SESSION['nome'].'"'; unset($_SESSION['nome']);}?>>
                       </div>
                       <div class="mb-5">
                         <label for="email-input" class="form-label mb-0">Email</label>
@@ -86,5 +94,4 @@
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
-
 </html>

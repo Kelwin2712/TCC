@@ -40,6 +40,9 @@ $page = $_GET['page'] ?? 1;
 
 <body>
   <?php
+  include 'estruturas/top-button/top-button.php' ?>
+  <?php
+  $float = true;
   include 'estruturas/navbar/navbar-compras.php' ?>
   <main class="bg-body-tertiary fs-nav">
     <div class="container-fluid">
@@ -49,19 +52,19 @@ $page = $_GET['page'] ?? 1;
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.php" class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Home</a></li>
-                
+
                 <?php if (isset($vendedor)) {
                   echo "<li class=\"breadcrumb-item\"><a href=\"compras.php\" class=\"link-dark link-underline-opacity-0 link-underline-opacity-100-hover\">Carros</a></li>
-                <li class=\"breadcrumb-item active text-dark fw-semibold\" aria-current=\"page\">".$vendedor."</li>";
+                <li class=\"breadcrumb-item active text-dark fw-semibold\" aria-current=\"page\">" . $vendedor . "</li>";
                 } else {
                   echo "<li class=\"breadcrumb-item active text-dark fw-semibold\" aria-current=\"page\">Carros</li>";
-                };?>
+                }; ?>
               </ol>
               <h4><?php if (isset($vendedor)) {
-                  echo "Anúncios de ".$vendedor;
-                } else {
-                  echo "Carros de todo o Brasil!";
-                };?></h4>
+                    echo "Anúncios de " . $vendedor;
+                  } else {
+                    echo "Carros de todo o Brasil!";
+                  }; ?></h4>
             </nav>
           </div>
           <div class="row g-4">
@@ -69,7 +72,7 @@ $page = $_GET['page'] ?? 1;
               <div id="filtros-over" class="overflow-y-auto rounded-2 border border-opacity-25 shadow-sm" style="max-height: 100%;">
                 <div class="accordion w-100" id="accordionPanelsStayOpenExample">
                   <?php if (isset($vendedor)) {
-                  echo "<!-- Vendedor ⬇️ -->
+                    echo "<!-- Vendedor ⬇️ -->
                   <div class=\"accordion-item border-0 border-bottom\">
                     <h2 class=\"accordion-header\">
                       <button class=\"accordion-button\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#vendedor\" aria-expanded=\"true\" aria-controls=\"vendedor\">
@@ -83,15 +86,15 @@ $page = $_GET['page'] ?? 1;
                                     <div class=\"row\">
                                         <div class=\"col p-2 d-flex align-items-center justify-content-center\">
                                             <div class=\"ratio ratio-1x1\">
-                                                <img src=\"".$vendedor_img."\" alt=\"\" class=\"img-fluid rounded-3 shadow-sm\">
+                                                <img src=\"" . $vendedor_img . "\" alt=\"\" class=\"img-fluid rounded-3 shadow-sm\">
                                             </div></i>
                                         </div>
                                         <div class=\"col-7 py-2\">
                                             <div class=\"row\">
-                                                <p class=\"fw-semibold mb-0\">".$vendedor."</p>
+                                                <p class=\"fw-semibold mb-0\">" . $vendedor . "</p>
                                             </div>
                                             <div class=\"row\">
-                                                <small class=\"fw-semibold mb-0\">".$vendedor_est."<i class=\"bi bi-star-fill ms-1\"></i></small>
+                                                <small class=\"fw-semibold mb-0\">" . $vendedor_est . "<i class=\"bi bi-star-fill ms-1\"></i></small>
                                             </div>
                                         </div>
                                         <div class=\"col-3 d-inline-flex align-items-center text-nowrap\">
@@ -103,7 +106,7 @@ $page = $_GET['page'] ?? 1;
                       </div>
                     </div>
                   </div>";
-                };?>
+                  }; ?>
                   <!-- Modelo ⬇️ -->
                   <div class="accordion-item border-0 border-bottom">
                     <h2 class="accordion-header">
@@ -132,8 +135,8 @@ $page = $_GET['page'] ?? 1;
                             <div class="row ps-3">
                               <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="usados" <?php if ($codicao == 'usado') {
-                                                                                                              echo 'checked';
-                                                                                                            } ?>>
+                                                                                              echo 'checked';
+                                                                                            } ?>>
                                 <label class="form-check-label" for="usados">
                                   Usados
                                 </label>
@@ -143,8 +146,8 @@ $page = $_GET['page'] ?? 1;
                               </div>
                               <div class="form-check">
                                 <input class="form-check-input" type="checkbox" id="novos" <?php if ($codicao == 'novo') {
-                                                                                                              echo 'checked';
-                                                                                                            } ?>>
+                                                                                              echo 'checked';
+                                                                                            } ?>>
                                 <label class="form-check-label" for="novos">
                                   Novos
                                 </label>
@@ -159,66 +162,66 @@ $page = $_GET['page'] ?? 1;
                             <div id="marcas-input" class="mb-3">
                               <h6>Marcas</h6>
                               <div class="input-group">
-                                <select name="" id="" class="form-select">
+                                <select id="marca-select" name="" id="" class="form-select">
                                   <option value="" selected hidden>Selecione a marca</option>
-                                  <option value="0">Abarth</option>
-                                  <option value="0">Alfa Romeo</option>
-                                  <option value="0">Aston Martin</option>
-                                  <option value="0">Audi</option>
-                                  <option value="0">Bentley</option>
-                                  <option value="0">BMW</option>
-                                  <option value="0">Bugatti</option>
-                                  <option value="0">BYD</option>
-                                  <option value="0">Cadillac</option>
-                                  <option value="0">Chevrolet</option>
-                                  <option value="0">Chrysler</option>
-                                  <option value="0">Citroën</option>
-                                  <option value="0">Corvette</option>
-                                  <option value="0">Dacia</option>
-                                  <option value="0">Dodge</option>
-                                  <option value="0">Ferrari</option>
-                                  <option value="0">Fiat</option>
-                                  <option value="0">Ford</option>
-                                  <option value="0">Genesis</option>
-                                  <option value="0">GMC</option>
-                                  <option value="0">GWM</option>
-                                  <option value="0">Honda</option>
-                                  <option value="0">Hummer</option>
-                                  <option value="0">Hyundai</option>
-                                  <option value="0">Infiniti</option>
-                                  <option value="0">JAECOO</option>
-                                  <option value="0">Jaguar</option>
-                                  <option value="0">Jeep</option>
-                                  <option value="0">Kia</option>
-                                  <option value="0">Koenigsegg</option>
-                                  <option value="0">Lamborghini</option>
-                                  <option value="0">Lacia</option>
-                                  <option value="0">Land Rover</option>
-                                  <option value="0">Lexus</option>
-                                  <option value="0">Lincoln</option>
-                                  <option value="0">Lotus</option>
-                                  <option value="0">Maserati</option>
-                                  <option value="0">Mazda</option>
-                                  <option value="0">McLaren</option>
-                                  <option value="0">Mercedes-Benz</option>
-                                  <option value="0">MINI</option>
-                                  <option value="0">Mitsubishi</option>
-                                  <option value="0">Nissan</option>
-                                  <option value="0">Omoda</option>
-                                  <option value="0">Opel</option>
-                                  <option value="0">Peugeot</option>
-                                  <option value="0">Porsche</option>
-                                  <option value="0">Ram</option>
-                                  <option value="0">Renault</option>
-                                  <option value="0">Rolls-Royce</option>
-                                  <option value="0">Skoda</option>
-                                  <option value="0">Smart</option>
-                                  <option value="0">Subaru</option>
-                                  <option value="0">Suzuki</option>
-                                  <option value="0">Tesla</option>
-                                  <option value="0">Toyota</option>
-                                  <option value="0">Volkswagen</option>
-                                  <option value="0">Volvo</option>
+                                  <option value="abarth">Abarth</option>
+                                  <option value="alfa">Alfa Romeo</option>
+                                  <option value="aston">Aston Martin</option>
+                                  <option value="audi">Audi</option>
+                                  <option value="bentley">Bentley</option>
+                                  <option value="bmw">BMW</option>
+                                  <option value="bugatti">Bugatti</option>
+                                  <option value="byd">BYD</option>
+                                  <option value="cadillac">Cadillac</option>
+                                  <option value="chevrolet">Chevrolet</option>
+                                  <option value="chrysler">Chrysler</option>
+                                  <option value="citroen">Citroën</option>
+                                  <option value="corvette">Corvette</option>
+                                  <option value="dacia">Dacia</option>
+                                  <option value="dodge">Dodge</option>
+                                  <option value="ferrari">Ferrari</option>
+                                  <option value="fiat">Fiat</option>
+                                  <option value="ford">Ford</option>
+                                  <option value="genesis">Genesis</option>
+                                  <option value="gmc">GMC</option>
+                                  <option value="gwm">GWM</option>
+                                  <option value="honda">Honda</option>
+                                  <option value="hummer">Hummer</option>
+                                  <option value="hyundai">Hyundai</option>
+                                  <option value="infiniti">Infiniti</option>
+                                  <option value="jaecoo">JAECOO</option>
+                                  <option value="jaguar">Jaguar</option>
+                                  <option value="jeep">Jeep</option>
+                                  <option value="kia">Kia</option>
+                                  <option value="koenigsegg">Koenigsegg</option>
+                                  <option value="lamborghini">Lamborghini</option>
+                                  <option value="lancia">Lancia</option>
+                                  <option value="land">Land Rover</option>
+                                  <option value="lexus">Lexus</option>
+                                  <option value="lincoln">Lincoln</option>
+                                  <option value="lotus">Lotus</option>
+                                  <option value="maserati">Maserati</option>
+                                  <option value="mazda">Mazda</option>
+                                  <option value="mclaren">McLaren</option>
+                                  <option value="mercedes">Mercedes-Benz</option>
+                                  <option value="mini">MINI</option>
+                                  <option value="mitsubishi">Mitsubishi</option>
+                                  <option value="nissan">Nissan</option>
+                                  <option value="omoda">Omoda</option>
+                                  <option value="opel">Opel</option>
+                                  <option value="peugeot">Peugeot</option>
+                                  <option value="porsche">Porsche</option>
+                                  <option value="ram">Ram</option>
+                                  <option value="renault">Renault</option>
+                                  <option value="rolls">Rolls-Royce</option>
+                                  <option value="skoda">Skoda</option>
+                                  <option value="smart">Smart</option>
+                                  <option value="subaru">Subaru</option>
+                                  <option value="suzuki">Suzuki</option>
+                                  <option value="tesla">Tesla</option>
+                                  <option value="toyota">Toyota</option>
+                                  <option value="volkswagen">Volkswagen</option>
+                                  <option value="volvo">Volvo</option>
                                 </select>
                                 <button class="btn bg-white border d-none">X</button>
                               </div>
@@ -747,16 +750,17 @@ $page = $_GET['page'] ?? 1;
                 </div>
               </div>
               <div id="area-compra" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-2">
-                  <?php
-                  $quantidade = 3;
-                  for ($i = 1; $i <= $quantidade*12; $i++) {
+                <?php
+                $quantidade = 3;
+                for ($i = 1; $i <= $quantidade * 12; $i++) {
                   echo '<div class="col">';
-                  $nome = 'PORSCHE 911';
-                  $info = '3.8 24V H6 GASOLINA TURBO PDK';
+                  $marca = 'PORSCHE';
+                  $modelo = '911';
+                  $versao = '3.8 24V H6 GASOLINA TURBO PDK';
                   $preco = 'R$ 1.190.000';
                   $ano = '2020/2021';
                   $km = '2.500';
-                  $id = 'carro-'.$i;
+                  $id = 'carro-' . $i;
                   $loc = 'São José dos Campos - SP';
                   $img1 = 'img/compras/1.png';
                   $img2 = 'img/compras/2.png';
@@ -766,8 +770,8 @@ $page = $_GET['page'] ?? 1;
                   $img6 = 'img/compras/6.png';
                   include 'estruturas/card-compra/card-compra.php';
                   echo '</div>';
-                  };
-                  ?>
+                };
+                ?>
               </div>
             </div>
           </div>
@@ -778,21 +782,61 @@ $page = $_GET['page'] ?? 1;
           <div class="col-12 d-flex justify-content-center">
             <nav aria-label="Page navigation example">
               <ul class="pagination pagination-dark">
-                <li class="page-item <?php if ($page == 1) {echo 'disabled';} ?>">
-                  <a class="page-link" href="compras.php?page=<?= $page-1?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
+                <li class="page-item <?php if ($page == 1) {
+                                        echo 'disabled';
+                                      } ?>">
+                  <a class="page-link" href="compras.php?page=<?= $page - 1 ?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
                 </li>
-                <?php if ($page >= 3) {echo '<li class="page-item">
+                <?php if ($page >= 3) {
+                  echo '<li class="page-item">
                   <a class="page-link" href="compras.php?page=1" tabindex="-1" aria-disabled="true">1</a>
                 </li>
                 <li class="page-item disabled">
                   <a class="page-link" href="#" tabindex="-1" aria-disabled="true">...</a>
-                </li>';};?>
-                <li class="page-item <?php if ($page == 1) {echo 'active';} ?>"><a class="page-link border-0" href="compras.php?page=<?php if ($page == 1) {echo $page;} else {echo $page-1;} ?>"><?php if ($page == 1) {echo $page;} else {echo $page-1;} ?></a></li>
-                <li class="page-item <?php if ($page != 1) {echo 'active';} ?>"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {echo $page+1;} else {echo $page;} ?>"><?php if ($page == 1) {echo $page+1;} else {echo $page;} ?></a></li>
-                <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {echo $page+2;} else {echo $page+1;} ?>"><?php if ($page == 1) {echo $page+2;} else {echo $page+1;} ?></a></li>
-                <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {echo $page+3;} else {echo $page+2;} ?>"><?php if ($page == 1) {echo $page+3;} else {echo $page+2;} ?></a></li>
+                </li>';
+                }; ?>
+                <li class="page-item <?php if ($page == 1) {
+                                        echo 'active';
+                                      } ?>"><a class="page-link border-0" href="compras.php?page=<?php if ($page == 1) {
+                                                                                                    echo $page;
+                                                                                                  } else {
+                                                                                                    echo $page - 1;
+                                                                                                  } ?>"><?php if ($page == 1) {
+                                                                                                          echo $page;
+                                                                                                        } else {
+                                                                                                          echo $page - 1;
+                                                                                                        } ?></a></li>
+                <li class="page-item <?php if ($page != 1) {
+                                        echo 'active';
+                                      } ?>"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
+                                                                                          echo $page + 1;
+                                                                                        } else {
+                                                                                          echo $page;
+                                                                                        } ?>"><?php if ($page == 1) {
+                                                                                                echo $page + 1;
+                                                                                              } else {
+                                                                                                echo $page;
+                                                                                              } ?></a></li>
+                <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
+                                                                                    echo $page + 2;
+                                                                                  } else {
+                                                                                    echo $page + 1;
+                                                                                  } ?>"><?php if ($page == 1) {
+                                                                                          echo $page + 2;
+                                                                                        } else {
+                                                                                          echo $page + 1;
+                                                                                        } ?></a></li>
+                <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
+                                                                                    echo $page + 3;
+                                                                                  } else {
+                                                                                    echo $page + 2;
+                                                                                  } ?>"><?php if ($page == 1) {
+                                                                                          echo $page + 3;
+                                                                                        } else {
+                                                                                          echo $page + 2;
+                                                                                        } ?></a></li>
                 <li class="page-item">
-                  <a class="page-link" href="compras.php?page=<?= $page+1?>"><i class="bi bi-caret-right-fill"></i></a>
+                  <a class="page-link" href="compras.php?page=<?= $page + 1 ?>"><i class="bi bi-caret-right-fill"></i></a>
                 </li>
               </ul>
             </nav>
@@ -805,20 +849,26 @@ $page = $_GET['page'] ?? 1;
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
 <script>
-
   $(function() {
+    <?php if (isset($_GET['marca'])): ?>
+      const marca = <?= json_encode($_GET['marca']) ?>;
+
+      $('#marca-select option[selected]').prop('selected', false);
+      $('#marca-select option[value="' + marca + '"]').prop('selected', true);
+    <?php endif; ?>
     const cards = $('.card-compra');
     cards.each(function() {
       let num = 1;
       const card = $(this)
       card.data('quant', card.find('.carro-img').children().length);
       const quant = card.data('quant');
+      console.log('rola');
       card.find('.max').text(quant);
       card.find('.carousel-control-prev').on('click', function() {
         if (num === 1) {
           num = quant;
         } else {
-          num --;
+          num--;
         };
 
         card.find('.min').text(num);
@@ -827,19 +877,19 @@ $page = $_GET['page'] ?? 1;
         if (num === quant) {
           num = 1;
         } else {
-          num ++;
+          num++;
         };
         card.find('.min').text(num);
       });
 
       card.find('.favoritar-btn').hide();
-      
+
       card.on('mouseenter', function() {
-        card.find('.favoritar-btn').fadeIn(250);
+        card.find('.favoritar-btn, .carousel-control-prev, .carousel-control-next, #img-quant').fadeIn(250);
       });
 
       card.on('mouseleave', function() {
-        card.find('.favoritar-btn').fadeOut(250);
+        card.find('.favoritar-btn, .carousel-control-prev, .carousel-control-next, #img-quant').fadeOut(250);
       });
     });
 

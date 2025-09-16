@@ -22,18 +22,18 @@ document.querySelectorAll('.multi-carousel').forEach(function (multipleItemCarou
 
       var scrollStep = cardWidth * itemsToShow * 1;
 
+      console.log({ cardWidth, scrollPosition, maxScroll, scrollStep, itemsToShow });
+
       if ($(this).hasClass('carousel-control-next')) {
         if (scrollPosition + scrollStep <= maxScroll) {
           $carouselInner.stop().animate({ scrollLeft: scrollPosition + scrollStep }, 500);
         } else {
-
           $carouselInner.stop().animate({ scrollLeft: maxScroll }, 500);
         }
       } else {
         if (scrollPosition - scrollStep >= 0) {
           $carouselInner.stop().animate({ scrollLeft: scrollPosition - scrollStep }, 500);
         } else {
-
           $carouselInner.stop().animate({ scrollLeft: 0 }, 500);
         }
       }
@@ -43,6 +43,31 @@ document.querySelectorAll('.multi-carousel').forEach(function (multipleItemCarou
   } else {
 
     $(multipleItemCarousel).addClass('slide');
+  }
+});
+
+const alt = $('#alert-mensagem').parent();
+
+if (alt.length) {
+  alt.show();
+  alt.delay(1500).fadeOut(1500, function () {
+    alt.remove();
+  });
+}
+
+$(window).on("scroll", function () {
+  const header = $("header.float");
+  if (header.length === 0) return;
+
+  const scrollY = $(window).scrollTop();
+
+  if (scrollY > header.outerHeight() && !header.hasClass("floating")) {
+    console.log("adicionou");
+    header.addClass("floating");
+  } else if (scrollY <= header.outerHeight() && header.hasClass("floating")) {
+    console.log("removeu");
+    header.removeClass("floating");
+    $(window).scrollTop(0);
   }
 });
 
@@ -83,6 +108,18 @@ function showToggleSenha(input, ButtonID) {
   }
 }
 
+$(window).scroll(function () {
+  if ($(this).scrollTop() > 100) {
+    $('#top-button').fadeIn();
+  } else {
+    $('#top-button').fadeOut();
+  }
+});
+
+$("#top-button").click(function () {
+  $("html, body").animate({ scrollTop: 0 }, "slow");
+  return false;
+});
 
 const handlePhone = (event) => {
   let input = event.target

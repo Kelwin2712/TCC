@@ -1,4 +1,8 @@
 <?php session_start();
+$marca = $_GET['marca'];
+$modelo = $_GET['modelo'];
+$versao = $_GET['versao'];
+
 $vendedor = 'Fahren Imports';
 $vendedor_img = 'img/logo-fahren-bg.jpg';
 $vendedor_est = '4.63';
@@ -13,7 +17,7 @@ $vendedor_est = '4.63';
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title>Fahren</title>
+    <title><?= $marca . ' ' . $modelo . ' ' . $versao ?></title>
     <link rel="stylesheet" href="style.css">
     <style>
         .carro-img {
@@ -31,7 +35,10 @@ $vendedor_est = '4.63';
 </head>
 
 <body>
-    <?php include 'estruturas/navbar/navbar-compras.php' ?>
+    <?php
+    include 'estruturas/top-button/top-button.php' ?>
+    <?php $float = true;
+    include 'estruturas/navbar/navbar-compras.php' ?>
     <main class="bg-body-tertiary fs-nav">
         <div class="container py-5">
             <div class="row g-5 mb-3">
@@ -171,8 +178,8 @@ $vendedor_est = '4.63';
                         <div class="card-body py-4">
                             <div class="row mb-4 d-flex justify-content-between px-4">
                                 <div class="col-auto pe-0">
-                                    <h2 class="fw-bold mb-0 text-uppercase">PORSCHE 911</h2>
-                                    <p class="text-uppercase">3.8 24V H6 GASOLINA TURBO PDK</p>
+                                    <h2 class="fw-bold mb-0 text-uppercase"><?= $marca ?> <?= $modelo ?></h2>
+                                    <p class="text-uppercase"><?= $versao ?></p>
                                 </div>
                                 <div class="col">
                                     <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> São José dos Campos - SP</p>

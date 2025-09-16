@@ -1,10 +1,31 @@
 <?php
 session_start();
+include('controladores/conexao_bd.php');
+
+if (isset($_SESSION['id'])) {
+  header('Location: index.php');
+  exit();
+}
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  $email = $_POST['email'];
+  $_SESSION['nome'] = $_POST['nome'];
+  $sql = "SELECT * FROM usuarios WHERE email = '$email'";
+  $resultado = mysqli_query($conexao, $sql);
+
+  if (mysqli_num_rows($resultado) > 0) {
+    $_SESSION['msg_alert'] = ['danger', 'Email já cadastrado!'];
+    header('Location: sign-up.php');
+    exit();
+  } else {
     $_SESSION['nome'] = $_POST['nome'];
-    $_SESSION['email'] = $_POST['email'];
+    $_SESSION['email'] = $email;
+  } 
+} else {
+  header('Location: index.php');
 }
+
+mysqli_close($conexao);
 ?>
 
 <!DOCTYPE html>
@@ -21,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 </head>
 
 <body>
+  <?php include 'estruturas/alert/alert.php' ?>
   <?php include 'estruturas/navbar/navbar-no-login.php' ?>
   <main style="min-height: calc(100vh - 56px);" class="d-flex align-items-center">
     <div class="container h-100">
@@ -47,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 </div>
                 <div class="col-6 px-5 py-4 d-flex align-items-center">
                   <div class="row w-100">
-                    <form id="form-senha" action="sign-in.php" method="post">
+                    <form id="form-senha" action="controladores/cadastro.php" method="post">
                       <h3 class="mb-5 text-center">Defina sua senha</h3>
                       <div class="mb-3">
                         <label for="senha-input" class="form-label mb-0">Senha</label>

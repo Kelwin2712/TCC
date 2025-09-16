@@ -1,7 +1,7 @@
 <div class="card card-compra shadow-hover border-1 border-secondary border-opacity-25 position-relative">
     <div id="<?= $id ?>" class="carousel slide card-img-top position-relative" data-quant="1">
         <div class="carousel-inner">
-            <a class="carro-img" href="pagina-venda.php">
+            <a class="carro-img" href="pagina-venda.php?marca=<?= $marca?>&modelo=<?= $modelo?>&versao=<?= $versao?>">
                 <div class="carousel-item active">
                     <div class="ratio ratio-4x3">
                         <img src="<?= $img1; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem 1">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </a>
-            <div class="row position-absolute bottom-0 p-2">
+            <div id="img-quant" class="row position-absolute bottom-0 p-2" style="display: none;">
                 <div class="col-auto">
                     <div class="text-bg-dark bg-opacity-50 rounded-pill py-1" style="font-size: .8rem; padding-left: .75rem; padding-right: .75rem;"><span class="min">1</span>/<span class="max"></span></div>
                 </div>
@@ -46,21 +46,21 @@
                 </div>
             </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#<?= $id ?>" data-bs-slide="prev">
+        <button class="carousel-control-prev" style="display: none;" type="button" data-bs-target="#<?= $id ?>" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#<?= $id ?>" data-bs-slide="next">
+        <button class="carousel-control-next" style="display: none;" type="button" data-bs-target="#<?= $id ?>" data-bs-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Next</span>
         </button>
     </div>
     <div class="card-body pb-1">
         <div class="row mb-3">
-            <a href="pagina-venda.php" class="text-decoration-none text-dark stretched-link">
-                <h5 class="card-title fw-bold mb-0 text-uppercase"><?= $nome; ?></h5>
+            <a href="pagina-venda.php?marca=<?= $marca?>&modelo=<?= $modelo?>&versao=<?= $versao?>" class="text-decoration-none text-dark stretched-link">
+                <h5 class="card-title fw-bold mb-0 text-uppercase"><?= $marca?> <?= $modelo?></h5>
             </a>
-            <p class="card-text text-uppercase text-secondary small"><?= $info; ?></p>
+            <p class="card-text text-uppercase text-secondary small"><?= $versao; ?></p>
         </div>
         <div class="row mb-3 gx-2">
             <div class="col-auto">
