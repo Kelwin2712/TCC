@@ -885,11 +885,11 @@ $page = $_GET['page'] ?? 1;
       card.find('.favoritar-btn').hide();
 
       card.on('mouseenter', function() {
-        card.find('.favoritar-btn, .carousel-control-prev, .carousel-control-next, #img-quant').fadeIn(250);
+        card.find('.favoritar-btn, .carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeIn(300);
       });
 
       card.on('mouseleave', function() {
-        card.find('.favoritar-btn, .carousel-control-prev, .carousel-control-next, #img-quant').fadeOut(250);
+        card.find('.favoritar-btn, .carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeOut(300);
       });
     });
 

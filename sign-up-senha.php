@@ -10,6 +10,7 @@ if (isset($_SESSION['id'])) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $email = $_POST['email'];
   $_SESSION['nome'] = $_POST['nome'];
+  $_SESSION['sobrenome'] = $_POST['sobrenome'];
   $sql = "SELECT * FROM usuarios WHERE email = '$email'";
   $resultado = mysqli_query($conexao, $sql);
 
@@ -18,7 +19,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header('Location: sign-up.php');
     exit();
   } else {
-    $_SESSION['nome'] = $_POST['nome'];
     $_SESSION['email'] = $email;
   } 
 } else {

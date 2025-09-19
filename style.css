@@ -11,7 +11,16 @@ body {
 }
 
 .c-img {
-    min-height: 150px;
+  min-height: 150px;
+}
+
+.sidebar .nav-link {
+  color: RGBA(var(--bs-dark-rgb), var(--bs-link-opacity, 1)) !important;
+}
+
+.sidebar .nav-link.active {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)) !important;
 }
 
 .pagination-dark {
@@ -37,12 +46,12 @@ body {
 }
 
 .col-2-5 {
-    flex: 0 0 auto;
-    max-width: 20%;
+  flex: 0 0 auto;
+  max-width: 20%;
 }
 
 .nav-item.dropdown:hover .dropdown-menu {
-    display: block;
+  display: block;
 }
 
 header {
@@ -60,11 +69,11 @@ header.floating nav {
 }
 
 .no-deco {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 .no-deco:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 #categorias-carousel {
@@ -73,8 +82,8 @@ header.floating nav {
 
 .shadow-hover:hover {
   transition: transform .3s ease;
-  box-shadow: 0 .2rem .6rem rgba(0,0,0,0.1)
-  }
+  box-shadow: 0 .2rem .6rem rgba(0, 0, 0, 0.1)
+}
 
 @media screen and (min-width:576px) {
   .multi-carousel .carousel-inner {

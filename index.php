@@ -502,11 +502,11 @@ session_start();
     $('.favoritar').hide();
 
     $('.card-compra').on('mouseenter', function() {
-      $(this).find('.favoritar').fadeIn(250);
+      $(this).find('.favoritar').stop(true, true).fadeIn(300);
     });
 
     $('.card-compra').on('mouseleave', function() {
-      $(this).find('.favoritar').fadeOut(250);
+      $(this).find('.favoritar').stop(true, true).fadeOut(300);
     });
   });
 </script>

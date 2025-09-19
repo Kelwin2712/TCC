@@ -14,6 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       if ($linha['senha'] == $senha) {
         $_SESSION['id'] = $linha['id'];
         $_SESSION['nome'] = $linha['nome'];
+        $_SESSION['sobrenome'] = $linha['sobrenome'];
         $_SESSION['email'] = $linha['email'];
 
         $_SESSION['msg_alert'] = ['success', 'Login realizado com sucesso!'];
@@ -28,17 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $_SESSION['msg_alert'] = ['danger', 'Email incorreto!'];
       header('Location: ../sign-in.php');
       exit();
-    }
-  } else {
-    $_SESSION['senha'] = $_POST['senha'];
-    $data_criacao_conta = date('Y-m-d H:i:s');
-
-    $nome = $_SESSION['nome'];
-    $email = $_SESSION['email'];
-    $senha = $_SESSION['senha'];
-    $sql = "INSERT INTO usuarios(nome, senha, email, data_criacao_conta) VALUES ('$nome', '$senha', '$email', '$data_criacao_conta')";
-    if (!mysqli_query($conexao, $sql)) {
-      echo "Erro: " . $sql . "<br>" . mysqli_error($conexao);
     }
   }
 } else {

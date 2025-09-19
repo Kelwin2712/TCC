@@ -2,7 +2,8 @@
     <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill me-1"></i><?= $_SESSION['nome'] ?></button>
     <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="configuracoes.php"><i class="bi bi-gear-fill me-2"></i>Configurações</a></li>
-        <li class="border-bottom pb-1 mb-1"><a class="dropdown-item" href="configuracoes.php"><i class="bi bi-person-fill me-2"></i>Perfil</a></li>
+        <li><a class="dropdown-item" href="perfil.php"><i class="bi bi-person-fill me-2"></i>Perfil</a></li>
+        <hr class="dropdown-divider">
         <li><a class="dropdown-item" href="controladores/logout.php"><i class="bi bi-door-open me-2"></i>Sair</a></li>
     </ul>
 </div>

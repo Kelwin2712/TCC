@@ -49,10 +49,17 @@ if (isset($_SESSION['id'])) {
                     <form action="sign-up-senha.php" method="post">
                       <h3 class="mb-1 text-center">Cadastre-se</h3>
                       <p class="mb-5 text-secondary text-center">Utilize o seu email para ter acesso</p>
-                      <div class="mb-3">
-                        <label for="email-input" class="form-label mb-0">Nome completo</label>
+                      <div class="row mb-3">
+                        <div class="col">
+                          <label for="nome-input" class="form-label mb-0">Nome</label>
                         <input type="text" class="form-control rounded-3 border-2" id="nome-input" name="nome" placeholder="Nome completo" required <?php if (isset(
     $_SESSION['nome'])) {echo 'value="'.$_SESSION['nome'].'"'; unset($_SESSION['nome']);}?>>
+                        </div>
+                        <div class="col">
+                        <label for="sobrenome-input" class="form-label mb-0">Sobrenome</label>
+                          <input type="text" class="form-control rounded-3 border-2" id="sobrenome-input" name="sobrenome" placeholder="Sobrenome" required <?php if (isset(
+    $_SESSION['sobrenome'])) {echo 'value="'.$_SESSION['sobrenome'].'"'; unset($_SESSION['sobrenome']);}?>>
+                        </div>
                       </div>
                       <div class="mb-5">
                         <label for="email-input" class="form-label mb-0">Email</label>

@@ -1,39 +1,28 @@
-<?php
+<?php 
 session_start();
-?>
 
-<!DOCTYPE html>
+if (!isset($_SESSION['nome'])) {
+    header("Location: index.php");
+}
+?>
+<!doctype html>
 <html lang="pt-br">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
-  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <title>Fahren</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Configuração</title>
+    <link rel="icon" type="png" href="img/logo-oficial.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
 <body>
-  <?php include 'estruturas/top-button/top-button.php' ?>
-  <?php include 'estruturas/alert/alert.php' ?>
-  <?php
-  $float = true;
-  include 'estruturas/navbar/navbar-default.php' ?>
-
-  <main style="min-height: calc(100vh - 56px);" class="bg-body-tertiary fs-nav">
-    <div class="container-fluid py-4">
-      <h1>Conteúdo principal</h1>
-      <p>Coloque seu conteúdo aqui...</p>
-    </div>
-  </main>
-
-  <?php include 'estruturas/footer/footer.php' ?>
+    <main class="container-fluid d-flex vh-100 p-0">
+        <?php $selected = 'config'; include_once 'estruturas/sidebar/sidebar.php'?>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-<script src="script.js"></script>
 
 </html>

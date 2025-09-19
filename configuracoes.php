@@ -1,4 +1,10 @@
-<?php session_start(); ?>
+<?php 
+session_start();
+
+if (!isset($_SESSION['nome'])) {
+    header("Location: index.php");
+}
+?>
 <!doctype html>
 <html lang="pt-br">
 
@@ -12,77 +18,118 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
-<body class="min-vh-100">
-    <?php
-    $float = true;
-    include 'estruturas/navbar/navbar-default.php' ?>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12 d-flex">
-                <div class="flex-shrink-0 p-3" style="width: 280px;"> <a href="index.php" class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom"> <svg class="bi pe-none me-2" width="30" height="24" aria-hidden="true">
-                            <use xlink:href="#bootstrap"></use>
-                        </svg> <span class="fs-5 fw-semibold">Collapsible</span> </a>
-                    <ul class="list-unstyled ps-0">
-                        <li class="mb-1"> <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
-                                Home
-                            </button>
-                            <div class="collapse show" id="home-collapse">
-                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Updates</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Reports</a></li>
-                                </ul>
+<body>
+    <main class="container-fluid d-flex vh-100 p-0">
+        <?php $selected = 'config'; include_once 'estruturas/sidebar/sidebar.php'?>
+        <div class="col">
+            <center>
+                <h1 class="pt-2 pb-2 display-6" style="font-weight: bolder;"><i class="bi bi-gear-fill fs-2"></i>&nbsp;Configuração</h1>
+            </center>
+            <section class="container-fluid px-md-5 py-2">
+                <h2 style="font-weight: bolder;" class="display-7">Acessos Rápidos</h2>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6 col-lg-4 mb-1">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><i class="bi bi-person-vcard"></i>&nbsp;Usuário</h5>
+                                <p class="card-text flex-grow-1">Dados e Informações sobre a sua Conta</p>
+                                <a href="B-user.php" class="btn btn-dark rounded rounded-5">
+                                    Acessar Configurações
+                                </a>
                             </div>
-                        </li>
-                        <li class="mb-1"> <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
-                                Dashboard
-                            </button>
-                            <div class="collapse" id="dashboard-collapse">
-                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Weekly</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Monthly</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Annually</a></li>
-                                </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-1">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><i class="bi bi-emoji-smile"></i>&nbsp;Suas Preferências</h5>
+                                <p class="card-text flex-grow-1">Escolha as suas preferências</p>
+                                <a href="C-pref.php" class="btn btn-dark rounded rounded-5">
+                                    Ajustar as Preferências
+                                </a>
                             </div>
-                        </li>
-                        <li class="mb-1"> <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
-                                Orders
-                            </button>
-                            <div class="collapse" id="orders-collapse">
-                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Processed</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Shipped</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Returned</a></li>
-                                </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-1">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><i class="bi bi-grid-3x3"></i>&nbsp;Interface</h5>
+                                <p class="card-text flex-grow-1">Escolha como seja sua interface</p>
+                                <a href="D-interface.php" class="btn btn-dark rounded rounded-5">
+                                    Customizar Interface
+                                </a>
                             </div>
-                        </li>
-                        <li class="border-top my-3"></li>
-                        <li class="mb-1"> <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
-                                Account
-                            </button>
-                            <div class="collapse" id="account-collapse">
-                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">New...</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Profile</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Settings</a></li>
-                                    <li><a href="#" class="link-body-emphasis d-inline-flex text-decoration-none rounded">Sign out</a></li>
-                                </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-1">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><i class="bi bi-coin"></i>&nbsp;Financeiro</h5>
+                                <p class="card-text flex-grow-1">Compras, Vendas, Lucros etc</p>
+                                <a href="E-financeiro.php" class="btn btn-dark rounded rounded-5">
+                                    Gerenciar Pagamentos
+                                </a>
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-1">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><i class="bi bi-person-raised-hand"></i>Suporte</h5>
+                                <p class="card-text flex-grow-1">Para qualquer dúvida e contatar-nos</p>
+                                <a href="F-suporte.php" class="btn btn-dark rounded rounded-5">
+                                    Preciso de Ajuda
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 mb-1">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title"><i class="bi bi-shield-check"></i>&nbsp;Sua Proteção</h5>
+                                <p class="card-text flex-grow-1">Segurança e Termos de Privacidade!</p>
+                                <a href="G-sua_proteção.php" class="btn btn-dark rounded rounded-5">
+                                    Saiba mais
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <section class="configuracao container-fluid px-md-5 py-4">
-                    <h2><i class="bi bi-person-fill-gear me-1"></i>Configuração da conta @</h2>
-                    <div class="row g-3 mb-3">
+                <section>
+                    <div class="container-fluid min-vh-75 rounded-2 mt-3 bg-black d-flex align-items-center justify-content-center position-relative overflow-hidden">
+                        <i class="bi bi-people position-absolute" style="top: 25%; left: 15%; font-size: 1.8rem; color: white; opacity: 0.3; 
+                    animation: float-rotate 12s infinite linear;">
+                        </i>
+                        <i class="bi bi-person-circle position-absolute" style="top: 65%; left: 80%; font-size: 2.2rem; color: white; opacity: 0.3; 
+                    animation: float-rotate 18s infinite linear reverse;">
+                        </i>
+                        <i class="bi bi-people-fill position-absolute" style="top: 40%; left: 70%; font-size: 1.5rem; color: white; opacity: 0.3; 
+                    animation: float-rotate 15s infinite linear;">
+                        </i>
+                        <i class="bi bi-person position-absolute" style="top: 15%; left: 50%; font-size: 2rem; color: white; opacity: 0.3; 
+                    animation: float-rotate 20s infinite linear reverse;">
+                        </i>
+                        <i class="bi bi-person-fill-gear position-absolute" style="top: 75%; left: 25%; font-size: 1.6rem; color: white; opacity: 0.3; 
+                    animation: float-rotate 14s infinite linear;">
+                        </i>
+                        <i class="bi bi-person-lines-fill position-absolute" style="top: 30%; left: 85%; font-size: 1.7rem; color: white; opacity: 0.3; 
+                    animation: float-rotate 16s infinite linear reverse;">
+                        </i>
+                        <i class="bi bi-person-video position-absolute" style="top: 55%; left: 40%; font-size: 2.3rem; color: white; opacity: 0.3; 
+                    animation: float-rotate 22s infinite linear;">
+                        </i>
+                        <h2 class="pt-2 display-7 text-white" style="font-weight: bolder; position: relative; z-index: 2;">
+                            Perfil de Usuário
+                        </h2>
+                    </div>
+                    <div class="row g-3 mt-1">
                         <div class="col-md-6 col-lg-4 mb-1">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><i class="bi bi-person-vcard me-1"></i>Usuário</h5>
-                                    <p class="card-text flex-grow-1">Dados e Informações sobre a sua Conta</p>
-                                    <a href="B-user.html" class="btn btn-dark">
-                                        Acessar Configurações
+                                    <h5 class="card-title">Suas Informações</h5>
+                                    <p class="card-text flex-grow-1">Todos os dados que você preencheu</p>
+                                    <a href="B-user.php" class="btn btn-dark rounded rounded-5">
+                                        Exibir
                                     </a>
                                 </div>
                             </div>
@@ -90,10 +137,10 @@
                         <div class="col-md-6 col-lg-4 mb-1">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><i class="bi bi-emoji-smile me-1"></i>Suas Preferências</h5>
-                                    <p class="card-text flex-grow-1">Escolha as suas preferências</p>
-                                    <a href="C-pref.html" class="btn btn-dark">
-                                        Ajustar as Preferências
+                                    <h5 class="card-title">Contas seguidas</h5>
+                                    <p class="card-text flex-grow-1">Veja as contas que você segue</p>
+                                    <a href="C-pref.php" class="btn btn-dark rounded rounded-5">
+                                        Analisar
                                     </a>
                                 </div>
                             </div>
@@ -101,10 +148,10 @@
                         <div class="col-md-6 col-lg-4 mb-1">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><i class="bi bi-grid-3x3 me-1"></i>Interface</h5>
-                                    <p class="card-text flex-grow-1">Escolha como seja sua interface</p>
-                                    <a href="D-interface.html" class="btn btn-dark">
-                                        Customizar Interface
+                                    <h5 class="card-title">Suas Preferências</h5>
+                                    <p class="card-text flex-grow-1">Ver o que você prefere</p>
+                                    <a href="D-interface.php" class="btn btn-dark rounded rounded-5">
+                                        Ver Preferências
                                     </a>
                                 </div>
                             </div>
@@ -112,10 +159,10 @@
                         <div class="col-md-6 col-lg-4 mb-1">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><i class="bi bi-coin me-1"></i>Financeiro</h5>
-                                    <p class="card-text flex-grow-1">Saiba tudo sobre o Setor Financeiro</p>
-                                    <a href="E-financeiro.html" class="btn btn-dark">
-                                        Gerenciar Pagamentos
+                                    <h5 class="card-title">Privacidade do seu Perfil</h5>
+                                    <p class="card-text flex-grow-1">Informações que sejam visiveis ou não para outros usuários</p>
+                                    <a href="E-financeiro.php" class="btn btn-dark rounded rounded-5">
+                                        Concordar ou Discordar
                                     </a>
                                 </div>
                             </div>
@@ -123,10 +170,10 @@
                         <div class="col-md-6 col-lg-4 mb-1">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><i class="bi bi-person-raised-hand"></i>Suporte</h5>
-                                    <p class="card-text flex-grow-1">Para qualquer dúvida e contatar-nos</p>
-                                    <a href="F-suporte.html" class="btn btn-dark">
-                                        Preciso de Ajuda
+                                    <h5 class="card-title">Permissão de uso de dados</h5>
+                                    <p class="card-text flex-grow-1">Sua segurança é de extrema importância para nós</p>
+                                    <a href="F-suporte.php" class="btn btn-dark rounded rounded-5">
+                                        Permitir ou não
                                     </a>
                                 </div>
                             </div>
@@ -134,27 +181,25 @@
                         <div class="col-md-6 col-lg-4 mb-1">
                             <div class="card h-100 shadow-sm">
                                 <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title"><i class="bi bi-shield-check me-1"></i>Privacidade</h5>
+                                    <h5 class="card-title">Termos de Uso</h5>
                                     <p class="card-text flex-grow-1">Segurança e Termos de Privacidade!</p>
-                                    <a href="G-privacidade.html" class="btn btn-dark">
+                                    <a href="G-sua_proteção.php" class="btn btn-dark rounded rounded-5">
                                         Saiba mais
                                     </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <i class="bi bi-exclamation-circle- me-1fill"></i><span>Solicitar <a href="#" style="text-decoration: none;">Informações e Dados sobre a minha Conta</a></span>
-                        </div>
-                        <div class="col-12">
-                            <i class="bi bi-trash3-fill me-1"></i><span>Solicitar <a class="delete-account" href="#">Exclusão da minha Conta</a></span>
-                        </div>
-                    </div>
+                    <img src="img/car.png" class="d-block w-100" alt="...">
                 </section>
-            </div>
+                <h5>Atalhos</h5>
+                <div class="row">
+                    <span><i class="bi bi-exclamation-circle-fill"></i>&nbspSolicitar <a href="#">Informações e Dados sobre a minha Conta</a></span>
+                    <span><i class="bi bi-trash3-fill"></i>&nbspSolicitar <a class="delete-account" href="#">Exclusão da minha Conta</a></span>
+                </div>
+            </section>
         </div>
-    </div>
+    </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 
