@@ -1,6 +1,6 @@
 <?php
 session_start();
-http_response_code(403);
+http_response_code(404);
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +22,7 @@ http_response_code(403);
     <main class="bg-body-tertiary fs-nav flex-grow-1 d-flex justify-content-center align-items-center">
       <div class="container-fluid d-flex flex-column justify-content-center align-items-center h-100">
         <div class="text-center mb-4">
-          <h1 class="fw-bold mb-0" style="font-size: 4rem;">403!</h1>
+          <h1 class="fw-bold mb-0" style="font-size: 4rem;">404!</h1>
           <p class="mb-0">Página não encontrada</p>
           <p>Ei motorista, pelo visto você pegou o caminho errado</p>
         </div>

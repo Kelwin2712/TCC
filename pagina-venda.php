@@ -3,6 +3,11 @@ $marca = $_GET['marca'];
 $modelo = $_GET['modelo'];
 $versao = $_GET['versao'];
 
+if (!$marca || !$modelo || !$versao) {
+    header('Location: index.php');
+    exit;
+}
+
 $vendedor = 'Fahren Imports';
 $vendedor_img = 'img/logo-fahren-bg.jpg';
 $vendedor_est = '4.63';

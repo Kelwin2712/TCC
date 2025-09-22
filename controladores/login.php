@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['nome'] = $linha['nome'];
         $_SESSION['sobrenome'] = $linha['sobrenome'];
         $_SESSION['email'] = $linha['email'];
+        $_SESSION['data_nascimento'] = $linha['data_nascimento'];
 
         $_SESSION['msg_alert'] = ['success', 'Login realizado com sucesso!'];
         header('Location: ../index.php');
@@ -26,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       }
       exit();
     } else {
-      $_SESSION['msg_alert'] = ['danger', 'Email incorreto!'];
+      $_SESSION['msg_alert'] = ['danger', 'Email não encontrado!'];
       header('Location: ../sign-in.php');
       exit();
     }

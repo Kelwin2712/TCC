@@ -66,7 +66,7 @@ session_start();
             <div class="ps-0 col col-md-2 col-xl-auto">
               <div class="d-flex align-items-center position-relative">
                 <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
-                <select id="marca-select" class="form-select rounded-pill shadow-sm ps-5 bg-transparent">
+                <select id="marca-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
                   <option value="">Marca</option>
                   <option value="0">Abarth</option>
                   <option value="0">Alfa Romeo</option>
@@ -132,7 +132,7 @@ session_start();
             <div class="col col-md-2">
               <div class="d-flex align-items-center position-relative">
                 <label for="modelo-select" class="d-flex align-items-center"><i class="bi bi-car-front position-absolute px-3"></i></label>
-                <select id="modelo-select" class="form-select rounded-pill shadow-sm ps-5 bg-transparent" disabled>
+                <select id="modelo-select" class="form-select rounded-pill shadow-sm bg-transparent" disabled style="padding-left: 3rem;">
                   <option value="" selected>Modelo</option>
                   <option value="0">Audi R8 Spyder</option>
                   <option value="1">Ferrari 488</option>
@@ -146,7 +146,7 @@ session_start();
             <div class="col col-md-2 col-xl-auto">
               <div class="d-flex align-items-center position-relative">
                 <label for="estado-select" class="d-flex align-items-center"><i class="bi bi-pin-map position-absolute px-3"></i></label>
-                <select id="estado-select" class="form-select rounded-pill shadow-sm ps-5 bg-transparent">
+                <select id="estado-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
                   <option value="">Estado</option>
                   <option value="1">Acre</option>
                   <option value="2">Alagoas</option>
@@ -182,11 +182,11 @@ session_start();
               <div class="input-group flex-nowrap">
                 <div class="d-flex align-items-center position-relative">
                   <label for="preco-de" class="text-dark position-absolute px-3">De</label>
-                  <input type="text" id="preco-de" class="form-control rounded-start-5 rounded-end-0 ps-5" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px;">
+                  <input type="text" id="preco-de" class="form-control rounded-start-5 rounded-end-0" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px; padding-left: 3rem;">
                 </div>
                 <div class="d-flex align-items-center position-relative">
                   <label for="preco-ate" class="text-dark position-absolute px-3">Até</label>
-                  <input type="text" id="preco-ate" class="form-control rounded-end-5 rounded-start-0 ps-5" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px;">
+                  <input type="text" id="preco-ate" class="form-control rounded-end-5 rounded-start-0" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px; padding-left: 3rem;">
                 </div>
 
               </div>
