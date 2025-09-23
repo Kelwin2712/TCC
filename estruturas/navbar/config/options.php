@@ -38,13 +38,13 @@
   </a>
   <ul class="dropdown-menu">
     <li>
-      <a class="dropdown-item" href="vender.php">
+      <a class="dropdown-item" href="vender-placa.php">
         <i class="bi bi-car-front-fill"></i>
         Vender carro
       </a>
     </li>
     <li>
-      <a class="dropdown-item" href="vender.php">
+      <a class="dropdown-item" href="vender-placa.php">
         <i class="bi bi-bicycle"></i>
         Vender moto
       </a>
