@@ -1,0 +1,48 @@
+<?php
+session_start();
+include('../conexao_bd.php');
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  $_SESSION['msg_alert'] = ['success', 'Cadastro feito com sucesso!'];
+  $preco_post = isset($_POST['preco']) ? $_POST['preco'] : null;
+  $preco = null;
+
+  if ($preco_post) {
+    // Converte: "R$ 10.000,00" → 10000.00
+    $preco_limpo = str_replace(['R$', '.', ' ', ','], ['', '', '', '.'], $preco_post);
+    $preco = number_format((float)$preco_limpo, 2, '.', '');
+  }
+  echo $preco;
+  $troca = isset($_POST['troca']) ? $_POST['troca'] : null;
+  $email = isset($_POST['email']) ? $_POST['email'] : null;
+  $telefone = isset($_POST['telefone']) ? $_POST['telefone'] : null;
+  $quilometragem = $_SESSION['quilometragem'];
+  $proprietario = $_SESSION['proprietario'];
+  $revisao = $_SESSION['revisao'];
+  $vistoria = $_SESSION['vistoria'];
+  $sinistro = $_SESSION['sinistro'];
+  $ipva = $_SESSION['ipva'];
+  $licenciamento = $_SESSION['licenciamento'];
+  $consevacao = $_SESSION['consevacao'];
+  $uso_anterior = $_SESSION['uso_anterior'];
+  $placa = $_SESSION['placa'];
+  $cor = $_SESSION['cor'];
+  $fabr = $_SESSION['fabr'];
+  $ano = $_SESSION['ano'];
+  $marca = $_SESSION['marca'];
+  $modelo = $_SESSION['modelo'];
+  $versao = $_SESSION['versao'];
+
+  $sql = "INSERT INTO carros(modelo, marca, versao, ano_fabricacao, ano_modelo, placa, cor, id_vendedor, preco, quilometragem, quant_proprietario, revisao, vistoria, sinistro, ipva, licenciamento, estado_conservacao, uso_anterior, aceita_troca, email, telefone) VALUES ('$modelo', '$marca', '$versao', '$fabr', '$ano', '$placa', '$cor', '" . $_SESSION['id'] . "', '$preco', '$quilometragem', '$proprietario', '$revisao', '$vistoria', '$sinistro', '$ipva', '$licenciamento', '$consevacao', '$uso_anterior', '$troca', '$email', '$telefone')";
+  if (!mysqli_query($conexao, $sql)) {
+    header('Location: ../sign-up-senha.php');
+    exit();
+    echo "Erro: " . $sql . "<br>" . mysqli_error($conexao);
+  }
+  header('Location: ../../index.php');
+  exit();
+} else {
+  header('Location: ../../index.php');
+  exit();
+}
+
+mysqli_close($conexao);

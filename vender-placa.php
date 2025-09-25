@@ -1,6 +1,5 @@
 <?php
 session_start();
-http_response_code(404);
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +29,7 @@ http_response_code(404);
           <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm bg-body-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
         </div>
         <div class="card">
-          <div class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
+          <form action="vender-infos.php" method="post" class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
             <h3 class="mb-4 fw-bold">Informe a placa do veículo</h3>
             <div class="d-flex flex-column">
               <div class="position-relative mb-2">
@@ -39,11 +38,12 @@ http_response_code(404);
                   <input
                     type="text"
                     class="form-control w-100 h-100 bg-transparent text-center text-uppercase border-0"
+                    name="placa"
                     id="placa"
                     pattern="[A-Z]{3}[0-9][A-Z][0-9]{2}"
                     title="Formato: 3 letras + 1 número + 1 letra + 2 números (ex: ABC1D23)"
                     placeholder="ABC1D23"
-                    style="font-size: calc(300% + 1.25vw); line-height: 1; border: none !important; outline: none !important; box-shadow: none !important;background: transparent !important;" maxlength="7">
+                    style="font-size: calc(300% + 1.25vw); line-height: 1; border: none !important; outline: none !important; box-shadow: none !important;background: transparent !important;" maxlength="7" required>
                 </div>
               </div>
               <p>Não tem a placa do veículo no momento? Sem problemas, <a href="vender-infos.php" class="link-dark fw-semibold">clique aqui</a></p>
@@ -53,10 +53,10 @@ http_response_code(404);
                 <a href="index.php" class="btn text-muted"><i class="bi bi-caret-left"></i>&nbsp;Cancelar</a>
               </div>
               <div class="col-auto">
-                <a href="vender-infos.php" class="btn btn-dark shadow-sm">Próximo passo&nbsp;<i class="bi bi-caret-right-fill"></i></a>
+                <button type="submit" class="btn btn-dark shadow-sm" disabled>Próximo passo&nbsp;<i class="bi bi-caret-right-fill"></i></button>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </main>
@@ -98,8 +98,17 @@ http_response_code(404);
     $input.val(resultado);
   }
 
-  $('#placa').on('input', function() {
+  const proxBtn = $('button[type="submit"]');
+  const placaInput = $('#placa');
+
+  placaInput.on('input', function() {
     formatarPlacaRobusto($(this));
+
+    if ($(this).val().length === 7) {
+      proxBtn.prop('disabled', false);
+    } else {
+      proxBtn.prop('disabled', true);
+    }
   });
 </script>
 

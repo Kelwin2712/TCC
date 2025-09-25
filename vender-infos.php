@@ -1,6 +1,7 @@
 <?php
 session_start();
-http_response_code(404);
+
+$_SESSION['placa'] = isset($_POST['placa']) ? $_POST['placa'] : null;
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +31,7 @@ http_response_code(404);
           <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm bg-body-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
         </div>
         <div class="card">
-          <div class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
+          <form method="post" action="vender-condicao.php" class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
             <h3 class="mb-4 fw-bold">Informe os dados do veículo</h3>
             <div class="row w-100 px-5">
               <div class="col-md-6 mb-2">
@@ -38,66 +39,66 @@ http_response_code(404);
                   <label for="marca-select">Marca<sup>*</sup></label>
                   <a href="#" class="link-dark">Não encontrou a marca?</a>
                 </div>
-                <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" required>
+                <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
                   <option value="" selected hidden>Escolha uma marca</option>
-                  <option value="0">Abarth</option>
-                  <option value="0">Alfa Romeo</option>
-                  <option value="0">Aston Martin</option>
-                  <option value="0">Audi</option>
-                  <option value="0">Bentley</option>
-                  <option value="0">BMW</option>
-                  <option value="0">Bugatti</option>
-                  <option value="0">BYD</option>
-                  <option value="0">Cadillac</option>
-                  <option value="0">Chevrolet</option>
-                  <option value="0">Chrysler</option>
-                  <option value="0">Citroën</option>
-                  <option value="0">Corvette</option>
-                  <option value="0">Dacia</option>
-                  <option value="0">Dodge</option>
-                  <option value="0">Ferrari</option>
-                  <option value="0">Fiat</option>
-                  <option value="0">Ford</option>
-                  <option value="0">Genesis</option>
-                  <option value="0">GMC</option>
-                  <option value="0">GWM</option>
-                  <option value="0">Honda</option>
-                  <option value="0">Hummer</option>
-                  <option value="0">Hyundai</option>
-                  <option value="0">Infiniti</option>
-                  <option value="0">JAECOO</option>
-                  <option value="0">Jaguar</option>
-                  <option value="0">Jeep</option>
-                  <option value="0">Kia</option>
-                  <option value="0">Koenigsegg</option>
-                  <option value="0">Lamborghini</option>
-                  <option value="0">Lacia</option>
-                  <option value="0">Land Rover</option>
-                  <option value="0">Lexus</option>
-                  <option value="0">Lincoln</option>
-                  <option value="0">Lotus</option>
-                  <option value="0">Maserati</option>
-                  <option value="0">Mazda</option>
-                  <option value="0">McLaren</option>
-                  <option value="0">Mercedes-Benz</option>
-                  <option value="0">MINI</option>
-                  <option value="0">Mitsubishi</option>
-                  <option value="0">Nissan</option>
-                  <option value="0">Omoda</option>
-                  <option value="0">Opel</option>
-                  <option value="0">Peugeot</option>
-                  <option value="0">Porsche</option>
-                  <option value="0">Ram</option>
-                  <option value="0">Renault</option>
-                  <option value="0">Rolls-Royce</option>
-                  <option value="0">Skoda</option>
-                  <option value="0">Smart</option>
-                  <option value="0">Subaru</option>
-                  <option value="0">Suzuki</option>
-                  <option value="0">Tesla</option>
-                  <option value="0">Toyota</option>
-                  <option value="0">Volkswagen</option>
-                  <option value="0">Volvo</option>
+                  <option value="abarth">Abarth</option>
+                  <option value="alfa">Alfa Romeo</option>
+                  <option value="aston">Aston Martin</option>
+                  <option value="audi">Audi</option>
+                  <option value="bentley">Bentley</option>
+                  <option value="bmw">BMW</option>
+                  <option value="bugatti">Bugatti</option>
+                  <option value="byd">BYD</option>
+                  <option value="cadillac">Cadillac</option>
+                  <option value="chevrolet">Chevrolet</option>
+                  <option value="chrysler">Chrysler</option>
+                  <option value="citroen">Citroën</option>
+                  <option value="corvette">Corvette</option>
+                  <option value="dacia">Dacia</option>
+                  <option value="dodge">Dodge</option>
+                  <option value="ferrari">Ferrari</option>
+                  <option value="fiat">Fiat</option>
+                  <option value="ford">Ford</option>
+                  <option value="genesis">Genesis</option>
+                  <option value="gmc">GMC</option>
+                  <option value="gwm">GWM</option>
+                  <option value="honda">Honda</option>
+                  <option value="hummer">Hummer</option>
+                  <option value="hyundai">Hyundai</option>
+                  <option value="infiniti">Infiniti</option>
+                  <option value="jaecoo">JAECOO</option>
+                  <option value="jaguar">Jaguar</option>
+                  <option value="jeep">Jeep</option>
+                  <option value="kia">Kia</option>
+                  <option value="koenigsegg">Koenigsegg</option>
+                  <option value="lamborghini">Lamborghini</option>
+                  <option value="lancia">Lancia</option>
+                  <option value="land">Land Rover</option>
+                  <option value="lexus">Lexus</option>
+                  <option value="lincoln">Lincoln</option>
+                  <option value="lotus">Lotus</option>
+                  <option value="maserati">Maserati</option>
+                  <option value="mazda">Mazda</option>
+                  <option value="mclaren">McLaren</option>
+                  <option value="mercedes">Mercedes-Benz</option>
+                  <option value="mini">MINI</option>
+                  <option value="mitsubishi">Mitsubishi</option>
+                  <option value="nissan">Nissan</option>
+                  <option value="omoda">Omoda</option>
+                  <option value="opel">Opel</option>
+                  <option value="peugeot">Peugeot</option>
+                  <option value="porsche">Porsche</option>
+                  <option value="ram">Ram</option>
+                  <option value="renault">Renault</option>
+                  <option value="rolls">Rolls-Royce</option>
+                  <option value="skoda">Skoda</option>
+                  <option value="smart">Smart</option>
+                  <option value="subaru">Subaru</option>
+                  <option value="suzuki">Suzuki</option>
+                  <option value="tesla">Tesla</option>
+                  <option value="toyota">Toyota</option>
+                  <option value="volkswagen">Volkswagen</option>
+                  <option value="volvo">Volvo</option>
                 </select>
               </div>
               <div class="col-md-6 mb-2">
@@ -105,11 +106,11 @@ http_response_code(404);
                   <label for="modelo-input">Modelo<sup>*</sup></label>
                   <a href="#" class="link-dark">Não encontrou o modelo?</a>
                 </div>
-                <input type="text" class="form-control" name="modelo-input" id="modelo-input" placeholder="Escolha um modelo">
+                <input type="text" class="form-control" id="modelo-input" name="modelo" placeholder="Escolha um modelo" required>
               </div>
               <div class="col-sm-6 mb-2">
                 <label for="ano-select" class="form-text mb-2">Ano do modelo<sup>*</sup></label>
-                <select class="form-select shadow-sm" id="ano-select" aria-label="Default select example" required>
+                <select class="form-select shadow-sm" id="ano-select" aria-label="Default select example" name="ano" required>
                   <option value="" selected hidden>Escolha um ano</option>
                   <?php $quantidade = 97;
                   for ($i = 1; $i <= $quantidade; $i++): ?>
@@ -119,12 +120,9 @@ http_response_code(404);
               </div>
               <div class="col-sm-6 mb-2">
                 <label for="fabr-select" class="form-text mb-2">Ano de fabricação<sup>*</sup></label>
-                <select class="form-select shadow-sm" id="fabr-select" aria-label="Default select example" required>
+                <select class="form-select shadow-sm" id="fabr-select" aria-label="Default select example" name="fabr" required>
                   <option value="" selected hidden>Escolha um ano</option>
-                  <?php $quantidade = 96;
-                  for ($i = 1; $i <= $quantidade; $i++): ?>
-                    <option value="<?= 2026 - $i ?>"><?= 2026 - $i ?></option>
-                  <?php endfor; ?>
+                  <option value="" disabled>Escolha o ano do modelo antes</option>
                 </select>
               </div>
               <div class="col-xl-6 mb-2">
@@ -132,14 +130,14 @@ http_response_code(404);
                   <label for="versao-input">Versão<sup>*</sup></label>
                   <a href="#" class="link-dark">Não encontrou a versão?</a>
                 </div>
-                <input type="text" class="form-control" name="versao-input" id="versao-input" placeholder="Escolha uma versão">
+                <input type="text" class="form-control" id="versao-input" name="versao" placeholder="Escolha uma versão" required>
               </div>
               <div class="col-xl-6 mb-2">
                 <div class="d-flex justify-content-between mb-2 form-text">
                   <label for="cor-select">Cor<sup>*</sup></label>
                   <a href="#" class="link-dark">Não encontrou a cor?</a>
                 </div>
-                <select class="form-select shadow-sm" id="cor-select" aria-label="Default select example" required>
+                <select class="form-select shadow-sm" id="cor-select" aria-label="Default select example" name="cor" required>
                   <option value="" selected hidden>Escolha uma cor</option>
                   <option value="branco">Branco</option>
                   <option value="preto">Preto</option>
@@ -162,10 +160,10 @@ http_response_code(404);
                 <a href="vender-placa.php" class="btn text-muted"><i class="bi bi-caret-left"></i>&nbsp;Voltar</a>
               </div>
               <div class="col-auto">
-                <a href="vender-infos.php" class="btn btn-dark shadow-sm">Próximo passo&nbsp;<i class="bi bi-caret-right-fill"></i></a>
+                <button type="submit" class="btn btn-dark shadow-sm">Próximo passo&nbsp;<i class="bi bi-caret-right-fill"></i></button>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </main>
@@ -175,41 +173,22 @@ http_response_code(404);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
 <script>
-  function formatarPlacaRobusto($input) {
-    let texto = $input.val().toUpperCase();
-    texto = texto.replace(/[^A-Z0-9]/g, '');
+  $(function(){
+  $('#ano-select').on('change', function() {
+    const anoModelo = parseInt($(this).val());
+    const fabrSelect = $('#fabr-select');
 
-    const pattern = ['L', 'L', 'L', 'N', 'L', 'N', 'N'];
-    let resultado = '';
-    let i = 0;
+    fabrSelect.empty('option[selected="false"]');
 
-    for (let p = 0; p < pattern.length && i < texto.length;) {
-      const ch = texto[i];
-      if (pattern[p] === 'L') {
-        if (/[A-Z]/.test(ch)) {
-          resultado += ch;
-          p++;
-          i++;
-        } else {
-          i++;
-        }
-      } else {
-        if (/[0-9]/.test(ch)) {
-          resultado += ch;
-          p++;
-          i++;
-        } else {
-          i++;
-        }
-      }
+    for (let year = anoModelo; year >= anoModelo-1; year--) {
+      fabrSelect.append('<option value="' + year + '">' + year + '</option>');
     }
-
-    $input.val(resultado);
-  }
+  });
 
   $('#placa').on('input', function() {
     formatarPlacaRobusto($(this));
   });
+  })
 </script>
 
 </html>
