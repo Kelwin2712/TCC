@@ -5,6 +5,10 @@ $versao = $_GET['versao'];
 $preco = $_GET['preco'];
 $ano = $_GET['ano'];
 $km = $_GET['km'];
+$cor = $_GET['cor'];
+$troca = $_GET['troca'] == 1 ? 'sim' : 'não';
+$revisao_qtd = $_GET['revisao'];
+$revisao = $_GET['revisao'] > 0 ? 'sim'." ($revisao_qtd)" : 'não';
 
 if (!$marca || !$modelo || !$versao) {
     header('Location: index.php');
@@ -155,25 +159,25 @@ $vendedor_est = '4.63';
                             </div>
                             <div class="row">
                                 <div class="mb-2">
-                                    <label for="nome-input" class="form-label mb-0">Nome<sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control rounded-4 border-2" id="nome-input" placeholder="Nome" required>
+                                    <label for="nome-input" class="form-label form-text mb-0">Nome<sup class="text-danger">*</sup></label>
+                                    <input type="text" class="form-control shadow-sm rounded-4" id="nome-input" placeholder="Nome" required>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="email-input" class="form-label mb-0">Email<sup class="text-danger">*</sup></label>
-                                    <input type="email" class="form-control rounded-4 border-2" id="email-input" placeholder="Email" required>
+                                    <label for="email-input" class="form-label form-text mb-0">Email<sup class="text-danger">*</sup></label>
+                                    <input type="email" class="form-control shadow-sm rounded-4" id="email-input" placeholder="Email" required>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="telefone-input" class="form-label mb-0">Telefone<sup class="text-danger">*</sup></label>
-                                    <input type="email" class="form-control rounded-4 border-2" id="telefone-input" placeholder="Telefone" required>
+                                    <label for="telefone-input" class="form-label form-text mb-0">Telefone<sup class="text-danger">*</sup></label>
+                                    <input type="email" class="form-control shadow-sm rounded-4" id="telefone-input" placeholder="Telefone" required>
                                 </div>
                                 <div class="mb-2">
-                                    <label for="mensagem-input" class="form-label mb-0">Mensagem<sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control rounded-4 border-2 pb-5" id="mensagem-input" placeholder="Mensagem" required>
+                                    <label for="mensagem-input" class="form-label form-text mb-0">Mensagem<sup class="text-danger">*</sup></label>
+                                    <input type="text" class="form-control shadow-sm rounded-4 pb-5" id="mensagem-input" placeholder="Mensagem" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2">Enviar mensagem</button>
+                                    <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2 shadow-sm">Enviar mensagem</button>
                                 </div>
                             </div>
                         </div>
@@ -222,7 +226,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Cor</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold ">Preta</p>
+                                            <p class="fw-semibold text-capitalize"><?= $cor?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -248,7 +252,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Aceita troca</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold ">Sim</p>
+                                            <p class="fw-semibold text-capitalize"><?= $troca?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -256,7 +260,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Revisão feita</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold ">Sim</p>
+                                            <p class="fw-semibold text-capitalize"><?= $revisao?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -286,7 +290,7 @@ $vendedor_est = '4.63';
                                     <p>Vendedor</p>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn bg-primary-subtle text-primary px-2 float-end rounded-3" style="padding-top: .125rem; padding-bottom: .125rem;">
+                                    <button type="button" class="btn btn-sm bg-primary-subtle text-primary px-2 float-end rounded-3" style="padding-top: .125rem; padding-bottom: .125rem;">
                                         <div id="seguir-btn" class="small">Seguir</div>
                                     </button>
                                 </div>
