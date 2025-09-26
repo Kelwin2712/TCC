@@ -1,12 +1,12 @@
 <?php
 session_start();
 
-$_SESSION['modelo'] = strtolower($_POST['modelo']);
-$_SESSION['marca'] = $_POST['marca'];
-$_SESSION['versao'] = $_POST['versao'];
-$_SESSION['cor'] = $_POST['cor'];
-$_SESSION['ano'] = $_POST['ano'];
-$_SESSION['fabr'] = $_POST['fabr'];
+$_SESSION['modelo'] = isset($_POST['modelo']) ? strtolower($_POST['modelo']) : $_SESSION['modelo'];
+$_SESSION['marca'] = isset($_POST['marca']) ? $_POST['marca'] : $_SESSION['marca'];
+$_SESSION['versao'] = isset($_POST['versao']) ? $_POST['versao'] : $_SESSION['versao'];
+$_SESSION['cor'] = isset($_POST['cor']) ? $_POST['cor'] : $_SESSION['cor'];
+$_SESSION['ano'] = isset($_POST['ano']) ? $_POST['ano'] : $_SESSION['ano'];
+$_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
 ?>
 
 <!DOCTYPE html>

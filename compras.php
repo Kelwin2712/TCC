@@ -1,4 +1,5 @@
 <?php session_start();
+include('controladores/conexao_bd.php');
 $filter_check_caminho = 'estruturas/filter/filter-checkbox.php';
 
 $tipo = $_GET['tipo'] ?? 'carro';
@@ -9,6 +10,20 @@ $vendedor_img = $_GET['vendedor_img'] ?? null;
 $vendedor_est = $_GET['vendedor_est'] ?? null;
 
 $page = $_GET['page'] ?? 1;
+
+$quantidade = 3;
+$quantidade = $quantidade * 12;
+
+$sql = "SELECT * FROM anuncios_carros LIMIT $quantidade";
+$resultado = mysqli_query($conexao, $sql);
+
+$carros = [];
+
+while ($linha = mysqli_fetch_array($resultado)) {
+  $carros[] = $linha;
+}
+
+mysqli_close($conexao);
 ?>
 
 <!DOCTYPE html>
@@ -751,16 +766,15 @@ $page = $_GET['page'] ?? 1;
               </div>
               <div id="area-compra" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-2">
                 <?php
-                $quantidade = 3;
-                for ($i = 1; $i <= $quantidade * 12; $i++) {
+                foreach ($carros as $carro) {
                   echo '<div class="col">';
-                  $marca = 'PORSCHE';
-                  $modelo = '911';
-                  $versao = '3.8 24V H6 GASOLINA TURBO PDK';
-                  $preco = 'R$ 1.190.000';
-                  $ano = '2020/2021';
-                  $km = '2.500';
-                  $id = 'carro-' . $i;
+                  $marca = $carro['marca'];
+                  $modelo = $carro['modelo'];
+                  $versao = $carro['versao'];
+                  $preco = $carro['preco'];
+                  $ano = $carro['ano_fabricacao'].'/'.$carro['ano_modelo'];
+                  $km = $carro['quilometragem'];
+                  $id = 'carro-' . $carro['id'];
                   $loc = 'São José dos Campos - SP';
                   $img1 = 'img/compras/1.png';
                   $img2 = 'img/compras/2.png';

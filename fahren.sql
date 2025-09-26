@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 25/09/2025 às 03:47
+-- Tempo de geração: 26/09/2025 às 04:07
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -24,10 +24,10 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `carros`
+-- Estrutura para tabela `anuncios_carros`
 --
 
-CREATE TABLE `carros` (
+CREATE TABLE `anuncios_carros` (
   `id` int(12) NOT NULL,
   `estado_local` char(2) DEFAULT NULL,
   `marca` varchar(25) DEFAULT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `carros` (
   `combustivel` varchar(20) DEFAULT NULL,
   `blindagem` char(1) DEFAULT '0',
   `id_vendedor` int(10) DEFAULT NULL,
-  `fotos` varchar(255) DEFAULT NULL,
+  `imagens` varchar(255) DEFAULT NULL,
   `leilao` char(1) DEFAULT NULL,
   `portas_qtd` smallint(1) DEFAULT 4,
   `acentos_qtd` smallint(1) DEFAULT 5,
@@ -92,9 +92,9 @@ INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `
 --
 
 --
--- Índices de tabela `carros`
+-- Índices de tabela `anuncios_carros`
 --
-ALTER TABLE `carros`
+ALTER TABLE `anuncios_carros`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `placa` (`placa`),
   ADD KEY `carro_link_vendedor_id` (`id_vendedor`);
@@ -113,10 +113,10 @@ ALTER TABLE `usuarios`
 --
 
 --
--- AUTO_INCREMENT de tabela `carros`
+-- AUTO_INCREMENT de tabela `anuncios_carros`
 --
-ALTER TABLE `carros`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ALTER TABLE `anuncios_carros`
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
@@ -129,9 +129,9 @@ ALTER TABLE `usuarios`
 --
 
 --
--- Restrições para tabelas `carros`
+-- Restrições para tabelas `anuncios_carros`
 --
-ALTER TABLE `carros`
+ALTER TABLE `anuncios_carros`
   ADD CONSTRAINT `carro_link_vendedor_id` FOREIGN KEY (`id_vendedor`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 

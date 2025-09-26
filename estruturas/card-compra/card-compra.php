@@ -1,7 +1,7 @@
 <div class="card card-compra shadow-hover border-1 border-secondary border-opacity-25 position-relative">
     <div id="<?= $id ?>" class="carousel slide card-img-top position-relative" data-quant="1">
         <div class="carousel-inner">
-            <a class="carro-img" href="pagina-venda.php?marca=<?= $marca?>&modelo=<?= $modelo?>&versao=<?= $versao?>">
+            <a class="carro-img" href="pagina-venda.php?marca=<?= $marca?>&modelo=<?= $modelo?>&versao=<?= $versao?>&preco=<?= $preco?>&ano=<?= $ano?>&km=<?= $km?>">
                 <div class="carousel-item active">
                     <div class="ratio ratio-4x3">
                         <img src="<?= $img1; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem 1">
@@ -57,7 +57,7 @@
     </div>
     <div class="card-body pb-1">
         <div class="row mb-3">
-            <a href="pagina-venda.php?marca=<?= $marca?>&modelo=<?= $modelo?>&versao=<?= $versao?>" class="text-decoration-none text-dark stretched-link">
+            <a href="pagina-venda.php?marca=<?= $marca?>&modelo=<?= $modelo?>&versao=<?= $versao?>&preco=<?= $preco?>&ano=<?= $ano?>&km=<?= $km?>" class="text-decoration-none text-dark stretched-link">
                 <h5 class="card-title fw-bold mb-0 text-uppercase"><?= $marca?> <?= $modelo?></h5>
             </a>
             <p class="card-text text-uppercase text-secondary small"><?= $versao; ?></p>
@@ -74,7 +74,7 @@
                 <p class="card-text text-nowrap small text-truncate"><?= $loc; ?></p>
             </div>
         </div>
-        <p class="card-text h5 fw-bold mb-2"><?= $preco; ?></p>
+        <p class="card-text h5 fw-bold mb-2">R$ <?= $preco; ?></p>
     </div>
     <div class="card-footer border-top-0 bg-body">
         <div class="row mb-1">

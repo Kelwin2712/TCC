@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $licenciamento = $_SESSION['licenciamento'];
   $consevacao = $_SESSION['consevacao'];
   $uso_anterior = $_SESSION['uso_anterior'];
-  $placa = $_SESSION['placa'];
+  $placa = empty($_SESSION['placa']) ? null : $_SESSION['placa'];
   $cor = $_SESSION['cor'];
   $fabr = $_SESSION['fabr'];
   $ano = $_SESSION['ano'];
@@ -32,7 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $modelo = $_SESSION['modelo'];
   $versao = $_SESSION['versao'];
 
-  $sql = "INSERT INTO carros(modelo, marca, versao, ano_fabricacao, ano_modelo, placa, cor, id_vendedor, preco, quilometragem, quant_proprietario, revisao, vistoria, sinistro, ipva, licenciamento, estado_conservacao, uso_anterior, aceita_troca, email, telefone) VALUES ('$modelo', '$marca', '$versao', '$fabr', '$ano', '$placa', '$cor', '" . $_SESSION['id'] . "', '$preco', '$quilometragem', '$proprietario', '$revisao', '$vistoria', '$sinistro', '$ipva', '$licenciamento', '$consevacao', '$uso_anterior', '$troca', '$email', '$telefone')";
+  $sql = "INSERT INTO anuncios_carros(modelo, marca, versao, ano_fabricacao, ano_modelo, placa, cor, id_vendedor, preco, quilometragem, quant_proprietario, revisao, vistoria, sinistro, ipva, licenciamento, estado_conservacao, uso_anterior, aceita_troca, email, telefone) VALUES ('$modelo', '$marca', '$versao', '$fabr', '$ano', '$placa', '$cor', '" . $_SESSION['id'] . "', '$preco', '$quilometragem', '$proprietario', '$revisao', '$vistoria', '$sinistro', '$ipva', '$licenciamento', '$consevacao', '$uso_anterior', '$troca', '$email', '$telefone')";
   if (!mysqli_query($conexao, $sql)) {
     header('Location: ../sign-up-senha.php');
     exit();
@@ -46,3 +46,4 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 }
 
 mysqli_close($conexao);
+?>

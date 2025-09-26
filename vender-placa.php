@@ -1,5 +1,9 @@
 <?php
 session_start();
+if (!isset($_SESSION['id'])) {
+  header('Location: sign-in.php');
+  exit();
+}
 ?>
 
 <!DOCTYPE html>

@@ -2,6 +2,9 @@
 $marca = $_GET['marca'];
 $modelo = $_GET['modelo'];
 $versao = $_GET['versao'];
+$preco = $_GET['preco'];
+$ano = $_GET['ano'];
+$km = $_GET['km'];
 
 if (!$marca || !$modelo || !$versao) {
     header('Location: index.php');
@@ -143,7 +146,7 @@ $vendedor_est = '4.63';
                         <div class="card-body px-4 d-flex flex-column justify-content-between">
                             <div class="row d-flex justify-content-between">
                                 <div class="col-auto">
-                                    <p class="fs-1 fw-semibold mb-0">R$1.190.000</p>
+                                    <p class="fs-1 fw-semibold mb-0">R$ <?= $preco ?></p>
                                 </div>
                                 <div class="col-auto">
                                     <span class="badge text-bg-primary py-2 user-select-none rounded-3"><i class="bi bi-shield-check"></i> Confiável</span>
@@ -203,7 +206,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Ano</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold ">2020/2021</p>
+                                            <p class="fw-semibold "><?= $ano?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -211,7 +214,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">KM</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold ">2.500</p>
+                                            <p class="fw-semibold "><?= $km?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
