@@ -19,8 +19,19 @@ $resultado = mysqli_query($conexao, $sql);
 
 $carros = [];
 
+$qtd_resultados = mysqli_num_rows($resultado) ?? 0;
+
 while ($linha = mysqli_fetch_array($resultado)) {
   $carros[] = $linha;
+}
+
+$sql = "SELECT value, nome FROM marcas";
+$resultado = mysqli_query($conexao, $sql);
+
+$marcas = [];
+
+while ($linha = mysqli_fetch_array($resultado)) {
+  $marcas[] = $linha;
 }
 
 mysqli_close($conexao);
@@ -179,64 +190,9 @@ mysqli_close($conexao);
                               <div class="input-group">
                                 <select id="marca-select" name="" id="" class="form-select">
                                   <option value="" selected hidden>Selecione a marca</option>
-                                  <option value="abarth">Abarth</option>
-                                  <option value="alfa">Alfa Romeo</option>
-                                  <option value="aston">Aston Martin</option>
-                                  <option value="audi">Audi</option>
-                                  <option value="bentley">Bentley</option>
-                                  <option value="bmw">BMW</option>
-                                  <option value="bugatti">Bugatti</option>
-                                  <option value="byd">BYD</option>
-                                  <option value="cadillac">Cadillac</option>
-                                  <option value="chevrolet">Chevrolet</option>
-                                  <option value="chrysler">Chrysler</option>
-                                  <option value="citroen">Citroën</option>
-                                  <option value="corvette">Corvette</option>
-                                  <option value="dacia">Dacia</option>
-                                  <option value="dodge">Dodge</option>
-                                  <option value="ferrari">Ferrari</option>
-                                  <option value="fiat">Fiat</option>
-                                  <option value="ford">Ford</option>
-                                  <option value="genesis">Genesis</option>
-                                  <option value="gmc">GMC</option>
-                                  <option value="gwm">GWM</option>
-                                  <option value="honda">Honda</option>
-                                  <option value="hummer">Hummer</option>
-                                  <option value="hyundai">Hyundai</option>
-                                  <option value="infiniti">Infiniti</option>
-                                  <option value="jaecoo">JAECOO</option>
-                                  <option value="jaguar">Jaguar</option>
-                                  <option value="jeep">Jeep</option>
-                                  <option value="kia">Kia</option>
-                                  <option value="koenigsegg">Koenigsegg</option>
-                                  <option value="lamborghini">Lamborghini</option>
-                                  <option value="lancia">Lancia</option>
-                                  <option value="land">Land Rover</option>
-                                  <option value="lexus">Lexus</option>
-                                  <option value="lincoln">Lincoln</option>
-                                  <option value="lotus">Lotus</option>
-                                  <option value="maserati">Maserati</option>
-                                  <option value="mazda">Mazda</option>
-                                  <option value="mclaren">McLaren</option>
-                                  <option value="mercedes">Mercedes-Benz</option>
-                                  <option value="mini">MINI</option>
-                                  <option value="mitsubishi">Mitsubishi</option>
-                                  <option value="nissan">Nissan</option>
-                                  <option value="omoda">Omoda</option>
-                                  <option value="opel">Opel</option>
-                                  <option value="peugeot">Peugeot</option>
-                                  <option value="porsche">Porsche</option>
-                                  <option value="ram">Ram</option>
-                                  <option value="renault">Renault</option>
-                                  <option value="rolls">Rolls-Royce</option>
-                                  <option value="skoda">Skoda</option>
-                                  <option value="smart">Smart</option>
-                                  <option value="subaru">Subaru</option>
-                                  <option value="suzuki">Suzuki</option>
-                                  <option value="tesla">Tesla</option>
-                                  <option value="toyota">Toyota</option>
-                                  <option value="volkswagen">Volkswagen</option>
-                                  <option value="volvo">Volvo</option>
+                                  <?php foreach ($marcas as $marca): ?>
+                                    <option value="<?= $marca['value'] ?>"><?= $marca['nome'] ?></option>
+                                  <?php endforeach; ?>
                                 </select>
                                 <button class="btn bg-white border d-none">X</button>
                               </div>
@@ -748,7 +704,7 @@ mysqli_close($conexao);
               <div class="row pt-4">
                 <div class="col-auto me-auto">
                   <div class="fw-semibold small py-3">
-                    1.234 resultados encontrados
+                    <?= $qtd_resultados; ?> resultados encontrados
                   </div>
                 </div>
                 <div class="col-auto d-flex align-items-center">
@@ -772,7 +728,7 @@ mysqli_close($conexao);
                   $modelo = $carro['modelo'];
                   $versao = $carro['versao'];
                   $preco = $carro['preco'];
-                  $ano = $carro['ano_fabricacao'].'/'.$carro['ano_modelo'];
+                  $ano = $carro['ano_fabricacao'] . '/' . $carro['ano_modelo'];
                   $km = $carro['quilometragem'];
                   $cor = $carro['cor'];
                   $troca = $carro['aceita_troca'];
@@ -794,71 +750,74 @@ mysqli_close($conexao);
           </div>
         </div>
       </div>
-      <div class="container-fluid mt-5 pb-5">
-        <div class="row">
-          <div class="col-12 d-flex justify-content-center">
-            <nav aria-label="Page navigation example">
-              <ul class="pagination pagination-dark">
-                <li class="page-item <?php if ($page == 1) {
-                                        echo 'disabled';
-                                      } ?>">
-                  <a class="page-link" href="compras.php?page=<?= $page - 1 ?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
-                </li>
-                <?php if ($page >= 3) {
-                  echo '<li class="page-item">
+      <?php if (!empty($carros)): ?>
+        <div class="container-fluid mt-5 pb-5">
+          <div class="row">
+            <div class="col-12 d-flex justify-content-center">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination pagination-dark">
+                  <li class="page-item <?php if ($page == 1) {
+                                          echo 'disabled';
+                                        } ?>">
+                    <a class="page-link" href="compras.php?page=<?= $page - 1 ?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
+                  </li>
+                  <?php if ($page >= 3) {
+                    echo '<li class="page-item">
                   <a class="page-link" href="compras.php?page=1" tabindex="-1" aria-disabled="true">1</a>
                 </li>
                 <li class="page-item disabled">
                   <a class="page-link" href="#" tabindex="-1" aria-disabled="true">...</a>
                 </li>';
-                }; ?>
-                <li class="page-item <?php if ($page == 1) {
-                                        echo 'active';
-                                      } ?>"><a class="page-link border-0" href="compras.php?page=<?php if ($page == 1) {
-                                                                                                    echo $page;
-                                                                                                  } else {
-                                                                                                    echo $page - 1;
-                                                                                                  } ?>"><?php if ($page == 1) {
+                  }; ?>
+                  <li class="page-item <?php if ($page == 1) {
+                                          echo 'active';
+                                        } ?>"><a class="page-link border-0" href="compras.php?page=<?php if ($page == 1) {
+                                                                                                      echo $page;
+                                                                                                    } else {
+                                                                                                      echo $page - 1;
+                                                                                                    } ?>"><?php if ($page == 1) {
                                                                                                           echo $page;
                                                                                                         } else {
                                                                                                           echo $page - 1;
                                                                                                         } ?></a></li>
-                <li class="page-item <?php if ($page != 1) {
-                                        echo 'active';
-                                      } ?>"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
-                                                                                          echo $page + 1;
-                                                                                        } else {
-                                                                                          echo $page;
-                                                                                        } ?>"><?php if ($page == 1) {
+                  <li class="page-item <?php if ($page != 1) {
+                                          echo 'active';
+                                        } ?>"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
+                                                                                            echo $page + 1;
+                                                                                          } else {
+                                                                                            echo $page;
+                                                                                          } ?>"><?php if ($page == 1) {
                                                                                                 echo $page + 1;
                                                                                               } else {
                                                                                                 echo $page;
                                                                                               } ?></a></li>
-                <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
-                                                                                    echo $page + 2;
-                                                                                  } else {
-                                                                                    echo $page + 1;
-                                                                                  } ?>"><?php if ($page == 1) {
-                                                                                          echo $page + 2;
-                                                                                        } else {
-                                                                                          echo $page + 1;
-                                                                                        } ?></a></li>
-                <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
-                                                                                    echo $page + 3;
-                                                                                  } else {
-                                                                                    echo $page + 2;
-                                                                                  } ?>"><?php if ($page == 1) {
-                                                                                          echo $page + 3;
-                                                                                        } else {
-                                                                                          echo $page + 2;
-                                                                                        } ?></a></li>
-                <li class="page-item">
-                  <a class="page-link" href="compras.php?page=<?= $page + 1 ?>"><i class="bi bi-caret-right-fill"></i></a>
-                </li>
-              </ul>
-            </nav>
+                  <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
+                                                                                      echo $page + 2;
+                                                                                    } else {
+                                                                                      echo $page + 1;
+                                                                                    } ?>"><?php if ($page == 1) {
+                                                                                            echo $page + 2;
+                                                                                          } else {
+                                                                                            echo $page + 1;
+                                                                                          } ?></a></li>
+                  <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
+                                                                                      echo $page + 3;
+                                                                                    } else {
+                                                                                      echo $page + 2;
+                                                                                    } ?>"><?php if ($page == 1) {
+                                                                                            echo $page + 3;
+                                                                                          } else {
+                                                                                            echo $page + 2;
+                                                                                          } ?></a></li>
+                  <li class="page-item">
+                    <a class="page-link" href="compras.php?page=<?= $page + 1 ?>"><i class="bi bi-caret-right-fill"></i></a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
           </div>
         </div>
+      <?php endif; ?>
   </main>
   <?php include 'estruturas/footer/footer.php' ?>
 </body>

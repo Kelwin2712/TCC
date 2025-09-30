@@ -1,5 +1,17 @@
 <?php
 session_start();
+include('controladores/conexao_bd.php');
+
+$sql = "SELECT value, nome FROM marcas";
+$resultado = mysqli_query($conexao, $sql);
+
+$marcas = [];
+
+while ($linha = mysqli_fetch_array($resultado)) {
+  $marcas[] = $linha;
+}
+
+mysqli_close($conexao);
 ?>
 
 <!DOCTYPE html>
@@ -68,64 +80,9 @@ session_start();
                 <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
                 <select id="marca-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
                   <option value="">Marca</option>
-                  <option value="0">Abarth</option>
-                  <option value="0">Alfa Romeo</option>
-                  <option value="0">Aston Martin</option>
-                  <option value="0">Audi</option>
-                  <option value="0">Bentley</option>
-                  <option value="0">BMW</option>
-                  <option value="0">Bugatti</option>
-                  <option value="0">BYD</option>
-                  <option value="0">Cadillac</option>
-                  <option value="0">Chevrolet</option>
-                  <option value="0">Chrysler</option>
-                  <option value="0">Citroën</option>
-                  <option value="0">Corvette</option>
-                  <option value="0">Dacia</option>
-                  <option value="0">Dodge</option>
-                  <option value="0">Ferrari</option>
-                  <option value="0">Fiat</option>
-                  <option value="0">Ford</option>
-                  <option value="0">Genesis</option>
-                  <option value="0">GMC</option>
-                  <option value="0">GWM</option>
-                  <option value="0">Honda</option>
-                  <option value="0">Hummer</option>
-                  <option value="0">Hyundai</option>
-                  <option value="0">Infiniti</option>
-                  <option value="0">JAECOO</option>
-                  <option value="0">Jaguar</option>
-                  <option value="0">Jeep</option>
-                  <option value="0">Kia</option>
-                  <option value="0">Koenigsegg</option>
-                  <option value="0">Lamborghini</option>
-                  <option value="0">Lacia</option>
-                  <option value="0">Land Rover</option>
-                  <option value="0">Lexus</option>
-                  <option value="0">Lincoln</option>
-                  <option value="0">Lotus</option>
-                  <option value="0">Maserati</option>
-                  <option value="0">Mazda</option>
-                  <option value="0">McLaren</option>
-                  <option value="0">Mercedes-Benz</option>
-                  <option value="0">MINI</option>
-                  <option value="0">Mitsubishi</option>
-                  <option value="0">Nissan</option>
-                  <option value="0">Omoda</option>
-                  <option value="0">Opel</option>
-                  <option value="0">Peugeot</option>
-                  <option value="0">Porsche</option>
-                  <option value="0">Ram</option>
-                  <option value="0">Renault</option>
-                  <option value="0">Rolls-Royce</option>
-                  <option value="0">Skoda</option>
-                  <option value="0">Smart</option>
-                  <option value="0">Subaru</option>
-                  <option value="0">Suzuki</option>
-                  <option value="0">Tesla</option>
-                  <option value="0">Toyota</option>
-                  <option value="0">Volkswagen</option>
-                  <option value="0">Volvo</option>
+                  <?php foreach ($marcas as $marca): ?>
+                    <option value="<?= $marca['value'] ?>"><?= $marca['nome'] ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
             </div>
@@ -289,7 +246,7 @@ session_start();
           (Ver todas as marcas)
         </a>
       </div>
-      <div class="row g-3 align-items-stretch justify-content-between row-cols-3 row-cols-lg-6">
+      <div class=" row g-3 align-items-stretch justify-content-between row-cols-3 row-cols-lg-6">
           <div class="col d-flex">
             <a href="compras.php?marca=toyota" class="bg-body shadow-hover d-flex align-items-center justify-content-center p-3 border rounded w-100" style="height: 120px;">
               <img src="./img/marcas/toyota-logo.png" alt="Toyota" class="img-fluid" style="max-height: 60px; width: auto;">
@@ -329,7 +286,7 @@ session_start();
           (Ver todas as marcas)
         </a>
       </div>
-      <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
+      <div id=" populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
           <div class="carousel-inner">
             <?php
             $nome = 'AUDI RS5';
@@ -480,7 +437,7 @@ session_start();
   </main>
   <?php include 'estruturas/footer/footer.php' ?>
 </body>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
 <script>

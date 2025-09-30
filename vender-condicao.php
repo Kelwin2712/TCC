@@ -21,6 +21,7 @@ $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <title>Fahren</title>
 </head>
+
 <body>
   <div class="vh-100 d-flex flex-column">
     <?php include 'estruturas/navbar/navbar-default.php' ?>
@@ -39,8 +40,19 @@ $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
             <h3 class="mb-4 fw-bold">Condição e uso</h3>
             <div class="row row-cols-1 row-cols-md-2 w-100 g-4">
               <div class="col">
-                <label for="quilometragem-input" class="form-text mb-2">Quilometragem<sup>*</sup></label>
-                <input type="text" class="form-control" id="quilometragem-input" value="0 km" name="quilometragem" placeholder="Informe a quilometragem do veículo" required>
+                <label for="quilometragem-input" class="form-text mb-2">Condição/Quilometragem<sup>*</sup></label>
+                <div class="row">
+                  <div class="col">
+                    <select class="form-select shadow-sm" id="condicao-select" aria-label="Default select example" name="condicao" required>
+                      <option value="" selected hidden>Informe a condição do veículo<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></option>
+                      <option value="N">Novo</option>
+                      <option value="U">Usado</option>
+                    </select>
+                  </div>
+                  <div class="col-8" style="display: none;">
+                    <input type="text" class="form-control" id="quilometragem-input" value="0 km" name="quilometragem" placeholder="Informe a quilometragem do veículo" required>
+                  </div>
+                </div>
               </div>
               <div class="col">
                 <label for="proprietario-select" class="form-text mb-2">Quantidade de proprietários<sup>*</sup></label>
@@ -151,6 +163,32 @@ $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
 
     const kmInput = $('#quilometragem-input');
+    const condicaoSelect = $('#condicao-select');
+
+    const usoRow = $('#uso-row');
+    const usoSelect = $('#uso-select');
+
+    function slideDown() {
+      usoRow.slideDown(150);
+      usoSelect.prop('required', true);
+    };
+
+    function slideUp() {
+      usoRow.slideUp(100);
+          usoSelect.prop('required', false);
+          usoSelect.val('');
+    };
+
+    condicaoSelect.on('change', function() {
+      if ($(this).val() === 'N') {
+        kmInput.val('0 km');
+        kmInput.parent().hide();
+        slideUp();
+      } else {
+        kmInput.parent().show();
+        slideDown();
+      }
+    });
 
     kmInput.on('focus', function() {
       kmInput.prop('required', false);
@@ -172,12 +210,9 @@ $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
           numericValue = '0';
         }
         if (numericValue > 0) {
-          $('#uso-row').slideDown(150);
-          $('#uso-select').prop('required', true);
+          slideDown();
         } else {
-          $('#uso-row').slideUp(100);
-          $('#uso-select').prop('required', false);
-          $('#uso-select').val('');
+          slideUp();
         }
         const formattedValue = parseInt(numericValue, 10).toLocaleString('pt-BR') + ' km';
         $(this).val(formattedValue);

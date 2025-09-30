@@ -109,20 +109,21 @@ $_SESSION['placa'] = isset($_POST['placa']) ? $_POST['placa'] : null;
                 <input type="text" class="form-control" id="modelo-input" name="modelo" placeholder="Escolha um modelo" required>
               </div>
               <div class="col-sm-6 mb-2">
-                <label for="ano-select" class="form-text mb-2">Ano do modelo<sup>*</sup></label>
-                <select class="form-select shadow-sm" id="ano-select" aria-label="Default select example" name="ano" required>
+                <label for="fabr-select" class="form-text mb-2">Ano de fabricação<sup>*</sup></label>
+                <select class="form-select shadow-sm" id="fabr-select" aria-label="Default select example" name="fabr" required>
                   <option value="" selected hidden>Escolha um ano</option>
-                  <?php $quantidade = 97;
-                  for ($i = 1; $i <= $quantidade; $i++): ?>
-                    <option value="<?= 2027 - $i ?>"><?= 2027 - $i ?></option>
+                  <?php
+                  $quantidade = date('Y') - 1930;
+                  for ($i = 0; $i <= $quantidade; $i++): ?>
+                    <option value="<?= date('Y') - $i ?>"><?= date('Y') - $i ?></option>
                   <?php endfor; ?>
                 </select>
               </div>
               <div class="col-sm-6 mb-2">
-                <label for="fabr-select" class="form-text mb-2">Ano de fabricação<sup>*</sup></label>
-                <select class="form-select shadow-sm" id="fabr-select" aria-label="Default select example" name="fabr" required>
+                <label for="ano-select" class="form-text mb-2">Ano do modelo<sup>*</sup></label>
+                <select class="form-select shadow-sm" id="ano-select" aria-label="Default select example" name="ano" required>
                   <option value="" selected hidden>Escolha um ano</option>
-                  <option value="" disabled>Escolha o ano do modelo antes</option>
+                  <option value="" disabled>Escolha o ano de fabricação antes</option>
                 </select>
               </div>
               <div class="col-xl-6 mb-2">
@@ -174,14 +175,19 @@ $_SESSION['placa'] = isset($_POST['placa']) ? $_POST['placa'] : null;
 <script src="script.js"></script>
 <script>
   $(function(){
-  $('#ano-select').on('change', function() {
-    const anoModelo = parseInt($(this).val());
-    const fabrSelect = $('#fabr-select');
+  $('#fabr-select').on('change', function() {
+    const fabrModelo = parseInt($(this).val());
+    const anoSelect = $('#ano-select');
 
-    fabrSelect.empty('option[selected="false"]');
+    anoSelect.empty('option[selected="false"]');
 
-    for (let year = anoModelo; year >= anoModelo-1; year--) {
-      fabrSelect.append('<option value="' + year + '">' + year + '</option>');
+    for (let year = fabrModelo + 1; year >= fabrModelo; year--) {
+      if (fabrModelo == year) {
+        anoSelect.append('<option value="' + year + '" selected>' + year + '</option>');
+      }
+      else {
+        anoSelect.append('<option value="' + year + '">' + year + '</option>');
+      }
     }
   });
 
