@@ -79,7 +79,11 @@ mysqli_close($conexao);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
-
+<style>
+    .overlay {
+        cursor: pointer;
+    }
+</style>
 <body class="overflow-x-hidden">
     <?php include '../estruturas/alert/alert.php' ?>
     <main class="container-fluid d-flex vh-100 p-0">
@@ -220,10 +224,6 @@ mysqli_close($conexao);
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-12 mt-4">
-                        <button type="submit" class="btn btn-dark float-end shadow-sm" disabled>Salvar alterações&nbsp;&nbsp;<i class="bi bi-floppy"></i></button>
-                    </div>
                 </div>
                 <hr class="my-5">
                 <div class="row d-flex align-items-stretch">
@@ -242,54 +242,16 @@ mysqli_close($conexao);
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
-                                <div class="ratio ratio-16x9 position-relative">
-                                    <div class="position-absolute rounded-3 bg-black w-100 h-100 translate-middle start-50 top-50 z-1 bg-opacity-25 text-white d-flex align-items-center justify-content-center text-center fs-2" style="display: none !important;">
-                                        <i class="bi bi-trash"></i>
+                            <?php for ($i = 0; $i <= 8; $i++): ?>
+                                <div class="col">
+                                    <div class="ratio ratio-16x9 position-relative">
+                                        <div class="position-absolute rounded-3 bg-black w-100 h-100 translate-middle start-50 top-50 z-1 bg-opacity-25 text-white d-flex align-items-center justify-content-center text-center fs-2 overlay d-none">
+                                            <i class="bi bi-trash"></i>
+                                        </div>
+                                        <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
                                     </div>
-                                    <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="ratio ratio-16x9">
-                                    <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="ratio ratio-16x9">
-                                    <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="ratio ratio-16x9">
-                                    <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="ratio ratio-16x9">
-                                    <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="ratio ratio-16x9">
-                                    <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="ratio ratio-16x9">
-                                    <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="ratio ratio-16x9">
-                                    <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="ratio ratio-16x9">
-                                    <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
-                                </div>
-                            </div>
+                            <?php endfor; ?>
                         </div>
                     </div>
                 </div>
@@ -433,7 +395,7 @@ mysqli_close($conexao);
     $(function() {
         const addCard = $('#add-card');
         const addText = $('#add-text');
-        const imgCard = $('.ratio.ratio-16x9.position-relative');
+        const imgCard = $('.overlay').parent();
 
         addCard.on('mouseenter', function() {
             addText.stop(true, true).slideDown(150);
@@ -443,16 +405,23 @@ mysqli_close($conexao);
             addText.stop(true, true).slideUp(150);
         })
 
-        imgCard.each(function() {
-            $(this).hover(
-                function() {
-                    $(this).find('.position-absolute').stop(true, true).fadeIn(150);
-                },
-                function() {
-                    $(this).find('.position-absolute').stop(true, true).fadeOut(150);
-                }
-            );
+        imgCard.hover(
+            function() {
+                $(this).find('.overlay').stop(true, true).fadeIn(150).removeClass("d-none");
+            },
+            function() {
+                $(this).find('.overlay').stop(true, true).fadeOut(150, function() {
+                    $(this).addClass("d-none");
+                });
+            }
+        );
+
+        imgCard.on('click', function () {
+            $(this).parent().fadeOut(250, function() {
+                $(this).remove();
+            })
         })
+
     })
 </script>
 
