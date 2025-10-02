@@ -63,6 +63,24 @@ while ($linha = mysqli_fetch_array($resultado)) {
     $marcas[] = $linha;
 }
 
+$sql = "SELECT * FROM cores";
+$resultado = mysqli_query($conexao, $sql);
+
+$cores = [];
+
+while ($linha = mysqli_fetch_array($resultado)) {
+    $cores[] = $linha;
+}
+
+$sql = "SELECT * FROM carrocerias";
+$resultado = mysqli_query($conexao, $sql);
+
+$carrocerias = [];
+
+while ($linha = mysqli_fetch_array($resultado)) {
+    $carrocerias[] = $linha;
+}
+
 mysqli_close($conexao);
 ?>
 
@@ -79,11 +97,14 @@ mysqli_close($conexao);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
+
 <style>
-    .overlay {
-        cursor: pointer;
+    .upload-foto:hover {
+        background-color: #ccc !important;
+        transition: all 0.25s ease;
     }
 </style>
+
 <body class="overflow-x-hidden">
     <?php include '../estruturas/alert/alert.php' ?>
     <main class="container-fluid d-flex vh-100 p-0">
@@ -122,49 +143,52 @@ mysqli_close($conexao);
                             </div>
                             <div class="col">
                                 <label for="nome-input" class="form-label">Modelo</label>
-                                <input type="text" class="form-control shadow-sm" id="quilometragem-input" value="<?= $modelo ?>" name="quilometragem" placeholder="Informe a placa do veículo" required>
+                                <input type="text" class="form-control shadow-sm text-capitalize" id="quilometragem-input" value="<?= $modelo ?>" name="quilometragem" placeholder="Informe a placa do veículo" required>
                             </div>
                             <div class="col">
                                 <label for="nome-input" class="form-label">Ano de fabricação</label>
                                 <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
-                                    <?php foreach ($marcas as $marca_o): ?>
-                                        <option value="<?= $marca_o['value'] ?>" <?php if ($marca == $marca_o['value']) {
-                                                                                        echo 'selected';
-                                                                                    } ?>><?= $marca_o['nome'] ?></option>
-                                    <?php endforeach; ?>
+                                    <?php
+                                    $quantidade = date('Y') - 1930;
+                                    for ($i = 0; $i <= $quantidade; $i++): ?>
+                                        <option value="<?= date('Y') - $i ?>" <?php if ($ano_fabricacao == date('Y') - $i) {
+                                                                                    echo 'selected';
+                                                                                } ?>><?= date('Y') - $i ?></option>
+                                    <?php endfor; ?>
                                 </select>
                             </div>
                             <div class="col">
                                 <label for="nome-input" class="form-label">Ano do modelo</label>
                                 <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
-                                    <?php foreach ($marcas as $marca_o): ?>
-                                        <option value="<?= $marca_o['value'] ?>" <?php if ($marca == $marca_o['value']) {
-                                                                                        echo 'selected';
-                                                                                    } ?>><?= $marca_o['nome'] ?></option>
-                                    <?php endforeach; ?>
+                                    <?php
+                                    $quantidade = date('Y') - 1930;
+                                    for ($i = $ano_fabricacao + 1; $i >= $ano_fabricacao; $i--): ?>
+                                        <option value="<?= $i ?>"><?= $i ?></option>
+                                    <?php endfor; ?>
                                 </select>
                             </div>
                             <div class="col">
                                 <label for="nome-input" class="form-label">Versão</label>
-                                <input type="text" class="form-control shadow-sm" id="quilometragem-input" value="<?= $versao ?>" name="quilometragem" placeholder="Informe a placa do veículo" required>
+                                <input type="text" class="form-control shadow-sm text-capitalize" id="quilometragem-input" value="<?= $versao ?>" name="quilometragem" placeholder="Informe a placa do veículo" required>
                             </div>
                             <div class="col">
                                 <label for="nome-input" class="form-label">Cor</label>
-                                <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
-                                    <?php foreach ($marcas as $marca_o): ?>
-                                        <option value="<?= $marca_o['value'] ?>" <?php if ($marca == $marca_o['value']) {
-                                                                                        echo 'selected';
-                                                                                    } ?>><?= $marca_o['nome'] ?></option>
+                                <select class="form-select shadow-sm" id="cor-select" aria-label="Default select example" name="marca" required>
+
+                                    <?php foreach ($cores as $cor_o): ?>
+                                        <option value="<?= $cor_o['id'] ?>" <?php if ($cor == $cor_o['id']) {
+                                                                                echo 'selected';
+                                                                            } ?>><?= $cor_o['nome'] ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="col">
                                 <label for="nome-input" class="form-label">Carroceria</label>
                                 <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
-                                    <?php foreach ($marcas as $marca_o): ?>
-                                        <option value="<?= $marca_o['value'] ?>" <?php if ($marca == $marca_o['value']) {
+                                    <?php foreach ($carrocerias as $carroceria_o): ?>
+                                        <option value="<?= $carroceria_o['id'] ?>" <?php if ($carroceria == $carroceria_o['id']) {
                                                                                         echo 'selected';
-                                                                                    } ?>><?= $marca_o['nome'] ?></option>
+                                                                                    } ?>><?= $carroceria_o['nome'] ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -211,11 +235,10 @@ mysqli_close($conexao);
                             <div class="col">
                                 <label for="nome-input" class="form-label">Blindagem</label>
                                 <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
-                                    <?php foreach ($marcas as $marca_o): ?>
-                                        <option value="<?= $marca_o['value'] ?>" <?php if ($marca == $marca_o['value']) {
-                                                                                        echo 'selected';
-                                                                                    } ?>><?= $marca_o['nome'] ?></option>
-                                    <?php endforeach; ?>
+                                    <option value="0">Sem blindagem</option>
+                                    <option value="0" <?php if ($blindagem == 1) {
+                                                            echo 'selected';
+                                                        } ?>>Com blindagem</option>
                                 </select>
                             </div>
                             <div class="col-12 mt-3">
@@ -233,22 +256,24 @@ mysqli_close($conexao);
                     </div>
 
                     <div class="col d-flex justify-content-between">
-                        <div class="row row-cols-5 row-gap-3 mb-3 w-100">
+                        <div class="row row-cols-3 row-cols-xxl-5 row-gap-3 mb-3 w-100">
                             <div class="col">
-                                <div id="add-card" class="ratio ratio-16x9 border border-secondary text-secondary border-1 bg-secondary-subtle rounded-3">
-                                    <div class="d-flex flex-column justify-content-center align-items-center text-center w-100 h-100">
+                                <label for="foto" class="upload-foto ratio ratio-16x9 border border-secondary-subtle fs-2 text-secondary text-center border-1 bg-secondary-subtle rounded-3" style="cursor: pointer;">
+                                    <div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
                                         <span><i class="bi bi-plus-lg"></i></span>
-                                        <span id="add-text" style="display: none;">Adicionar imagem</span>
                                     </div>
-                                </div>
+                                </label>
+
+                                <input type="file" id="foto" name="foto" accept="image/*" style="display:none;">
                             </div>
+
                             <?php for ($i = 0; $i <= 8; $i++): ?>
                                 <div class="col">
                                     <div class="ratio ratio-16x9 position-relative">
                                         <div class="position-absolute rounded-3 bg-black w-100 h-100 translate-middle start-50 top-50 z-1 bg-opacity-25 text-white d-flex align-items-center justify-content-center text-center fs-2 overlay d-none">
                                             <i class="bi bi-trash"></i>
                                         </div>
-                                        <img src="../img/compras/1.png" class="img-fluid object-fit-cover rounded-3">
+                                        <img src="../img/compras/1.png" class="img-fluid object-fit-cover shadow-sm rounded-3">
                                     </div>
                                 </div>
                             <?php endfor; ?>
@@ -265,8 +290,18 @@ mysqli_close($conexao);
                     <div class="col d-flex flex-column justify-content-between">
                         <div class="row row-cols-2 row-gap-3 mb-3">
                             <div class="col">
-                                <label for="nome-input" class="form-label">Quilometragem</label>
-                                <input type="text" class="form-control shadow-sm" id="quilometragem-input" value="<?= $quilometragem ?>" name="quilometragem" placeholder="Informe a placa do veículo" required>
+                                <label for="quilometragem-input" class="form-label">Condição/Quilometragem</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <select class="form-select shadow-sm" id="condicao-select" aria-label="Default select example" name="condicao" required>
+                                            <option value="N">Novo</option>
+                                            <option value="U">Usado</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-8" style="display: none;">
+                                        <input type="text" class="form-control" id="quilometragem-input" value="0 km" name="quilometragem" placeholder="Informe a quilometragem do veículo" required>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col">
                                 <label for="nome-input" class="form-label">Quantidade de proprietários</label>
@@ -340,7 +375,7 @@ mysqli_close($conexao);
                     </div>
 
                     <div class="col-12 mt-4">
-                        <button type="submit" class="btn btn-dark float-end shadow-sm" disabled>Salvar alterações&nbsp;&nbsp;<i class="bi bi-floppy"></i></button>
+                        <button type="submit" class="btn btn-dark float-end shadow-sm" disabled>Salvar alterações  <i class="bi bi-floppy"></i></button>
                     </div>
                 </div>
                 <hr class="my-5">
@@ -352,12 +387,12 @@ mysqli_close($conexao);
                     <div class="col-auto d-flex flex-column justify-content-between">
                         <div class="row row-gap-3 mb-3">
                             <div class="col">
-                                <button class="btn btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#delete-modal">Deletar anúncio&nbsp;<i class="bi bi-trash"></i></button>
+                                <button class="btn btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#delete-modal">Deletar anúncio<i class="bi bi-trash"></i></button>
                                 <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <form action="../controladores/veiculos/deletar-anuncio.php" class="modal-content" method="POST">
                                             <div class="modal-body p-5">
-                                                <div class="bg-danger-subtle rounded-circle d-flex justify-content-center align-items-center mb-3 mx-auto fs-5" style="width: 60px; height: 60px;">
+                                                <div class="bg-danger-subtle rounded-circle d-flex text-danger justify-content-center align-items-center mb-3 mx-auto fs-5" style="width: 60px; height: 60px;">
                                                     <i class="bi bi-trash"></i>
                                                 </div>
                                                 <input type="text" name="id" class="d-none" value="<?= $id_veiculo ?>">
@@ -367,7 +402,7 @@ mysqli_close($conexao);
                                                 </div>
                                             </div>
                                             <div class="modal-footer d-flex flex-column border-top-0">
-                                                <button id="delete-btn" type="submit" class="btn btn-danger w-100">Deletar conta</button>
+                                                <button id="delete-btn" type="submit" class="btn btn-danger w-100">Deletar anúncio</button>
                                                 <button type="button" class="btn bg-body-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
                                             </div>
                                         </form>
@@ -393,17 +428,9 @@ mysqli_close($conexao);
 <script src="script.js"></script>
 <script>
     $(function() {
-        const addCard = $('#add-card');
-        const addText = $('#add-text');
         const imgCard = $('.overlay').parent();
 
-        addCard.on('mouseenter', function() {
-            addText.stop(true, true).slideDown(150);
-        })
-
-        addCard.on('mouseleave', function() {
-            addText.stop(true, true).slideUp(150);
-        })
+        $("#cor-select option[value='<?= $cor ?>']").prop('selected', true);
 
         imgCard.hover(
             function() {
@@ -416,12 +443,68 @@ mysqli_close($conexao);
             }
         );
 
-        imgCard.on('click', function () {
+        imgCard.on('click', function() {
             $(this).parent().fadeOut(250, function() {
                 $(this).remove();
             })
         })
+        const kmInput = $('#quilometragem-input');
+        const condicaoSelect = $('#condicao-select');
 
+        const usoRow = $('#uso-row');
+        const usoSelect = $('#uso-select');
+
+        function slideDown() {
+            usoRow.slideDown(150);
+            usoSelect.prop('required', true);
+        };
+
+        function slideUp() {
+            usoRow.slideUp(100);
+            usoSelect.prop('required', false);
+            usoSelect.val('');
+        };
+
+        condicaoSelect.on('change', function() {
+            if ($(this).val() === 'N') {
+                kmInput.val('0 km');
+                kmInput.parent().hide();
+                slideUp();
+            } else {
+            console.log('AAAAAAAAAAAAAAAA');
+                kmInput.parent().show();
+                slideDown();
+            }
+        });
+
+        kmInput.on('focus', function() {
+            kmInput.prop('required', false);
+            if ($(this).val() === '0 km') {
+                $(this).val('');
+            } else {
+                const currentValue = $(this).val().replace(' km', '').replace(/\./g, '');
+                $(this).val(currentValue);
+            }
+        });
+
+        kmInput.on('blur', function() {
+            kmInput.prop('required', true);
+            if ($(this).val() === '') {
+                $(this).val('0 km');
+            } else {
+                let numericValue = $(this).val().replace(/\D/g, '');
+                if (numericValue === '') {
+                    numericValue = '0';
+                }
+                if (numericValue > 0) {
+                    slideDown();
+                } else {
+                    slideUp();
+                }
+                const formattedValue = parseInt(numericValue, 10).toLocaleString('pt-BR') + ' km';
+                $(this).val(formattedValue);
+            }
+        });
     })
 </script>
 
