@@ -30,67 +30,63 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
 <body class="overflow-x-hidden">
     <?php include '../estruturas/alert/alert.php' ?>
     <main class="container-fluid d-flex vh-100 p-0">
-        <?php $selected = 'config';
+        <?php $selected = 'loja';
         include_once '../estruturas/sidebar/sidebar.php' ?>
         <div class="col" style="margin-left: calc(200px + 5vw);">
             <div class="container-fluid p-5">
                 <div class="row">
-                    <h2 class="pb-2 fw-semibold mb-0">Configurações</h2>
-                    <p class="text-muted">Gerencie sua conta e suas preferências</p>
+                    <h2 class="pb-2 fw-semibold mb-0">Configurações da Loja</h2>
+                    <p class="text-muted">Gerencie sua loja e suas preferências</p>
                 </div>
                 <div class="mb-5 d-flex flex-wrap gap-2">
                     <input type="radio" class="btn-check" name="telas" id="tela-1" autocomplete="off" checked>
-                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-1">Suas informações</label>
+                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-1">Informações da Loja</label>
                     <input type="radio" class="btn-check" name="telas" id="tela-2" autocomplete="off">
-                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-2">Segurança e Privacidade</label>
+                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-2">Endereço</label>
                     <input type="radio" class="btn-check" name="telas" id="tela-3" autocomplete="off">
-                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-3">Notificações</label>
+                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-3">Funcionamento</label>
                     <input type="radio" class="btn-check" name="telas" id="tela-4" autocomplete="off">
                     <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-4">Formas de pagamento</label>
                 </div>
-                <form action="../controladores/mudar-infos.php" class="row d-flex align-items-stretch" id="info-form" method="POST">
+                <form action="../controladores/mudar-loja.php" class="row d-flex align-items-stretch" id="loja-form" method="POST">
                     <div class="col-4">
-                        <h5>Perfil</h5>
-                        <p class="text-muted">Defina as informações da sua conta</p>
+                        <h5>Perfil da Loja</h5>
+                        <p class="text-muted">Defina as informações da sua loja</p>
                     </div>
 
                     <div class="col d-flex flex-column justify-content-between">
                         <div class="row row-cols-2 row-gap-3 mb-3">
                             <div class="col">
-                                <label for="nome-input" class="form-label">Nome</label>
-                                <input type="text" class="form-control shadow-sm" name="nome" id="nome-input" placeholder="Nome" value="<?= $nome ?>">
+                                <label for="nome-loja-input" class="form-label">Nome da Loja</label>
+                                <input type="text" class="form-control shadow-sm" name="nome_loja" id="nome-loja-input" placeholder="Nome da Loja" value="<?= $nome_loja ?>">
                             </div>
                             <div class="col">
-                                <label for="sobrenome-input" class="form-label">Sobrenome</label>
-                                <input type="text" class="form-control shadow-sm" name="sobrenome" id="sobrenome-input" placeholder="Sobrenome" value="<?= $sobrenome ?>">
+                                <label for="cnpj-input" class="form-label">CNPJ</label>
+                                <input type="text" class="form-control shadow-sm" name="cnpj" id="cnpj-input" placeholder="CNPJ" value="<?= $cnpj ?>">
                             </div>
                             <div class="col">
-                                <label for="telefone-input" class="form-label">Telefone</label>
-                                <input type="text" class="form-control shadow-sm" name="telefone" id="telefone-input" placeholder="Telefone" value="<?= $telefone ?>">
+                                <label for="telefone-loja-input" class="form-label">Telefone Comercial</label>
+                                <input type="text" class="form-control shadow-sm" name="telefone" id="telefone-loja-input" placeholder="Telefone" value="<?= $telefone ?>">
                             </div>
                             <div class="col">
-                                <label for="cpf-input" class="form-label">CPF</label>
-                                <input type="text" class="form-control shadow-sm" name="cpf" id="cpf-input" placeholder="CPF" value="<?= $cpf ?>">
+                                <label for="email-loja-input" class="form-label">E-mail da Loja</label>
+                                <input type="email" class="form-control shadow-sm" name="email" id="email-loja-input" placeholder="Email" value="<?= $email ?>">
                             </div>
-                            <div class="col">
-                                <label for="email-input" class="form-label">Email</label>
-                                <input type="email" class="form-control shadow-sm" name="email" id="email-input" placeholder="Email" value="<?= $email ?>">
-                            </div>
-                            <div class="col">
-                                <label for="data-nascimento-input" class="form-label">Data de nascimento</label>
-                                <input type="date" class="form-control shadow-sm" name="data-nascimento" id="data-nascimento-input" placeholder="dd/mm/aaaa" value="<?= $data_nascimento ?>">
+                            <div class="col-12">
+                                <label for="descricao-input" class="form-label">Descrição da Loja</label>
+                                <textarea class="form-control shadow-sm" name="descricao" id="descricao-input" rows="3" placeholder="Fale um pouco sobre sua loja"><?= $descricao ?></textarea>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-auto d-flex flex-column justify-content-center">
                         <div class="ratio ratio-1x1 mb-3">
-                            <img src="../img/logo-fahren-bg.jpg" alt="Foto de Perfil"
+                            <img src="../img/logo-fahren-bg.jpg" alt="Logo da Loja"
                                 class="rounded-circle img-fluid mb-3 object-fit-cover">
                         </div>
 
                         <div class="d-flex gap-2 w-100">
-                            <button class="btn text-muted border rounded-pill w-100 shadow-sm">Alterar foto</button>
+                            <button class="btn text-muted border rounded-pill w-100 shadow-sm">Alterar logo</button>
                             <button class="btn text-muted border rounded-pill shadow-sm"><i class="bi bi-eraser"></i></button>
                         </div>
                     </div>
@@ -102,15 +98,15 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
                 <hr class="my-5">
                 <div class="row d-flex align-items-stretch flex-nowrap">
                     <div class="col-4">
-                        <h5>Localização</h5>
-                        <p class="text-muted">Defina a sua localização</p>
+                        <h5>Endereço</h5>
+                        <p class="text-muted">Defina a localização da sua loja</p>
                     </div>
 
                     <div class="col d-flex flex-column justify-content-between">
                         <div class="row row-cols-2 row-gap-3 mb-3">
                             <div class="col">
                                 <label for="estado-input" class="form-label">Estado</label>
-                                <input type="text" list="estado-list" class="form-control shadow-sm" id="estado-input" placeholder="Estado">
+                                <input type="text" list="estado-list" class="form-control shadow-sm" name="estado" id="estado-input" placeholder="Estado" value="<?= $estado ?>">
                                 <datalist id="estado-list">
                                     <option value="Acre">
                                     <option value="Alagoas">
@@ -143,7 +139,11 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
                             </div>
                             <div class="col">
                                 <label for="cidade-input" class="form-label">Cidade</label>
-                                <input type="text" class="form-control shadow-sm" id="cidade-input" placeholder="Cidade">
+                                <input type="text" class="form-control shadow-sm" name="cidade" id="cidade-input" placeholder="Cidade" value="<?= $cidade ?>">
+                            </div>
+                            <div class="col-12">
+                                <label for="endereco-input" class="form-label">Endereço completo</label>
+                                <input type="text" class="form-control shadow-sm" name="endereco" id="endereco-input" placeholder="Rua, número, bairro" value="<?= $endereco ?>">
                             </div>
                         </div>
                     </div>
@@ -151,29 +151,29 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
                 <hr class="my-5">
                 <div class="row d-flex align-items-center flex-nowrap">
                     <div class="col">
-                        <h5>Deletar conta</h5>
-                        <p class="text-muted">Delete a sua conta permanentemente</p>
+                        <h5>Deletar Loja</h5>
+                        <p class="text-muted">Delete sua loja permanentemente</p>
                     </div>
                     <div class="col-auto d-flex flex-column justify-content-between">
                         <div class="row row-gap-3 mb-3">
                             <div class="col">
-                                <button class="btn btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#delete-modal">Deletar conta&nbsp;<i class="bi bi-trash"></i></button>
+                                <button class="btn btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#delete-modal">Deletar loja&nbsp;<i class="bi bi-trash"></i></button>
                                 <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
-                                        <form action="../controladores/deletar-conta.php" class="modal-content" method="POST">
+                                        <form action="../controladores/deletar-loja.php" class="modal-content" method="POST">
                                             <div class="modal-body p-5">
                                                 <div class="bg-danger-subtle rounded-circle d-flex justify-content-center align-items-center mb-3 mx-auto fs-5" style="width: 60px; height: 60px;">
                                                     <i class="bi bi-trash"></i>
                                                 </div>
-                                                <h4 class="text-center">Deletar conta</h4>
-                                                <p class="text-center small text-danger">ATENÇÃO!<br>essa ação é permanete e não poderá ser desfeita</p>
-                                                <p class="mb-5 text-muted">Ao deletar sua conta, todos os seus dados e informações serão permanentemente removidos e não poderão ser recuperados</p>
+                                                <h4 class="text-center">Deletar loja</h4>
+                                                <p class="text-center small text-danger">ATENÇÃO!<br>essa ação é permanente e não poderá ser desfeita</p>
+                                                <p class="mb-5 text-muted">Ao deletar sua loja, todos os seus dados e anúncios serão permanentemente removidos e não poderão ser recuperados</p>
                                                 <label for="senha-deletar-input" class="form-label">Confirme com sua senha</label>
                                                 <input type="password" class="form-control shadow-sm" id="senha-deletar-input" name="senha" placeholder="Senha" required>
                                             </div>
                                             <div class="modal-footer border-top-0">
                                                 <button type="button" class="btn bg-body-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                                <button id="delete-btn" type="submit" class="btn btn-danger" disabled>Deletar conta</button>
+                                                <button id="delete-btn" type="submit" class="btn btn-danger" disabled>Deletar loja</button>
                                             </div>
                                         </form>
                                     </div>
@@ -186,8 +186,10 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
         </div>
     </main>
 </body>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+<script src="../script.js"></script>
 <script>
     $(function() {
         $('#senha-deletar-input').on('input', function() {

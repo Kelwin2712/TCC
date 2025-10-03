@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 03/10/2025 às 04:11
+-- Tempo de geração: 03/10/2025 às 12:22
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -186,6 +186,30 @@ INSERT INTO `estados` (`uf`, `nome`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `lojas`
+--
+
+CREATE TABLE IF NOT EXISTS `lojas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) NOT NULL,
+  `criador` int(11) NOT NULL,
+  `descricao` text DEFAULT NULL,
+  `logo` varchar(255) DEFAULT NULL,
+  `banner` varchar(255) DEFAULT NULL,
+  `estado` varchar(50) DEFAULT NULL,
+  `cidade` varchar(100) DEFAULT NULL,
+  `telefone_contato` varchar(20) DEFAULT NULL,
+  `email_contato` varchar(150) DEFAULT NULL,
+  `status` enum('ativa','suspensa','deletada') DEFAULT 'ativa',
+  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
+  `ultima_atualizacao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `criador` (`criador`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `marcas`
 --
 
@@ -303,6 +327,12 @@ ALTER TABLE `anuncios_carros`
   ADD CONSTRAINT `cor_fk` FOREIGN KEY (`cor`) REFERENCES `cores` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `estado_fk` FOREIGN KEY (`estado_local`) REFERENCES `estados` (`uf`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `vendedor_fk` FOREIGN KEY (`id_vendedor`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Restrições para tabelas `lojas`
+--
+ALTER TABLE `lojas`
+  ADD CONSTRAINT `lojas_ibfk_1` FOREIGN KEY (`criador`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

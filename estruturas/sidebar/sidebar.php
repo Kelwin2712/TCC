@@ -16,7 +16,7 @@
                     <a class="nav-link <?php if ($selected == 'ad') {echo 'active';}?>" href="anuncios.php"><i class="bi bi-megaphone-fill"></i>&nbsp;Meus anúncios</a>
                     <a class="nav-link <?php if ($selected == 'mensagens') {echo 'active';}?>" href="mensagens.php"><i class="bi bi-chat-left-text-fill"></i>&nbsp;Mensagens</a>
                 <hr class="mx-3">
-                    <a class="nav-link <?php if ($selected == 'loja') {echo 'active';}?>" href="#"><i class="bi bi-building-fill"></i>&nbsp;Minha loja</a>
+                    <a class="nav-link <?php if ($selected == 'loja') {echo 'active';}?>" href="lista-lojas.php"><i class="bi bi-building-fill"></i>&nbsp;Lojas</a>
                     <a class="nav-link <?php if ($selected == 'equipe') {echo 'active';}?>" href="#"><i class="bi bi-people-fill"></i>&nbsp;Equipe</a>
                 </div>
                 <hr class="mx-3 mt-auto">
