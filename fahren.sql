@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 02/10/2025 às 03:16
+-- Tempo de geração: 03/10/2025 às 04:11
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   `imagens` varchar(255) DEFAULT NULL,
   `leilao` char(1) DEFAULT NULL,
   `portas_qtd` smallint(1) DEFAULT 4,
-  `acentos_qtd` smallint(1) DEFAULT 5,
+  `assentos_qtd` smallint(1) DEFAULT 5,
   `placa` char(7) DEFAULT NULL,
   `data_criacao` datetime NOT NULL DEFAULT current_timestamp(),
   `cor` int(2) NOT NULL,
@@ -63,19 +63,22 @@ CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   `aceita_troca` char(1) NOT NULL,
   `email` varchar(256) NOT NULL,
   `telefone` varchar(20) NOT NULL,
+  `garantia` int(2) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `placa` (`placa`),
-  KEY `carro_link_vendedor_id` (`id_vendedor`),
   KEY `cor_fk` (`cor`),
-  KEY `carroceria_fk` (`carroceria`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `carroceria_fk` (`carroceria`),
+  KEY `vendedor_fk` (`id_vendedor`),
+  KEY `estado_fk` (`estado_local`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `anuncios_carros`
 --
 
-INSERT INTO `anuncios_carros` (`id`, `estado_local`, `cidade`, `marca`, `modelo`, `versao`, `carroceria`, `preco`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `blindagem`, `id_vendedor`, `imagens`, `leilao`, `portas_qtd`, `acentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`) VALUES
-(13, NULL, NULL, 'ferrari', '488 spider', '3.9 V8 TURBO GASOLINA F1-DCT', 4, 3450000.00, 0, 2017, 2018, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'AAA1A11', '2025-09-30 18:50:26', 3, '2', '2', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111');
+INSERT INTO `anuncios_carros` (`id`, `estado_local`, `cidade`, `marca`, `modelo`, `versao`, `carroceria`, `preco`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `blindagem`, `id_vendedor`, `imagens`, `leilao`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`) VALUES
+(13, 'SP', '', 'ferrari', '488 spider', '3.9 V8 TURBO GASOLINA F1-DCT', 1, 2400000.00, 600, 2017, 2018, 'ferrari', 'ferrari', '0', 6, NULL, NULL, 1, 2, 'AAA1A11', '2025-09-30 18:50:26', 2, '4', '5', 'F', 'L', 'I', 'D', '4', 'T', '1', 'kelwin@gmail.com', '12988273730', 6),
+(15, 'SP', NULL, 'porsche', '911', '3.0 24V GASOLINA TURBO S PDK', NULL, 1920000.00, 3000, 2022, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'TDH2K25', '2025-10-02 22:37:29', 1, '1', '2', 'F', '0', 'D', 'D', '4', 'P', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0);
 
 -- --------------------------------------------------------
 
@@ -134,6 +137,51 @@ INSERT INTO `cores` (`id`, `nome`) VALUES
 (11, 'Dourado'),
 (12, 'Verde'),
 (13, 'Bege');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `estados`
+--
+
+CREATE TABLE IF NOT EXISTS `estados` (
+  `uf` char(2) NOT NULL,
+  `nome` varchar(30) NOT NULL,
+  PRIMARY KEY (`uf`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `estados`
+--
+
+INSERT INTO `estados` (`uf`, `nome`) VALUES
+('AC', 'Acre'),
+('AL', 'Alagoas'),
+('AM', 'Amazonas'),
+('AP', 'Amapá'),
+('BA', 'Bahia'),
+('CE', 'Ceará'),
+('DF', 'Distrito Federal'),
+('ES', 'Espírito Santo'),
+('GO', 'Goiás'),
+('MA', 'Maranhão'),
+('MG', 'Minas Gerais'),
+('MS', 'Mato Grosso do Sul'),
+('MT', 'Mato Grosso'),
+('PA', 'Pará'),
+('PB', 'Paraíba'),
+('PE', 'Pernambuco'),
+('PI', 'Piauí'),
+('PR', 'Paraná'),
+('RJ', 'Rio de Janeiro'),
+('RN', 'Rio Grande do Norte'),
+('RO', 'Rondônia'),
+('RR', 'Roraima'),
+('RS', 'Rio Grande do Sul'),
+('SC', 'Santa Catarina'),
+('SE', 'Sergipe'),
+('SP', 'São Paulo'),
+('TO', 'Tocantins');
 
 -- --------------------------------------------------------
 
@@ -233,14 +281,15 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `telefone` (`telefone`),
   UNIQUE KEY `cpf` (`cpf`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `senha`, `data_criacao_conta`, `data_nascimento`) VALUES
-(6, 'Kelwin', 'Silva', NULL, NULL, 'kelwin@gmail.com', '1111AAAA', '2025-09-20 20:44:02', NULL);
+(6, 'Kelwin', 'Silva', NULL, NULL, 'kelwin@gmail.com', '1111AAAA', '2025-09-20 20:44:02', NULL),
+(7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1111AAAA', '2025-10-02 22:40:54', NULL);
 
 --
 -- Restrições para tabelas despejadas
@@ -251,7 +300,9 @@ INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `
 --
 ALTER TABLE `anuncios_carros`
   ADD CONSTRAINT `carroceria_fk` FOREIGN KEY (`carroceria`) REFERENCES `carrocerias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `cor_fk` FOREIGN KEY (`cor`) REFERENCES `cores` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `cor_fk` FOREIGN KEY (`cor`) REFERENCES `cores` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `estado_fk` FOREIGN KEY (`estado_local`) REFERENCES `estados` (`uf`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `vendedor_fk` FOREIGN KEY (`id_vendedor`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

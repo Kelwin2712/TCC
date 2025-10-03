@@ -1,7 +1,28 @@
 <?php
 session_start();
+include('controladores/conexao_bd.php');
 
 $_SESSION['placa'] = isset($_POST['placa']) ? $_POST['placa'] : null;
+
+$sql = "SELECT * FROM marcas";
+$resultado = mysqli_query($conexao, $sql);
+
+$marcas = [];
+
+while ($linha = mysqli_fetch_array($resultado)) {
+  $marcas[] = $linha;
+}
+
+$sql = "SELECT * FROM cores";
+$resultado = mysqli_query($conexao, $sql);
+
+$cores = [];
+
+while ($linha = mysqli_fetch_array($resultado)) {
+  $cores[] = $linha;
+}
+
+mysqli_close($conexao);
 ?>
 
 <!DOCTYPE html>
@@ -41,64 +62,9 @@ $_SESSION['placa'] = isset($_POST['placa']) ? $_POST['placa'] : null;
                 </div>
                 <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
                   <option value="" selected hidden>Escolha uma marca</option>
-                  <option value="abarth">Abarth</option>
-                  <option value="alfa">Alfa Romeo</option>
-                  <option value="aston">Aston Martin</option>
-                  <option value="audi">Audi</option>
-                  <option value="bentley">Bentley</option>
-                  <option value="bmw">BMW</option>
-                  <option value="bugatti">Bugatti</option>
-                  <option value="byd">BYD</option>
-                  <option value="cadillac">Cadillac</option>
-                  <option value="chevrolet">Chevrolet</option>
-                  <option value="chrysler">Chrysler</option>
-                  <option value="citroen">Citroën</option>
-                  <option value="corvette">Corvette</option>
-                  <option value="dacia">Dacia</option>
-                  <option value="dodge">Dodge</option>
-                  <option value="ferrari">Ferrari</option>
-                  <option value="fiat">Fiat</option>
-                  <option value="ford">Ford</option>
-                  <option value="genesis">Genesis</option>
-                  <option value="gmc">GMC</option>
-                  <option value="gwm">GWM</option>
-                  <option value="honda">Honda</option>
-                  <option value="hummer">Hummer</option>
-                  <option value="hyundai">Hyundai</option>
-                  <option value="infiniti">Infiniti</option>
-                  <option value="jaecoo">JAECOO</option>
-                  <option value="jaguar">Jaguar</option>
-                  <option value="jeep">Jeep</option>
-                  <option value="kia">Kia</option>
-                  <option value="koenigsegg">Koenigsegg</option>
-                  <option value="lamborghini">Lamborghini</option>
-                  <option value="lancia">Lancia</option>
-                  <option value="land">Land Rover</option>
-                  <option value="lexus">Lexus</option>
-                  <option value="lincoln">Lincoln</option>
-                  <option value="lotus">Lotus</option>
-                  <option value="maserati">Maserati</option>
-                  <option value="mazda">Mazda</option>
-                  <option value="mclaren">McLaren</option>
-                  <option value="mercedes">Mercedes-Benz</option>
-                  <option value="mini">MINI</option>
-                  <option value="mitsubishi">Mitsubishi</option>
-                  <option value="nissan">Nissan</option>
-                  <option value="omoda">Omoda</option>
-                  <option value="opel">Opel</option>
-                  <option value="peugeot">Peugeot</option>
-                  <option value="porsche">Porsche</option>
-                  <option value="ram">Ram</option>
-                  <option value="renault">Renault</option>
-                  <option value="rolls">Rolls-Royce</option>
-                  <option value="skoda">Skoda</option>
-                  <option value="smart">Smart</option>
-                  <option value="subaru">Subaru</option>
-                  <option value="suzuki">Suzuki</option>
-                  <option value="tesla">Tesla</option>
-                  <option value="toyota">Toyota</option>
-                  <option value="volkswagen">Volkswagen</option>
-                  <option value="volvo">Volvo</option>
+                  <?php foreach ($marcas as $marca): ?>
+                    <option value="<?= $marca['value'] ?>"><?= $marca['nome'] ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
               <div class="col-md-6 mb-2">
@@ -140,19 +106,9 @@ $_SESSION['placa'] = isset($_POST['placa']) ? $_POST['placa'] : null;
                 </div>
                 <select class="form-select shadow-sm" id="cor-select" aria-label="Default select example" name="cor" required>
                   <option value="" selected hidden>Escolha uma cor</option>
-                  <option value="branco">Branco</option>
-                  <option value="preto">Preto</option>
-                  <option value="vermelho">Vermelho</option>
-                  <option value="azul">Azul</option>
-                  <option value="cinza">Cinza</option>
-                  <option value="prata">Prata</option>
-                  <option value="vinho">Vinho</option>
-                  <option value="marrom">Marrom</option>
-                  <option value="laranja">Laranja</option>
-                  <option value="amarelo">Amarelo</option>
-                  <option value="dourado">Dourado</option>
-                  <option value="verde">Verde</option>
-                  <option value="bege">Bege</option>
+                  <?php foreach ($cores as $cor): ?>
+                    <option value="<?= $cor['id'] ?>"><?= $cor['nome'] ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
             </div>

@@ -7,7 +7,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $preco = null;
 
   if ($preco_post) {
-    // Converte: "R$ 10.000,00" → 10000.00
     $preco_limpo = str_replace(['R$', '.', ' ', ','], ['', '', '', '.'], $preco_post);
     $preco = number_format((float)$preco_limpo, 2, '.', '');
   }
@@ -15,7 +14,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $troca = isset($_POST['troca']) ? $_POST['troca'] : null;
   $email = isset($_POST['email']) ? $_POST['email'] : null;
   $telefone = isset($_POST['telefone']) ? $_POST['telefone'] : null;
-  $quilometragem = $_SESSION['quilometragem'];
+  $quilometragem = preg_replace('/\D/', '', $_SESSION['quilometragem']);
   $proprietario = $_SESSION['proprietario'];
   $revisao = $_SESSION['revisao'];
   $vistoria = $_SESSION['vistoria'];

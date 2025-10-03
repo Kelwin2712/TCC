@@ -38,13 +38,6 @@
                     <div class="text-bg-dark bg-opacity-50 rounded-pill py-1" style="font-size: .8rem; padding-left: .75rem; padding-right: .75rem;"><span class="min">1</span>/<span class="max"></span></div>
                 </div>
             </div>
-            <div class="row position-absolute top-0 end-0 p-2 favoritar-btn">
-                <div class="col-auto">
-                    <button type="button" class="btn text-bg-dark bg-opacity-50 position-relative favoritar rounded-circle">
-                        <i class="bi bi-heart"></i>
-                    </button>
-                </div>
-            </div>
         </div>
         <button class="carousel-control-prev" style="display: none;" type="button" data-bs-target="#<?= $id ?>" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -78,11 +71,11 @@
     </div>
     <div class="card-footer border-top-0 bg-body">
         <div class="row mb-1">
-            <div class="col-auto">
-                <button class="btn border rounded-5 text-uppercase fw-bold w-100"><i class="bi bi-trash"></i></button>
-            </div>
             <div class="col">
                 <button class="btn btn-dark rounded-5 fw-bold w-100">Editar&nbsp;&nbsp;<i class="bi bi-pencil"></i></button>
+            </div>
+            <div class="col-auto">
+                <button class="btn border rounded-5 text-uppercase fw-bold w-100"><i class="bi bi-trash"></i></button>
             </div>
         </div>
     </div>

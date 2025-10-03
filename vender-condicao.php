@@ -55,6 +55,17 @@ $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
                 </div>
               </div>
               <div class="col">
+                <label for="garantia-select" class="form-text mb-2">Garantia<sup>*</sup></label>
+                <select class="form-select shadow-sm" id="garantia-select" aria-label="Default select example" name="garantia" required>
+                  <option value="" selected hidden>Informe a situação da garantia<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></option>
+                  <option value="0">Sem garantia</option>
+                  <option value="1">1 mês</option>
+                  <option value="3">3 meses</option>
+                  <option value="6">6 meses</option>
+                  <option value="12">12 meses ou mais</option>
+                </select>
+              </div>
+              <div class="col">
                 <label for="proprietario-select" class="form-text mb-2">Quantidade de proprietários<sup>*</sup></label>
                 <select class="form-select shadow-sm" id="proprietario-select" aria-label="Default select example" name="proprietario" required>
                   <option value="" selected hidden>Informe quantos proprietários o veículo já teve</option>
@@ -116,6 +127,8 @@ $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
                   <option value="T">Em processo de transferência</option>
                 </select>
               </div>
+            </div>
+            <div class="row w-100 mt-4">
               <div class="col">
                 <label for="consevacao-select" class="form-text mb-2">Estado de conservação<sup>*</sup></label>
                 <select class="form-select shadow-sm" id="consevacao-select" aria-label="Default select example" name="consevacao" required>
