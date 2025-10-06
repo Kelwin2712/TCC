@@ -7,14 +7,21 @@
         </div>
 
         <div class="col">
-            <div class="card-body pb-1">
+            <div class="card-body position-relative">
+            <div class="position-absolute top-0 end-0 p-2 favoritar-btn">
+                <div class="col-auto">
+                    <button type="button" class="btn text-dark border-0 position-relative favoritar rounded-circle" data-anuncio='<?= $id ?>'>
+                        <i class="bi <?= ($favoritado == 1) ? 'bi-heart' : 'bi-heart-fill'  ?>"></i>
+                    </button>
+                </div>
+            </div>
                 <div class="row mb-3">
-                    <a href="editar-anuncio.php?id=<?= $id; ?>" class="text-decoration-none text-dark stretched-link">
+                    <a href="../pagina-venda.php?id=<?= $id; ?>" class="text-decoration-none text-dark stretched-link" style="padding-right: 2.5rem;">
                         <h5 class="card-title fw-bold mb-0 text-uppercase"><?= $marca ?> <?= $modelo ?></h5>
                     </a>
                     <p class="card-text text-uppercase text-secondary small"><?= $versao; ?></p>
                 </div>
-                <div class="row mb-3 gx-2">
+                <div class="row mb-3 gx-4">
                     <div class="col-auto">
                         <p class="card-text text-nowrap text-secondary small"><?= $ano; ?></p>
                     </div>
@@ -27,16 +34,6 @@
                     </div>
                 </div>
                 <p class="card-text h5 fw-bold mb-2">R$ <?= $preco; ?></p>
-            </div>
-            <div class="card-footer border-top-0 bg-body">
-                <div class="row mb-1">
-                    <div class="col">
-                        <button class="btn btn-dark rounded-5 fw-bold w-100">Editar&nbsp;&nbsp;<i class="bi bi-pencil"></i></button>
-                    </div>
-                    <div class="col-auto">
-                        <button class="btn border rounded-5 text-uppercase fw-bold w-100"><i class="bi bi-trash"></i></button>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -158,3 +158,8 @@ const cpfMask = (value) => {
   value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
   return value
 }
+
+
+$('.sidebar-drop').on('click', function() {
+  $(this).toggleClass('active');
+})

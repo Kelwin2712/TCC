@@ -54,7 +54,7 @@ if (!isset($_SESSION['id'])) {
             </div>
             <div class="row d-flex justify-content-between align-items-center w-100 mt-4">
               <div class="col-auto">
-                <a href="index.php" class="btn text-muted"><i class="bi bi-caret-left"></i>&nbsp;Cancelar</a>
+                <a href="." class="btn text-muted"><i class="bi bi-caret-left"></i>&nbsp;Cancelar</a>
               </div>
               <div class="col-auto">
                 <button type="submit" class="btn btn-dark shadow-sm" disabled>Próximo passo&nbsp;<i class="bi bi-caret-right-fill"></i></button>

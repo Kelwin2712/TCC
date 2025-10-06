@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header('Location: ../menu/configuracoes.php');
     exit();
 } else {
-    header('Location: ../index.php');
+    header('Location: ../');
     exit();
 }
 

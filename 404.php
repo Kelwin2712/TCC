@@ -26,7 +26,7 @@ http_response_code(404);
           <p class="mb-0">Página não encontrada</p>
           <p>Ei motorista, pelo visto você pegou o caminho errado</p>
         </div>
-        <a href="index.php" class="btn btn-dark">Voltar para a homepage</a>
+        <a href="." class="btn btn-dark">Voltar para a homepage</a>
       </div>
     </main>
   </div>

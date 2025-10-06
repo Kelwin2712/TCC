@@ -1,7 +1,7 @@
-<div class="card card-compra shadow-hover border-1 border-secondary border-opacity-25 position-relative">
+<div class="card card-compra shadow-hover border-1 border-secondary border-opacity-25 position-relative overflow-hidden h-100">
     <div id="<?= $id ?>" class="carousel slide card-img-top position-relative" data-quant="1">
         <div class="carousel-inner">
-            <a class="carro-img" href="pagina-venda.php?marca=<?= $marca?>&modelo=<?= $modelo?>&versao=<?= $versao?>&preco=<?= $preco?>&ano=<?= $ano?>&km=<?= $km?>&cor=<?= $cor?>&troca=<?= $troca?>&revisao=<?= $revisao?>">
+            <a class="carro-img" href="pagina-venda.php?id=<?= $id?>">
                 <div class="carousel-item active">
                     <div class="ratio ratio-4x3">
                         <img src="<?= $img1; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem 1">
@@ -40,8 +40,8 @@
             </div>
             <div class="row position-absolute top-0 end-0 p-2 favoritar-btn">
                 <div class="col-auto">
-                    <button type="button" class="btn text-bg-dark bg-opacity-50 position-relative favoritar rounded-circle">
-                        <i class="bi bi-heart"></i>
+                    <button type="button" class="btn text-bg-dark bg-opacity-50 position-relative favoritar rounded-circle" data-anuncio='<?= $id ?>'>
+                        <i class="bi <?= ($favoritado == 1) ? 'bi-heart-fill' : 'bi-heart'  ?>"></i>
                     </button>
                 </div>
             </div>
@@ -55,10 +55,10 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-    <div class="card-body pb-1">
+    <div class="card-body pb-1 d-flex flex-column justify-content-between">
         <div class="row mb-3">
-            <a href="pagina-venda.php?marca=<?= $marca?>&modelo=<?= $modelo?>&versao=<?= $versao?>&preco=<?= $preco?>&ano=<?= $ano?>&km=<?= $km?>&cor=<?= $cor?>&troca=<?= $troca?>&revisao=<?= $revisao?>" class="text-decoration-none text-dark stretched-link">
-                <h5 class="card-title fw-bold mb-0 text-uppercase"><?= $marca?> <?= $modelo?></h5>
+            <a href="pagina-venda.php?id=<?= $id?>" class="text-decoration-none text-dark stretched-link">
+                <h5 class="card-title fw-bold mb-1 text-uppercase"><?= $marca?> <?= $modelo?></h5>
             </a>
             <p class="card-text text-uppercase text-secondary small"><?= $versao; ?></p>
         </div>

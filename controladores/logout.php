@@ -15,7 +15,7 @@ if (isset($msg_alert)) {
 if (!empty($_SERVER['HTTP_REFERER'])) {
     header("Location: " . $_SERVER['HTTP_REFERER']);
 } else {
-    header("Location: ../index.php");
+    header("Location: ../");
 }
 exit;
 ?>

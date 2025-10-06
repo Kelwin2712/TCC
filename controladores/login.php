@@ -19,7 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $_SESSION['data_nascimento'] = $linha['data_nascimento'];
 
         $_SESSION['msg_alert'] = ['success', 'Login realizado com sucesso!'];
-        header('Location: ../index.php');
+        header('Location: ../');
       } else {
         $_SESSION['msg_alert'] = ['danger', 'Senha incorreta!'];
         header('Location: ../sign-in.php');
@@ -33,7 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
   }
 } else {
-  header('Location: ../index.php');
+  header('Location: ../');
   exit();
 }
 

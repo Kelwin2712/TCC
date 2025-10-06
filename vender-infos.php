@@ -63,7 +63,7 @@ mysqli_close($conexao);
                 <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
                   <option value="" selected hidden>Escolha uma marca</option>
                   <?php foreach ($marcas as $marca): ?>
-                    <option value="<?= $marca['value'] ?>"><?= $marca['nome'] ?></option>
+                    <option value="<?= $marca['id'] ?>"><?= $marca['nome'] ?></option>
                   <?php endforeach; ?>
                 </select>
               </div>

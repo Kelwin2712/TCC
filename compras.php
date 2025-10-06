@@ -2,6 +2,8 @@
 include('controladores/conexao_bd.php');
 $filter_check_caminho = 'estruturas/filter/filter-checkbox.php';
 
+$id = $_SESSION['id'] ?? null;
+
 $tipo = $_GET['tipo'] ?? 'carro';
 $codicao = $_GET['codicao'] ?? 'usado';
 $categoria = $_GET['categoria'] ?? null;
@@ -14,7 +16,19 @@ $page = $_GET['page'] ?? 1;
 $quantidade = 3;
 $quantidade = $quantidade * 12;
 
-$sql = "SELECT * FROM anuncios_carros LIMIT $quantidade";
+$sql = "SELECT 
+    carros.*, 
+    marcas.nome AS marca_nome,
+    IF(favoritos.id IS NULL, 0, 1) AS favoritado
+FROM 
+    anuncios_carros carros
+INNER JOIN 
+    marcas ON carros.marca = marcas.id
+LEFT JOIN 
+    favoritos ON favoritos.anuncio_id = carros.id 
+               AND favoritos.usuario_id = '$id'
+LIMIT $quantidade;";
+
 $resultado = mysqli_query($conexao, $sql);
 
 $carros = [];
@@ -23,15 +37,6 @@ $qtd_resultados = mysqli_num_rows($resultado) ?? 0;
 
 while ($linha = mysqli_fetch_array($resultado)) {
   $carros[] = $linha;
-}
-
-$sql = "SELECT value, nome FROM marcas";
-$resultado = mysqli_query($conexao, $sql);
-
-$marcas = [];
-
-while ($linha = mysqli_fetch_array($resultado)) {
-  $marcas[] = $linha;
 }
 
 mysqli_close($conexao);
@@ -77,7 +82,7 @@ mysqli_close($conexao);
           <div class="row pt-5">
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
               <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.php" class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Home</a></li>
+                <li class="breadcrumb-item"><a href="." class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Home</a></li>
 
                 <?php if (isset($vendedor)) {
                   echo "<li class=\"breadcrumb-item\"><a href=\"compras.php\" class=\"link-dark link-underline-opacity-0 link-underline-opacity-100-hover\">Carros</a></li>
@@ -722,29 +727,30 @@ mysqli_close($conexao);
               </div>
               <div id="area-compra" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-2">
                 <?php
-                foreach ($carros as $carro) {
-                  echo '<div class="col">';
-                  $marca = $carro['marca'];
-                  $modelo = $carro['modelo'];
-                  $versao = $carro['versao'];
-                  $preco = $carro['preco'];
-                  $ano = $carro['ano_fabricacao'] . '/' . $carro['ano_modelo'];
-                  $km = $carro['quilometragem'];
-                  $cor = $carro['cor'];
-                  $troca = $carro['aceita_troca'];
-                  $revisao = $carro['revisao'];
-                  $id = 'carro-' . $carro['id'];
-                  $loc = 'São José dos Campos - SP';
-                  $img1 = 'img/compras/1.png';
-                  $img2 = 'img/compras/2.png';
-                  $img3 = 'img/compras/3.png';
-                  $img4 = 'img/compras/4.png';
-                  $img5 = 'img/compras/5.png';
-                  $img6 = 'img/compras/6.png';
-                  include 'estruturas/card-compra/card-compra.php';
-                  echo '</div>';
-                };
-                ?>
+                foreach ($carros as $carro): ?>
+                  <div class="col">
+                    <?php
+                    $marca = $carro['marca_nome'];
+                    $modelo = $carro['modelo'];
+                    $versao = $carro['versao'];
+                    $preco = $carro['preco'];
+                    $ano = $carro['ano_fabricacao'] . '/' . $carro['ano_modelo'];
+                    $km = $carro['quilometragem'];
+                    $cor = $carro['cor'];
+                    $troca = $carro['aceita_troca'];
+                    $revisao = $carro['revisao'];
+                    $id = $carro['id'];
+                    $loc = 'São José dos Campos - SP';
+                    $img1 = 'img/compras/1.png';
+                    $img2 = 'img/compras/2.png';
+                    $img3 = 'img/compras/3.png';
+                    $img4 = 'img/compras/4.png';
+                    $img5 = 'img/compras/5.png';
+                    $img6 = 'img/compras/6.png';
+                    $favoritado = $carro['favoritado'];
+                    include 'estruturas/card-compra/card-compra.php'; ?>
+                  </div>
+                <?php endforeach; ?>
               </div>
             </div>
           </div>
@@ -776,10 +782,10 @@ mysqli_close($conexao);
                                                                                                     } else {
                                                                                                       echo $page - 1;
                                                                                                     } ?>"><?php if ($page == 1) {
-                                                                                                          echo $page;
-                                                                                                        } else {
-                                                                                                          echo $page - 1;
-                                                                                                        } ?></a></li>
+                                                                                                            echo $page;
+                                                                                                          } else {
+                                                                                                            echo $page - 1;
+                                                                                                          } ?></a></li>
                   <li class="page-item <?php if ($page != 1) {
                                           echo 'active';
                                         } ?>"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
@@ -787,10 +793,10 @@ mysqli_close($conexao);
                                                                                           } else {
                                                                                             echo $page;
                                                                                           } ?>"><?php if ($page == 1) {
-                                                                                                echo $page + 1;
-                                                                                              } else {
-                                                                                                echo $page;
-                                                                                              } ?></a></li>
+                                                                                                  echo $page + 1;
+                                                                                                } else {
+                                                                                                  echo $page;
+                                                                                                } ?></a></li>
                   <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
                                                                                       echo $page + 2;
                                                                                     } else {
@@ -838,7 +844,6 @@ mysqli_close($conexao);
       const card = $(this)
       card.data('quant', card.find('.carro-img').children().length);
       const quant = card.data('quant');
-      console.log('rola');
       card.find('.max').text(quant);
       card.find('.carousel-control-prev').on('click', function() {
         if (num === 1) {
@@ -981,6 +986,19 @@ mysqli_close($conexao);
     versoesInput.find("button").on("click", function() {
       versoesInput.find("select").val("");
       versoesInput.find("button").addClass("d-none");
+    });
+  });
+
+  $(document).on('click', 'button.favoritar', function() {
+    let anuncioID = $(this).data('anuncio');
+
+    console.log(anuncioID)
+
+    $.post('controladores/veiculos/favoritar-veiculo.php', {
+      usuario: <?= $_SESSION['id'] ?>,
+      anuncio: anuncioID
+    }, function(resposta) {
+      console.log("Resposta do servidor:", resposta);
     });
   });
 </script>

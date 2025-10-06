@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   header('Location: ../sign-in.php');
   exit();
 } else {
-  header('Location: ../index.php');
+  header('Location: ../');
   exit();
 }
 

@@ -2,8 +2,9 @@
 session_start();
 include('../controladores/conexao_bd.php');
 
-if (!isset($_SESSION['nome'])) {
-    header("Location: index.php");
+if (!isset($_SESSION['id'])) {
+    header("Location: ../");
+    exit;
 }
 
 $tipo = $_GET['tipo'] ?? 'carro';
@@ -17,7 +18,7 @@ $page = $_GET['page'] ?? 1;
 
 $id = $_SESSION['id'];
 
-$sql = "SELECT * FROM anuncios_carros WHERE id_vendedor = $id";
+$sql = "SELECT carros.*, marcas.nome as marca_nome FROM anuncios_carros carros INNER JOIN marcas ON carros.marca = marcas.id WHERE carros.id_vendedor = $id";
 $resultado = mysqli_query($conexao, $sql);
 
 $carros = [];
@@ -64,11 +65,11 @@ mysqli_close($conexao);
                     <label class="btn btn-outline-dark w-auto rounded-pill px-3" for="tela-2">Motos</label>
                     <a href="../vender-placa.php" class="btn btn-dark ms-auto rounded-pill shadow-sm">+ Criar novo anúncio</a>
                 </div>
-                <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 row-cols-xxl-6">
+                <div class="row row-cols-1 row-cols-xl-2 g-3">
                     <?php foreach ($carros as $carro): ?>
                         <div class="col">
                             <?php
-                            $marca = $carro['marca'];
+                            $marca = $carro['marca_nome'];
                             $modelo = $carro['modelo'];
                             $versao = $carro['versao'];
                             $preco = $carro['preco'];

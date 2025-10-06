@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $preco_limpo = str_replace(['R$', '.', ' ', ','], ['', '', '', '.'], $preco_post);
     $preco = number_format((float)$preco_limpo, 2, '.', '');
   }
-  echo $preco;
+  
   $troca = isset($_POST['troca']) ? $_POST['troca'] : null;
   $email = isset($_POST['email']) ? $_POST['email'] : null;
   $telefone = isset($_POST['telefone']) ? $_POST['telefone'] : null;

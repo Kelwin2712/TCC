@@ -4,7 +4,7 @@ include('../conexao_bd.php');
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $id_veiculo = $_SESSION['id_veiculo_edit'];
 
-    $estado_local = $_POST['estado_local'] ?? '';
+    $estado_local = $_POST['estado_local'] ?? 'SP';
     $cidade = $_POST['cidade'] ?? '';
     $marca = $_POST['marca'] ?? '';
     $modelo = $_POST['modelo'] ?? '';
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     $_SESSION['msg_alert'] = ['success', 'Alterações feitas com sucesso!'];
-    header('Location: ../../menu/editar-anuncio.php?id='.$id_veiculo.'&teste='.$assentos_qtd);
+    header('Location: ../../menu/anuncios.php');
     exit();
 } else {
     header('Location: ../../index.php');

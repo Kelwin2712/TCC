@@ -23,6 +23,29 @@ body {
   background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)) !important;
 }
 
+.sidebar-drop {
+  position: relative;
+  padding-right: 1.5rem; /* espaço pra seta */
+}
+
+/* seta padrão para direita */
+.sidebar-drop::after {
+  font-family: "bootstrap-icons"; /* usa a fonte do Bootstrap Icons */
+  content: "\f285"; /* chevron-right */
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  transition: transform 0.3s ease;
+  font-size: 1rem;
+}
+
+/* quando o botão está aberto (sem collapsed) */
+.sidebar-drop:not(.collapsed)::after {
+  transform: translateY(-50%) rotate(90deg); /* gira pra baixo */
+}
+
+
 .pagination-dark {
   --bs-pagination-active-color: #fff;
   --bs-pagination-active-bg: #212529;

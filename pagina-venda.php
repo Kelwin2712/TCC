@@ -1,21 +1,28 @@
-<?php session_start();
-$marca = $_GET['marca'];
-$modelo = $_GET['modelo'];
-$versao = $_GET['versao'];
-$preco = $_GET['preco'];
-$ano = $_GET['ano'];
-$km = $_GET['km'];
-$cor = $_GET['cor'];
-$troca = $_GET['troca'] == 1 ? 'sim' : 'não';
-$revisao_qtd = $_GET['revisao'];
-$revisao = $_GET['revisao'] > 0 ? 'sim'." ($revisao_qtd)" : 'não';
+<?php
+session_start();
+include('controladores/conexao_bd.php');
 
-if (!$marca || !$modelo || !$versao) {
+$id_veiculo = $_GET['id'];
+
+if (!$id_veiculo) {
     header('Location: index.php');
     exit;
 }
 
-$vendedor = 'Fahren Imports';
+$sql = "SELECT carros.*, marcas.nome as marca_nome, usuarios.nome as vendedor_nome, usuarios.sobrenome as vendedor_sobrenome FROM anuncios_carros carros INNER JOIN marcas ON carros.marca = marcas.id INNER JOIN usuarios ON carros.id_vendedor = usuarios.id WHERE carros.id = $id_veiculo";
+$resultado = mysqli_query($conexao, $sql);
+
+
+if (mysqli_num_rows($resultado) > 0) {
+    $carro = mysqli_fetch_array($resultado);
+} else {
+    header('Location: index.php');
+    exit;
+}
+
+mysqli_close($conexao);
+
+$vendedor = $carro['vendedor_nome'].' '.$carro['vendedor_sobrenome'];
 $vendedor_img = 'img/logo-fahren-bg.jpg';
 $vendedor_est = '4.63';
 ?>
@@ -29,7 +36,7 @@ $vendedor_est = '4.63';
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title><?= $marca . ' ' . $modelo . ' ' . $versao ?></title>
+    <title><?= $carro['marca'] . ' ' . $carro['modelo'] . ' ' . $carro['versao'] ?></title>
     <link rel="stylesheet" href="style.css">
     <style>
         .carro-img {
@@ -150,7 +157,7 @@ $vendedor_est = '4.63';
                         <div class="card-body px-4 d-flex flex-column justify-content-between">
                             <div class="row d-flex justify-content-between">
                                 <div class="col-auto">
-                                    <p class="fs-1 fw-semibold mb-0">R$ <?= $preco ?></p>
+                                    <p class="fs-1 fw-semibold mb-0">R$ <?= $carro['preco'] ?></p>
                                 </div>
                                 <div class="col-auto">
                                     <span class="badge text-bg-primary py-2 user-select-none rounded-3"><i class="bi bi-shield-check"></i> Confiável</span>
@@ -190,11 +197,11 @@ $vendedor_est = '4.63';
                         <div class="card-body py-4">
                             <div class="row mb-4 d-flex justify-content-between px-4">
                                 <div class="col-auto pe-0">
-                                    <h2 class="fw-bold mb-0 text-uppercase"><?= $marca ?> <?= $modelo ?></h2>
-                                    <p class="text-uppercase"><?= $versao ?></p>
+                                    <h2 class="fw-bold mb-0 text-uppercase"><?= $carro['marca_nome'] ?> <?= $carro['modelo'] ?></h2>
+                                    <p class="text-uppercase"><?= $carro['versao'] ?></p>
                                 </div>
                                 <div class="col">
-                                    <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> São José dos Campos - SP</p>
+                                    <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> São José dos Campos - <?= $carro['estado_local'] ?></p>
                                 </div>
                                 <div class="col-auto">
                                     <button type="button" class="btn p-0 favoritar favoritar-danger">
@@ -210,7 +217,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Ano</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold "><?= $ano?></p>
+                                            <p class="fw-semibold "><?= $carro['preco'] ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -218,7 +225,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">KM</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold "><?= $km?></p>
+                                            <p class="fw-semibold "><?= $carro['quilometragem'] ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -226,7 +233,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Cor</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold text-capitalize"><?= $cor?></p>
+                                            <p class="fw-semibold text-capitalize"><?= $carro['cor'] ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -252,7 +259,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Aceita troca</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold text-capitalize"><?= $troca?></p>
+                                            <p class="fw-semibold text-capitalize"><?= $carro['aceita_troca'] ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -260,7 +267,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Revisão feita</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold text-capitalize"><?= $revisao?></p>
+                                            <p class="fw-semibold text-capitalize"><?= $carro['revisao'] ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
