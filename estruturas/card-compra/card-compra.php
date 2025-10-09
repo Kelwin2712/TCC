@@ -40,7 +40,7 @@
             </div>
             <div class="row position-absolute top-0 end-0 p-2 favoritar-btn">
                 <div class="col-auto">
-                    <button type="button" class="btn text-bg-dark bg-opacity-50 position-relative favoritar rounded-circle" data-anuncio='<?= $id ?>'>
+                    <button type="button" class="btn btn-sm text-bg-dark bg-opacity-50 position-relative favoritar rounded-circle" data-anuncio='<?= $id ?>'>
                         <i class="bi <?= ($favoritado == 1) ? 'bi-heart-fill' : 'bi-heart'  ?>"></i>
                     </button>
                 </div>

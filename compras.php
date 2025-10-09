@@ -31,6 +31,10 @@ LIMIT $quantidade;";
 
 $resultado = mysqli_query($conexao, $sql);
 
+if (!$resultado) {
+    die("Erro na consulta SQL: " . mysqli_error($conexao));
+}
+
 $carros = [];
 
 $qtd_resultados = mysqli_num_rows($resultado) ?? 0;
@@ -39,6 +43,14 @@ while ($linha = mysqli_fetch_array($resultado)) {
   $carros[] = $linha;
 }
 
+$sql = "SELECT value, nome FROM marcas";
+$resultado = mysqli_query($conexao, $sql);
+
+$marcas = [];
+
+while ($linha = mysqli_fetch_array($resultado)) {
+  $marcas[] = $linha;
+}
 mysqli_close($conexao);
 ?>
 
@@ -99,7 +111,7 @@ mysqli_close($conexao);
             </nav>
           </div>
           <div class="row g-4">
-            <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-flex flex-column" style="max-height: 100vh;">
+            <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-flex flex-column d-none d-md-block" style="max-height: 100vh;">
               <div id="filtros-over" class="overflow-y-auto rounded-2 border border-opacity-25 shadow-sm" style="max-height: 100%;">
                 <div class="accordion w-100" id="accordionPanelsStayOpenExample">
                   <?php if (isset($vendedor)) {
@@ -725,7 +737,7 @@ mysqli_close($conexao);
                   </div>
                 </div>
               </div>
-              <div id="area-compra" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-2">
+              <div id="area-compra" class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-2">
                 <?php
                 foreach ($carros as $carro): ?>
                   <div class="col">

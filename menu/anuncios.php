@@ -38,7 +38,7 @@ mysqli_close($conexao);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Configuração</title>
+    <title>Meus anúncios</title>
     <link rel="shortcut icon" href="../img/favicon.ico" type="image/x-icon">
     <link rel="icon" type="png" href="../img/logo-oficial.png">
     <link rel="stylesheet" href="../style.css">
@@ -46,7 +46,14 @@ mysqli_close($conexao);
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 
+<style>
+    .card-anuncio .card-footer {
+        z-index: 3;
+    }
+</style>
+
 <body class="overflow-x-hidden">
+    <?php include '../estruturas/modal/loja-modal.php';?>
     <?php include '../estruturas/alert/alert.php' ?>
     <main class="container-fluid d-flex vh-100 p-0">
         <?php $selected = 'ad';
@@ -86,12 +93,34 @@ mysqli_close($conexao);
                     <?php endforeach; ?>
                 </div>
 
-                <div class="row flex-grow-1 d-flex align-items-center <?php if ($qtd_resultados > 0) {echo 'd-none';}?>">
+                <div class="row flex-grow-1 d-flex align-items-center <?php if ($qtd_resultados > 0) {
+                                                                            echo 'd-none';
+                                                                        } ?>">
                     <div class="text-center text-muted">
                         <p style="font-size: calc(2rem + 1.5vw) !important;"><i class="bi bi-x-circle-fill"></i></p>
                         <h4 class="mb-0">Nenhuma anúncio feito ainda</h4>
                         <p>Gerencie todos os seus anúncios</p>
                     </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <form action="../controladores/veiculos/deletar-anuncio.php" class="modal-content" method="POST">
+                        <div class="modal-body p-5">
+                            <div class="bg-danger-subtle rounded-circle d-flex text-danger justify-content-center align-items-center mb-3 mx-auto fs-5" style="width: 60px; height: 60px;">
+                                <i class="bi bi-trash"></i>
+                            </div>
+                            <input type="text" name="id" id="id-delete" class="d-none" value="0">
+                            <div class="text-center">
+                                <h4>Você tem certeza?</h4>
+                                <p class="text-muted">Essa ação não pode ser desfeita. Todos os dados serão perdidos.</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer d-flex flex-column border-top-0">
+                            <button id="delete-btn" type="submit" class="btn btn-danger w-100">Deletar anúncio</button>
+                            <button type="button" class="btn bg-body-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -100,5 +129,12 @@ mysqli_close($conexao);
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 <script src="../script.js"></script>
-
+<script>
+    $(function() {
+        const buttonDelete = $('.bi-trash').parent();
+        buttonDelete.on('click', function() {
+            $('#id-delete').val($(this).data('id-delete'));
+        })
+    })
+</script>
 </html>

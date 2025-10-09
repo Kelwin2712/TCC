@@ -38,6 +38,7 @@ if (!isset($_SESSION['id'])) {
 </style>
 
 <body class="overflow-x-hidden">
+    <?php include '../estruturas/modal/loja-modal.php'; ?>
     <?php include '../estruturas/alert/alert.php' ?>
     <main class="container-fluid d-flex vh-100 p-0">
         <?php $selected = 'mensagens';
@@ -120,7 +121,7 @@ if (!isset($_SESSION['id'])) {
                                         <button class="btn border shadow-sm btn-sm"><i class="bi bi-telephone-fill"></i></button>
                                         <button class="btn border shadow-sm btn-sm"><i class="bi bi-whatsapp"></i></button>
                                         <button class="btn border shadow-sm btn-sm"><i class="bi bi-three-dots-vertical"></i></button>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="card-body overflow-auto px-3 chat-container" style="height: calc(100% - 120px);">
@@ -157,7 +158,7 @@ if (!isset($_SESSION['id'])) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer px-3 py-4 border-0 bg-transparent">
+                                <div class="card-footer px-3 py-2 border-0 bg-transparent">
                                     <div class="border rounded-2 shadow-sm p-2 d-flex flex-column align-items-center">
                                         <div class="d-flex gap-1 align-items-center w-100">
                                             <button class="btn" type="button" id="anexar"><i class="bi bi-plus-lg"></i></button>
@@ -173,10 +174,9 @@ if (!isset($_SESSION['id'])) {
             </div>
         </div>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 </body>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 <script src="../script.js"></script>
 <script>
     $(function() {

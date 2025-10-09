@@ -25,13 +25,12 @@ body {
 
 .sidebar-drop {
   position: relative;
-  padding-right: 1.5rem; /* espaço pra seta */
+  padding-right: 1.5rem;
 }
 
-/* seta padrão para direita */
 .sidebar-drop::after {
-  font-family: "bootstrap-icons"; /* usa a fonte do Bootstrap Icons */
-  content: "\f285"; /* chevron-right */
+  font-family: "bootstrap-icons";
+  content: "\f285";
   position: absolute;
   right: 0.75rem;
   top: 50%;
@@ -40,11 +39,9 @@ body {
   font-size: 1rem;
 }
 
-/* quando o botão está aberto (sem collapsed) */
 .sidebar-drop:not(.collapsed)::after {
-  transform: translateY(-50%) rotate(90deg); /* gira pra baixo */
+  transform: translateY(-50%) rotate(90deg);
 }
-
 
 .pagination-dark {
   --bs-pagination-active-color: #fff;
@@ -66,11 +63,6 @@ body {
 
 .pagination-dark .page-item.disabled .page-link {
   color: var(--bs-secondary-color) !important;
-}
-
-.col-2-5 {
-  flex: 0 0 auto;
-  max-width: 20%;
 }
 
 .nav-item.dropdown:hover .dropdown-menu {

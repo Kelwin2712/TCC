@@ -51,13 +51,13 @@ mysqli_close($conexao);
     <div id="banner-carousel" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
         <div class="carousel-item active" data-bs-interval="7500">
-          <img src="./img/banner/carousel-1.png" class="d-block w-100 c-img">
+          <img src="./img/banner/carousel-1.png" class="d-block w-100 object-fit-cover c-img">
         </div>
         <div class="carousel-item" data-bs-interval="7500">
-          <img src="./img/banner/carousel-2.png" class="d-block w-100 c-img">
+          <img src="./img/banner/carousel-2.png" class="d-block w-100 object-fit-cover c-img">
         </div>
         <div class="carousel-item" data-bs-interval="7500">
-          <img src="./img/banner/carousel-3.png" class="d-block w-100 c-img">
+          <img src="./img/banner/carousel-3.png" class="d-block w-100 object-fit-cover c-img">
         </div>
       </div>
       <button class="carousel-control-prev" style="width: 10%;" type="button" data-bs-target="#banner-carousel" data-bs-slide="prev">
@@ -84,7 +84,7 @@ mysqli_close($conexao);
             <input type="text" class="form-control border-0 my-3" placeholder="Encontre o modelo que você procura...">
           </div>
           <div class="row g-2">
-            <div class="ps-0 col col-md-2 col-xl-auto">
+            <div class="ps-0 col col-md-2 col-xl-2">
               <div class="d-flex align-items-center position-relative">
                 <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
                 <select id="marca-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
@@ -124,11 +124,11 @@ mysqli_close($conexao);
               <div class="input-group flex-nowrap">
                 <div class="d-flex align-items-center position-relative">
                   <label for="preco-de" class="text-dark position-absolute px-3">De</label>
-                  <input type="text" id="preco-de" class="form-control rounded-start-5 rounded-end-0" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px; padding-left: 3rem;">
+                  <input type="text" id="preco-de" class="form-control shadow-sm rounded-start-5 rounded-end-0" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px; padding-left: 3rem;">
                 </div>
                 <div class="d-flex align-items-center position-relative">
                   <label for="preco-ate" class="text-dark position-absolute px-3">Até</label>
-                  <input type="text" id="preco-ate" class="form-control rounded-end-5 rounded-start-0" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px; padding-left: 3rem;">
+                  <input type="text" id="preco-ate" class="form-control shadow-sm rounded-end-5 rounded-start-0" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px; padding-left: 3rem;">
                 </div>
 
               </div>
@@ -271,7 +271,7 @@ mysqli_close($conexao);
           (Ver todas as marcas)
         </a>
       </div>
-      <div id=" populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
+      <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">
           <div class="carousel-inner">
             <?php
             $nome = 'AUDI RS5';

@@ -110,6 +110,7 @@ mysqli_close($conexao);
 </style>
 
 <body class="overflow-x-hidden">
+    <?php include '../estruturas/modal/loja-modal.php';?>
     <?php include '../estruturas/alert/alert.php' ?>
     <main class="container-fluid d-flex vh-100 p-0">
         <?php $selected = 'ad';

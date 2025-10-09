@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 06/10/2025 às 12:17
+-- Tempo de geração: 09/10/2025 às 03:10
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -29,6 +29,7 @@ USE `fahren`;
 -- Estrutura para tabela `anuncios_carros`
 --
 
+DROP TABLE IF EXISTS `anuncios_carros`;
 CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
   `modelo` varchar(75) DEFAULT NULL,
@@ -86,6 +87,7 @@ INSERT INTO `anuncios_carros` (`id`, `modelo`, `estado_local`, `cidade`, `marca`
 -- Estrutura para tabela `carrocerias`
 --
 
+DROP TABLE IF EXISTS `carrocerias`;
 CREATE TABLE IF NOT EXISTS `carrocerias` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
@@ -113,6 +115,7 @@ INSERT INTO `carrocerias` (`id`, `nome`) VALUES
 -- Estrutura para tabela `cores`
 --
 
+DROP TABLE IF EXISTS `cores`;
 CREATE TABLE IF NOT EXISTS `cores` (
   `id` int(2) NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) NOT NULL,
@@ -144,6 +147,7 @@ INSERT INTO `cores` (`id`, `nome`) VALUES
 -- Estrutura para tabela `estados`
 --
 
+DROP TABLE IF EXISTS `estados`;
 CREATE TABLE IF NOT EXISTS `estados` (
   `uf` char(2) NOT NULL,
   `nome` varchar(30) NOT NULL,
@@ -189,6 +193,7 @@ INSERT INTO `estados` (`uf`, `nome`) VALUES
 -- Estrutura para tabela `favoritos`
 --
 
+DROP TABLE IF EXISTS `favoritos`;
 CREATE TABLE IF NOT EXISTS `favoritos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `usuario_id` int(11) NOT NULL,
@@ -205,23 +210,41 @@ CREATE TABLE IF NOT EXISTS `favoritos` (
 -- Estrutura para tabela `lojas`
 --
 
+DROP TABLE IF EXISTS `lojas`;
 CREATE TABLE IF NOT EXISTS `lojas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(100) NOT NULL,
-  `criador` int(11) NOT NULL,
-  `descricao` text DEFAULT NULL,
+  `razao_social` varchar(100) DEFAULT NULL,
+  `cnpj` varchar(18) DEFAULT NULL,
+  `inscricao_estadual` varchar(30) DEFAULT NULL,
+  `endereco` varchar(120) DEFAULT NULL,
+  `numero` varchar(10) DEFAULT NULL,
+  `cep` varchar(9) DEFAULT NULL,
+  `bairro` varchar(60) DEFAULT NULL,
+  `cidade` varchar(60) DEFAULT NULL,
+  `estado` char(2) DEFAULT NULL,
+  `telefone_fixo` varchar(20) DEFAULT NULL,
+  `whatsapp` varchar(20) NOT NULL,
+  `email_corporativo` varchar(100) NOT NULL,
+  `site` varchar(100) DEFAULT NULL,
+  `instagram` varchar(100) DEFAULT NULL,
+  `facebook` varchar(100) DEFAULT NULL,
   `logo` varchar(255) DEFAULT NULL,
-  `banner` varchar(255) DEFAULT NULL,
-  `estado` varchar(50) DEFAULT NULL,
-  `cidade` varchar(100) DEFAULT NULL,
-  `telefone_contato` varchar(20) DEFAULT NULL,
-  `email_contato` varchar(150) DEFAULT NULL,
-  `status` enum('ativa','suspensa','deletada') DEFAULT 'ativa',
-  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
-  `ultima_atualizacao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `criador` (`criador`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `capa` varchar(255) DEFAULT NULL,
+  `descricao_loja` text DEFAULT NULL,
+  `hora_abre` time DEFAULT NULL,
+  `hora_fecha` time DEFAULT NULL,
+  `dias_funcionamento` varchar(50) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `lojas`
+--
+
+INSERT INTO `lojas` (`id`, `nome`, `razao_social`, `cnpj`, `inscricao_estadual`, `endereco`, `numero`, `cep`, `bairro`, `cidade`, `estado`, `telefone_fixo`, `whatsapp`, `email_corporativo`, `site`, `instagram`, `facebook`, `logo`, `capa`, `descricao_loja`, `hora_abre`, `hora_fecha`, `dias_funcionamento`, `created_at`) VALUES
+(2, 'Kelwin', '', '', '', '', '', '', '', '', '', '', '123', 'a@a.a', '', '', '', '', '', 'A', '21:50:00', '21:50:00', 'Domingo,Segunda', '2025-10-09 00:50:16');
 
 -- --------------------------------------------------------
 
@@ -229,6 +252,7 @@ CREATE TABLE IF NOT EXISTS `lojas` (
 -- Estrutura para tabela `marcas`
 --
 
+DROP TABLE IF EXISTS `marcas`;
 CREATE TABLE IF NOT EXISTS `marcas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `value` varchar(50) NOT NULL,
@@ -307,6 +331,7 @@ INSERT INTO `marcas` (`id`, `value`, `nome`) VALUES
 -- Estrutura para tabela `usuarios`
 --
 
+DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `id` int(6) NOT NULL AUTO_INCREMENT,
   `nome` varchar(30) NOT NULL,
@@ -351,12 +376,6 @@ ALTER TABLE `anuncios_carros`
 ALTER TABLE `favoritos`
   ADD CONSTRAINT `favoritos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `favoritos_ibfk_2` FOREIGN KEY (`anuncio_id`) REFERENCES `anuncios_carros` (`id`) ON DELETE CASCADE;
-
---
--- Restrições para tabelas `lojas`
---
-ALTER TABLE `lojas`
-  ADD CONSTRAINT `lojas_ibfk_1` FOREIGN KEY (`criador`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

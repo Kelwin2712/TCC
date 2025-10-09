@@ -1,4 +1,4 @@
-<div class="card card-compra shadow-hover border-1 border-secondary border-opacity-25 position-relative h-100">
+<div class="card card-anuncio shadow-hover border-1 border-secondary border-opacity-25 position-relative h-100">
     <div class="row g-0">
         <div class="col-12 col-lg-4 col-xxl-2">
             <div class="ratio ratio-4x3 bg-danger h-100">
@@ -28,13 +28,13 @@
                 </div>
                 <p class="card-text h5 fw-bold mb-2">R$ <?= $preco; ?></p>
             </div>
-            <div class="card-footer border-top-0 bg-body">
+            <div class="card-footer position-relative border-top-0 bg-body">
                 <div class="row mb-1">
                     <div class="col">
-                        <button class="btn btn-dark rounded-5 fw-bold w-100">Editar&nbsp;&nbsp;<i class="bi bi-pencil"></i></button>
+                        <a href="editar-anuncio.php?id=<?= $id; ?>" class="btn btn-dark rounded-pill fw-bold w-100">Editar&nbsp;&nbsp;<i class="bi bi-pencil"></i></a>
                     </div>
                     <div class="col-auto">
-                        <button class="btn border rounded-5 text-uppercase fw-bold w-100"><i class="bi bi-trash"></i></button>
+                        <button class="btn border rounded-circle text-uppercase fw-bold w-100" data-bs-toggle="modal" data-id-delete="<?= $id; ?>" data-bs-target="#delete-modal"><i class="bi bi-trash"></i></button>
                     </div>
                 </div>
             </div>

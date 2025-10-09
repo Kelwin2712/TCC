@@ -26,35 +26,40 @@
                                     echo 'active';
                                 } ?>" href="mensagens.php"><i class="bi bi-chat-left-text-fill"></i>&nbsp;Mensagens</a>
             <hr class="mx-3">
-            <button class="nav-link sidebar-drop w-100 text-start <?php if ($selected == 'loja') {
-                                                                        echo 'active';
-                                                                    } ?> collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+            <button class="nav-link sidebar-drop w-100 text-start <?= isset($loja_id_selected) ? '' : 'collapsed'?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
                 <span>
                     <i class="bi bi-building-fill"></i>&nbsp;Lojas
                 </span>
             </button>
 
-            <div class="collapse mx-3" id="collapseExample">
+            <div class="collapse mx-3 <?= isset($loja_id_selected) ? 'show' : ''?>" id="collapseExample">
                 <div class="py-2 d-flex flex-column">
-                    <div class="nav-link p-2">
+                    <?php
+                    include('../conexao_bd.php');
+
+                    $sql = "SELECT nome, id FROM lojas";
+                    $resultado = mysqli_query($conexao, $sql);
+
+                    $lojas = [];
+
+                    while ($linha = mysqli_fetch_array($resultado)) {
+                        $lojas[] = $linha;
+                    }
+                    
+                    foreach ($lojas as $loja):
+                    ?>
+                    <a href="loja.php?id=<?= $loja['id']?>" class="nav-link <?= $loja_id_selected == $loja['id'] ? 'active' : ''?> p-2 text-capitalize">
                         <img src="../img/logo-fahren-bg.jpg" alt="Foto de Perfil" width="28" height="28" class="rounded-circle me-2">
-                        Loja 1
-                    </div>
-                    <div class="nav-link p-2">
-                        <img src="../img/logo-fahren-bg.jpg" alt="Foto de Perfil" width="28" height="28" class="rounded-circle me-2">
-                        Loja 2
-                    </div>
-                    <div class="nav-link p-2">
-                        <img src="../img/logo-fahren-bg.jpg" alt="Foto de Perfil" width="28" height="28" class="rounded-circle me-2">
-                        Loja 3
-                    </div>
-                    <div class="nav-link p-2 d-flex align-items-center">
+                        <?= $loja['nome'] ?>
+                    </a>
+                    <?php endforeach; mysqli_close($conexao);?>
+                    <button class="nav-link p-2 d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#loja-modal">
                         <span class="d-inline-flex justify-content-center align-items-center bg-body-secondary rounded-circle me-2"
                             style="width:28px; height:28px;">
                             <i class="bi bi-plus-lg"></i>
                         </span>
                         Criar nova loja
-                    </div>
+                    </button>
                 </div>
             </div>
         </div>

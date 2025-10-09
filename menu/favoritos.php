@@ -14,8 +14,6 @@ $vendedor = $_GET['vendedor'] ?? null;
 $vendedor_img = $_GET['vendedor_img'] ?? null;
 $vendedor_est = $_GET['vendedor_est'] ?? null;
 
-$page = $_GET['page'] ?? 1;
-
 $id = $_SESSION['id'];
 
 $sql = "SELECT carros.*, marcas.nome as marca_nome FROM favoritos fav  INNER JOIN anuncios_carros carros ON fav.anuncio_id = carros.id INNER JOIN marcas ON carros.marca = marcas.id WHERE fav.usuario_id = $id";
@@ -52,6 +50,7 @@ mysqli_close($conexao);
 </style>
 
 <body class="overflow-x-hidden">
+    <?php include '../estruturas/modal/loja-modal.php';?>
     <?php include '../estruturas/alert/alert.php' ?>
     <main class="container-fluid d-flex vh-100 p-0">
         <?php $selected = 'fav';
