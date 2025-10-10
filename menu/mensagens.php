@@ -5,6 +5,24 @@ if (!isset($_SESSION['id'])) {
     header("Location: ../");
     exit;
 }
+include('../controladores/conexao_bd.php');
+$sql = "SELECT * FROM usuarios";
+$resultado = mysqli_query($conexao, $sql);
+
+$usuarios = [];
+
+if (mysqli_num_rows($resultado) > 0) {
+    while ($linha = mysqli_fetch_array($resultado)) {
+        $usuarios[] = $linha;
+    }
+} else {
+    $_SESSION['msg_alert'] = ['danger', 'Não foi possível carregar as mensagens!'];
+    header('Location: ../../index.php');
+    exit();
+}
+
+mysqli_close($conexao);
+
 ?>
 <!doctype html>
 <html lang="pt-br">
@@ -59,27 +77,8 @@ if (!isset($_SESSION['id'])) {
                                     </div>
                                 </div>
                                 <ul class="list-group list-group-flush flex-grow-1 overflow-y-auto">
-                                    <li class="list-group-item active d-flex align-items-center gap-3">
-                                        <div class="col-auto flex-shrink-0">
-                                            <div class="ratio ratio-1x1" style="width: calc(30px + .5vw);">
-                                                <img src="../img/logo-fahren-bg.jpg" class="img-fluid rounded-circle" alt="Avatar">
-                                            </div>
-                                        </div>
-                                        <div class="flex-grow-1 overflow-hidden">
-                                            <div class="d-flex justify-content-between align-items-start">
-                                                <p class="mb-1 me-2 fs-6 fw-semibold text-truncate">Nome do usuário</p>
-                                                <small class="text-muted text-nowrap">3 dias</small>
-                                            </div>
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <p class="text-muted small mb-0 text-truncate">Mensagem</p>
-                                                <span class="badge bg-primary rounded-circle">1</span>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <!-- Exemplo de outra mensagem -->
                                     <?php
-                                    $quantidade = 15;
-                                    for ($i = 1; $i <= $quantidade; $i++): ?>
+                                    foreach ($usuarios as $user): ?>
                                         <li class="list-group-item d-flex align-items-center gap-3">
                                             <div class="col-auto flex-shrink-0">
                                                 <div class="ratio ratio-1x1" style="width: calc(30px + .5vw);">
@@ -88,7 +87,7 @@ if (!isset($_SESSION['id'])) {
                                             </div>
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <div class="d-flex justify-content-between align-items-start">
-                                                    <p class="mb-1 me-2 fs-6 fw-semibold text-truncate">Nome do usuário</p>
+                                                    <p class="mb-1 me-2 fs-6 fw-semibold text-truncate"><?=$user['nome'].' '.$user['sobrenome']?></p>
                                                     <small class="text-muted text-nowrap">3 dias</small>
                                                 </div>
                                                 <div class="d-flex justify-content-between align-items-center">
@@ -97,7 +96,7 @@ if (!isset($_SESSION['id'])) {
                                                 </div>
                                             </div>
                                         </li>
-                                    <?php endfor; ?>
+                                    <?php endforeach; ?>
                                 </ul>
                             </div>
                         </div>

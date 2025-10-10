@@ -3,6 +3,16 @@ session_start();
 include('controladores/conexao_bd.php');
 
 $_SESSION['placa'] = isset($_POST['placa']) ? $_POST['placa'] : null;
+$placa = $_SESSION['placa'];
+
+$sql = "SELECT placa FROM anuncios_carros WHERE placa = '$placa'";
+$resultado = mysqli_query($conexao, $sql);
+
+if (mysqli_num_rows($resultado) > 0) {
+  $_SESSION['msg_alert'] = ['danger', 'Placa já registrada!'];
+  header('Location: vender-placa.php');
+  exit;
+}
 
 $sql = "SELECT * FROM marcas";
 $resultado = mysqli_query($conexao, $sql);
@@ -40,6 +50,7 @@ mysqli_close($conexao);
 
 <body>
   <div class="vh-100 d-flex flex-column">
+    <?php include 'estruturas/alert/alert.php' ?>
     <?php include 'estruturas/navbar/navbar-default.php' ?>
     <main class="bg-body-tertiary fs-nav flex-grow-1 d-flex justify-content-center align-items-center">
       <div class="container h-100">
@@ -130,26 +141,25 @@ mysqli_close($conexao);
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
 <script>
-  $(function(){
-  $('#fabr-select').on('change', function() {
-    const fabrModelo = parseInt($(this).val());
-    const anoSelect = $('#ano-select');
+  $(function() {
+    $('#fabr-select').on('change', function() {
+      const fabrModelo = parseInt($(this).val());
+      const anoSelect = $('#ano-select');
 
-    anoSelect.empty('option[selected="false"]');
+      anoSelect.empty('option[selected="false"]');
 
-    for (let year = fabrModelo + 1; year >= fabrModelo; year--) {
-      if (fabrModelo == year) {
-        anoSelect.append('<option value="' + year + '" selected>' + year + '</option>');
+      for (let year = fabrModelo + 1; year >= fabrModelo; year--) {
+        if (fabrModelo == year) {
+          anoSelect.append('<option value="' + year + '" selected>' + year + '</option>');
+        } else {
+          anoSelect.append('<option value="' + year + '">' + year + '</option>');
+        }
       }
-      else {
-        anoSelect.append('<option value="' + year + '">' + year + '</option>');
-      }
-    }
-  });
+    });
 
-  $('#placa').on('input', function() {
-    formatarPlacaRobusto($(this));
-  });
+    $('#placa').on('input', function() {
+      formatarPlacaRobusto($(this));
+    });
   })
 </script>
 

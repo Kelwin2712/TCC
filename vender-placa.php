@@ -21,6 +21,7 @@ if (!isset($_SESSION['id'])) {
 
 <body>
   <div class="vh-100 d-flex flex-column">
+    <?php include 'estruturas/alert/alert.php' ?>
     <?php include 'estruturas/navbar/navbar-default.php' ?>
     <main class="bg-body-tertiary fs-nav flex-grow-1 d-flex justify-content-center align-items-center">
       <div class="container h-100">

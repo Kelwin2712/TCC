@@ -1,9 +1,20 @@
 <?php
 session_start();
+include('../controladores/conexao_bd.php');
+
 if (!isset($_SESSION['id']) || !isset($_GET['id'])) {
     header("Location: ../index.php");
     exit;
 }
+
+$id_loja = $_GET['id'];
+
+$sql = "SELECT * FROM lojas WHERE id = '$id_loja'";
+$resultado = mysqli_query($conexao, $sql);
+
+$loja = mysqli_fetch_assoc($resultado);
+
+mysqli_close($conexao);
 ?>
 
 <!DOCTYPE html>
@@ -112,10 +123,10 @@ if (!isset($_SESSION['id']) || !isset($_GET['id'])) {
                 </label>
             </div>
             <div>
-                <h3 class="fw-bold mb-1">@loja_fahren</h3>
+                <h3 class="fw-bold mb-1"><?= $loja['nome']?></h3>
                 <div class="d-flex gap-4 text-muted small">
-                    <span><strong>Data da criação:</strong> <span class="fw-medium">14/09/2025</span></span>
-                    <span><strong>Seguidores:</strong> <span class="fw-medium">12</span></span>
+                    <span><strong>Data da criação:</strong> <span class="fw-medium"><?=date("d/m/Y", strtotime($loja['created_at']));?></span></span>
+                    <span><strong>Seguidores:</strong> <span class="fw-medium"><?= $loja['seguidores'];?></span></span>
                 </div>
             </div>
         </div>

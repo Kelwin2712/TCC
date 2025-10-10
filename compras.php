@@ -27,7 +27,8 @@ INNER JOIN
 LEFT JOIN 
     favoritos ON favoritos.anuncio_id = carros.id 
                AND favoritos.usuario_id = '$id'
-LIMIT $quantidade;";
+WHERE ativo = 'A'
+LIMIT $quantidade";
 
 $resultado = mysqli_query($conexao, $sql);
 

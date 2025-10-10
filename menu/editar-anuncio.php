@@ -53,17 +53,18 @@ if (mysqli_num_rows($resultado) > 0) {
         $troca = $linha['aceita_troca'];
         $email = $linha['email'];
         $telefone = $linha['telefone'];
+        $ativo = $linha['ativo'];
     } else {
         header('Location: anuncios.php');
     }
 }
 
-$sql = "SELECT value, nome FROM marcas";
+$sql = "SELECT * FROM marcas";
 $resultado = mysqli_query($conexao, $sql);
 
 $marcas = [];
 
-while ($linha = mysqli_fetch_array($resultado)) {
+while ($linha = mysqli_fetch_assoc($resultado)) {
     $marcas[] = $linha;
 }
 
@@ -72,7 +73,7 @@ $resultado = mysqli_query($conexao, $sql);
 
 $cores = [];
 
-while ($linha = mysqli_fetch_array($resultado)) {
+while ($linha = mysqli_fetch_assoc($resultado)) {
     $cores[] = $linha;
 }
 
@@ -81,7 +82,7 @@ $resultado = mysqli_query($conexao, $sql);
 
 $carrocerias = [];
 
-while ($linha = mysqli_fetch_array($resultado)) {
+while ($linha = mysqli_fetch_assoc($resultado)) {
     $carrocerias[] = $linha;
 }
 
@@ -107,10 +108,67 @@ mysqli_close($conexao);
         background-color: #ccc !important;
         transition: all 0.25s ease;
     }
+
+    /* Switch estilo Uiverse - Versão Fahren */
+    .form-switch {
+        position: relative;
+        display: inline-block;
+    }
+
+    #anuncio-ativo {
+        display: none;
+    }
+
+    .form-switch label {
+        position: relative;
+        padding: 10px 20px;
+        background-color: #6c757d;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        color: white;
+        font-size: 0.9em;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        min-width: 100px;
+    }
+
+    .form-switch label .bi-power {
+        transition: all 0.3s ease;
+        font-size: 1em;
+    }
+
+    /* Estado DESLIGADO (inativo) */
+    #anuncio-ativo:not(:checked)+label {
+        background-color: #6c757d;
+    }
+
+    /* Estado LIGADO (ativo) */
+    #anuncio-ativo:checked+label {
+        background-color: #198754;
+        /* Verde do Bootstrap success */
+    }
+
+    /* Texto dinâmico */
+    #anuncio-ativo:not(:checked)+label::before {
+        content: "Inativo";
+    }
+
+    #anuncio-ativo:checked+label::before {
+        content: "Ativo";
+    }
+
+    /* Remove o texto original do botão */
+    .form-switch label .btn-text {
+        display: none;
+    }
 </style>
 
 <body class="overflow-x-hidden">
-    <?php include '../estruturas/modal/loja-modal.php';?>
+    <?php include '../estruturas/modal/loja-modal.php'; ?>
     <?php include '../estruturas/alert/alert.php' ?>
     <main class="container-fluid d-flex vh-100 p-0">
         <?php $selected = 'ad';
@@ -126,7 +184,6 @@ mysqli_close($conexao);
                                 <li class="breadcrumb-item active text-dark fw-semibold text-uppercase" aria-current="page"><?= "$marca_nome $modelo" ?></li>
                             </ol>
                         </nav>
-
                     </div>
                     <div class="row d-flex align-items-stretch mt-5">
                         <div class="col-4">
@@ -171,9 +228,9 @@ mysqli_close($conexao);
                                     <label for="marca-select" class="form-label">Marca</label>
                                     <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
                                         <?php foreach ($marcas as $marca_o): ?>
-                                            <option value="<?= $marca_o['value'] ?>" <?php if ($marca == $marca_o['value']) {
-                                                                                            echo 'selected';
-                                                                                        } ?>><?= $marca_o['nome'] ?></option>
+                                            <option value="<?= $marca_o['id'] ?>" <?php if ($marca == $marca_o['id']) {
+                                                                                        echo 'selected';
+                                                                                    } ?>><?= $marca_o['nome'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                 </div>
@@ -432,6 +489,26 @@ mysqli_close($conexao);
                     </div>
                     <hr class="my-5">
                 </form>
+                <div class="row d-flex align-items-stretch mt-5">
+                    <div class="col-4">
+                        <h5>Anúncio ativo</h5>
+                        <p class="text-muted">Defina se o anúncio está ativo</p>
+                    </div>
+
+                    <div class="col d-flex flex-column justify-content-between">
+                        <div class="ms-auto">
+                            <div class="form-switch">
+                                <input type="checkbox" id="anuncio-ativo" name="ativo" <?= $ativo == 'A' ? 'checked' : '' ?> style="display: none;">
+                                <label class="rounded-4" for="anuncio-ativo">
+                                    <span class="btn-text">Ativo</span>
+                                    <i class="bi bi-power"></i>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr class="my-5">
                 <div class="row d-flex align-items-center flex-nowrap">
                     <div class="col">
                         <h5>Deletar anúncio</h5>
@@ -532,7 +609,6 @@ mysqli_close($conexao);
         };
 
         function condicaoFunc(e) {
-            console.log('teste')
             if (e.val() === 'N') {
                 kmInput.val('0 km');
                 kmInput.parent().hide();
@@ -576,6 +652,25 @@ mysqli_close($conexao);
                 const formattedValue = parseInt(numericValue, 10).toLocaleString('pt-BR') + ' km';
                 $(this).val(formattedValue);
             }
+        });
+
+        $('#anuncio-ativo').on('change', function() {
+            let ativoVal = $(this).prop('checked');
+
+            console.log('Novo status:', ativoVal);
+
+            $.post('../controladores/veiculos/ativar-veiculo.php', {
+                    anuncio: <?= $_GET['id'] ?>,
+                    ativo: ativoVal ? 1 : 0 // Envia 1 ou 0
+                })
+                .done(function(response) {
+                    console.log('Status atualizado:', response);
+                })
+                .fail(function() {
+                    console.error('Erro ao atualizar status');
+                    // Reverter visualmente se der erro
+                    $('#anuncio-ativo').prop('checked', !ativoVal);
+                });
         });
     })
 </script>

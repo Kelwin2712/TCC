@@ -62,10 +62,8 @@ $(window).on("scroll", function () {
   const scrollY = $(window).scrollTop();
 
   if (scrollY > header.outerHeight() && !header.hasClass("floating")) {
-    console.log("adicionou");
     header.addClass("floating");
   } else if (scrollY <= header.outerHeight() && header.hasClass("floating")) {
-    console.log("removeu");
     header.removeClass("floating");
     $(window).scrollTop(0);
   }

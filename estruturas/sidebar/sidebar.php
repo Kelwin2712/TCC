@@ -46,11 +46,11 @@
                         $lojas[] = $linha;
                     }
                     
-                    foreach ($lojas as $loja):
+                    foreach ($lojas as $loja_side):
                     ?>
-                    <a href="loja.php?id=<?= $loja['id']?>" class="nav-link <?= $loja_id_selected == $loja['id'] ? 'active' : ''?> p-2 text-capitalize">
+                    <a href="loja.php?id=<?= $loja_side['id']?>" class="nav-link <?= $loja_id_selected == $loja_side['id'] ? 'active' : ''?> p-2 text-capitalize">
                         <img src="../img/logo-fahren-bg.jpg" alt="Foto de Perfil" width="28" height="28" class="rounded-circle me-2">
-                        <?= $loja['nome'] ?>
+                        <?= $loja_side['nome'] ?>
                     </a>
                     <?php endforeach; mysqli_close($conexao);?>
                     <button class="nav-link p-2 d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#loja-modal">

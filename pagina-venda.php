@@ -22,7 +22,7 @@ if (mysqli_num_rows($resultado) > 0) {
 
 mysqli_close($conexao);
 
-$vendedor = $carro['vendedor_nome'].' '.$carro['vendedor_sobrenome'];
+$vendedor = $carro['vendedor_nome'] . ' ' . $carro['vendedor_sobrenome'];
 $vendedor_img = 'img/logo-fahren-bg.jpg';
 $vendedor_est = '4.63';
 ?>
@@ -164,24 +164,43 @@ $vendedor_est = '4.63';
                                 </div>
                                 <p>Envie uma mensagem para o vendedor</p>
                             </div>
-                            <div class="row">
-                                <div class="mb-2">
-                                    <label for="nome-input" class="form-label form-text mb-0">Nome<sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control shadow-sm rounded-4" id="nome-input" placeholder="Nome" required>
+                            <?php if (!isset($_SESSION['id'])): ?>
+                                <div class="row">
+                                    <div class="mb-2">
+                                        <label for="nome-input" class="form-label form-text mb-0">Nome<sup class="text-danger">*</sup></label>
+                                        <input type="text" class="form-control shadow-sm rounded-4" id="nome-input" placeholder="Nome" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="email-input" class="form-label form-text mb-0">Email<sup class="text-danger">*</sup></label>
+                                        <input type="email" class="form-control shadow-sm rounded-4" id="email-input" placeholder="Email" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="telefone-input" class="form-label form-text mb-0">Telefone<sup class="text-danger">*</sup></label>
+                                        <input type="email" class="form-control shadow-sm rounded-4" id="telefone-input" placeholder="Telefone" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between mb-0">
+                                            <label for="mensagem-input" class="form-label form-text">
+                                                Mensagem<sup class="text-danger">*</sup>
+                                            </label>
+                                            <small id="max-mensagem" class="form-text" style="font-size: .75rem;">0/500</small>
+                                        </div>
+                                        <textarea class="form-control shadow-sm rounded-4" id="mensagem-input" placeholder="Mensagem" maxlength="500" required></textarea>
+                                    </div>
                                 </div>
-                                <div class="mb-2">
-                                    <label for="email-input" class="form-label form-text mb-0">Email<sup class="text-danger">*</sup></label>
-                                    <input type="email" class="form-control shadow-sm rounded-4" id="email-input" placeholder="Email" required>
+                            <?php else: ?>
+                                <div class="row h-100">
+                                    <div class="mb-5">
+                                        <div class="d-flex justify-content-between mb-0">
+                                            <label for="mensagem-input" class="form-label form-text">
+                                                Mensagem<sup class="text-danger">*</sup>
+                                            </label>
+                                            <small id="max-mensagem" class="form-text" style="font-size: .75rem;">0/500</small>
+                                        </div>
+                                        <textarea class="form-control h-100 shadow-sm rounded-4" id="mensagem-input" placeholder="Mensagem" rows="5" maxlength="500" required></textarea>
+                                    </div>
                                 </div>
-                                <div class="mb-2">
-                                    <label for="telefone-input" class="form-label form-text mb-0">Telefone<sup class="text-danger">*</sup></label>
-                                    <input type="email" class="form-control shadow-sm rounded-4" id="telefone-input" placeholder="Telefone" required>
-                                </div>
-                                <div class="mb-2">
-                                    <label for="mensagem-input" class="form-label form-text mb-0">Mensagem<sup class="text-danger">*</sup></label>
-                                    <input type="text" class="form-control shadow-sm rounded-4 pb-5" id="mensagem-input" placeholder="Mensagem" required>
-                                </div>
-                            </div>
+                            <?php endif; ?>
                             <div class="row">
                                 <div class="col">
                                     <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2 shadow-sm">Enviar mensagem</button>
@@ -251,7 +270,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Blindando</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold ">Não</p>
+                                            <p class="fw-semibold "><?= $carro['blindagem'] == 1 ? 'Sim' : 'Não' ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -259,7 +278,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Aceita troca</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold text-capitalize"><?= $carro['aceita_troca'] ?></p>
+                                            <p class="fw-semibold text-capitalize"><?= $carro['aceita_troca'] == 1 ? 'Sim' : 'Não' ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -267,7 +286,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Revisão feita</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold text-capitalize"><?= $carro['revisao'] ?></p>
+                                            <p class="fw-semibold text-capitalize"><?= $carro['revisao'] > 0 ? 'Sim (' . $carro['revisao'] . ')' : 'Não' ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -338,6 +357,17 @@ $vendedor_est = '4.63';
 <script src="script.js"></script>
 <script>
     $(function() {
+        const msgInput =  $('#mensagem-input');
+        const msgMax =  $('#max-mensagem');
+        const max = 500;
+
+        msgInput.attr('maxlength', max);
+
+        msgInput.on('input', function() {
+            console.log('oi');
+            msgMax.text(msgInput.val().length + '/' + max);
+        })
+
         const carousel = $('.carousel');
         let carousel_imgs = [];
         let selecionado = 1;

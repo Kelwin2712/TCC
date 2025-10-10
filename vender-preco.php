@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+$_SESSION['condicao'] = isset($_POST['condicao']) ? $_POST['condicao'] : null;
 $_SESSION['quilometragem'] = isset($_POST['quilometragem']) ? $_POST['quilometragem'] : null;
 $_SESSION['proprietario'] = isset($_POST['proprietario']) ? $_POST['proprietario'] : null;
 $_SESSION['revisao'] = isset($_POST['revisao']) ? $_POST['revisao'] : null;
@@ -27,6 +28,7 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
 
 <body>
   <div class="vh-100 d-flex flex-column">
+    <?php include 'estruturas/alert/alert.php' ?>
     <?php include 'estruturas/navbar/navbar-default.php' ?>
     <main class="bg-body-tertiary fs-nav flex-grow-1 d-flex justify-content-center align-items-center">
       <div class="container h-100">

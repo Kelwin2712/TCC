@@ -84,7 +84,7 @@ mysqli_close($conexao);
             <input type="text" class="form-control border-0 my-3" placeholder="Encontre o modelo que você procura...">
           </div>
           <div class="row g-2">
-            <div class="ps-0 col col-md-2 col-xl-2">
+            <div class="ps-0 col col-md-2">
               <div class="d-flex align-items-center position-relative">
                 <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
                 <select id="marca-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">

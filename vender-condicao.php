@@ -24,6 +24,7 @@ $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
 
 <body>
   <div class="vh-100 d-flex flex-column">
+    <?php include 'estruturas/alert/alert.php' ?>
     <?php include 'estruturas/navbar/navbar-default.php' ?>
     <main class="bg-body-tertiary fs-nav flex-grow-1 d-flex justify-content-center align-items-center">
       <div class="container h-100">
@@ -46,6 +47,7 @@ $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
                     <select class="form-select shadow-sm" id="condicao-select" aria-label="Default select example" name="condicao" required>
                       <option value="" selected hidden>Informe a condição do veículo<i class="fa fa-sort-amount-asc" aria-hidden="true"></i></option>
                       <option value="N">Novo</option>
+                      <option value="S">Seminovo</option>
                       <option value="U">Usado</option>
                     </select>
                   </div>
@@ -188,8 +190,8 @@ $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
 
     function slideUp() {
       usoRow.slideUp(100);
-          usoSelect.prop('required', false);
-          usoSelect.val('');
+      usoSelect.prop('required', false);
+      usoSelect.val('');
     };
 
     condicaoSelect.on('change', function() {

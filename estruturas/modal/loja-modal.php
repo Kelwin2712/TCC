@@ -145,31 +145,31 @@
                         <label class="form-label mb-4">Dias da semana<sup class="text-danger">*</sup></label>
                         <div class="d-flex flex-wrap justify-content-between gap-2">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="Domingo" id="dia-dom">
+                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="1" id="dia-dom">
                                 <label class="form-check-label" for="dia-dom">Domingo</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="Segunda" id="dia-seg">
+                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="2" id="dia-seg">
                                 <label class="form-check-label" for="dia-seg">Segunda</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="Terça" id="dia-ter">
+                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="3" id="dia-ter">
                                 <label class="form-check-label" for="dia-ter">Terça</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="Quarta" id="dia-qua">
+                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="4" id="dia-qua">
                                 <label class="form-check-label" for="dia-qua">Quarta</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="Quinta" id="dia-qui">
+                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="5" id="dia-qui">
                                 <label class="form-check-label" for="dia-qui">Quinta</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="Sexta" id="dia-sex">
+                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="6" id="dia-sex">
                                 <label class="form-check-label" for="dia-sex">Sexta</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="Sábado" id="dia-sab">
+                                <input class="form-check-input" type="checkbox" name="dias_funcionamento[]" value="7" id="dia-sab">
                                 <label class="form-check-label" for="dia-sab">Sábado</label>
                             </div>
                         </div>
