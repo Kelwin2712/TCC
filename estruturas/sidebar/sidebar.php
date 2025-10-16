@@ -74,7 +74,7 @@
                 <span class="fw-semibold"><?= $_SESSION['nome'] ?></span>
             </a>
             <ul class="dropdown-menu text-small shadow">
-                <li><a class="dropdown-item" href="controladores/logout.php">Sair</a></li>
+                <li><a class="dropdown-item" href="../controladores/logout.php">Sair</a></li>
             </ul>
         </div>
     </div>

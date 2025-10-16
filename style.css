@@ -19,8 +19,9 @@ body {
 }
 
 .sidebar .nav-link.active {
-  --bs-bg-opacity: 1;
+  --bs-bg-opacity: 0.75;
   background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)) !important;
+  border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color) !important;
 }
 
 .sidebar-drop {

@@ -154,7 +154,7 @@ $vendedor_est = '4.63';
                 </div>
                 <div class="col-lg-4">
                     <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body px-4 d-flex flex-column justify-content-between">
+                        <form class="card-body px-4 d-flex flex-column justify-content-between">
                             <div class="row d-flex justify-content-between">
                                 <div class="col-auto">
                                     <p class="fs-1 fw-semibold mb-0">R$ <?= $carro['preco'] ?></p>
@@ -185,7 +185,7 @@ $vendedor_est = '4.63';
                                             </label>
                                             <small id="max-mensagem" class="form-text" style="font-size: .75rem;">0/500</small>
                                         </div>
-                                        <textarea class="form-control shadow-sm rounded-4" id="mensagem-input" placeholder="Mensagem" maxlength="500" required></textarea>
+                                        <textarea class="form-control shadow-sm rounded-4" id="mensagem-input" placeholder="Mensagem" maxlength="500" minlength="10" required></textarea>
                                     </div>
                                 </div>
                             <?php else: ?>
@@ -197,16 +197,16 @@ $vendedor_est = '4.63';
                                             </label>
                                             <small id="max-mensagem" class="form-text" style="font-size: .75rem;">0/500</small>
                                         </div>
-                                        <textarea class="form-control h-100 shadow-sm rounded-4" id="mensagem-input" placeholder="Mensagem" rows="5" maxlength="500" required></textarea>
+                                        <textarea class="form-control h-100 shadow-sm rounded-4" id="mensagem-input" placeholder="Mensagem" rows="5" maxlength="500" minlength="10" required></textarea>
                                     </div>
                                 </div>
                             <?php endif; ?>
                             <div class="row">
-                                <div class="col">
-                                    <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2 shadow-sm">Enviar mensagem</button>
+                                <div class="col"<?= $carro['id_vendedor'] == $_SESSION['id'] ? " title=\"Você não pode enviar mensagem para si mesmo\"" : '' ?>>
+                                    <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2 shadow-sm" <?= $carro['id_vendedor'] == $_SESSION['id'] ? 'disabled' : '' ?>>Enviar mensagem</button>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -357,6 +357,22 @@ $vendedor_est = '4.63';
 <script src="script.js"></script>
 <script>
     $(function() {
+        $('form').on('submit', function(e) {
+            e.preventDefault();
+            $.post('controladores/mensagens/enviar.php', {
+                de: <?= $_SESSION['id']?>,
+                para: <?= $carro['id_vendedor']?>,
+                anuncio: <?= $_GET['id']?>,
+                texto: $('#mensagem-input').val()
+            }, function(resposta) {
+                if (resposta == true) {
+                    const btn = $("button[type='submit']");
+                    btn.html('Mensagem enviada&nbsp;<i class="bi bi-check2"></i>');
+                    btn.prop('disabled', true);
+                }
+            })
+        })
+        
         const msgInput =  $('#mensagem-input');
         const msgMax =  $('#max-mensagem');
         const max = 500;
