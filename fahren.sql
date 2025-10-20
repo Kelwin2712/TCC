@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 09/10/2025 às 03:10
+-- Tempo de geração: 20/10/2025 às 03:00
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -32,6 +32,7 @@ USE `fahren`;
 DROP TABLE IF EXISTS `anuncios_carros`;
 CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
+  `ativo` char(1) NOT NULL DEFAULT 'A',
   `modelo` varchar(75) DEFAULT NULL,
   `estado_local` char(2) DEFAULT NULL,
   `cidade` varchar(255) DEFAULT NULL,
@@ -39,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   `versao` varchar(40) DEFAULT NULL,
   `carroceria` int(2) DEFAULT NULL,
   `preco` decimal(11,2) DEFAULT NULL,
+  `condicao` char(1) NOT NULL DEFAULT 'U',
   `quilometragem` int(10) DEFAULT NULL,
   `ano_fabricacao` int(4) DEFAULT NULL,
   `ano_modelo` int(4) DEFAULT NULL,
@@ -72,14 +74,18 @@ CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   KEY `vendedor_fk` (`id_vendedor`),
   KEY `estado_fk` (`estado_local`),
   KEY `marca_fk` (`marca`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `anuncios_carros`
 --
 
-INSERT INTO `anuncios_carros` (`id`, `modelo`, `estado_local`, `cidade`, `marca`, `versao`, `carroceria`, `preco`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `blindagem`, `id_vendedor`, `imagens`, `leilao`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`) VALUES
-(23, 'a', NULL, NULL, 2, 'A', NULL, 1.00, 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'FAF8F09', '2025-10-05 18:37:55', 1, '1', '0', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0);
+INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`, `marca`, `versao`, `carroceria`, `preco`, `condicao`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `blindagem`, `id_vendedor`, `imagens`, `leilao`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`) VALUES
+(28, 'A', 'meu', 'SP', '', 1, '3.9 V8 TURBO GASOLINA F1-DCT', 1, 530.00, 'S', 0, 2025, 2026, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'AAA1A11', '2025-10-10 20:41:00', 8, '3', '2', 'V', 'L', 'A', 'V', '3', 'T', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0),
+(29, 'A', 'vini', NULL, NULL, 4, '3.9 V8 TURBO GASOLINA F1-DCTa', NULL, 100000.00, 'N', 0, 2020, 2021, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'ZZZ3Z33', '2025-10-10 20:41:57', 4, '3', '2', 'V', 'L', 'A', 'V', '4', '', '0', 'vinicius@gmail.com', '(11) 11111-1111', 0),
+(30, 'A', '911', NULL, NULL, 3, 'v12', NULL, 4821.00, 'N', 0, 2022, 2022, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'FDA1R23', '2025-10-17 08:23:51', 5, '3', '3', 'F', 'L', 'D', 'V', '4', '', '0', 'kelwin@gmail.com', '(12) 98827-3730', 0),
+(31, 'A', 'da', NULL, NULL, 6, 'v12', NULL, 95.87, 'N', 0, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'GAG2T23', '2025-10-17 08:27:04', 4, '2', '3', 'V', 'L', 'A', 'D', '3', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0),
+(33, 'A', 'b12', NULL, NULL, 3, '3.0 24V GASOLINA TURBO S PDK', NULL, 51965.61, 'N', 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'DAD8D81', '2025-10-17 08:29:44', 3, '4', '1', 'V', 'L', 'A', 'V', '3', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0);
 
 -- --------------------------------------------------------
 
@@ -108,6 +114,36 @@ INSERT INTO `carrocerias` (`id`, `nome`) VALUES
 (7, 'Minivan'),
 (8, 'Picape'),
 (9, 'Conversível');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `conversas`
+--
+
+DROP TABLE IF EXISTS `conversas`;
+CREATE TABLE IF NOT EXISTS `conversas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `comprador_id` int(11) NOT NULL,
+  `vendedor_id` int(11) NOT NULL,
+  `anuncio_id` int(11) NOT NULL,
+  `ultima_mensagem` text DEFAULT NULL,
+  `data_ultima_mensagem` datetime DEFAULT current_timestamp(),
+  `nao_lidas_comprador` int(11) DEFAULT 0,
+  `nao_lidas_vendedor` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `conversa_unica` (`comprador_id`,`vendedor_id`,`anuncio_id`),
+  KEY `para_id` (`vendedor_id`),
+  KEY `anuncio_id` (`anuncio_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `conversas`
+--
+
+INSERT INTO `conversas` (`id`, `comprador_id`, `vendedor_id`, `anuncio_id`, `ultima_mensagem`, `data_ultima_mensagem`, `nao_lidas_comprador`, `nao_lidas_vendedor`) VALUES
+(1, 6, 7, 29, 'teste', '2025-10-18 19:49:06', 0, 0),
+(3, 7, 6, 28, 'vinicin lindin', '2025-10-14 07:28:31', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -202,7 +238,7 @@ CREATE TABLE IF NOT EXISTS `favoritos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `usuario_id` (`usuario_id`,`anuncio_id`),
   KEY `anuncio_id` (`anuncio_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -219,6 +255,7 @@ CREATE TABLE IF NOT EXISTS `lojas` (
   `inscricao_estadual` varchar(30) DEFAULT NULL,
   `endereco` varchar(120) DEFAULT NULL,
   `numero` varchar(10) DEFAULT NULL,
+  `seguidores` int(9) NOT NULL DEFAULT 0,
   `cep` varchar(9) DEFAULT NULL,
   `bairro` varchar(60) DEFAULT NULL,
   `cidade` varchar(60) DEFAULT NULL,
@@ -243,8 +280,8 @@ CREATE TABLE IF NOT EXISTS `lojas` (
 -- Despejando dados para a tabela `lojas`
 --
 
-INSERT INTO `lojas` (`id`, `nome`, `razao_social`, `cnpj`, `inscricao_estadual`, `endereco`, `numero`, `cep`, `bairro`, `cidade`, `estado`, `telefone_fixo`, `whatsapp`, `email_corporativo`, `site`, `instagram`, `facebook`, `logo`, `capa`, `descricao_loja`, `hora_abre`, `hora_fecha`, `dias_funcionamento`, `created_at`) VALUES
-(2, 'Kelwin', '', '', '', '', '', '', '', '', '', '', '123', 'a@a.a', '', '', '', '', '', 'A', '21:50:00', '21:50:00', 'Domingo,Segunda', '2025-10-09 00:50:16');
+INSERT INTO `lojas` (`id`, `nome`, `razao_social`, `cnpj`, `inscricao_estadual`, `endereco`, `numero`, `seguidores`, `cep`, `bairro`, `cidade`, `estado`, `telefone_fixo`, `whatsapp`, `email_corporativo`, `site`, `instagram`, `facebook`, `logo`, `capa`, `descricao_loja`, `hora_abre`, `hora_fecha`, `dias_funcionamento`, `created_at`) VALUES
+(2, 'Kelwin', '', '', '', '', '', 0, '', '', '', '', '', '123', 'a@a.a', '', '', '', '', '', 'A', '21:50:00', '21:50:00', 'Domingo,Segunda', '2025-10-09 00:50:16');
 
 -- --------------------------------------------------------
 
@@ -328,6 +365,64 @@ INSERT INTO `marcas` (`id`, `value`, `nome`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `mensagens_chat`
+--
+
+DROP TABLE IF EXISTS `mensagens_chat`;
+CREATE TABLE IF NOT EXISTS `mensagens_chat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `de_usuario` int(11) NOT NULL,
+  `para_usuario` int(11) NOT NULL,
+  `anuncio` int(11) NOT NULL,
+  `texto` text NOT NULL,
+  `data_envio` datetime DEFAULT current_timestamp(),
+  `lida` tinyint(1) DEFAULT 0,
+  `apagada_de` tinyint(1) NOT NULL DEFAULT 0,
+  `double_apagada_de` tinyint(1) NOT NULL DEFAULT 0,
+  `apagada_para` tinyint(1) NOT NULL DEFAULT 0,
+  `double_apagada_para` tinyint(1) NOT NULL DEFAULT 0,
+  `resposta_id` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `de_usuario_id` (`de_usuario`),
+  KEY `para_usuario_id` (`para_usuario`),
+  KEY `anuncio_id` (`anuncio`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `mensagens_chat`
+--
+
+INSERT INTO `mensagens_chat` (`id`, `de_usuario`, `para_usuario`, `anuncio`, `texto`, `data_envio`, `lida`, `apagada_de`, `double_apagada_de`, `apagada_para`, `double_apagada_para`, `resposta_id`) VALUES
+(1, 6, 7, 29, 'Bom dia', '2025-10-15 08:52:38', 1, 1, 0, 1, 0, 0),
+(2, 7, 6, 29, 'eba', '2025-10-15 09:14:22', 1, 0, 0, 1, 1, 0),
+(3, 6, 7, 29, 'teste', '2025-10-15 13:41:07', 1, 0, 0, 0, 0, 0),
+(4, 6, 7, 29, 'apu', '2025-10-15 13:41:11', 1, 0, 0, 0, 0, 0),
+(5, 6, 7, 29, 'cszin bora?', '2025-10-15 13:41:18', 1, 0, 0, 0, 0, 0),
+(6, 7, 6, 29, 'opa meu amigo', '2025-10-15 13:58:35', 1, 0, 0, 0, 0, 0),
+(7, 7, 6, 29, 'vc quer marreta do thor ou vc quer o peitinho do galego', '2025-10-18 14:24:26', 1, 0, 0, 0, 0, 0),
+(8, 6, 7, 29, 'teste', '2025-10-18 14:25:02', 1, 0, 0, 0, 0, 0),
+(9, 6, 7, 29, 'tempo real', '2025-10-18 14:25:11', 1, 0, 0, 0, 0, 0),
+(10, 6, 7, 29, 'opa', '2025-10-18 14:25:37', 1, 0, 0, 0, 0, 0),
+(11, 6, 7, 29, 'teste', '2025-10-18 14:26:54', 1, 0, 0, 0, 0, 0),
+(12, 6, 7, 29, 'opa', '2025-10-18 14:34:18', 1, 0, 0, 0, 0, 0),
+(13, 7, 6, 29, 'opa', '2025-10-18 14:35:47', 1, 0, 0, 0, 0, 0),
+(14, 6, 7, 29, 'opa', '2025-10-18 14:35:50', 1, 0, 0, 0, 0, 0),
+(15, 6, 7, 29, 'e trem bão', '2025-10-18 14:42:31', 1, 0, 0, 0, 0, 0),
+(16, 6, 7, 29, 'teste', '2025-10-18 16:17:34', 1, 0, 0, 0, 0, 0),
+(17, 6, 7, 29, 'teste 2', '2025-10-18 16:18:01', 1, 0, 0, 0, 0, 0),
+(18, 6, 7, 29, 'E ai mano', '2025-10-18 16:25:58', 1, 0, 0, 0, 0, 0),
+(19, 6, 7, 29, 'Blz', '2025-10-18 16:26:02', 1, 0, 0, 0, 0, 0),
+(20, 6, 7, 29, 'Bom', '2025-10-18 16:26:16', 1, 0, 0, 0, 0, 0),
+(21, 6, 7, 29, 'Joia', '2025-10-18 16:26:25', 1, 0, 0, 0, 0, 0),
+(22, 6, 7, 29, 'kk', '2025-10-18 19:45:43', 1, 0, 0, 0, 0, 0),
+(23, 6, 7, 29, 'eae', '2025-10-18 19:45:49', 1, 1, 0, 1, 0, 0),
+(24, 6, 7, 29, 'oi', '2025-10-18 19:48:16', 1, 0, 0, 0, 0, 0),
+(25, 7, 6, 29, 'opa', '2025-10-18 19:49:03', 1, 0, 0, 0, 0, 0),
+(26, 6, 7, 29, 'teste', '2025-10-18 19:49:06', 1, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `usuarios`
 --
 
@@ -353,7 +448,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `senha`, `data_criacao_conta`, `data_nascimento`) VALUES
-(6, 'Kelwin', 'Silva', 0, '', 'kelwin@gmail.com', '1111AAAA', '2025-09-20 20:44:02', '0000-00-00'),
+(6, 'Kelwin', 'Silva', 0, '', 'kelwin@gmail.com', '1111AAAA', '2025-09-20 20:44:02', '2025-10-14'),
 (7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1111AAAA', '2025-10-02 22:40:54', NULL);
 
 --
@@ -371,11 +466,27 @@ ALTER TABLE `anuncios_carros`
   ADD CONSTRAINT `vendedor_fk` FOREIGN KEY (`id_vendedor`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Restrições para tabelas `conversas`
+--
+ALTER TABLE `conversas`
+  ADD CONSTRAINT `conversas_ibfk_1` FOREIGN KEY (`comprador_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `conversas_ibfk_2` FOREIGN KEY (`vendedor_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `conversas_ibfk_3` FOREIGN KEY (`anuncio_id`) REFERENCES `anuncios_carros` (`id`);
+
+--
 -- Restrições para tabelas `favoritos`
 --
 ALTER TABLE `favoritos`
   ADD CONSTRAINT `favoritos_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `favoritos_ibfk_2` FOREIGN KEY (`anuncio_id`) REFERENCES `anuncios_carros` (`id`) ON DELETE CASCADE;
+
+--
+-- Restrições para tabelas `mensagens_chat`
+--
+ALTER TABLE `mensagens_chat`
+  ADD CONSTRAINT `mensagens_chat_ibfk_1` FOREIGN KEY (`de_usuario`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `mensagens_chat_ibfk_2` FOREIGN KEY (`para_usuario`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `mensagens_chat_ibfk_3` FOREIGN KEY (`anuncio`) REFERENCES `anuncios_carros` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
