@@ -158,6 +158,44 @@ const cpfMask = (value) => {
 }
 
 
-$('.sidebar-drop').on('click', function() {
+$('.sidebar-drop').on('click', function () {
   $(this).toggleClass('active');
 })
+
+const precoInput = $('.preco-input');
+
+if (precoInput.length > 0) {
+  precoInput.each(function() {
+    
+    // garante valor inicial
+    if ($(this).val().trim() === '') {
+      $(this).val('0,00');
+    }
+
+    $(this).on('input', function () {
+      let value = $(this).val().replace(/\D/g, ''); // só números
+
+      if (value === '' || value === '0') {
+        $(this).val('0,00');
+        return;
+      }
+
+      // transforma em valor decimal (centavos)
+      value = (parseInt(value, 10) / 100).toFixed(2);
+
+      // formata no padrão BR
+      value = value
+        .replace('.', ',') // vírgula para decimais
+        .replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // pontos a cada 3 dígitos
+
+      $(this).val(value);
+    });
+
+    // se perder o foco e estiver vazio, força "0,00"
+    $(this).on('blur', function () {
+      if ($(this).val().trim() === '') {
+        $(this).val('0,00');
+      }
+    });
+  });
+}

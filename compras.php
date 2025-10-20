@@ -33,7 +33,7 @@ LIMIT $quantidade";
 $resultado = mysqli_query($conexao, $sql);
 
 if (!$resultado) {
-    die("Erro na consulta SQL: " . mysqli_error($conexao));
+  die("Erro na consulta SQL: " . mysqli_error($conexao));
 }
 
 $carros = [];

@@ -195,7 +195,10 @@ mysqli_close($conexao);
                             <div class="row row-cols-2 row-gap-3 mb-3">
                                 <div class="col">
                                     <label for="preco-input" class="form-label">Preço</label>
-                                    <input type="text" class="form-control shadow-sm text-capitalize" id="preco-input" value="<?= $preco ?>" name="preco" placeholder="Informe a placa do veículo" required>
+                                    <div class="position-relative">
+                                        <span class="position-absolute translate-middle-y top-50" style="margin-left: .75rem;">R$</span>
+                                        <input type="text" class="form-control shadow-sm preco-input" style="padding-left: 2.25rem" id="preco-input" value="<?= number_format($preco, 2, ',', '.'); ?>" name="preco" placeholder="Informe o preço do veículo" required>
+                                    </div>
                                 </div>
                                 <div class="col">
                                     <label for="troca-select" class="form-label">Aceita troca</label>

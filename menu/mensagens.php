@@ -9,6 +9,49 @@ include('../controladores/conexao_bd.php');
 
 $usuario = $_SESSION['id'];
 
+$msgs = [];
+$dest = [];
+
+if (isset($_GET['id'])) {
+    $de_id = $_GET['id'];
+    $anuncio = $_GET['anuncio_id'];
+
+    // Carregar mensagens
+    $sql = "SELECT * FROM mensagens_chat 
+            WHERE ((de_usuario = '$de_id' AND para_usuario = '$usuario') 
+            OR (de_usuario = '$usuario' AND para_usuario = '$de_id')) 
+            AND anuncio = '$anuncio' 
+            ORDER BY data_envio";
+    $resultado = mysqli_query($conexao, $sql);
+
+    while ($linha = mysqli_fetch_assoc($resultado)) {
+        $msgs[] = $linha;
+    }
+
+    // Marcar mensagens como lidas
+    $sql = "UPDATE mensagens_chat 
+            SET lida = 1 
+            WHERE para_usuario = '$usuario' 
+            AND anuncio = '$anuncio'";
+    mysqli_query($conexao, $sql);
+
+    // 🔥 Zerar contador também na tabela conversas
+    $sql = "UPDATE conversas 
+            SET nao_lidas_comprador = 0 
+            WHERE anuncio_id = '$anuncio' AND comprador_id = '$usuario'";
+    mysqli_query($conexao, $sql);
+
+    $sql = "UPDATE conversas 
+            SET nao_lidas_vendedor = 0 
+            WHERE anuncio_id = '$anuncio' AND vendedor_id = '$usuario'";
+    mysqli_query($conexao, $sql);
+
+    // Carregar destinatário
+    $sql = "SELECT * FROM usuarios WHERE id = '$de_id'";
+    $resultado = mysqli_query($conexao, $sql);
+    $dest = mysqli_fetch_assoc($resultado);
+}
+
 $sql = "UPDATE conversas c
 LEFT JOIN (
     SELECT anuncio AS anuncio_id, para_usuario, COUNT(*) AS qtd
@@ -49,8 +92,6 @@ INNER JOIN marcas
 WHERE comprador_id = '$usuario'";
 $resultado = mysqli_query($conexao, $sql);
 
-
-
 $conversas_comp = [];
 
 if (mysqli_num_rows($resultado) > 0) {
@@ -80,29 +121,6 @@ if (mysqli_num_rows($resultado) > 0) {
     while ($linha = mysqli_fetch_assoc($resultado)) {
         $conversas_vend[] = $linha;
     }
-}
-
-$msgs = [];
-$dest = [];
-
-if (isset($_GET['id'])) {
-    $de_id = $_GET['id'];
-    $anuncio = $_GET['anuncio_id'];
-
-    $sql = "SELECT * FROM mensagens_chat WHERE ((de_usuario = '$de_id' AND para_usuario = '$usuario') OR (de_usuario = '$usuario' AND para_usuario = '$de_id')) AND anuncio = '$anuncio' ORDER BY data_envio";
-    $resultado = mysqli_query($conexao, $sql);
-
-    while ($linha = mysqli_fetch_assoc($resultado)) {
-        $msgs[] = $linha;
-    }
-
-    $sql = "UPDATE mensagens_chat SET lida = 1 WHERE para_usuario = '$usuario' AND anuncio = '$anuncio'";
-    $resultado = mysqli_query($conexao, $sql);
-
-    $sql = "SELECT * FROM usuarios WHERE id = '$de_id'";
-    $resultado = mysqli_query($conexao, $sql);
-
-    $dest = mysqli_fetch_assoc($resultado);
 }
 
 mysqli_close($conexao);
@@ -264,7 +282,7 @@ $msg_pos = 0;
                             <ul id="comprando-tab" class="list-group list-group-flush flex-grow-1 overflow-y-auto <?= isset($_GET['vendendo']) && $_GET['vendendo'] == 'true'  ? 'd-none' : '' ?>">
                                 <?php
                                 foreach ($conversas_comp as $user): ?>
-                                    <li class="list-group-item <?= isset($_GET['anuncio_id']) && $_GET['anuncio_id'] == $user['anuncio_id'] ? 'active' : '' ?>">
+                                    <li class="list-group-item <?= isset($_GET['anuncio_id']) && $_GET['anuncio_id'] == $user['anuncio_id'] ? 'active' : '' ?>" data-id-conversa="<?= $user['id'] ?>">
                                         <a href="mensagens.php?anuncio_id=<?= $user['anuncio_id'] ?>&id=<?= $user['id'] ?>" class="d-flex align-items-center py-0 gap-3 text-decoration-none text-black">
                                             <div class="col-auto flex-shrink-0">
                                                 <div class="ratio ratio-1x1" style="width: calc(30px + .5vw);">
@@ -281,9 +299,7 @@ $msg_pos = 0;
                                                         <p class="mb-1 text-uppercase"><?= $user['marca'] . ' ' . $user['modelo'] . ' ' . $user['versao'] ?? 'Veículo não disponível' ?></p>
                                                         <p class="mb-0 text-muted"><?= $user['ultima_mensagem'] ?? '' ?></p>
                                                     </div>
-                                                    <?php if ($user['nao_lidas_comprador'] > 0): ?>
-                                                        <span class="badge bg-primary rounded-circle"><?= $user['nao_lidas_comprador'] ?></span>
-                                                    <?php endif ?>
+                                                    <span class="badge bg-primary rounded-circle" <?= $user['nao_lidas_comprador'] > 0 ? '' : 'style="display: none;"' ?>><?= $user['nao_lidas_comprador'] ?></span>
                                                 </div>
                                             </div>
                                         </a>
@@ -293,7 +309,7 @@ $msg_pos = 0;
                             <ul id="vendendo-tab" class="list-group list-group-flush flex-grow-1 overflow-y-auto <?= isset($_GET['vendendo']) && $_GET['vendendo'] == 'true'  ? '' : 'd-none' ?>">
                                 <?php
                                 foreach ($conversas_vend as $user): ?>
-                                    <li class="list-group-item <?= isset($_GET['anuncio_id']) && $_GET['anuncio_id'] == $user['anuncio_id'] ? 'active' : '' ?>">
+                                    <li class="list-group-item <?= isset($_GET['anuncio_id']) && $_GET['anuncio_id'] == $user['anuncio_id'] ? 'active' : '' ?>" data-id-conversa="<?= $user['id'] ?>">
                                         <a href="mensagens.php?vendendo=true&anuncio_id=<?= $user['anuncio_id'] ?>&id=<?= $user['id'] ?>" class="d-flex align-items-center py-0 gap-3 text-decoration-none text-black">
                                             <div class="col-auto flex-shrink-0">
                                                 <div class="ratio ratio-1x1" style="width: calc(30px + .5vw);">
@@ -310,9 +326,7 @@ $msg_pos = 0;
                                                         <p class="mb-1 text-uppercase"><i class="bi bi-eye-fill"></i>&nbsp;<?= $user['marca'] . ' ' . $user['modelo'] . ' ' . $user['versao'] ?? 'Veículo não disponível' ?></p>
                                                         <p class="mb-0 text-muted"><?= $user['ultima_mensagem'] ?? '' ?></p>
                                                     </div>
-                                                    <?php if ($user['nao_lidas_vendedor'] > 0): ?>
-                                                        <span class="badge bg-primary rounded-circle"><?= $user['nao_lidas_vendedor'] ?></span>
-                                                    <?php endif ?>
+                                                    <span class="badge bg-primary rounded-circle" <?= $user['nao_lidas_vendedor'] > 0 ? '' : 'style="display: none;"' ?>><?= $user['nao_lidas_vendedor'] ?></span>
                                                 </div>
                                             </div>
                                         </a>
@@ -336,13 +350,33 @@ $msg_pos = 0;
                                             <small class="text-muted"><span><i class="bi bi-circle-fill align-middle text-success" style="font-size: .4rem;"></i></span>&nbsp;Online</small>
                                         </div>
                                     </div>
-                                    <div id="topbar" class="col-auto d-flex align-items-center gap-3">
-                                        <button title="Ligar" class="btn border shadow-sm btn-sm"><i class="bi bi-telephone-fill" data-action=""></i></button>
-                                        <button title="Whatsapp" class="btn border shadow-sm btn-sm"><i class="bi bi-whatsapp" data-action=""></i></button>
-                                        <button title="Mais" class="btn border shadow-sm btn-sm"><i class="bi bi-three-dots-vertical" data-action=""></i></button>
-                                        <button title="Copiar" class="btn border shadow-sm btn-sm sel-group" style="display: none;" data-action=""><i class="bi bi-copy"></i></button>
-                                        <button title="Apagar" class="btn border shadow-sm btn-sm sel-group" style="display: none;" data-action=""><i class="bi bi-trash"></i></button>
-                                        <button title="Cancelar" class="btn border shadow-sm btn-sm sel-group" style="display: none;" data-action="cancelar"><i class="bi bi-x-lg"></i></button>
+                                    <div id="topbar" class="col-auto d-flex align-items-center gap-2">
+                                        <button title="Ligar" class="btn border-0 btn-sm"><i class="bi bi-telephone-fill" data-action=""></i></button>
+                                        <button title="Whatsapp" class="btn border-0 btn-sm"><i class="bi bi-whatsapp" data-action=""></i></button>
+                                        <div class="dropdown">
+                                            <button title="Mais" class="btn border-0 btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi bi-three-dots-vertical" data-action=""></i>
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <h6 class="dropdown-header">Mensagem</h6>
+                                                </li>
+                                                <li><a class="dropdown-item" href="#"><i class="bi bi-flag"></i> Denunciar usuário</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="bi bi-ban"></i> Bloquear usuário</a></li>
+                                                <li><a class="dropdown-item" href="#"><i class="bi bi-trash"></i> Apagar mensagens</a></li>
+                                                <li>
+                                                    <h6 class="dropdown-divider"></h6>
+                                                </li>
+                                                <li>
+                                                    <h6 class="dropdown-header">Anúncio</h6>
+                                                </li>
+                                                <li><a class="dropdown-item" href="../pagina-venda.php?id=<?= $_GET['anuncio_id'] ?>"><i class="bi bi-car-front"></i> Ver anúncio</a></li>
+                                                <li><a class="dropdown-item <?= isset($_GET['vendendo']) && $_GET['vendendo'] == 'true'  ? '' : 'd-none' ?>" href="editar-anuncio.php?id=<?= $_GET['anuncio_id'] ?>"><i class="bi bi-pencil"></i> Editar anúncio</a></li>
+                                            </ul>
+                                        </div>
+                                        <button title="Copiar" class="btn border-0 btn-sm sel-group" style="display: none;" data-action=""><i class="bi bi-copy"></i></button>
+                                        <button title="Apagar" class="btn border-0 btn-sm sel-group" style="display: none;" data-action=""><i class="bi bi-trash"></i></button>
+                                        <button title="Cancelar" class="btn border-0 btn-sm sel-group" style="display: none;" data-action="cancelar"><i class="bi bi-x-lg"></i></button>
                                     </div>
                                 </div>
                                 <div class="card-body overflow-auto px-0 chat-container" style="height: calc(100% - 120px);">
@@ -518,11 +552,8 @@ $msg_pos = 0;
                     anuncio: <?= $_GET['anuncio_id'] ?>,
                     texto: msg.val()
                 }, function(res) {
-                    if (res == true) {
-                        msg.val('')
-                    }
+                    location.reload();
                 })
-                location.reload();
             })
         <?php endif ?>
 
@@ -873,6 +904,23 @@ $msg_pos = 0;
                 //mostrarFeedback('❌ Erro de conexão');
             });
         }
+
+        setInterval(() => {
+            $.post('../controladores/mensagens/atualizar.php', {
+                anuncio: <?= isset($_GET['anuncio_id']) ? $_GET['anuncio_id'] : 'null' ?>
+            }).done(function(response) {
+                try {
+                    let data = JSON.parse(response); // transforma a string JSON em array/objeto
+
+                    if (data.length > 0) {
+                        location.reload();
+                    }
+                } catch (e) {
+                    console.error("Erro ao interpretar JSON:", e, response);
+                }
+            });
+        }, 1000);
+
     })
 </script>
 

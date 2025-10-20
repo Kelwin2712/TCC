@@ -20,6 +20,16 @@ while ($linha = mysqli_fetch_array($resultado)) {
   $estados[] = $linha;
 }
 
+$sql = "SELECT MAX(preco) as maior FROM anuncios_carros";
+$resultado = mysqli_query($conexao, $sql);
+
+$mais_caro = 0.00;
+
+if ($resultado && mysqli_num_rows($resultado) > 0) {
+    $linha = mysqli_fetch_array($resultado);
+    $mais_caro = $linha['maior'];
+}
+
 mysqli_close($conexao);
 ?>
 
@@ -124,11 +134,11 @@ mysqli_close($conexao);
               <div class="input-group flex-nowrap">
                 <div class="d-flex align-items-center position-relative">
                   <label for="preco-de" class="text-dark position-absolute px-3">De</label>
-                  <input type="text" id="preco-de" class="form-control shadow-sm rounded-start-5 rounded-end-0" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px; padding-left: 3rem;">
+                  <input type="text" id="preco-de" class="form-control shadow-sm rounded-start-5 rounded-end-0 preco-input" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px; padding-left: 3rem;">
                 </div>
                 <div class="d-flex align-items-center position-relative">
                   <label for="preco-ate" class="text-dark position-absolute px-3">Até</label>
-                  <input type="text" id="preco-ate" class="form-control shadow-sm rounded-end-5 rounded-start-0" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px; padding-left: 3rem;">
+                  <input type="text" id="preco-ate" class="form-control shadow-sm rounded-end-5 rounded-start-0 preco-input" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px; padding-left: 3rem;" value="<?= number_format($mais_caro, 2, ',', '.'); ?>">
                 </div>
 
               </div>

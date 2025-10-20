@@ -46,7 +46,10 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
             <div class="row row-cols-1 row-cols-md-2 w-100 g-4">
               <div class="col">
                 <label for="preco-input" class="form-text mb-2">Preço<sup>*</sup></label>
-                <input type="text" class="form-control" id="preco-input" value="R$ 0,00" name="preco" placeholder="Informe o preço do veículo" required>
+                <div class="position-relative">
+                  <span class="position-absolute translate-middle-y top-50" style="margin-left: .75rem;">R$</span>
+                  <input type="text" class="form-control preco-input" style="padding-left: 2.25rem" id="preco-input" value="0,00" name="preco" placeholder="Informe o preço do veículo" required>
+                </div>
               </div>
               <div class="col">
                 <label for="troca-select" class="form-text mb-2">Aceita troca<sup>*</sup></label>
@@ -85,55 +88,6 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
   $(function() {
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
-
-    const precoInput = $('#preco-input');
-
-    precoInput.on('focus', function() {
-      precoInput.prop('required', false);
-      if ($(this).val() === 'R$ 0,00') {
-        $(this).val('');
-      } else {
-        const currentValue = $(this).val()
-          .replace('R$ ', '')
-          .replace(/\./g, '')
-          .replace(',', '.');
-        $(this).val(currentValue);
-      }
-    });
-
-    precoInput.on('blur', function() {
-      precoInput.prop('required', true);
-      if ($(this).val() === '') {
-        $(this).val('R$ 0,00');
-      } else {
-        let numericValue = $(this).val().replace(/[^\d.,]/g, '');
-
-        if (numericValue === '' || numericValue === '0') {
-          numericValue = '0.00';
-        } else {
-          numericValue = numericValue.replace(',', '.');
-
-          if (!numericValue.includes('.')) {
-            numericValue += '.00';
-          } else {
-            const parts = numericValue.split('.');
-            parts[1] = parts[1].padEnd(2, '0').substring(0, 2);
-            numericValue = parts[0] + '.' + parts[1];
-          }
-        }
-
-        const formattedValue = 'R$ ' + parseFloat(numericValue).toLocaleString('pt-BR', {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        });
-
-        $(this).val(formattedValue);
-      }
-    });
-
-    $('#placa').on('input', function() {
-      formatarPlacaRobusto($(this));
-    });
   })
 </script>
 

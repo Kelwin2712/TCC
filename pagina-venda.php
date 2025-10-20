@@ -157,7 +157,7 @@ $vendedor_est = '4.63';
                         <form class="card-body px-4 d-flex flex-column justify-content-between">
                             <div class="row d-flex justify-content-between">
                                 <div class="col-auto">
-                                    <p class="fs-1 fw-semibold mb-0">R$ <?= $carro['preco'] ?></p>
+                                    <p class="fs-1 fw-semibold mb-0">R$ <?= number_format($carro['preco'], 2, ',', '.'); ?></p>
                                 </div>
                                 <div class="col-auto">
                                     <span class="badge text-bg-primary py-2 user-select-none rounded-3"><i class="bi bi-shield-check"></i> Confiável</span>
@@ -236,7 +236,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Ano</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold "><?= $carro['preco'] ?></p>
+                                            <p class="fw-semibold "><?= $carro['ano_fabricacao'].'/'.$carro['ano_modelo'] ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">

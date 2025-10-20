@@ -26,7 +26,7 @@
                         <p class="card-text text-nowrap small text-truncate"><?= $loc; ?></p>
                     </div>
                 </div>
-                <p class="card-text h5 fw-bold mb-2">R$ <?= $preco; ?></p>
+                <p class="card-text h5 fw-bold mb-2">R$ <?= number_format($preco, 2, ',', '.'); ?></p>
             </div>
             <div class="card-footer position-relative border-top-0 bg-body">
                 <div class="row mb-1">
