@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $cpf = str_replace('-', '', str_replace('.', '', $_POST['cpf']));
     $data_nascimento = $_POST['data-nascimento'];
     $email = $_POST['email'];
-    $telefone = $_POST['telefone'];
+    $telefone = str_replace(')', '', str_replace('(', '', str_replace('-', '', $_POST['telefone'])));
 
     $sql = "UPDATE usuarios SET nome='$nome', sobrenome='$sobrenome', telefone='$telefone', cpf='$cpf', email='$email', data_nascimento='$data_nascimento' WHERE id='$_SESSION[id]'";
     if (!mysqli_query($conexao, $sql)) {

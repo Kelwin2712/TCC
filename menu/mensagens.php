@@ -905,21 +905,38 @@ $msg_pos = 0;
             });
         }
 
+        let ultimoEstado = ""; // para comparar mudanças
+
         setInterval(() => {
+            console.log(ultimoEstado)
             $.post('../controladores/mensagens/atualizar.php', {
                 anuncio: <?= isset($_GET['anuncio_id']) ? $_GET['anuncio_id'] : 'null' ?>
             }).done(function(response) {
                 try {
-                    let data = JSON.parse(response); // transforma a string JSON em array/objeto
+                    let data = JSON.parse(response);
 
-                    if (data.length > 0) {
-                        location.reload();
+                    // Ordena os dados para garantir consistência (evita diferenças por ordem)
+                    let estadoAtual = JSON.stringify(
+                        data.map(item => ({
+                            anuncio_id: item.anuncio_id,
+                            nao_lidas_comprador: item.nao_lidas_comprador ?? 0,
+                            nao_lidas_vendedor: item.nao_lidas_vendedor ?? 0
+                        })).sort((a, b) => a.anuncio_id - b.anuncio_id)
+                    );
+
+                    if (estadoAtual !== ultimoEstado) {
+                        // Só recarrega se o estado atual for diferente do anterior
+                        if (ultimoEstado !== "") {
+                            location.reload();
+                        }
+                        ultimoEstado = estadoAtual;
                     }
                 } catch (e) {
                     console.error("Erro ao interpretar JSON:", e, response);
                 }
             });
         }, 1000);
+
 
     })
 </script>

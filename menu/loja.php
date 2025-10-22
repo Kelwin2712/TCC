@@ -85,6 +85,7 @@ mysqli_close($conexao);
 </head>
 
 <body>
+    <?php include '../estruturas/modal/loja-modal.php'; ?>
     <?php
     $selected = 'loja';
     $loja_id_selected = $_GET['id'];
@@ -123,10 +124,10 @@ mysqli_close($conexao);
                 </label>
             </div>
             <div>
-                <h3 class="fw-bold mb-1"><?= $loja['nome']?></h3>
+                <h3 class="fw-bold mb-1"><?= $loja['nome'] ?></h3>
                 <div class="d-flex gap-4 text-muted small">
-                    <span><strong>Data da criação:</strong> <span class="fw-medium"><?=date("d/m/Y", strtotime($loja['created_at']));?></span></span>
-                    <span><strong>Seguidores:</strong> <span class="fw-medium"><?= $loja['seguidores'];?></span></span>
+                    <span><strong>Data da criação:</strong> <span class="fw-medium"><?= date("d/m/Y", strtotime($loja['created_at'])); ?></span></span>
+                    <span><strong>Seguidores:</strong> <span class="fw-medium"><?= $loja['seguidores']; ?></span></span>
                 </div>
             </div>
         </div>
@@ -183,62 +184,63 @@ mysqli_close($conexao);
             </div>
         </div>
     </main>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const editBtn = document.getElementById('edit-btn');
-        const saveBtn = document.getElementById('save-btn');
-        const cancelBtn = document.getElementById('cancel-btn');
-        const fotoEditIcon = document.getElementById('foto-edit-icon');
-        const sobreInput = document.getElementById('sobre-input');
-        const charCount = document.getElementById('char-count');
-
-        // Ativar edição
-        editBtn.addEventListener('click', () => {
-            sobreInput.readOnly = false;
-            sobreInput.classList.add('border', 'border-primary');
-            fotoEditIcon.classList.remove('d-none');
-            editBtn.classList.add('d-none');
-            saveBtn.classList.remove('d-none');
-            cancelBtn.classList.remove('d-none');
-            sobreInput.focus();
-        });
-
-        // Cancelar edição
-        cancelBtn.addEventListener('click', () => {
-            sobreInput.readOnly = true;
-            sobreInput.classList.remove('border', 'border-primary');
-            fotoEditIcon.classList.add('d-none');
-            editBtn.classList.remove('d-none');
-            saveBtn.classList.add('d-none');
-            cancelBtn.classList.add('d-none');
-        });
-
-        // Salvar edição
-        saveBtn.addEventListener('click', () => {
-            sobreInput.readOnly = true;
-            sobreInput.classList.remove('border', 'border-primary');
-            fotoEditIcon.classList.add('d-none');
-            editBtn.classList.remove('d-none');
-            saveBtn.classList.add('d-none');
-            cancelBtn.classList.add('d-none');
-            alert('Salvo com sucesso!');
-        });
-
-        // Contador de caracteres
-        sobreInput.addEventListener('input', function () {
-            const length = this.value.length;
-            charCount.textContent = length;
-
-            charCount.classList.remove('text-warning', 'fw-bold', 'text-danger', 'fw-bolder');
-
-            if (length >= 235 && length < 250) {
-                charCount.classList.add('text-warning', 'fw-bold');
-            } else if (length === 250) {
-                charCount.classList.add('text-danger', 'fw-bolder');
-            }
-        });
-    </script>
 </body>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+<script src="../script.js"></script>
+<script>
+    const editBtn = document.getElementById('edit-btn');
+    const saveBtn = document.getElementById('save-btn');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const fotoEditIcon = document.getElementById('foto-edit-icon');
+    const sobreInput = document.getElementById('sobre-input');
+    const charCount = document.getElementById('char-count');
+
+    // Ativar edição
+    editBtn.addEventListener('click', () => {
+        sobreInput.readOnly = false;
+        sobreInput.classList.add('border', 'border-primary');
+        fotoEditIcon.classList.remove('d-none');
+        editBtn.classList.add('d-none');
+        saveBtn.classList.remove('d-none');
+        cancelBtn.classList.remove('d-none');
+        sobreInput.focus();
+    });
+
+    // Cancelar edição
+    cancelBtn.addEventListener('click', () => {
+        sobreInput.readOnly = true;
+        sobreInput.classList.remove('border', 'border-primary');
+        fotoEditIcon.classList.add('d-none');
+        editBtn.classList.remove('d-none');
+        saveBtn.classList.add('d-none');
+        cancelBtn.classList.add('d-none');
+    });
+
+    // Salvar edição
+    saveBtn.addEventListener('click', () => {
+        sobreInput.readOnly = true;
+        sobreInput.classList.remove('border', 'border-primary');
+        fotoEditIcon.classList.add('d-none');
+        editBtn.classList.remove('d-none');
+        saveBtn.classList.add('d-none');
+        cancelBtn.classList.add('d-none');
+        alert('Salvo com sucesso!');
+    });
+
+    // Contador de caracteres
+    sobreInput.addEventListener('input', function() {
+        const length = this.value.length;
+        charCount.textContent = length;
+
+        charCount.classList.remove('text-warning', 'fw-bold', 'text-danger', 'fw-bolder');
+
+        if (length >= 235 && length < 250) {
+            charCount.classList.add('text-warning', 'fw-bold');
+        } else if (length === 250) {
+            charCount.classList.add('text-danger', 'fw-bolder');
+        }
+    });
+</script>
 
 </html>

@@ -53,7 +53,7 @@ mysqli_close($conexao);
 </style>
 
 <body class="overflow-x-hidden">
-    <?php include '../estruturas/modal/loja-modal.php';?>
+    <?php include '../estruturas/modal/loja-modal.php'; ?>
     <?php include '../estruturas/alert/alert.php' ?>
     <main class="container-fluid d-flex vh-100 p-0">
         <?php $selected = 'ad';
@@ -66,28 +66,90 @@ mysqli_close($conexao);
 
                 </div>
                 <div class="mb-5 d-flex flex-wrap gap-2">
-                    <a href="anuncios.php" class="btn text-bg-dark rounded-pill">Anúncios</a>
-                    <a href="reservas.php" class="btn border border-dark rounded-pill">Reservas</a>
+                    <a href="anuncios.php" class="btn border border-dark rounded-pill">Anúncios</a>
+                    <a href="reservas.php" class="btn text-bg-dark rounded-pill">Reservas</a>
                     <a href="../vender-placa.php" class="btn btn-dark ms-auto rounded-pill shadow-sm">+ Criar novo anúncio</a>
                 </div>
-                <div class="row row-cols-1 row-cols-xl-2 g-3">
-                    <?php foreach ($carros as $carro): ?>
-                        <div class="col">
-                            <?php
-                            $marca = $carro['marca_nome'];
-                            $modelo = $carro['modelo'];
-                            $versao = $carro['versao'];
-                            $preco = $carro['preco'];
-                            $ano = $carro['ano_fabricacao'] . '/' . $carro['ano_modelo'];
-                            $km = $carro['quilometragem'];
-                            $cor = $carro['cor'];
-                            $troca = $carro['aceita_troca'];
-                            $revisao = $carro['revisao'];
-                            $id = $carro['id'];
-                            $loc = 'São José dos Campos - SP';
-                            $img1 = '../img/compras/1.png';
-                            include('../estruturas/card-compra/card-anuncios.php'); ?>
+                <div class="row row-cols-1 g-3">
+                    <div class="col-12">
+                        <div class="card rounded-5">
+                            <div class="card-body d-flex px-0 gap-4">
+                                <div class="d-flex flex-column text-center justify-content-center align-items-center px-4 border-end">
+                                    <span class="fs-6">Sex</span>
+                                    <span class="fs-2 fw-bold">29</span>
+                                </div>
+                                <div class="row row-cols-2 text-muted">
+                                    <div class="col-auto d-flex flex-column justify-content-center gap-2">
+                                        <span class="text-dark fw-bold">PORSCHE 911 TURBO S PDK</span>
+                                        <span>Cliente: <span class="fw-semibold">Vinicius Souza</span></span>
+                                    </div>
+                                    <div class="col-auto d-flex flex-column justify-content-center gap-2">
+                                        <span><i class="bi bi-clock-history"></i> &nbsp;9:30 - 10:30</span>
+                                        <span>Status: <span class="fw-semibold bg-warning-subtle px-2 py-1 rounded-pill text-warning-emphasis">Pendente</span></span>
+                                    </div>
+                                </div>
+
+                                <!-- Dropdown -->
+                                <div class="dropdown ms-auto me-3 d-flex align-items-center">
+                                    <button class="btn border-0" data-bs-toggle="dropdown">
+                                        <i class="bi bi-chevron-down"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <!-- Ações Principais -->
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-check-circle me-2"></i>Confirmar Reserva
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-telephone me-2"></i>Contatar Cliente
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-pencil me-2"></i>Editar Reserva
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+
+                                        <!-- Informações -->
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-eye me-2"></i>Ver Detalhes do Veículo
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-person me-2"></i>Ver Perfil do Cliente
+                                            </a>
+                                        </li>
+
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+
+                                        <!-- Ações de Risco -->
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-clock me-2"></i>Renovar Reserva
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="#">
+                                                <i class="bi bi-x-circle me-2"></i>Cancelar Reserva
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
+                    </div>
+                    <?php foreach ($carros as $carro): ?>
+
                     <?php endforeach; ?>
                 </div>
 
@@ -135,4 +197,5 @@ mysqli_close($conexao);
         })
     })
 </script>
+
 </html>
