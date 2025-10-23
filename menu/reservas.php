@@ -68,7 +68,7 @@ mysqli_close($conexao);
                 <div class="mb-5 d-flex flex-wrap gap-2">
                     <a href="anuncios.php" class="btn border border-dark rounded-pill">Anúncios</a>
                     <a href="reservas.php" class="btn text-bg-dark rounded-pill">Reservas</a>
-                    <a href="../vender-placa.php" class="btn btn-dark ms-auto rounded-pill shadow-sm">+ Criar novo anúncio</a>
+                    <a href="../vender-placa.php" class="btn btn-dark ms-auto rounded-pill shadow-sm d-none">+ Criar novo anúncio</a>
                 </div>
                 <div class="row row-cols-1 g-3">
                     <div class="col-12">

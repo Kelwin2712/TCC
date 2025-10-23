@@ -132,8 +132,6 @@ const phoneMask = (value) => {
   return value
 }
 
-
-
 function cnpj(v) {
   v = v.replace(/\D/g, "")
   v = v.replace(/^(\d{2})(\d)/, "$1.$2")
@@ -157,6 +155,12 @@ const cpfMask = (value) => {
   return value
 }
 
+$(document).ready(function () {
+  $('.telefone-mask').val(phoneMask($('.telefone-mask').val()));
+  $('.cpf-mask').val(cpfMask($('.cpf-mask').val()));
+  $('.telefone-mask').on('input', handlePhone);
+  $('.cpf-mask').on('input', handleCPF);
+});
 
 $('.sidebar-drop').on('click', function () {
   $(this).toggleClass('active');
@@ -165,8 +169,8 @@ $('.sidebar-drop').on('click', function () {
 const precoInput = $('.preco-input');
 
 if (precoInput.length > 0) {
-  precoInput.each(function() {
-    
+  precoInput.each(function () {
+
     // garante valor inicial
     if ($(this).val().trim() === '') {
       $(this).val('0,00');

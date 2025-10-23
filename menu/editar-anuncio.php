@@ -514,13 +514,135 @@ mysqli_close($conexao);
                 <hr class="my-5">
                 <div class="row d-flex align-items-center flex-nowrap">
                     <div class="col">
+                        <h5>Reservas</h5>
+                        <p class="text-muted">Gerencie todas as reservas de visitas</p>
+                    </div>
+                    <div class="col-auto d-flex flex-column justify-content-between">
+                        <div class="row row-gap-3 mb-3">
+                            <div class="col">
+                                <button class="btn btn-dark shadow-sm" data-bs-toggle="modal" data-bs-target="#reserva-modal">Criar nova reserva <i class="bi bi-plus-lg"></i></button>
+                                <div class="modal fade" id="reserva-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <form class="modal-content" id="form-reserva" method="POST" action="#" novalidate>
+                                            <div class="modal-header border-0">
+                                                <h5 class="modal-title" id="reservaModalLabel">Criar nova reserva de visita</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                            </div>
+                                            <div class="modal-body p-4">
+                                                <input type="hidden" name="id_veiculo" id="reserva-id-veiculo" value="<?= $id_veiculo ?>">
+
+                                                <!-- Contato -->
+                                                <div class="row g-3 mb-2">
+                                                    <div class="col-md-6">
+                                                        <label for="reserva-nome" class="form-label">Nome completo</label>
+                                                        <input type="text" class="form-control" id="reserva-nome" name="nome" placeholder="Nome do visitante" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="reserva-telefone" class="form-label">Telefone</label>
+                                                        <input type="tel" class="form-control telefone-mask" id="reserva-telefone" maxlength="15" name="telefone" placeholder="(00) 9 9999-9999" required>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="reserva-email" class="form-label">E-mail</label>
+                                                        <input type="email" class="form-control" id="reserva-email" name="email" placeholder="exemplo@dominio.com">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="reserva-contato" class="form-label">Preferência de contato</label>
+                                                        <select class="form-select" id="reserva-contato" name="preferencia_contato">
+                                                            <option value="telefone">Telefone</option>
+                                                            <option value="whatsapp">WhatsApp</option>
+                                                            <option value="email">E-mail</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Data / Hora / Pessoas -->
+                                                <div class="row g-3 mb-2">
+                                                    <div class="col-md-4">
+                                                        <label for="reserva-data" class="form-label">Data</label>
+                                                        <input type="date" class="form-control" id="reserva-data" name="data" required>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="reserva-hora" class="form-label">Hora</label>
+                                                        <input type="time" class="form-control" id="reserva-hora" name="hora" required>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="reserva-acompcount" class="form-label">Nº de acompanhantes</label>
+                                                        <input type="number" class="form-control" id="reserva-acompcount" name="acompanhantes_qtd" min="0" max="10" value="0">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Endereço do visitante -->
+                                                <div class="row g-3 mt-2 mb-2">
+                                                    <div class="col-12"><h6 class="mb-2">Endereço</h6></div>
+                                                    <div class="col-md-1">
+                                                        <label for="reserva-estado" class="form-label">Estado</label>
+                                                        <input type="text" class="form-control" id="reserva-estado" name="estado" placeholder="SP" maxlength="2">
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <label for="reserva-cidade" class="form-label">Cidade</label>
+                                                        <input type="text" class="form-control" id="reserva-cidade" name="cidade" placeholder="Cidade">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="reserva-bairro" class="form-label">Bairro</label>
+                                                        <input type="text" class="form-control" id="reserva-bairro" name="bairro" placeholder="Bairro">
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label for="reserva-rua" class="form-label">Rua</label>
+                                                        <input type="text" class="form-control" id="reserva-rua" name="rua" placeholder="Rua, avenida, etc.">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label for="reserva-numero" class="form-label">Número</label>
+                                                        <input type="text" class="form-control" id="reserva-numero" name="numero" placeholder="123">
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <label for="reserva-complemento" class="form-label">Complemento</label>
+                                                        <input type="text" class="form-control" id="reserva-complemento" name="complemento" placeholder="Apto, casa">
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <label for="reserva-cep" class="form-label">CEP</label>
+                                                        <input type="text" class="form-control" id="reserva-cep" name="cep" placeholder="00000-000" maxlength="9">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Observações (último) -->
+                                                <div class="row g-3 mt-3">
+                                                    <div class="col-12">
+                                                        <label for="reserva-observacoes" class="form-label">Observações</label>
+                                                        <textarea class="form-control" id="reserva-observacoes" name="observacoes" rows="3" placeholder="Anotações adicionais (ex.: preferências, horário alternativo)"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer d-flex flex-column border-top-0 p-4">
+                                                <div class="w-100 d-flex gap-2">
+                                                    <button type="submit" class="btn btn-dark w-100" id="btn-salvar-reserva">Salvar reserva</button>
+                                                    <button type="button" class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="d-flex justify-content-center align-items-center bg-body-secondary p-5 rounded-5">
+                        <div class="text-center text-muted">
+                            <p class="fs-1 mb-0"><i class="bi bi-calendar-x-fill"></i></p>
+                            <h5 class="mb-0">Nenhuma reserva feita ainda</h5>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-5">
+                <div class="row d-flex align-items-center flex-nowrap">
+                    <div class="col">
                         <h5>Deletar anúncio</h5>
                         <p class="text-muted">Delete esse anúncio permanentemente</p>
                     </div>
                     <div class="col-auto d-flex flex-column justify-content-between">
                         <div class="row row-gap-3 mb-3">
                             <div class="col">
-                                <button class="btn btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#delete-modal">Deletar anúncio<i class="bi bi-trash"></i></button>
+                                <button class="btn btn-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#delete-modal">Deletar anúncio <i class="bi bi-trash"></i></button>
                                 <div class="modal fade" id="delete-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-dialog-centered">
                                         <form action="../controladores/veiculos/deletar-anuncio.php" class="modal-content" method="POST">
@@ -675,6 +797,11 @@ mysqli_close($conexao);
                     $('#anuncio-ativo').prop('checked', !ativoVal);
                 });
         });
+
+        const dateInput = $('input[type="date"]')
+
+        dateInput.attr('min', new Date().toISOString().split('T')[0]);
+        dateInput.val(new Date().toISOString().split('T')[0]);
     })
 </script>
 

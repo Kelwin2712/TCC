@@ -68,11 +68,11 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
                             </div>
                             <div class="col">
                                 <label for="telefone-input" class="form-label">Telefone</label>
-                                <input type="text" class="form-control shadow-sm" name="telefone" id="telefone-input" placeholder="Telefone" value="<?= $telefone ?>">
+                                <input type="text" class="form-control shadow-sm telefone-mask" name="telefone" id="telefone-input" placeholder="Telefone" value="<?= $telefone ?>" maxlength="15">
                             </div>
                             <div class="col">
                                 <label for="cpf-input" class="form-label">CPF</label>
-                                <input type="text" class="form-control shadow-sm" name="cpf" id="cpf-input" placeholder="CPF" value="<?= $cpf ?>">
+                                <input type="text" class="form-control shadow-sm cpf-mask" name="cpf" id="cpf-input" placeholder="CPF" value="<?= $cpf ?>" maxlength="14">
                             </div>
                             <div class="col">
                                 <label for="email-input" class="form-label">Email</label>
