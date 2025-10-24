@@ -119,48 +119,76 @@ $("#top-button").click(function () {
   return false;
 });
 
-const handlePhone = (event) => {
-  let input = event.target
-  input.value = phoneMask(input.value)
-}
+// === Máscaras de entrada ===
 
-const phoneMask = (value) => {
-  if (!value) return ""
-  value = value.replace(/\D/g, '')
-  value = value.replace(/(\d{2})(\d)/, "($1) $2")
-  value = value.replace(/(\d)(\d{4})$/, "$1-$2")
+// Telefone
+const formatPhone = (value) => {
+  if (!value) return "";
   return value
-}
+    .replace(/\D/g, "")                // Remove tudo que não for número
+    .replace(/^(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d)(\d{4})$/, "$1-$2"); // Formata final: (00) 9 9999-9999
+};
 
-function cnpj(v) {
-  v = v.replace(/\D/g, "")
-  v = v.replace(/^(\d{2})(\d)/, "$1.$2")
-  v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-  v = v.replace(/\.(\d{3})(\d)/, ".$1/$2")
-  v = v.replace(/(\d{4})(\d)/, "$1-$2")
-  return v
-}
+const handlePhone = (event) => {
+  event.target.value = formatPhone(event.target.value);
+};
+
+// CNPJ
+const formatCNPJ = (value) => {
+  if (!value) return "";
+  return value
+    .replace(/\D/g, "")
+    .replace(/^(\d{2})(\d)/, "$1.$2")
+    .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+    .replace(/\.(\d{3})(\d)/, ".$1/$2")
+    .replace(/(\d{4})(\d)/, "$1-$2");
+};
+
+// CPF
+const formatCPF = (value) => {
+  if (!value) return "";
+  return value
+    .replace(/\D/g, "")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+};
 
 const handleCPF = (event) => {
-  let input = event.target
-  input.value = cpfMask(input.value)
-}
+  event.target.value = formatCPF(event.target.value);
+};
 
-const cpfMask = (value) => {
-  if (!value) return ""
-  value = value.replace(/\D/g, "")
-  value = value.replace(/(\d{3})(\d)/, "$1.$2")
-  value = value.replace(/(\d{3})(\d)/, "$1.$2")
-  value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+// CEP
+const formatCEP = (value) => {
+  if (!value) return "";
   return value
-}
+    .replace(/\D/g, "")
+    .slice(0, 8)
+    .replace(/^(\d{5})(\d)/, "$1-$2"); // Ex: 12345-678
+};
 
-$(document).ready(function () {
-  $('.telefone-mask').val(phoneMask($('.telefone-mask').val()));
-  $('.cpf-mask').val(cpfMask($('.cpf-mask').val()));
-  $('.telefone-mask').on('input', handlePhone);
-  $('.cpf-mask').on('input', handleCPF);
+const handleCEP = (event) => {
+  event.target.value = formatCEP(event.target.value);
+};
+
+
+// === Aplicação automática das máscaras ===
+$(document).ready(() => {
+  // Aplica formatação inicial
+  $(".telefone-mask").each((_, el) => el.value = formatPhone(el.value));
+  $(".cpf-mask").each((_, el) => el.value = formatCPF(el.value));
+  $(".cnpj-mask").each((_, el) => el.value = formatCNPJ(el.value));
+  $(".cep-mask").each((_, el) => el.value = formatCEP(el.value));
+
+  // Eventos de digitação
+  $(document)
+    .on("input", ".telefone-mask", handlePhone)
+    .on("input", ".cpf-mask", handleCPF)
+    .on("input", ".cnpj-mask", (e) => e.target.value = formatCNPJ(e.target.value))
+    .on("input", ".cep-mask", handleCEP);
 });
+
 
 $('.sidebar-drop').on('click', function () {
   $(this).toggleClass('active');

@@ -10,7 +10,6 @@ if (!isset($_SESSION['id'])) {
 $id_veiculo = $_GET['id'];
 $_SESSION['id_veiculo_edit'] = $id_veiculo;
 
-
 $id = $_SESSION['id'];
 
 $sql = "SELECT carros.*, marcas.nome as marca_nome FROM anuncios_carros carros INNER JOIN marcas ON carros.marca = marcas.id WHERE carros.id = $id_veiculo";
@@ -214,6 +213,114 @@ mysqli_close($conexao);
                                 <div class="col">
                                     <label for="telefone-input" class="form-label">Telefone de contato</label>
                                     <input type="text" class="form-control shadow-sm text-capitalize" id="telefone-input" value="<?= $telefone ?>" name="telefone" placeholder="Informe a placa do veículo" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal de visualização/edição de reserva (copiado e adaptado de menu/reservas.php) -->
+                    <div class="modal fade" id="view-reserva-view-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewReservaViewLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="viewReservaViewLabel">Reserva</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="view-reserva-edit-form">
+                                        <input type="hidden" name="id" id="view-reserva-id">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Nome</label>
+                                                <input type="text" id="view-reserva-nome" name="nome" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Telefone</label>
+                                                <input type="tel" id="view-reserva-telefone" name="telefone" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" id="view-reserva-email" name="email" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Preferência de contato</label>
+                                                <select id="view-reserva-preferencia" name="preferencia_contato" class="form-select">
+                                                    <option value="telefone">Telefone</option>
+                                                    <option value="whatsapp">WhatsApp</option>
+                                                    <option value="email">E-mail</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Data</label>
+                                                <input type="date" id="view-reserva-data" name="data" class="form-control">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Hora</label>
+                                                <input type="time" id="view-reserva-hora" name="hora" class="form-control">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Acompanhantes</label>
+                                                <input type="number" id="view-reserva-acomp" name="acompanhantes_qtd" class="form-control" min="0">
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="row g-3">
+                                            <div class="col-md-2">
+                                                <label class="form-label">Estado</label>
+                                                <input type="text" id="view-reserva-estado" name="estado" class="form-control" maxlength="2">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Cidade</label>
+                                                <input type="text" id="view-reserva-cidade" name="cidade" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Bairro</label>
+                                                <input type="text" id="view-reserva-bairro" name="bairro" class="form-control">
+                                            </div>
+                                            <div class="col-md-8">
+                                                <label class="form-label">Rua</label>
+                                                <input type="text" id="view-reserva-rua" name="rua" class="form-control">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label class="form-label">Número</label>
+                                                <input type="text" id="view-reserva-numero" name="numero" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Complemento</label>
+                                                <input type="text" id="view-reserva-complemento" name="complemento" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">CEP</label>
+                                                <input type="text" id="view-reserva-cep" name="cep" class="form-control">
+                                            </div>
+                                        </div>
+
+                                        <hr>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Observações</label>
+                                            <textarea id="view-reserva-observacoes" name="observacoes" class="form-control" rows="3"></textarea>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer d-flex flex-column border-top-0">
+                                    <div class="w-100 d-flex gap-2 mb-2">
+                                        <button type="button" class="btn btn-primary w-100" id="view-reserva-save">Salvar alterações</button>
+                                        <button type="button" class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Fechar</button>
+                                    </div>
+                                    <div class="w-100 d-flex gap-2" id="view-reserva-actions">
+                                        <button type="button" class="btn btn-success w-100" id="view-reserva-confirm">Confirmar</button>
+                                        <button type="button" class="btn btn-danger w-100" id="view-reserva-cancel">Cancelar</button>
+                                    </div>
+                                    <div class="w-100 d-flex gap-2 d-none" id="view-reserva-after-confirm">
+                                        <button type="button" class="btn btn-outline-secondary w-50" id="view-reserva-to-pendente">Voltar para pendente</button>
+                                        <button type="button" class="btn btn-success w-50" id="view-reserva-to-realizada">Marcar como realizada</button>
+                                    </div>
+                                    <div class="w-100 d-flex gap-2 d-none" id="view-reserva-after-cancel">
+                                        <button type="button" class="btn btn-outline-secondary w-50" id="view-reserva-to-pendente-2">Voltar para pendente</button>
+                                        <button type="button" class="btn btn-danger w-50" id="view-reserva-delete">Excluir reserva</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -523,7 +630,7 @@ mysqli_close($conexao);
                                 <button class="btn btn-dark shadow-sm" data-bs-toggle="modal" data-bs-target="#reserva-modal">Criar nova reserva <i class="bi bi-plus-lg"></i></button>
                                 <div class="modal fade" id="reserva-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-lg modal-dialog-centered">
-                                        <form class="modal-content" id="form-reserva" method="POST" action="#" novalidate>
+                                        <form class="modal-content" id="form-reserva" method="POST" action="../controladores/reservas/criar-reserva.php" novalidate>
                                             <div class="modal-header border-0">
                                                 <h5 class="modal-title" id="reservaModalLabel">Criar nova reserva de visita</h5>
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
@@ -600,7 +707,7 @@ mysqli_close($conexao);
                                                     </div>
                                                     <div class="col-md-5">
                                                         <label for="reserva-cep" class="form-label">CEP</label>
-                                                        <input type="text" class="form-control" id="reserva-cep" name="cep" placeholder="00000-000" maxlength="9">
+                                                        <input type="text" class="form-control cep-mask" id="reserva-cep" name="cep" placeholder="00000-000" maxlength="9">
                                                     </div>
                                                 </div>
 
@@ -625,13 +732,103 @@ mysqli_close($conexao);
                         </div>
                     </div>
                 </div>
-                <div class="row mt-5">
-                    <div class="d-flex justify-content-center align-items-center bg-body-secondary p-5 rounded-5">
-                        <div class="text-center text-muted">
-                            <p class="fs-1 mb-0"><i class="bi bi-calendar-x-fill"></i></p>
-                            <h5 class="mb-0">Nenhuma reserva feita ainda</h5>
+                <?php
+                // Carregar reservas desse veículo
+                include('../controladores/conexao_bd.php');
+                $sql_res = "SELECT * FROM reservas WHERE id_veiculo = $id_veiculo ORDER BY criado_em DESC";
+                $res_result = mysqli_query($conexao, $sql_res);
+                $reservas = [];
+                while ($r = mysqli_fetch_assoc($res_result)) {
+                    $reservas[] = $r;
+                }
+
+                // Helpers locais
+                function format_phone_display_local($digits) {
+                    $digits_only = preg_replace('/\D+/', '', $digits);
+                    if ($digits_only === '') return '';
+                    if (strlen($digits_only) <= 2) return '(' . $digits_only . ')';
+                    $area = substr($digits_only, 0, 2);
+                    $rest = substr($digits_only, 2);
+                    $len = strlen($rest);
+                    if ($len <= 4) {
+                        return '(' . $area . ') ' . $rest;
+                    }
+                    $last4 = substr($rest, -4);
+                    $firstPart = substr($rest, 0, $len - 4);
+                    return '(' . $area . ') ' . $firstPart . '-' . $last4;
+                }
+
+                function day_abbr_pt_local($date) {
+                    $w = date('w', strtotime($date));
+                    $map = ['dom','seg','ter','qua','qui','sex','sab'];
+                    return $map[$w] ?? '';
+                }
+
+                mysqli_close($conexao);
+                ?>
+
+                <div class="row row-cols-1 g-3">
+                    <?php if (!empty($reservas)): ?>
+                        <?php foreach ($reservas as $res): ?>
+                            <?php
+                                $badgeClass = 'bg-warning-subtle text-warning-emphasis';
+                                switch ($res['status']) {
+                                    case 'confirmada': $badgeClass = 'bg-success-subtle text-success-emphasis'; break;
+                                    case 'cancelada': $badgeClass = 'bg-danger-subtle text-danger-emphasis'; break;
+                                    case 'realizada': $badgeClass = 'bg-info-subtle text-info-emphasis'; break;
+                                }
+                                $data_display = day_abbr_pt_local($res['data']);
+                                $dia = date('d', strtotime($res['data']));
+                            ?>
+                            <div class="col-12">
+                                <div class="card rounded-5 reserva-card" role="button" data-id="<?= $res['id'] ?>"
+                                     data-nome="<?= htmlspecialchars($res['nome'], ENT_QUOTES) ?>"
+                                     data-telefone="<?= htmlspecialchars(format_phone_display_local($res['telefone']), ENT_QUOTES) ?>"
+                                     data-email="<?= htmlspecialchars($res['email'], ENT_QUOTES) ?>"
+                                     data-preferencia_contato="<?= htmlspecialchars($res['preferencia_contato'], ENT_QUOTES) ?>"
+                                     data-data="<?= $res['data'] ?>"
+                                     data-hora="<?= $res['hora'] ?>"
+                                     data-acompanhantes_qtd="<?= $res['acompanhantes_qtd'] ?>"
+                                     data-estado="<?= htmlspecialchars($res['estado'], ENT_QUOTES) ?>"
+                                     data-cidade="<?= htmlspecialchars($res['cidade'], ENT_QUOTES) ?>"
+                                     data-bairro="<?= htmlspecialchars($res['bairro'], ENT_QUOTES) ?>"
+                                     data-rua="<?= htmlspecialchars($res['rua'], ENT_QUOTES) ?>"
+                                     data-numero="<?= htmlspecialchars($res['numero'], ENT_QUOTES) ?>"
+                                     data-complemento="<?= htmlspecialchars($res['complemento'], ENT_QUOTES) ?>"
+                                     data-cep="<?= htmlspecialchars($res['cep'], ENT_QUOTES) ?>"
+                                     data-observacoes="<?= htmlspecialchars($res['observacoes'], ENT_QUOTES) ?>"
+                                     data-status="<?= $res['status'] ?>"
+                                     >
+                                    <div class="card-body d-flex px-0 gap-4">
+                                        <div class="d-flex flex-column text-center justify-content-center align-items-center px-4 border-end">
+                                            <span class="fs-6 text-uppercase"><?= $data_display ?></span>
+                                            <span class="fs-2 fw-bold"><?= $dia ?></span>
+                                        </div>
+                                        <div class="row row-cols-2 text-muted w-100 align-items-center">
+                                            <div class="col-auto d-flex flex-column justify-content-center gap-2">
+                                                <span>Cliente: <span class="fw-semibold"><?= htmlspecialchars($res['nome'], ENT_QUOTES) ?></span></span>
+                                                <small class="text-muted">Contato: <?= htmlspecialchars(format_phone_display_local($res['telefone']), ENT_QUOTES) ?> · <?= htmlspecialchars($res['email'], ENT_QUOTES) ?></small>
+                                            </div>
+                                            <div class="col-auto d-flex flex-column justify-content-center gap-2">
+                                                <span><i class="bi bi-clock-history"></i> &nbsp;<?= date('H:i', strtotime($res['hora'])) ?></span>
+                                                <span>Status: <span class="fw-semibold px-2 py-1 rounded-pill <?= $badgeClass ?> reserva-badge" data-status="<?= $res['status'] ?>"><?= ucfirst($res['status']) ?></span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="col-12">
+                            <div class="card rounded-5">
+                                <div class="card-body">
+                                    <div class="text-center text-muted">
+                                        <p class="mb-0">Nenhuma reserva feita ainda</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                 </div>
                 <hr class="my-5">
                 <div class="row d-flex align-items-center flex-nowrap">
@@ -802,6 +999,186 @@ mysqli_close($conexao);
 
         dateInput.attr('min', new Date().toISOString().split('T')[0]);
         dateInput.val(new Date().toISOString().split('T')[0]);
+        
+        // --- Handlers para abrir/editar/alterar status/excluir reservas a partir dos cards nesta página ---
+        function fillViewModalFromCard($card) {
+            const id = $card.data('id');
+            $('#view-reserva-id').val(id);
+            $('#view-reserva-nome').val($card.data('nome'));
+            $('#view-reserva-telefone').val($card.data('telefone'));
+            $('#view-reserva-email').val($card.data('email'));
+            $('#view-reserva-preferencia').val($card.data('preferencia_contato'));
+            $('#view-reserva-data').val($card.data('data'));
+            $('#view-reserva-hora').val($card.data('hora'));
+            $('#view-reserva-acomp').val($card.data('acompanhantes_qtd'));
+            $('#view-reserva-estado').val($card.data('estado'));
+            $('#view-reserva-cidade').val($card.data('cidade'));
+            $('#view-reserva-bairro').val($card.data('bairro'));
+            $('#view-reserva-rua').val($card.data('rua'));
+            $('#view-reserva-numero').val($card.data('numero'));
+            $('#view-reserva-complemento').val($card.data('complemento'));
+            $('#view-reserva-cep').val($card.data('cep'));
+            $('#view-reserva-observacoes').val($card.data('observacoes'));
+            const status = $card.data('status');
+            setViewActionButtons(status);
+        }
+
+        function setViewActionButtons(status) {
+            $('#view-reserva-actions').removeClass('d-none');
+            $('#view-reserva-after-confirm, #view-reserva-after-cancel').addClass('d-none');
+            if (status === 'pendente') {
+                $('#view-reserva-actions').removeClass('d-none');
+            } else if (status === 'confirmada') {
+                $('#view-reserva-actions').addClass('d-none');
+                $('#view-reserva-after-confirm').removeClass('d-none');
+            } else if (status === 'cancelada') {
+                $('#view-reserva-actions').addClass('d-none');
+                $('#view-reserva-after-cancel').removeClass('d-none');
+            } else if (status === 'realizada') {
+                $('#view-reserva-actions').addClass('d-none');
+                $('#view-reserva-after-confirm').removeClass('d-none');
+                $('#view-reserva-to-realizada').addClass('d-none');
+            }
+        }
+
+        function updateCardStatus(id, status) {
+            const $card = $('.reserva-card[data-id="' + id + '"]');
+            const $badge = $card.find('.reserva-badge');
+            $badge.text(status.charAt(0).toUpperCase() + status.slice(1));
+            $card.data('status', status);
+            $badge.removeClass('bg-warning-subtle text-warning-emphasis bg-success-subtle text-success-emphasis bg-danger-subtle text-danger-emphasis bg-info-subtle text-info-emphasis bg-secondary-subtle text-secondary');
+            switch (status) {
+                case 'confirmada': $badge.addClass('bg-success-subtle text-success-emphasis'); break;
+                case 'cancelada': $badge.addClass('bg-danger-subtle text-danger-emphasis'); break;
+                case 'realizada': $badge.addClass('bg-info-subtle text-info-emphasis'); break;
+                default: $badge.addClass('bg-warning-subtle text-warning-emphasis'); break;
+            }
+        }
+
+        // Abrir modal ao clicar no cartão (mesma classe .reserva-card usada na listagem)
+        $(document).on('click', '.reserva-card', function() {
+            const $card = $(this);
+            fillViewModalFromCard($card);
+            const modalEl = document.getElementById('view-reserva-view-modal');
+            const modal = new bootstrap.Modal(modalEl);
+            modal.show();
+        });
+
+        // Salvar alterações (update) — construir explicitamente o payload para evitar problemas de serialize
+        $('#view-reserva-save').on('click', function() {
+            const payload = {
+                id: $('#view-reserva-id').val(),
+                action: 'update',
+                nome: $('#view-reserva-nome').val(),
+                telefone: $('#view-reserva-telefone').val(),
+                email: $('#view-reserva-email').val(),
+                preferencia_contato: $('#view-reserva-preferencia').val(),
+                data: $('#view-reserva-data').val(),
+                hora: $('#view-reserva-hora').val(),
+                acompanhantes_qtd: $('#view-reserva-acomp').val(),
+                estado: $('#view-reserva-estado').val(),
+                cidade: $('#view-reserva-cidade').val(),
+                bairro: $('#view-reserva-bairro').val(),
+                rua: $('#view-reserva-rua').val(),
+                numero: $('#view-reserva-numero').val(),
+                complemento: $('#view-reserva-complemento').val(),
+                cep: $('#view-reserva-cep').val(),
+                observacoes: $('#view-reserva-observacoes').val()
+            };
+
+            $.post('../controladores/reservas/atualizar-reserva.php', payload)
+                .done(function(resp) {
+                    if (resp.success) {
+                        const id = payload.id;
+                        const $card = $('.reserva-card[data-id="' + id + '"]');
+                        $card.data('nome', payload.nome);
+                        $card.data('telefone', payload.telefone);
+                        $card.data('email', payload.email);
+                        $card.data('preferencia_contato', payload.preferencia_contato);
+                        $card.data('data', payload.data);
+                        $card.data('hora', payload.hora);
+                        $card.data('acompanhantes_qtd', payload.acompanhantes_qtd);
+                        $card.data('estado', payload.estado);
+                        $card.data('cidade', payload.cidade);
+                        $card.data('bairro', payload.bairro);
+                        $card.data('rua', payload.rua);
+                        $card.data('numero', payload.numero);
+                        $card.data('complemento', payload.complemento);
+                        $card.data('cep', payload.cep);
+                        $card.data('observacoes', payload.observacoes);
+                        $card.find('.fw-semibold').first().text(payload.nome);
+                        // Recarregar para sincronizar mensagens de sessão
+                        location.reload();
+                    } else {
+                        alert('Erro: ' + resp.message);
+                    }
+                })
+                .fail(function() { alert('Erro ao salvar.'); });
+        });
+
+        // Confirmar reserva
+        $('#view-reserva-confirm').on('click', function() {
+            const id = $('#view-reserva-id').val();
+            $.post('../controladores/reservas/atualizar-reserva.php', {id: id, action: 'status', status: 'confirmada'})
+                .done(function(resp) {
+                    if (resp.success) {
+                        updateCardStatus(id, 'confirmada');
+                        setViewActionButtons('confirmada');
+                    } else alert(resp.message);
+                });
+        });
+
+        // Cancelar reserva
+        $('#view-reserva-cancel').on('click', function() {
+            const id = $('#view-reserva-id').val();
+            $.post('../controladores/reservas/atualizar-reserva.php', {id: id, action: 'status', status: 'cancelada'})
+                .done(function(resp) {
+                    if (resp.success) {
+                        updateCardStatus(id, 'cancelada');
+                        setViewActionButtons('cancelada');
+                    } else alert(resp.message);
+                });
+        });
+
+        // Voltar para pendente
+        $('#view-reserva-to-pendente, #view-reserva-to-pendente-2').on('click', function() {
+            const id = $('#view-reserva-id').val();
+            $.post('../controladores/reservas/atualizar-reserva.php', {id: id, action: 'status', status: 'pendente'})
+                .done(function(resp) {
+                    if (resp.success) {
+                        updateCardStatus(id, 'pendente');
+                        setViewActionButtons('pendente');
+                    } else alert(resp.message);
+                });
+        });
+
+        // Marcar como realizada
+        $('#view-reserva-to-realizada').on('click', function() {
+            const id = $('#view-reserva-id').val();
+            $.post('../controladores/reservas/atualizar-reserva.php', {id: id, action: 'status', status: 'realizada'})
+                .done(function(resp) {
+                    if (resp.success) {
+                        updateCardStatus(id, 'realizada');
+                        setViewActionButtons('realizada');
+                    } else alert(resp.message);
+                });
+        });
+
+        // Excluir reserva
+        $('#view-reserva-delete').on('click', function() {
+            if (!confirm('Tem certeza que deseja excluir esta reserva?')) return;
+            const id = $('#view-reserva-id').val();
+            $.post('../controladores/reservas/deletar-reserva.php', {id: id})
+                .done(function(resp) {
+                    if (resp.success) {
+                        $('.reserva-card[data-id="' + id + '"]').parent().fadeOut(300, function() { $(this).remove(); });
+                        const modalEl = document.getElementById('view-reserva-view-modal');
+                        const modal = bootstrap.Modal.getInstance(modalEl);
+                        if (modal) modal.hide();
+                    } else alert(resp.message);
+                })
+                .fail(function() { alert('Erro ao excluir.'); });
+        });
     })
 </script>
 
