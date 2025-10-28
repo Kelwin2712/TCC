@@ -240,6 +240,7 @@ $msg_pos = 0;
                                         <label class="btn btn-outline-dark w-100 text-nowrap overflow-visible text-center text-truncate position-relative" for="option1">
                                             Comprando
                                             <?php
+                                            $nl = false;
                                             foreach ($conversas_comp as $c) {
                                                 if ($c['nao_lidas_comprador'] > 0) {
                                                     $nl = true;
@@ -261,6 +262,7 @@ $msg_pos = 0;
                                         <label class="btn btn-outline-dark w-100 text-nowrap overflow-visible text-center text-truncate position-relative" for="option2">
                                             Vendendo
                                             <?php
+                                            $nl = false;
                                             foreach ($conversas_vend as $c) {
                                                 if ($c['nao_lidas_vendedor'] > 0) {
                                                     $nl = true;

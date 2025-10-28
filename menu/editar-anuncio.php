@@ -53,6 +53,7 @@ if (mysqli_num_rows($resultado) > 0) {
         $email = $linha['email'];
         $telefone = $linha['telefone'];
         $ativo = $linha['ativo'];
+        $condicao = $linha['condicao'] ?? 'N';
     } else {
         header('Location: anuncios.php');
     }
@@ -85,7 +86,13 @@ while ($linha = mysqli_fetch_assoc($resultado)) {
     $carrocerias[] = $linha;
 }
 
-mysqli_close($conexao);
+// fetch fotos for this anuncio to prefill image slots
+$photos = [];
+$qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id_veiculo ORDER BY `ordem` ASC");
+if ($qr) {
+    while ($r = mysqli_fetch_assoc($qr)) $photos[] = $r['caminho_foto'];
+}
+// keep connection open for later actions; we'll close it at end of the file
 ?>
 
 <!doctype html>
@@ -217,114 +224,7 @@ mysqli_close($conexao);
                             </div>
                         </div>
                     </div>
-                    <!-- Modal de visualização/edição de reserva (copiado e adaptado de menu/reservas.php) -->
-                    <div class="modal fade" id="view-reserva-view-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewReservaViewLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="viewReservaViewLabel">Reserva</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <form id="view-reserva-edit-form">
-                                        <input type="hidden" name="id" id="view-reserva-id">
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <label class="form-label">Nome</label>
-                                                <input type="text" id="view-reserva-nome" name="nome" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Telefone</label>
-                                                <input type="tel" id="view-reserva-telefone" name="telefone" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Email</label>
-                                                <input type="email" id="view-reserva-email" name="email" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Preferência de contato</label>
-                                                <select id="view-reserva-preferencia" name="preferencia_contato" class="form-select">
-                                                    <option value="telefone">Telefone</option>
-                                                    <option value="whatsapp">WhatsApp</option>
-                                                    <option value="email">E-mail</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Data</label>
-                                                <input type="date" id="view-reserva-data" name="data" class="form-control">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Hora</label>
-                                                <input type="time" id="view-reserva-hora" name="hora" class="form-control">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Acompanhantes</label>
-                                                <input type="number" id="view-reserva-acomp" name="acompanhantes_qtd" class="form-control" min="0">
-                                            </div>
-                                        </div>
-
-                                        <hr>
-
-                                        <div class="row g-3">
-                                            <div class="col-md-2">
-                                                <label class="form-label">Estado</label>
-                                                <input type="text" id="view-reserva-estado" name="estado" class="form-control" maxlength="2">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Cidade</label>
-                                                <input type="text" id="view-reserva-cidade" name="cidade" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Bairro</label>
-                                                <input type="text" id="view-reserva-bairro" name="bairro" class="form-control">
-                                            </div>
-                                            <div class="col-md-8">
-                                                <label class="form-label">Rua</label>
-                                                <input type="text" id="view-reserva-rua" name="rua" class="form-control">
-                                            </div>
-                                            <div class="col-md-4">
-                                                <label class="form-label">Número</label>
-                                                <input type="text" id="view-reserva-numero" name="numero" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">Complemento</label>
-                                                <input type="text" id="view-reserva-complemento" name="complemento" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label">CEP</label>
-                                                <input type="text" id="view-reserva-cep" name="cep" class="form-control">
-                                            </div>
-                                        </div>
-
-                                        <hr>
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Observações</label>
-                                            <textarea id="view-reserva-observacoes" name="observacoes" class="form-control" rows="3"></textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer d-flex flex-column border-top-0">
-                                    <div class="w-100 d-flex gap-2 mb-2">
-                                        <button type="button" class="btn btn-primary w-100" id="view-reserva-save">Salvar alterações</button>
-                                        <button type="button" class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Fechar</button>
-                                    </div>
-                                    <div class="w-100 d-flex gap-2" id="view-reserva-actions">
-                                        <button type="button" class="btn btn-success w-100" id="view-reserva-confirm">Confirmar</button>
-                                        <button type="button" class="btn btn-danger w-100" id="view-reserva-cancel">Cancelar</button>
-                                    </div>
-                                    <div class="w-100 d-flex gap-2 d-none" id="view-reserva-after-confirm">
-                                        <button type="button" class="btn btn-outline-secondary w-50" id="view-reserva-to-pendente">Voltar para pendente</button>
-                                        <button type="button" class="btn btn-success w-50" id="view-reserva-to-realizada">Marcar como realizada</button>
-                                    </div>
-                                    <div class="w-100 d-flex gap-2 d-none" id="view-reserva-after-cancel">
-                                        <button type="button" class="btn btn-outline-secondary w-50" id="view-reserva-to-pendente-2">Voltar para pendente</button>
-                                        <button type="button" class="btn btn-danger w-50" id="view-reserva-delete">Excluir reserva</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Modal moved to after the main form to avoid nested forms -->
                     <hr class="my-5">
                     <div class="row d-flex align-items-stretch">
                         <div class="col-4">
@@ -479,13 +379,19 @@ mysqli_close($conexao);
                                     <input type="file" id="foto" name="foto" accept="image/*" style="display:none;">
                                 </div>
 
-                                <?php for ($i = 0; $i <= 8; $i++): ?>
+                                <?php
+                                    // show existing photos first (up to 9), then placeholders
+                                    $totalSlots = 9;
+                                    for ($i = 0; $i < $totalSlots; $i++):
+                                        $has = isset($photos[$i]);
+                                        $src = $has ? ('../img/anuncios/carros/' . $id_veiculo . '/' . $photos[$i]) : '../img/compras/1.png';
+                                ?>
                                     <div class="col">
                                         <div class="ratio ratio-16x9 position-relative">
                                             <div class="position-absolute rounded-3 bg-black w-100 h-100 translate-middle start-50 top-50 z-1 bg-opacity-25 text-white d-flex align-items-center justify-content-center text-center fs-2 overlay d-none">
                                                 <i class="bi bi-trash"></i>
                                             </div>
-                                            <img src="../img/compras/1.png" class="img-fluid object-fit-cover shadow-sm rounded-3">
+                                            <img src="<?= $src ?>" class="img-fluid object-fit-cover shadow-sm rounded-3">
                                         </div>
                                     </div>
                                 <?php endfor; ?>
@@ -506,14 +412,13 @@ mysqli_close($conexao);
                                     <div class="row">
                                         <div class="col">
                                             <select class="form-select shadow-sm" id="condicao-select" aria-label="Default select example" name="condicao" required>
-                                                <option value="N">Novo</option>
-                                                <option value="U" <?php if ($quilometragem > 0) {
-                                                                        echo 'selected';
-                                                                    } ?>>Usado</option>
+                                                <option value="N" <?php if (($condicao ?? 'N') === 'N') { echo 'selected'; } ?>>Novo</option>
+                                                <option value="S" <?php if (($condicao ?? '') === 'S') { echo 'selected'; } ?>>Seminovo</option>
+                                                <option value="U" <?php if (($condicao ?? '') === 'U' || ($quilometragem > 0 && empty($condicao))) { echo 'selected'; } ?>>Usado</option>
                                             </select>
                                         </div>
                                         <div class="col-8" style="display: none;">
-                                            <input type="text" class="form-control" id="quilometragem-input" value="<?= $quilometragem ?> km" name="quilometragem" placeholder="Informe a quilometragem do veículo" required>
+                                            <input type="text" class="form-control" id="quilometragem-input" value="<?= ($quilometragem !== '' && is_numeric($quilometragem)) ? number_format((int)$quilometragem, 0, ',', '.') . ' km' : '0 km' ?>" name="quilometragem" placeholder="Informe a quilometragem do veículo" required>
                                         </div>
                                     </div>
                                 </div>
@@ -599,6 +504,116 @@ mysqli_close($conexao);
                     </div>
                     <hr class="my-5">
                 </form>
+
+                <!-- Modal de visualização/edição de reserva (movido para fora do form principal) -->
+                <div class="modal fade" id="view-reserva-view-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="viewReservaViewLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="viewReservaViewLabel">Reserva</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="view-reserva-edit-form">
+                                    <input type="hidden" name="id" id="view-reserva-id">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Nome</label>
+                                            <input type="text" id="view-reserva-nome" name="nome" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Telefone</label>
+                                            <input type="tel" id="view-reserva-telefone" name="telefone" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" id="view-reserva-email" name="email" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Preferência de contato</label>
+                                            <select id="view-reserva-preferencia" name="preferencia_contato" class="form-select">
+                                                <option value="telefone">Telefone</option>
+                                                <option value="whatsapp">WhatsApp</option>
+                                                <option value="email">E-mail</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Data</label>
+                                            <input type="date" id="view-reserva-data" name="data" class="form-control">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Hora</label>
+                                            <input type="time" id="view-reserva-hora" name="hora" class="form-control">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Acompanhantes</label>
+                                            <input type="number" id="view-reserva-acomp" name="acompanhantes_qtd" class="form-control" min="0">
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row g-3">
+                                        <div class="col-md-2">
+                                            <label class="form-label">Estado</label>
+                                            <input type="text" id="view-reserva-estado" name="estado" class="form-control" maxlength="2">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Cidade</label>
+                                            <input type="text" id="view-reserva-cidade" name="cidade" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Bairro</label>
+                                            <input type="text" id="view-reserva-bairro" name="bairro" class="form-control">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <label class="form-label">Rua</label>
+                                            <input type="text" id="view-reserva-rua" name="rua" class="form-control">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Número</label>
+                                            <input type="text" id="view-reserva-numero" name="numero" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Complemento</label>
+                                            <input type="text" id="view-reserva-complemento" name="complemento" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">CEP</label>
+                                            <input type="text" id="view-reserva-cep" name="cep" class="form-control">
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Observações</label>
+                                        <textarea id="view-reserva-observacoes" name="observacoes" class="form-control" rows="3"></textarea>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer d-flex flex-column border-top-0">
+                                <div class="w-100 d-flex gap-2 mb-2">
+                                    <button type="button" class="btn btn-primary w-100" id="view-reserva-save">Salvar alterações</button>
+                                    <button type="button" class="btn btn-outline-secondary w-100" data-bs-dismiss="modal">Fechar</button>
+                                </div>
+                                <div class="w-100 d-flex gap-2" id="view-reserva-actions">
+                                    <button type="button" class="btn btn-success w-100" id="view-reserva-confirm">Confirmar</button>
+                                    <button type="button" class="btn btn-danger w-100" id="view-reserva-cancel">Cancelar</button>
+                                </div>
+                                <div class="w-100 d-flex gap-2 d-none" id="view-reserva-after-confirm">
+                                    <button type="button" class="btn btn-outline-secondary w-50" id="view-reserva-to-pendente">Voltar para pendente</button>
+                                    <button type="button" class="btn btn-success w-50" id="view-reserva-to-realizada">Marcar como realizada</button>
+                                </div>
+                                <div class="w-100 d-flex gap-2 d-none" id="view-reserva-after-cancel">
+                                    <button type="button" class="btn btn-outline-secondary w-50" id="view-reserva-to-pendente-2">Voltar para pendente</button>
+                                    <button type="button" class="btn btn-danger w-50" id="view-reserva-delete">Excluir reserva</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row d-flex align-items-stretch mt-5">
                     <div class="col-4">
                         <h5>Anúncio ativo</h5>
@@ -896,6 +911,7 @@ mysqli_close($conexao);
         $("#garantia-select option[value='<?= $garantia ?>']").prop('selected', true);
         $("#proprietario-select option[value='<?= $proprietario ?>']").prop('selected', true);
         $("#troca-select option[value='<?= $troca ?>']").prop('selected', true);
+    $("#condicao-select option[value='<?= $condicao ?? 'N' ?>']").prop('selected', true);
 
         imgCard.hover(
             function() {

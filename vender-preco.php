@@ -41,7 +41,7 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
           <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm bg-body-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
         </div>
         <div class="card">
-          <form method="post" action="controladores/veiculos/anunciar-veiculo.php" class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
+          <form method="post" action="vender-fotos.php" class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
             <h3 class="mb-4 fw-bold">Preço e negociação</h3>
             <div class="row row-cols-1 row-cols-md-2 w-100 g-4">
               <div class="col">

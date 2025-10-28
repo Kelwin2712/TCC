@@ -37,6 +37,23 @@
                     <?php
                     include('../conexao_bd.php');
 
+                    // fetch current user's avatar if available (fallback to default)
+                                    $user_avatar_src = '../img/usuarios/avatares/user.png';
+                    if (isset($_SESSION['id'])) {
+                        if (!empty($_SESSION['avatar'])) {
+                            $user_avatar_src = '../' . $_SESSION['avatar'];
+                        } else {
+                            $uid = (int) $_SESSION['id'];
+                            $res_av = mysqli_query($conexao, "SELECT avatar FROM usuarios WHERE id = $uid");
+                            if ($res_av && mysqli_num_rows($res_av) > 0) {
+                                $r_av = mysqli_fetch_assoc($res_av);
+                                    if (!empty($r_av['avatar'])) {
+                                    $user_avatar_src = '../' . $r_av['avatar'];
+                                }
+                            }
+                        }
+                    }
+
                     $sql = "SELECT nome, id FROM lojas";
                     $resultado = mysqli_query($conexao, $sql);
 
@@ -45,7 +62,7 @@
                     while ($linha = mysqli_fetch_array($resultado)) {
                         $lojas[] = $linha;
                     }
-                    
+
                     foreach ($lojas as $loja_side):
                     ?>
                     <a href="loja.php?id=<?= $loja_side['id']?>" class="nav-link <?= $loja_id_selected == $loja_side['id'] ? 'active' : ''?> p-2 text-capitalize">
@@ -65,11 +82,11 @@
         </div>
     </nav>
     <hr class="mx-3 mt-auto">
-    <div class="footer flex-shrink-0 mx-3 mb-3 d-flex justify-content-between align-content-center">
+            <div class="footer flex-shrink-0 mx-3 mb-3 d-flex justify-content-between align-content-center">
         <div class="dropdown">
             <a href="#" class="d-flex align-items-center text-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                 <div class="position-relative">
-                    <img src="../img/logo-fahren-bg.jpg" alt="Foto de Perfil" width="32" height="32" class="rounded-circle me-2">
+                    <img src="<?= htmlspecialchars($user_avatar_src) ?>" alt="Foto de Perfil" width="32" height="32" class="rounded-circle me-2">
                 </div>
                 <span class="fw-semibold"><?= $_SESSION['nome'] ?></span>
             </a>

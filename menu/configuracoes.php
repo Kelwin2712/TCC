@@ -13,6 +13,19 @@ $cpf = $_SESSION['cpf'] ?? '';
 $email = $_SESSION['email'] ?? '';
 $data_nascimento = $_SESSION['data_nascimento'] ?? '';
 
+// fetch avatar from DB if available
+include_once '../controladores/conexao_bd.php';
+$avatar = null;
+if (isset($_SESSION['id'])) {
+    $uid = (int) $_SESSION['id'];
+    $res = mysqli_query($conexao, "SELECT avatar FROM usuarios WHERE id = $uid");
+    if ($res && mysqli_num_rows($res) > 0) {
+        $row = mysqli_fetch_assoc($res);
+        $avatar = $row['avatar'];
+    }
+}
+mysqli_close($conexao);
+
 ?>
 <!doctype html>
 <html lang="pt-br">
@@ -50,7 +63,7 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
                     <input type="radio" class="btn-check" name="telas" id="tela-4" autocomplete="off">
                     <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-4">Formas de pagamento</label>
                 </div>
-                <form action="../controladores/mudar-infos.php" class="row d-flex align-items-stretch" id="info-form" method="POST">
+                <form action="../controladores/mudar-infos.php" class="row d-flex align-items-stretch" id="info-form" method="POST" enctype="multipart/form-data">
                     <div class="col-4">
                         <h5>Perfil</h5>
                         <p class="text-muted">Defina as informações da sua conta</p>
@@ -86,15 +99,17 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
                     </div>
 
                     <div class="col-auto d-flex flex-column justify-content-center">
-                        <div class="ratio ratio-1x1 mb-3">
-                            <img src="../img/logo-fahren-bg.jpg" alt="Foto de Perfil"
-                                class="rounded-circle img-fluid mb-3 object-fit-cover">
-                        </div>
+                <div class="ratio ratio-1x1 mb-3">
+                    <?php $avatar_src = (!empty($avatar)) ? ('../' . $avatar) : '../img/usuarios/avatares/user.png'; ?>
+                    <img id="avatar-preview" src="<?= htmlspecialchars($avatar_src) ?>" alt="Foto de Perfil"
+                    class="rounded-circle img-fluid mb-3 object-fit-cover">
+                </div>
 
-                        <div class="d-flex gap-2 w-100">
-                            <button class="btn text-muted border rounded-pill w-100 shadow-sm">Alterar foto</button>
-                            <button class="btn text-muted border rounded-pill shadow-sm"><i class="bi bi-eraser"></i></button>
-                        </div>
+                            <div class="d-flex gap-2 w-100">
+                                <label for="avatar-input" class="btn text-muted border rounded-pill w-100 shadow-sm mb-0 text-center" style="cursor: pointer;">Alterar foto</label>
+                                <button id="avatar-clear" type="button" class="btn text-muted border rounded-pill shadow-sm"><i class="bi bi-eraser"></i></button>
+                                <input type="file" name="avatar" id="avatar-input" accept="image/*" class="d-none">
+                            </div>
                     </div>
 
                     <div class="col-12 mt-4">
@@ -193,6 +208,29 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
 <script src="../script.js"></script>
 <script>
     $(function() {
+        // showAlert: create the same alert markup used by server-side session alerts
+        function showAlert(type, text, timeout = 4500) {
+            // remove any existing alert container
+            $('#alert-mensagem').closest('.position-fixed').remove();
+
+            const icon = (type === 'danger') ? 'bi-exclamation-triangle' : 'bi-check';
+            const $wrap = $('<div/>', { 'class': 'position-fixed d-flex justify-content-center start-50 translate-middle-x mb-5 z-3 bottom-0' });
+            const $alert = $(
+                '<div id="alert-mensagem" class="alert alert-' + type + ' alert-dismissible h-100 rounded-2" role="alert">' +
+                '<div><span><i class=" bi ' + icon + '"></i></span> ' + $('<div/>').text(text).html() + '</div>' +
+                '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>' +
+                '</div>'
+            );
+            $wrap.append($alert);
+            $('body').append($wrap);
+
+            if (timeout > 0) {
+                setTimeout(function() {
+                    try { $alert.alert('close'); } catch (e) { $wrap.remove(); }
+                }, timeout);
+            }
+        }
+
         $('#senha-deletar-input').on('input', function() {
             var senha = $(this).val();
             if (senha.length > 0) {
@@ -200,6 +238,65 @@ $data_nascimento = $_SESSION['data_nascimento'] ?? '';
             } else {
                 $('#delete-btn').prop('disabled', true);
             }
+        });
+        // avatar upload on change (no need to save)
+        $('#avatar-input').on('change', function(e) {
+            const file = this.files && this.files[0];
+            if (!file) return;
+
+            // local preview immediately
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                $('#avatar-preview').attr('src', ev.target.result);
+            }
+            reader.readAsDataURL(file);
+
+            // upload via AJAX
+            const fd = new FormData();
+            fd.append('avatar', file);
+
+            $.ajax({
+                url: '../controladores/upload-avatar.php',
+                type: 'POST',
+                data: fd,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(res) {
+                    if (res && res.success && res.avatar) {
+                        // set preview to the server path (avoids caching because filename includes timestamp)
+                        $('#avatar-preview').attr('src', '../' + res.avatar);
+                        // update sidebar avatar if present
+                        $('.footer img').attr('src', '../' + res.avatar);
+                        // show instant alert using server message if provided
+                        showAlert('success', res.message || 'Foto de perfil atualizada com sucesso.');
+                        // ensure the Save button stays disabled unless other fields changed
+                    } else {
+                        showAlert('danger', (res && res.message) ? res.message : 'Falha ao enviar imagem.');
+                    }
+                },
+                error: function() {
+                    showAlert('danger', 'Erro ao enviar a imagem.');
+                }
+            });
+        });
+
+        $('#avatar-clear').on('click', function() {
+            // request server to remove avatar and update UI
+            $.post('../controladores/remover-avatar.php', {}, function(res) {
+                if (res && res.success) {
+                    // clear file input and reset preview
+                    $('#avatar-input').val('');
+                    $('#avatar-preview').attr('src', '../img/usuarios/avatares/user.png');
+                    $('#info-form button[type="submit"]').prop('disabled', false);
+                    // update sidebar avatar if present
+                    $('.footer img').attr('src', '../img/usuarios/avatares/user.png');
+                    // show instant alert
+                    showAlert('success', res.message || 'Foto de perfil removida com sucesso.');
+                } else {
+                    showAlert('danger', (res && res.message) ? res.message : 'Não foi possível remover a foto.');
+                }
+            }, 'json');
         });
 
         function checkForm() {

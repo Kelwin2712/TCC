@@ -28,8 +28,7 @@ $qtd_resultados = mysqli_num_rows($resultado) ?? 0;
 while ($linha = mysqli_fetch_array($resultado)) {
     $carros[] = $linha;
 }
-
-mysqli_close($conexao);
+// keep DB connection open because we'll query fotos for each anuncio below
 ?>
 
 <!doctype html>
@@ -79,21 +78,28 @@ mysqli_close($conexao);
                             $versao = $carro['versao'];
                             $preco = $carro['preco'];
                             $ano = $carro['ano_fabricacao'] . '/' . $carro['ano_modelo'];
-                            $km = $carro['quilometragem'];
+                            // format quilometragem with thousands separator for display (e.g. 1.000)
+                            $km = is_numeric($carro['quilometragem']) ? number_format((int)$carro['quilometragem'], 0, ',', '.') : $carro['quilometragem'];
                             $cor = $carro['cor'];
                             $troca = $carro['aceita_troca'];
                             $revisao = $carro['revisao'];
                             $id = $carro['id'];
                             $loc = 'São José dos Campos - SP';
+                            // fetch first photo for this anuncio
                             $img1 = '../img/compras/1.png';
+                            $qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id ORDER BY `ordem` ASC LIMIT 1");
+                            if ($qr && mysqli_num_rows($qr) > 0) {
+                                $r = mysqli_fetch_assoc($qr);
+                                if (!empty($r['caminho_foto'])) $img1 = '../img/anuncios/carros/' . $id . '/' . $r['caminho_foto'];
+                            }
                             include('../estruturas/card-compra/card-anuncios.php'); ?>
                         </div>
                     <?php endforeach; ?>
                 </div>
 
                 <div class="row flex-grow-1 d-flex align-items-center <?php if ($qtd_resultados > 0) {
-                                                                            echo 'd-none';
-                                                                        } ?>">
+                                                                                echo 'd-none';
+                                                                            } ?>">
                     <div class="text-center text-muted">
                         <p style="font-size: calc(2rem + 1.5vw) !important;"><i class="bi bi-x-circle-fill"></i></p>
                         <h4 class="mb-0">Nenhuma anúncio feito ainda</h4>
@@ -124,6 +130,7 @@ mysqli_close($conexao);
         </div>
     </main>
 </body>
+<?php if (isset($conexao)) { mysqli_close($conexao); } ?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 <script src="../script.js"></script>

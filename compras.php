@@ -16,19 +16,34 @@ $page = $_GET['page'] ?? 1;
 $quantidade = 3;
 $quantidade = $quantidade * 12;
 
+// sorting
+$sort = $_GET['sort'] ?? 'relevancia';
+$dir = $_GET['dir'] ?? 'desc';
+$dir = strtolower($dir) === 'asc' ? 'asc' : 'desc';
+
+
+$order_sql = '';
+if ($sort === 'preco') {
+  $order_sql = " ORDER BY carros.preco " . ($dir === 'asc' ? 'ASC' : 'DESC');
+} elseif ($sort === 'ano') {
+  // order by fabrication year, newer first by default
+  $order_sql = " ORDER BY carros.ano_fabricacao " . ($dir === 'asc' ? 'ASC' : 'DESC');
+} elseif ($sort === 'km') {
+  $order_sql = " ORDER BY carros.quilometragem " . ($dir === 'asc' ? 'ASC' : 'DESC');
+}
+
 $sql = "SELECT 
-    carros.*, 
-    marcas.nome AS marca_nome,
-    IF(favoritos.id IS NULL, 0, 1) AS favoritado
+  carros.*, 
+  marcas.nome AS marca_nome,
+  IF(favoritos.id IS NULL, 0, 1) AS favoritado
 FROM 
-    anuncios_carros carros
+  anuncios_carros carros
 INNER JOIN 
-    marcas ON carros.marca = marcas.id
+  marcas ON carros.marca = marcas.id
 LEFT JOIN 
-    favoritos ON favoritos.anuncio_id = carros.id 
-               AND favoritos.usuario_id = '$id'
-WHERE ativo = 'A'
-LIMIT $quantidade";
+  favoritos ON favoritos.anuncio_id = carros.id 
+         AND favoritos.usuario_id = '$id'
+WHERE ativo = 'A'" . $order_sql . "\nLIMIT $quantidade";
 
 $resultado = mysqli_query($conexao, $sql);
 
@@ -52,7 +67,7 @@ $marcas = [];
 while ($linha = mysqli_fetch_array($resultado)) {
   $marcas[] = $linha;
 }
-mysqli_close($conexao);
+// keep DB connection open to fetch fotos for each anuncio below
 ?>
 
 <!DOCTYPE html>
@@ -730,10 +745,10 @@ mysqli_close($conexao);
                   <div class="small">Ordenar por: </div>
                   <div class="col-auto">
                     <select id="ordenar-input" class="form-select form-select-sm bg-transparent border-0 fw-semibold">
-                      <option value="relevancia" selected>Relevância</option>
-                      <option value="preco">Preço</option>
-                      <option value="ano">Ano</option>
-                      <option value="km">KM</option>
+                      <option value="relevancia" <?php if ($sort === 'relevancia') echo 'selected'; ?>>Relevância</option>
+                      <option value="preco" <?php if ($sort === 'preco') echo 'selected'; ?>>Preço</option>
+                      <option value="ano" <?php if ($sort === 'ano') echo 'selected'; ?>>Ano</option>
+                      <option value="km" <?php if ($sort === 'km') echo 'selected'; ?>>KM</option>
                     </select>
                   </div>
                 </div>
@@ -754,12 +769,22 @@ mysqli_close($conexao);
                     $revisao = $carro['revisao'];
                     $id = $carro['id'];
                     $loc = 'São José dos Campos - SP';
+                    // fetch up to 6 photos for this anuncio
                     $img1 = 'img/compras/1.png';
                     $img2 = 'img/compras/2.png';
                     $img3 = 'img/compras/3.png';
                     $img4 = 'img/compras/4.png';
                     $img5 = 'img/compras/5.png';
                     $img6 = 'img/compras/6.png';
+                    $qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id ORDER BY `ordem` ASC LIMIT 6");
+                    if ($qr && mysqli_num_rows($qr) > 0) {
+                      $i = 1;
+                      while ($r = mysqli_fetch_assoc($qr)) {
+                        $path = 'img/anuncios/carros/' . $id . '/' . $r['caminho_foto'];
+                        ${'img' . $i} = $path;
+                        $i++;
+                      }
+                    }
                     $favoritado = $carro['favoritado'];
                     include 'estruturas/card-compra/card-compra.php'; ?>
                   </div>
@@ -775,14 +800,15 @@ mysqli_close($conexao);
             <div class="col-12 d-flex justify-content-center">
               <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-dark">
+                  <?php $qs = "&sort=" . urlencode($sort) . "&dir=" . urlencode($dir); ?>
                   <li class="page-item <?php if ($page == 1) {
-                                          echo 'disabled';
-                                        } ?>">
-                    <a class="page-link" href="compras.php?page=<?= $page - 1 ?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
-                  </li>
+                                            echo 'disabled';
+                                          } ?>">
+                      <a class="page-link" href="compras.php?page=<?= $page - 1 ?><?= $qs ?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
+                    </li>
                   <?php if ($page >= 3) {
                     echo '<li class="page-item">
-                  <a class="page-link" href="compras.php?page=1" tabindex="-1" aria-disabled="true">1</a>
+                  <a class="page-link" href="compras.php?page=1' . $qs . '" tabindex="-1" aria-disabled="true">1</a>
                 </li>
                 <li class="page-item disabled">
                   <a class="page-link" href="#" tabindex="-1" aria-disabled="true">...</a>
@@ -794,7 +820,7 @@ mysqli_close($conexao);
                                                                                                       echo $page;
                                                                                                     } else {
                                                                                                       echo $page - 1;
-                                                                                                    } ?>"><?php if ($page == 1) {
+                                                                                                    } ?><?= $qs ?>"><?php if ($page == 1) {
                                                                                                             echo $page;
                                                                                                           } else {
                                                                                                             echo $page - 1;
@@ -805,7 +831,7 @@ mysqli_close($conexao);
                                                                                             echo $page + 1;
                                                                                           } else {
                                                                                             echo $page;
-                                                                                          } ?>"><?php if ($page == 1) {
+                                                                                          } ?><?= $qs ?>"><?php if ($page == 1) {
                                                                                                   echo $page + 1;
                                                                                                 } else {
                                                                                                   echo $page;
@@ -814,7 +840,7 @@ mysqli_close($conexao);
                                                                                       echo $page + 2;
                                                                                     } else {
                                                                                       echo $page + 1;
-                                                                                    } ?>"><?php if ($page == 1) {
+                                                                                    } ?><?= $qs ?>"><?php if ($page == 1) {
                                                                                             echo $page + 2;
                                                                                           } else {
                                                                                             echo $page + 1;
@@ -823,13 +849,13 @@ mysqli_close($conexao);
                                                                                       echo $page + 3;
                                                                                     } else {
                                                                                       echo $page + 2;
-                                                                                    } ?>"><?php if ($page == 1) {
+                                                                                    } ?><?= $qs ?>"><?php if ($page == 1) {
                                                                                             echo $page + 3;
                                                                                           } else {
                                                                                             echo $page + 2;
                                                                                           } ?></a></li>
                   <li class="page-item">
-                    <a class="page-link" href="compras.php?page=<?= $page + 1 ?>"><i class="bi bi-caret-right-fill"></i></a>
+                    <a class="page-link" href="compras.php?page=<?= $page + 1 ?><?= $qs ?>"><i class="bi bi-caret-right-fill"></i></a>
                   </li>
                 </ul>
               </nav>
@@ -840,6 +866,7 @@ mysqli_close($conexao);
   </main>
   <?php include 'estruturas/footer/footer.php' ?>
 </body>
+<?php if (isset($conexao)) { mysqli_close($conexao); } ?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
@@ -908,26 +935,54 @@ mysqli_close($conexao);
 
     const order_btn = $('#ordenar-btn');
     const order_i = $(order_btn).find("i");
+    // initial sort state from server
+    const currentSort = <?= json_encode($sort) ?>;
+    const currentDir = <?= json_encode($dir) ?>;
+
+    // reflect current dir in the icon
+    if (currentSort === 'relevancia') {
+      $(order_i).removeClass('bi-sort-up bi-sort-down').addClass('bi-filter');
+      $(order_btn).prop('disabled', true);
+    } else {
+      $(order_btn).prop('disabled', false);
+      $(order_i).removeClass('bi-filter');
+      if (currentDir === 'asc') {
+        $(order_i).addClass('bi-sort-up');
+      } else {
+        $(order_i).addClass('bi-sort-down');
+      }
+    }
 
     $('#ordenar-input').on('change', function() {
-      if ($(this).val() === 'relevancia') {
-        $(order_i).removeClass('bi-sort-up');
-        $(order_i).removeClass('bi-sort-down');
-        $(order_i).addClass('bi-filter');
-        $(order_btn).prop('disabled', true);
-      } else {
-        $(order_i).addClass('bi-sort-up');
-        $(order_i).removeClass('bi-sort-down');
-        $(order_i).removeClass('bi-filter');
-        $(order_btn).prop('disabled', false);
-      };
+      const val = $(this).val();
+      if (val === 'relevancia') {
+        // go to relevance
+        const url = new URL(window.location.href);
+        url.searchParams.set('sort', 'relevancia');
+        url.searchParams.delete('dir');
+        url.searchParams.delete('page');
+        window.location.href = url.toString();
+        return;
+      }
+      // default to desc for new sorts
+      const url = new URL(window.location.href);
+      url.searchParams.set('sort', val);
+      url.searchParams.set('dir', 'desc');
+      url.searchParams.delete('page');
+      window.location.href = url.toString();
     });
 
     $(order_btn).on('click', function() {
-      if ($(this).val() != 'relevancia') {
-        $(order_i).toggleClass('bi-sort-up');
-        $(order_i).toggleClass('bi-sort-down');
-      };
+      // toggle direction for current sort and reload
+      const sel = $('#ordenar-input').val();
+      if (sel === 'relevancia') return;
+      const url = new URL(window.location.href);
+      const dirNow = url.searchParams.get('dir') === 'asc' ? 'asc' : 'desc';
+      const newDir = dirNow === 'asc' ? 'desc' : 'asc';
+      url.searchParams.set('sort', sel);
+      url.searchParams.set('dir', newDir);
+      url.searchParams.delete('page');
+      window.location.href = url.toString();
     });
 
     $(window).on("scroll", function() {

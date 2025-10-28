@@ -9,7 +9,7 @@ if (!$id_veiculo) {
     exit;
 }
 
-$sql = "SELECT carros.*, marcas.nome as marca_nome, usuarios.nome as vendedor_nome, usuarios.sobrenome as vendedor_sobrenome FROM anuncios_carros carros INNER JOIN marcas ON carros.marca = marcas.id INNER JOIN usuarios ON carros.id_vendedor = usuarios.id WHERE carros.id = $id_veiculo";
+$sql = "SELECT carros.*, marcas.nome as marca_nome, usuarios.nome as vendedor_nome, usuarios.sobrenome as vendedor_sobrenome, usuarios.avatar as vendedor_avatar FROM anuncios_carros carros INNER JOIN marcas ON carros.marca = marcas.id INNER JOIN usuarios ON carros.id_vendedor = usuarios.id WHERE carros.id = $id_veiculo";
 $resultado = mysqli_query($conexao, $sql);
 
 
@@ -20,10 +20,15 @@ if (mysqli_num_rows($resultado) > 0) {
     exit;
 }
 
-mysqli_close($conexao);
+// fetch photos for this vehicle
+$photos = [];
+$qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id_veiculo ORDER BY `ordem` ASC");
+if ($qr) {
+    while ($r = mysqli_fetch_assoc($qr)) $photos[] = $r['caminho_foto'];
+}
 
 $vendedor = $carro['vendedor_nome'] . ' ' . $carro['vendedor_sobrenome'];
-$vendedor_img = 'img/logo-fahren-bg.jpg';
+$vendedor_img = !empty($carro['vendedor_avatar']) ? $carro['vendedor_avatar'] : 'img/usuarios/avatares/user.png';
 $vendedor_est = '4.63';
 ?>
 
@@ -68,36 +73,21 @@ $vendedor_est = '4.63';
                                 <div class="col-12">
                                     <div id="imagems-carro" class="carousel slide" data-quant="1" data-bs-touch="false">
                                         <div class="carousel-inner">
-                                            <div id="crl-1" class="carousel-item active">
-                                                <div class="ratio ratio-16x9">
-                                                    <img src="img/compras/1.png" class="d-block img-fluid object-fit-cover" alt="Imagem 1">
+                                            <?php if (!empty($photos)): ?>
+                                                <?php foreach ($photos as $idx => $ph): ?>
+                                                    <div id="crl-<?= ($idx+1) ?>" class="carousel-item <?= $idx === 0 ? 'active' : '' ?>">
+                                                        <div class="ratio ratio-16x9">
+                                                            <img src="img/anuncios/carros/<?= $id_veiculo ?>/<?= htmlspecialchars($ph) ?>" class="d-block img-fluid object-fit-cover" alt="Imagem <?= ($idx+1) ?>">
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <div class="carousel-item active">
+                                                    <div class="ratio ratio-16x9">
+                                                        <img src="img/compras/1.png" class="d-block img-fluid object-fit-cover" alt="Imagem 1">
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div id="crl-2" class="carousel-item">
-                                                <div class="ratio ratio-16x9">
-                                                    <img src="img/compras/2.png" class="d-block img-fluid object-fit-cover" alt="Imagem 2">
-                                                </div>
-                                            </div>
-                                            <div id="crl-3" class="carousel-item">
-                                                <div class="ratio ratio-16x9">
-                                                    <img src="img/compras/3.png" class="d-block img-fluid object-fit-cover" alt="Imagem 3">
-                                                </div>
-                                            </div>
-                                            <div id="crl-4" class="carousel-item">
-                                                <div class="ratio ratio-16x9">
-                                                    <img src="img/compras/4.png" class="d-block img-fluid object-fit-cover" alt="Imagem 4">
-                                                </div>
-                                            </div>
-                                            <div id="crl-5" class="carousel-item">
-                                                <div class="ratio ratio-16x9">
-                                                    <img src="img/compras/5.png" class="d-block img-fluid object-fit-cover" alt="Imagem 5">
-                                                </div>
-                                            </div>
-                                            <div id="crl-6" class="carousel-item">
-                                                <div class="ratio ratio-16x9">
-                                                    <img src="img/compras/6.png" class="d-block img-fluid object-fit-cover" alt="Imagem 6">
-                                                </div>
-                                            </div>
+                                            <?php endif; ?>
                                         </div>
                                         <div class="row position-absolute bottom-0 p-2">
                                             <div class="col-auto">
@@ -128,27 +118,37 @@ $vendedor_est = '4.63';
                                 </div>
                             </div>
                             <div id="img-row" class="row g-0">
-                                <div class="col-3 selecionado">
-                                    <div class="carro-img ratio ratio-16x9" data-img="1">
-                                        <img src="img/compras/1.png" alt="" class="img-fluid object-fit-cover">
-                                    </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="carro-img ratio ratio-16x9" data-img="2">
-                                        <img src="img/compras/2.png" alt="" class="img-fluid object-fit-cover">
-                                    </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="carro-img ratio ratio-16x9" data-img="3">
-                                        <img src="img/compras/3.png" alt="" class="img-fluid object-fit-cover">
-                                    </div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="carro-img ratio ratio-16x9" data-img="4">
-                                        <img src="img/compras/4.png" alt="" class="img-fluid object-fit-cover">
-                                    </div>
-                                </div>
-                            </div>
+                                                <?php if (!empty($photos)): ?>
+                                                    <?php foreach (array_slice($photos, 0, 4) as $idx => $ph): ?>
+                                                        <div class="col-3 <?= $idx === 0 ? 'selecionado' : '' ?>">
+                                                            <div class="carro-img ratio ratio-16x9" data-img="<?= ($idx+1) ?>">
+                                                                <img src="img/anuncios/carros/<?= $id_veiculo ?>/<?= htmlspecialchars($ph) ?>" alt="" class="img-fluid object-fit-cover">
+                                                            </div>
+                                                        </div>
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                    <div class="col-3 selecionado">
+                                                        <div class="carro-img ratio ratio-16x9" data-img="1">
+                                                            <img src="img/compras/1.png" alt="" class="img-fluid object-fit-cover">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="carro-img ratio ratio-16x9" data-img="2">
+                                                            <img src="img/compras/2.png" alt="" class="img-fluid object-fit-cover">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="carro-img ratio ratio-16x9" data-img="3">
+                                                            <img src="img/compras/3.png" alt="" class="img-fluid object-fit-cover">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <div class="carro-img ratio ratio-16x9" data-img="4">
+                                                            <img src="img/compras/4.png" alt="" class="img-fluid object-fit-cover">
+                                                        </div>
+                                                    </div>
+                                                <?php endif; ?>
+                                            </div>
                         </div>
                     </div>
                 </div>
@@ -244,7 +244,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">KM</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold "><?= $carro['quilometragem'] ?></p>
+                                            <p class="fw-semibold "><?= is_numeric($carro['quilometragem']) ? number_format((int)$carro['quilometragem'], 0, ',', '.') . ' km' : $carro['quilometragem'] ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -352,6 +352,7 @@ $vendedor_est = '4.63';
     <?php include 'estruturas/footer/footer.php' ?>
 
 </body>
+<?php if (isset($conexao)) { mysqli_close($conexao); } ?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
