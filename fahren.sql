@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/10/2025 às 03:00
+-- Tempo de geração: 28/10/2025 às 11:20
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -74,18 +74,23 @@ CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   KEY `vendedor_fk` (`id_vendedor`),
   KEY `estado_fk` (`estado_local`),
   KEY `marca_fk` (`marca`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `anuncios_carros`
 --
 
 INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`, `marca`, `versao`, `carroceria`, `preco`, `condicao`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `blindagem`, `id_vendedor`, `imagens`, `leilao`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`) VALUES
-(28, 'A', 'meu', 'SP', '', 1, '3.9 V8 TURBO GASOLINA F1-DCT', 1, 530.00, 'S', 0, 2025, 2026, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'AAA1A11', '2025-10-10 20:41:00', 8, '3', '2', 'V', 'L', 'A', 'V', '3', 'T', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0),
+(28, 'A', 'seu', 'SP', '', 3, '3.9 V8 TURBO GASOLINA F1-DCT', 5, 51087.51, 'S', 42141, 2025, 2025, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'AAA1A17', '2025-10-10 20:41:00', 8, '1', '2', 'F', 'L', 'I', 'V', '1', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0),
 (29, 'A', 'vini', NULL, NULL, 4, '3.9 V8 TURBO GASOLINA F1-DCTa', NULL, 100000.00, 'N', 0, 2020, 2021, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'ZZZ3Z33', '2025-10-10 20:41:57', 4, '3', '2', 'V', 'L', 'A', 'V', '4', '', '0', 'vinicius@gmail.com', '(11) 11111-1111', 0),
 (30, 'A', '911', NULL, NULL, 3, 'v12', NULL, 4821.00, 'N', 0, 2022, 2022, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'FDA1R23', '2025-10-17 08:23:51', 5, '3', '3', 'F', 'L', 'D', 'V', '4', '', '0', 'kelwin@gmail.com', '(12) 98827-3730', 0),
 (31, 'A', 'da', NULL, NULL, 6, 'v12', NULL, 95.87, 'N', 0, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'GAG2T23', '2025-10-17 08:27:04', 4, '2', '3', 'V', 'L', 'A', 'D', '3', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0),
-(33, 'A', 'b12', NULL, NULL, 3, '3.0 24V GASOLINA TURBO S PDK', NULL, 51965.61, 'N', 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'DAD8D81', '2025-10-17 08:29:44', 3, '4', '1', 'V', 'L', 'A', 'V', '3', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0);
+(33, 'A', 'b12', 'SP', '', 3, '3.0 24V GASOLINA TURBO S PDK', 1, 698168.62, 'N', 0, 2024, 2025, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'DAD8D81', '2025-10-17 08:29:44', 3, '4', '1', 'V', 'L', 'A', 'V', '3', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0),
+(34, 'A', 'seu', NULL, NULL, 4, 'punto', NULL, 100000.00, 'S', 41, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'AAA1A11', '2025-10-26 20:30:29', 4, '3', '2', 'F', 'L', 'A', 'V', '3', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0),
+(35, 'A', 'b12', NULL, NULL, 4, 'punto', NULL, 5151511.53, 'N', 0, 2022, 2022, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'DAD2C41', '2025-10-26 21:02:09', 4, '2', '3', 'F', '0', 'D', 'T', '4', '', '1', 'vinicius@gmail.com', '(12) 98827-3730', 0),
+(36, 'A', 'b12', NULL, NULL, 2, 'punto', NULL, 52341.42, 'N', 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'ART4G32', '2025-10-26 21:09:47', 1, '2', '2', 'V', 'L', 'A', 'T', '3', '', '1', 'vinicius@gmail.com', '(11) 11111-1111', 0),
+(37, 'A', 'afda', NULL, NULL, 2, '3.9 V8 TURBO GASOLINA F1-DCT', NULL, 5843515.16, 'N', 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'TQF2A44', '2025-10-26 21:15:11', 2, '1', '1', 'V', '0', 'D', 'V', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0),
+(42, 'A', 'b12', NULL, NULL, 10, '3.9 V8 TURBO GASOLINA F1-DCT', NULL, 42141.42, 'N', 0, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'AAA1A12', '2025-10-28 07:02:34', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0);
 
 -- --------------------------------------------------------
 
@@ -135,15 +140,15 @@ CREATE TABLE IF NOT EXISTS `conversas` (
   UNIQUE KEY `conversa_unica` (`comprador_id`,`vendedor_id`,`anuncio_id`),
   KEY `para_id` (`vendedor_id`),
   KEY `anuncio_id` (`anuncio_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `conversas`
 --
 
 INSERT INTO `conversas` (`id`, `comprador_id`, `vendedor_id`, `anuncio_id`, `ultima_mensagem`, `data_ultima_mensagem`, `nao_lidas_comprador`, `nao_lidas_vendedor`) VALUES
-(1, 6, 7, 29, 'teste', '2025-10-18 19:49:06', 0, 0),
-(3, 7, 6, 28, 'vinicin lindin', '2025-10-14 07:28:31', 0, 0);
+(1, 6, 7, 29, 'd boas', '2025-10-21 18:25:26', 0, 0),
+(3, 7, 6, 28, 'blz', '2025-10-21 18:25:35', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -239,6 +244,39 @@ CREATE TABLE IF NOT EXISTS `favoritos` (
   UNIQUE KEY `usuario_id` (`usuario_id`,`anuncio_id`),
   KEY `anuncio_id` (`anuncio_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `fotos_carros`
+--
+
+DROP TABLE IF EXISTS `fotos_carros`;
+CREATE TABLE IF NOT EXISTS `fotos_carros` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `carro_id` int(11) DEFAULT NULL,
+  `caminho_foto` varchar(255) DEFAULT NULL,
+  `ordem` int(11) DEFAULT 0,
+  PRIMARY KEY (`id`),
+  KEY `carro_id` (`carro_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `fotos_carros`
+--
+
+INSERT INTO `fotos_carros` (`id`, `carro_id`, `caminho_foto`, `ordem`) VALUES
+(1, 36, '1761523775_747ca926b1fc.png', 0),
+(2, 36, '1761523778_d8973268f6ce.png', 0),
+(3, 36, '1761523781_23336514c342.png', 0),
+(4, 37, '1761524098_21f4fb805b1f.png', 0),
+(5, 37, '1761524098_09bcf72e5408.png', 1),
+(6, 37, '1761524098_8600fec95fac.png', 2),
+(7, 42, '1761645754_55c028bea0d7.png', 0),
+(8, 42, '1761645754_56b6797555bb.png', 1),
+(9, 42, '1761645754_44a277fc2847.png', 2),
+(10, 42, '1761645754_d9393f7f9b0b.png', 3),
+(11, 42, '1761645754_6794bc72a56c.png', 4);
 
 -- --------------------------------------------------------
 
@@ -386,7 +424,7 @@ CREATE TABLE IF NOT EXISTS `mensagens_chat` (
   KEY `de_usuario_id` (`de_usuario`),
   KEY `para_usuario_id` (`para_usuario`),
   KEY `anuncio_id` (`anuncio`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `mensagens_chat`
@@ -418,7 +456,58 @@ INSERT INTO `mensagens_chat` (`id`, `de_usuario`, `para_usuario`, `anuncio`, `te
 (23, 6, 7, 29, 'eae', '2025-10-18 19:45:49', 1, 1, 0, 1, 0, 0),
 (24, 6, 7, 29, 'oi', '2025-10-18 19:48:16', 1, 0, 0, 0, 0, 0),
 (25, 7, 6, 29, 'opa', '2025-10-18 19:49:03', 1, 0, 0, 0, 0, 0),
-(26, 6, 7, 29, 'teste', '2025-10-18 19:49:06', 1, 0, 0, 0, 0, 0);
+(26, 6, 7, 29, 'teste', '2025-10-18 19:49:06', 1, 0, 0, 0, 0, 0),
+(27, 6, 7, 29, 'opa', '2025-10-20 21:34:55', 1, 0, 0, 0, 0, 0),
+(28, 7, 6, 29, 'EAE', '2025-10-20 21:35:20', 1, 0, 0, 0, 0, 0),
+(29, 6, 7, 29, 'BLZ', '2025-10-20 21:35:27', 1, 0, 0, 0, 0, 0),
+(30, 7, 6, 28, 'OPA', '2025-10-21 18:02:51', 1, 0, 0, 0, 0, 0),
+(31, 7, 6, 28, 'de boas', '2025-10-21 18:09:13', 1, 0, 0, 0, 0, 0),
+(32, 7, 6, 28, 'opa', '2025-10-21 18:24:02', 1, 0, 0, 0, 0, 0),
+(33, 6, 7, 28, 'eae', '2025-10-21 18:24:54', 1, 0, 0, 0, 0, 0),
+(34, 7, 6, 29, 'blz', '2025-10-21 18:25:01', 1, 0, 0, 0, 0, 0),
+(35, 6, 7, 29, 'tranquilo', '2025-10-21 18:25:12', 1, 0, 0, 0, 0, 0),
+(36, 7, 6, 29, 'claro', '2025-10-21 18:25:18', 1, 0, 0, 0, 0, 0),
+(37, 7, 6, 29, 'd boas', '2025-10-21 18:25:26', 1, 0, 0, 0, 0, 0),
+(38, 6, 7, 28, 'blz', '2025-10-21 18:25:35', 1, 0, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `reservas`
+--
+
+DROP TABLE IF EXISTS `reservas`;
+CREATE TABLE IF NOT EXISTS `reservas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id_veiculo` int(11) NOT NULL,
+  `nome` varchar(120) NOT NULL,
+  `telefone` varchar(20) NOT NULL,
+  `email` varchar(120) DEFAULT NULL,
+  `preferencia_contato` enum('telefone','whatsapp','email') DEFAULT 'telefone',
+  `data` date NOT NULL,
+  `hora` time NOT NULL,
+  `acompanhantes_qtd` tinyint(3) UNSIGNED DEFAULT 0,
+  `estado` char(2) DEFAULT NULL,
+  `cidade` varchar(100) DEFAULT NULL,
+  `bairro` varchar(100) DEFAULT NULL,
+  `rua` varchar(150) DEFAULT NULL,
+  `numero` varchar(10) DEFAULT NULL,
+  `complemento` varchar(100) DEFAULT NULL,
+  `cep` varchar(9) DEFAULT NULL,
+  `observacoes` text DEFAULT NULL,
+  `status` enum('pendente','confirmada','cancelada','realizada') DEFAULT 'pendente',
+  `criado_em` datetime DEFAULT current_timestamp(),
+  `atualizado_em` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `id_veiculo` (`id_veiculo`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `reservas`
+--
+
+INSERT INTO `reservas` (`id`, `id_veiculo`, `nome`, `telefone`, `email`, `preferencia_contato`, `data`, `hora`, `acompanhantes_qtd`, `estado`, `cidade`, `bairro`, `rua`, `numero`, `complemento`, `cep`, `observacoes`, `status`, `criado_em`, `atualizado_em`) VALUES
+(6, 28, 'Cleitinho', '21421521414', 'kelwin@gmail.com', 'whatsapp', '2025-10-24', '05:26:00', 1, 'SP', 'Teste', 'teste', 'etes', '4512', 'teste', '24115-151', 'dasfaf', 'pendente', '2025-10-23 21:24:33', '2025-10-25 19:51:29');
 
 -- --------------------------------------------------------
 
@@ -437,6 +526,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `senha` varchar(256) NOT NULL,
   `data_criacao_conta` datetime NOT NULL DEFAULT current_timestamp(),
   `data_nascimento` date DEFAULT NULL,
+  `avatar` varchar(255) NOT NULL DEFAULT 'img/user.png',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `telefone` (`telefone`),
@@ -447,9 +537,9 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 -- Despejando dados para a tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `senha`, `data_criacao_conta`, `data_nascimento`) VALUES
-(6, 'Kelwin', 'Silva', 0, '', 'kelwin@gmail.com', '1111AAAA', '2025-09-20 20:44:02', '2025-10-14'),
-(7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1111AAAA', '2025-10-02 22:40:54', NULL);
+INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `senha`, `data_criacao_conta`, `data_nascimento`, `avatar`) VALUES
+(6, 'Kelwin', 'Silva', 12, '12332131312', 'kelwin@gmail.com', '1', '2025-09-20 20:44:02', '2025-10-14', 'img/usuarios/avatares/usuario_6_1761513387.png'),
+(7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1', '2025-10-02 22:40:54', NULL, '');
 
 --
 -- Restrições para tabelas despejadas
@@ -481,12 +571,24 @@ ALTER TABLE `favoritos`
   ADD CONSTRAINT `favoritos_ibfk_2` FOREIGN KEY (`anuncio_id`) REFERENCES `anuncios_carros` (`id`) ON DELETE CASCADE;
 
 --
+-- Restrições para tabelas `fotos_carros`
+--
+ALTER TABLE `fotos_carros`
+  ADD CONSTRAINT `fotos_carros_ibfk_1` FOREIGN KEY (`carro_id`) REFERENCES `anuncios_carros` (`id`) ON DELETE CASCADE;
+
+--
 -- Restrições para tabelas `mensagens_chat`
 --
 ALTER TABLE `mensagens_chat`
   ADD CONSTRAINT `mensagens_chat_ibfk_1` FOREIGN KEY (`de_usuario`) REFERENCES `usuarios` (`id`),
   ADD CONSTRAINT `mensagens_chat_ibfk_2` FOREIGN KEY (`para_usuario`) REFERENCES `usuarios` (`id`),
   ADD CONSTRAINT `mensagens_chat_ibfk_3` FOREIGN KEY (`anuncio`) REFERENCES `anuncios_carros` (`id`);
+
+--
+-- Restrições para tabelas `reservas`
+--
+ALTER TABLE `reservas`
+  ADD CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`id_veiculo`) REFERENCES `anuncios_carros` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
