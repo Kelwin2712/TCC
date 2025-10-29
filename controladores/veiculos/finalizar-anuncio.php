@@ -79,7 +79,19 @@ if (($uploaded_count + count($temp_photos)) < 5) {
 }
 
 // Insert anuncio now that we have enough photos
-$sql = "INSERT INTO anuncios_carros(modelo, marca, versao, ano_fabricacao, ano_modelo, placa, cor, id_vendedor, preco, condicao, quilometragem, quant_proprietario, revisao, vistoria, sinistro, ipva, licenciamento, estado_conservacao, uso_anterior, aceita_troca, email, telefone) VALUES ('{$modelo}', {$marca}, '{$versao}', {$fabr}, {$ano}, ".(is_string($placa)?"'{$placa}'":'NULL').", {$cor}, {$uid}, '{$preco}', '{$condicao}', '{$quilometragem}', {$proprietario}, '{$revisao}', '{$vistoria}', '{$sinistro}', '{$ipva}', '{$licenciamento}', {$consevacao}, '{$uso_anterior}', '{$troca}', '{$email}', '{$telefone}')";
+// Description: accept from POST (client) — sanitize and enforce length limits
+$descricao = '';
+if (isset($_POST['descricao'])) {
+    $descricao = mysqli_real_escape_string($conexao, trim($_POST['descricao']));
+    // enforce limits server-side
+    if (mb_strlen($descricao) < 100 || mb_strlen($descricao) > 1000) {
+        echo json_encode(['success' => false, 'message' => 'A descrição deve ter entre 100 e 1000 caracteres.']);
+        mysqli_close($conexao);
+        exit;
+    }
+}
+
+$sql = "INSERT INTO anuncios_carros(modelo, marca, versao, ano_fabricacao, ano_modelo, placa, cor, descricao, id_vendedor, preco, condicao, quilometragem, quant_proprietario, revisao, vistoria, sinistro, ipva, licenciamento, estado_conservacao, uso_anterior, aceita_troca, email, telefone) VALUES ('{$modelo}', {$marca}, '{$versao}', {$fabr}, {$ano}, ".(is_string($placa)?"'{$placa}'":'NULL').", {$cor}, '" . $descricao . "', {$uid}, '{$preco}', '{$condicao}', '{$quilometragem}', {$proprietario}, '{$revisao}', '{$vistoria}', '{$sinistro}', '{$ipva}', '{$licenciamento}', {$consevacao}, '{$uso_anterior}', '{$troca}', '{$email}', '{$telefone}')";
 
 if (!mysqli_query($conexao, $sql)) {
     echo json_encode(['success' => false, 'message' => 'Erro ao inserir anúncio']);

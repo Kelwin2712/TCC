@@ -114,6 +114,14 @@ mysqli_close($conexao);
               <?php endif; ?>
             </div>
             
+            <hr class="my-4">
+
+            <div class="mb-3">
+              <label for="descricao" class="form-label">Descrição do anúncio <small class="text-muted">(mín. 100 — máx. 1000 caracteres)</small></label>
+              <textarea id="descricao" name="descricao" class="form-control" rows="6" maxlength="1000" placeholder="Descreva o veículo: estado, opcionais, histórico, diferenciais..."></textarea>
+              <div class="form-text text-end"><span id="desc-count">0</span>/1000</div>
+            </div>
+            
             <div class="row d-flex justify-content-between align-items-center w-100 mt-5">
               <div class="col-auto">
                 <a href="vender-placa.php" class="btn text-muted"><i class="bi bi-caret-left"></i>&nbsp;Voltar</a>
@@ -127,6 +135,24 @@ mysqli_close($conexao);
         </div>
       </div>
     </main>
+  </div>
+  <!-- Confirmation modal -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Confirmar publicação</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Deseja finalizar e publicar o anúncio agora? Verifique se a descrição e as fotos estão corretas.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" id="confirm-finalize" class="btn btn-primary">Sim, publicar</button>
+        </div>
+      </div>
+    </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
@@ -152,7 +178,9 @@ mysqli_close($conexao);
         const count = $('#gallery .thumb-wrap').length;
         const $final = $('#finalizar-btn');
         if ($final.length === 0) return; // not in temp mode
-        if (count >= 5) {
+        const descLen = ($('#descricao').val() || '').trim().length;
+        // require at least 5 photos and description length between 100 and 1000
+        if (count >= 5 && descLen >= 100 && descLen <= 1000) {
           $final.prop('disabled', false);
         } else {
           $final.prop('disabled', true);
@@ -255,17 +283,32 @@ mysqli_close($conexao);
         updateFinalButton();
       });
 
-      // finalize anuncio: send any pending files together with finalize request
+      // Description input: update counter and final button enabled state
+      $('#descricao').on('input', function() {
+        const len = ($(this).val() || '').length;
+        $('#desc-count').text(len);
+        updateFinalButton();
+      });
+
+      // finalize anuncio: show modal first, then send pending files together with descricao when confirmed
       $('#finalizar-btn').on('click', function(e) {
         e.preventDefault();
-        // require at least 5 images (previews count includes pending + uploaded thumbnails)
         const count = $('#gallery .thumb-wrap').length;
         if (count < 5) { showAlert('danger', 'É necessário pelo menos 5 fotos para finalizar.'); return; }
-        if (!confirm('Finalizar e publicar anúncio?')) return;
+        const desc = ($('#descricao').val() || '').trim();
+        if (desc.length < 100 || desc.length > 1000) { showAlert('danger', 'A descrição deve ter entre 100 e 1000 caracteres.'); return; }
+        // show confirmation modal
+        const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        modal.show();
+      });
 
-        // build FormData containing pending files (if any). We do not send carro_id because we're creating a new anuncio.
+      // when user confirms in modal, perform upload
+      $('#confirm-finalize').on('click', function() {
+        const $btn = $(this);
+        $btn.prop('disabled', true).text('Enviando...');
         const fd = new FormData();
         pendingFiles.forEach(function(f) { if (f && f.file) fd.append('fotos[]', f.file); });
+        fd.append('descricao', ($('#descricao').val() || '').trim());
 
         $.ajax({
           url: 'controladores/veiculos/finalizar-anuncio.php',
@@ -283,6 +326,11 @@ mysqli_close($conexao);
             }
           },
           error: function() { showAlert('danger', 'Erro ao finalizar anúncio.'); }
+        }).always(function() {
+          $btn.prop('disabled', false).text('Sim, publicar');
+          const modalEl = document.getElementById('confirmModal');
+          const modal = bootstrap.Modal.getInstance(modalEl);
+          if (modal) modal.hide();
         });
       });
 

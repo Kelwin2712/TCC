@@ -69,7 +69,7 @@
                         <img src="../img/logo-fahren-bg.jpg" alt="Foto de Perfil" width="28" height="28" class="rounded-circle me-2">
                         <?= $loja_side['nome'] ?>
                     </a>
-                    <?php endforeach; mysqli_close($conexao);?>
+                    <?php endforeach; ?>
                     <button class="nav-link p-2 d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#loja-modal">
                         <span class="d-inline-flex justify-content-center align-items-center bg-body-secondary rounded-circle me-2"
                             style="width:28px; height:28px;">

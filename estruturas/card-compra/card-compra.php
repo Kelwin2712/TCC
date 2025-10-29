@@ -1,41 +1,37 @@
 <div class="card card-compra shadow-hover border-1 border-secondary border-opacity-25 position-relative overflow-hidden h-100">
-    <div id="<?= $id ?>" class="carousel slide card-img-top position-relative" data-quant="1">
+    <?php
+    // Use $imgs array provided by caller (fetched from DB). If not set, fallback to empty.
+    $imgs_arr = [];
+    if (isset($imgs) && is_array($imgs)) {
+        foreach ($imgs as $im) {
+            if (!empty($im)) $imgs_arr[] = $im;
+        }
+    }
+    $imgCount = count($imgs_arr);
+    $dataQuant = $imgCount > 0 ? $imgCount : 1;
+    ?>
+    <div id="<?= $id ?>" class="carousel slide card-img-top position-relative" data-quant="<?= $dataQuant ?>">
         <div class="carousel-inner">
             <a class="carro-img" href="pagina-venda.php?id=<?= $id?>">
-                <div class="carousel-item active">
-                    <div class="ratio ratio-4x3">
-                        <img src="<?= $img1; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem 1">
+                <?php if ($imgCount > 0): ?>
+                    <?php foreach ($imgs_arr as $index => $src): ?>
+                        <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
+                            <div class="ratio ratio-4x3">
+                                <img src="<?= $src; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem <?= ($index+1) ?>">
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <div class="carousel-item active">
+                        <div class="ratio ratio-4x3 d-flex align-items-center justify-content-center bg-secondary bg-opacity-10">
+                            <span class="text-muted">Sem imagem</span>
+                        </div>
                     </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="ratio ratio-4x3">
-                        <img src="<?= $img2; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem 2">
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="ratio ratio-4x3">
-                        <img src="<?= $img3; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem 3">
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="ratio ratio-4x3">
-                        <img src="<?= $img4; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem 4">
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="ratio ratio-4x3">
-                        <img src="<?= $img5; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem 5">
-                    </div>
-                </div>
-                <div class="carousel-item">
-                    <div class="ratio ratio-4x3">
-                        <img src="<?= $img6; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem 6">
-                    </div>
-                </div>
+                <?php endif; ?>
             </a>
-            <div id="img-quant" class="row position-absolute bottom-0 p-2" style="display: none;">
+            <div id="img-quant" class="row position-absolute bottom-0 p-2" style="display: <?= $imgCount > 1 ? 'block' : 'none' ?>;">
                 <div class="col-auto">
-                    <div class="text-bg-dark bg-opacity-50 rounded-pill py-1" style="font-size: .8rem; padding-left: .75rem; padding-right: .75rem;"><span class="min">1</span>/<span class="max"></span></div>
+                    <div class="text-bg-dark bg-opacity-50 rounded-pill py-1" style="font-size: .8rem; padding-left: .75rem; padding-right: .75rem;"><span class="min">1</span>/<span class="max"><?= $dataQuant ?></span></div>
                 </div>
             </div>
             <div class="row position-absolute top-0 end-0 p-2 favoritar-btn">

@@ -45,8 +45,6 @@ if (!isset($_SESSION['id'])) {
                     class="form-control w-100 h-100 bg-transparent text-center text-uppercase border-0"
                     name="placa"
                     id="placa"
-                    pattern="[A-Z]{3}[0-9][A-Z][0-9]{2}"
-                    title="Formato: 3 letras + 1 número + 1 letra + 2 números (ex: ABC1D23)"
                     placeholder="ABC1D23"
                     style="font-size: calc(300% + 1.25vw); line-height: 1; border: none !important; outline: none !important; box-shadow: none !important;background: transparent !important;" maxlength="7" required>
                 </div>
@@ -75,30 +73,42 @@ if (!isset($_SESSION['id'])) {
     let texto = $input.val().toUpperCase();
     texto = texto.replace(/[^A-Z0-9]/g, '');
 
-    const pattern = ['L', 'L', 'L', 'N', 'L', 'N', 'N'];
-    let resultado = '';
-    let i = 0;
+    // Two accepted patterns:
+    // old: L L L N N N N  => AAA1111
+    // mercosul: L L L N L N N => AAA1A11
+    const patternOld = ['L','L','L','N','N','N','N'];
+    const patternMerc = ['L','L','L','N','L','N','N'];
 
-    for (let p = 0; p < pattern.length && i < texto.length;) {
-      const ch = texto[i];
-      if (pattern[p] === 'L') {
-        if (/[A-Z]/.test(ch)) {
-          resultado += ch;
-          p++;
-          i++;
+    function buildFromPattern(txt, pattern) {
+      let res = '';
+      let i = 0;
+      for (let p = 0; p < pattern.length && i < txt.length;) {
+        const ch = txt[i];
+        if (pattern[p] === 'L') {
+          if (/[A-Z]/.test(ch)) {
+            res += ch;
+            p++; i++;
+          } else {
+            i++; // skip non-letter for this slot
+          }
         } else {
-          i++;
-        }
-      } else {
-        if (/[0-9]/.test(ch)) {
-          resultado += ch;
-          p++;
-          i++;
-        } else {
-          i++;
+          if (/[0-9]/.test(ch)) {
+            res += ch;
+            p++; i++;
+          } else {
+            i++; // skip non-digit for this slot
+          }
         }
       }
+      return res;
     }
+
+    const outOld = buildFromPattern(texto, patternOld);
+    const outMerc = buildFromPattern(texto, patternMerc);
+
+    // choose the one that consumed more characters (prefer mercosul if tie)
+    let resultado = outOld.length > outMerc.length ? outOld : outMerc;
+    if (outOld.length === outMerc.length) resultado = outMerc;
 
     $input.val(resultado);
   }
@@ -109,7 +119,9 @@ if (!isset($_SESSION['id'])) {
   placaInput.on('input', function() {
     formatarPlacaRobusto($(this));
 
-    if ($(this).val().length === 7) {
+    const val = $(this).val();
+    const placaRegex = /^([A-Z]{3}[0-9]{4}|[A-Z]{3}[0-9][A-Z][0-9]{2})$/;
+    if (placaRegex.test(val)) {
       proxBtn.prop('disabled', false);
     } else {
       proxBtn.prop('disabled', true);

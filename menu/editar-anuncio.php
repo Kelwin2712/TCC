@@ -115,6 +115,51 @@ if ($qr) {
         transition: all 0.25s ease;
     }
 
+    /* Drag & drop previews */
+    .image-dropzone {
+        border: 2px dashed #ced4da;
+        padding: 0.5rem;
+        border-radius: .5rem;
+        transition: border-color .15s ease, background-color .15s ease;
+        background-clip: padding-box;
+    }
+    .image-dropzone.dragover {
+        border-color: #0d6efd;
+        background-color: rgba(13,110,253,0.03);
+    }
+    .img-item { position: relative; }
+    /* circular delete button hidden by default, appears on hover/focus */
+    .img-item .delete-mark {
+        position: absolute;
+        top: .5rem;
+        right: .5rem;
+        z-index: 10;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        width: 34px;
+        height: 34px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        border: none;
+        padding: 0;
+        font-size: 1rem;
+    }
+    /* show delete icon only on hover/focus for accessibility */
+    .img-item:hover .delete-mark,
+    .img-item:focus-within .delete-mark {
+        display: flex;
+    }
+    /* marked state: reduce image opacity (no green/highlight) */
+    .img-item.marked img {
+        opacity: 0.6;
+        transition: opacity .12s ease;
+    }
+    /* remove previous new-badge usage (new previews match existing images) */
+    .img-item .new-badge { display: none; }
+
     /* Switch estilo Uiverse - Versão Fahren */
     .form-switch {
         position: relative;
@@ -171,6 +216,36 @@ if ($qr) {
     .form-switch label .btn-text {
         display: none;
     }
+    
+    /* Add-image tile (appear like other image cards but darker and with +) */
+    .img-item.add-item .ratio {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: rgba(0,0,0,0.03);
+        border-radius: .5rem;
+        cursor: pointer;
+        transition: background-color .15s ease, transform .12s ease;
+        color: rgba(33,37,41,0.8);
+    }
+    .img-item.add-item .ratio:hover {
+        background-color: rgba(0,0,0,0.06);
+        transform: translateY(-2px);
+    }
+    .img-item.add-item .add-plus {
+        font-size: 2rem;
+        line-height: 1;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+        user-select: none;
+    }
+    .img-item.add-item:focus-within .ratio,
+    .img-item.add-item:focus .ratio {
+        outline: 3px solid rgba(13,110,253,0.12);
+    }
 </style>
 
 <body class="overflow-x-hidden">
@@ -181,7 +256,7 @@ if ($qr) {
         include_once '../estruturas/sidebar/sidebar.php' ?>
         <div class="col" style="margin-left: calc(200px + 5vw);">
             <div class="container-fluid p-5 d-flex flex-column h-100 overflow-auto">
-                <form action="../controladores/veiculos/mudar-infos-carro.php" method="POST">
+                <form id="edit-anuncio-form" action="../controladores/veiculos/mudar-infos-carro.php" method="POST" enctype="multipart/form-data">
                     <div class="row">
                         <h2 class="pb-2 fw-semibold mb-0">Meus anúncios</h2>
                         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
@@ -357,6 +432,12 @@ if ($qr) {
                                         <option value="12">12 meses ou mais</option>
                                     </select>
                                 </div>
+                                <!-- descricao editavel abaixo de placa/garantia -->
+                                <div class="col-12 mt-3">
+                                    <label for="descricao-input" class="form-label">Descrição do veículo</label>
+                                    <textarea id="descricao-input" name="descricao" class="form-control" rows="4" maxlength="1000" placeholder="Descreva o veículo (100 a 1000 caracteres)"><?= htmlspecialchars($linha['descricao'] ?? '', ENT_QUOTES) ?></textarea>
+                                    <div class="form-text text-end"><span id="desc-count"><?= mb_strlen($linha['descricao'] ?? '') ?></span>/1000</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -368,35 +449,38 @@ if ($qr) {
                         </div>
 
                         <div class="col d-flex justify-content-between">
-                            <div class="row row-cols-3 row-cols-xxl-5 row-gap-3 mb-3 w-100">
-                                <div class="col">
-                                    <label for="foto" class="upload-foto ratio ratio-16x9 border border-secondary-subtle fs-2 text-secondary text-center border-1 bg-secondary-subtle rounded-3" style="cursor: pointer;">
-                                        <div class="d-flex flex-column justify-content-center align-items-center w-100 h-100">
-                                            <span><i class="bi bi-plus-lg"></i></span>
-                                        </div>
-                                    </label>
-
-                                    <input type="file" id="foto" name="foto" accept="image/*" style="display:none;">
-                                </div>
-
-                                <?php
-                                    // show existing photos first (up to 9), then placeholders
-                                    $totalSlots = 9;
-                                    for ($i = 0; $i < $totalSlots; $i++):
-                                        $has = isset($photos[$i]);
-                                        $src = $has ? ('../img/anuncios/carros/' . $id_veiculo . '/' . $photos[$i]) : '../img/compras/1.png';
-                                ?>
-                                    <div class="col">
-                                        <div class="ratio ratio-16x9 position-relative">
-                                            <div class="position-absolute rounded-3 bg-black w-100 h-100 translate-middle start-50 top-50 z-1 bg-opacity-25 text-white d-flex align-items-center justify-content-center text-center fs-2 overlay d-none">
-                                                <i class="bi bi-trash"></i>
-                                            </div>
-                                            <img src="<?= $src ?>" class="img-fluid object-fit-cover shadow-sm rounded-3">
+                                <div class="w-100">
+                                    <div class="d-flex justify-content-end align-items-center mb-2">
+                                        <div>
+                                            <small class="text-muted mb-2">Fotos existentes: <?= count($photos) ?></small>
                                         </div>
                                     </div>
-                                <?php endfor; ?>
+
+                                    <div id="image-dropzone" class="image-dropzone">
+                                        <input type="file" id="new-fotos-input" name="new_fotos[]" accept="image/*" multiple style="display:none;">
+                                        <div id="images-grid" class="row row-cols-3 row-cols-xxl-5 row-gap-3 mb-0 g-3">
+                                                <!-- Add-image tile: appears as the FIRST card among images -->
+                                                <div class="col img-item add-item" role="button" tabindex="0" aria-label="Adicionar fotos">
+                                                    <div class="ratio ratio-16x9 position-relative">
+                                                        <div class="add-plus"><i class="bi bi-plus-lg"></i></div>
+                                                    </div>
+                                                </div>
+                                                <?php
+                                                    // render existing photos
+                                                    foreach ($photos as $p):
+                                                        $src = '../img/anuncios/carros/' . $id_veiculo . '/' . $p;
+                                                ?>
+                                                    <div class="col img-item existing-item" data-filename="<?= htmlspecialchars($p, ENT_QUOTES) ?>">
+                                                        <div class="ratio ratio-16x9 position-relative">
+                                                            <button type="button" class="delete-mark" title="Marcar para deletar"><i class="bi bi-trash"></i></button>
+                                                            <img src="<?= $src ?>" class="img-fluid object-fit-cover shadow-sm rounded-3">
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
                     </div>
                     <hr class="my-5">
                     <div class="row d-flex align-items-stretch">
@@ -1195,6 +1279,153 @@ if ($qr) {
                 })
                 .fail(function() { alert('Erro ao excluir.'); });
         });
+
+        // ---- Image editor: drag & drop, paste, add, mark for delete (apply on save) ----
+        const $dropzone = $('#image-dropzone');
+        const $fileInput = $('#new-fotos-input');
+        const $imagesGrid = $('#images-grid');
+        const $form = $('#edit-anuncio-form');
+        let newFiles = []; // array of File objects to upload
+        let deletions = []; // filenames (existing) marked for deletion
+
+        function renderNewPreview(file, idx) {
+            const url = URL.createObjectURL(file);
+            const $col = $(`
+                <div class="col img-item new-item" data-new-index="${idx}">
+                    <div class="ratio ratio-16x9 position-relative">
+                        <button type="button" class="delete-mark" title="Remover"><i class="bi bi-x-lg"></i></button>
+                        <img src="${url}" class="img-fluid object-fit-cover shadow-sm rounded-3">
+                    </div>
+                </div>
+            `);
+            // delete handler for new file
+            $col.find('.delete-mark').on('click', function() {
+                // remove from newFiles by index marker
+                const i = parseInt($col.attr('data-new-index'));
+                newFiles[i] = null; // mark removed; will be filtered later
+                $col.remove();
+            });
+            // append new preview at the end so added images appear last
+            $imagesGrid.append($col);
+        }
+
+        function addFilesList(list) {
+            for (let i=0;i<list.length;i++) {
+                const f = list[i];
+                if (!f || !f.type.startsWith('image/')) continue;
+                newFiles.push(f);
+                renderNewPreview(f, newFiles.length - 1);
+            }
+        }
+
+        // Open file input when clicking the add-image tile (or pressing Enter/Space when focused)
+        $imagesGrid.on('click', '.img-item.add-item', function() { $fileInput.trigger('click'); });
+        $imagesGrid.on('keydown', '.img-item.add-item', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                $fileInput.trigger('click');
+            }
+        });
+
+        $fileInput.on('change', function(e) {
+            const files = e.target.files;
+            addFilesList(files);
+            // reset input so selecting same file again works
+            $(this).val('');
+        });
+
+        $dropzone.on('dragover', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            $(this).addClass('dragover');
+        });
+        $dropzone.on('dragleave dragend drop', function(e) { e.preventDefault(); e.stopPropagation(); $(this).removeClass('dragover'); });
+        $dropzone.on('drop', function(e) {
+            const dt = e.originalEvent.dataTransfer;
+            if (!dt) return;
+            if (dt.files && dt.files.length) {
+                addFilesList(dt.files);
+            }
+        });
+
+        // Paste support (Ctrl+V)
+        $(document).on('paste', function(e) {
+            const items = (e.originalEvent.clipboardData || e.clipboardData).items;
+            if (!items) return;
+            const files = [];
+            for (let i=0;i<items.length;i++) {
+                const it = items[i];
+                if (it.kind === 'file') {
+                    const f = it.getAsFile();
+                    if (f) files.push(f);
+                }
+            }
+            if (files.length) addFilesList(files);
+        });
+
+        // toggle deletion for existing items
+        $imagesGrid.on('click', '.existing-item .delete-mark', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            const $item = $(this).closest('.existing-item');
+            const filename = $item.data('filename');
+            if (!$item.hasClass('marked')) {
+                $item.addClass('marked');
+                deletions.push(filename);
+                $(this).attr('title', 'Desmarcar exclusão');
+                $(this).html('<i class="bi bi-check-lg"></i>');
+            } else {
+                $item.removeClass('marked');
+                deletions = deletions.filter(x => x !== filename);
+                $(this).attr('title', 'Marcar para deletar');
+                $(this).html('<i class="bi bi-trash"></i>');
+            }
+        });
+
+        // on submit: build FormData including deletions and newFiles and send via AJAX
+        $form.on('submit', function(e) {
+            e.preventDefault();
+            const fd = new FormData(this);
+            // append deletions
+            for (let i=0;i<deletions.length;i++) fd.append('delete_photos[]', deletions[i]);
+            // append new files
+            for (let i=0;i<newFiles.length;i++) {
+                const f = newFiles[i];
+                if (!f) continue;
+                fd.append('new_fotos[]', f, f.name);
+            }
+
+            // disable save button
+            const $saveBtn = $form.find('button[type=submit]');
+            $saveBtn.prop('disabled', true).text('Salvando...');
+
+            $.ajax({
+                url: $form.attr('action'),
+                method: 'POST',
+                data: fd,
+                processData: false,
+                contentType: false,
+                dataType: 'json'
+            }).done(function(resp){
+                if (resp && resp.success) {
+                    if (resp.redirect) location.href = resp.redirect;
+                    else location.reload();
+                } else {
+                    alert((resp && resp.message) ? resp.message : 'Erro ao salvar alterações.');
+                    $saveBtn.prop('disabled', false).text('Salvar alterações  \u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0');
+                }
+            }).fail(function() {
+                alert('Erro de comunicação ao salvar.');
+                $saveBtn.prop('disabled', false).text('Salvar alterações  \u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0');
+            });
+        });
+
+        // descrição counter
+        const $desc = $('#descricao-input');
+        const $descCount = $('#desc-count');
+        if ($desc.length) {
+            $desc.on('input', function() {
+                $descCount.text($(this).val().length);
+            });
+        }
     })
 </script>
 

@@ -1,7 +1,7 @@
 <div class="card card-compra shadow-hover border-1 border-secondary border-opacity-25 position-relative h-100">
     <div class="row g-0">
         <div class="col-12 col-lg-4 col-xxl-2">
-            <div class="ratio ratio-4x3 bg-danger h-100">
+            <div class="ratio ratio-4x3 h-100">
                 <img src="<?= $img1; ?>" class="img-fluid object-fit-cover" alt="Imagem 1">
             </div>
         </div>

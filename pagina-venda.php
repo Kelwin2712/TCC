@@ -75,9 +75,9 @@ $vendedor_est = '4.63';
                                         <div class="carousel-inner">
                                             <?php if (!empty($photos)): ?>
                                                 <?php foreach ($photos as $idx => $ph): ?>
-                                                    <div id="crl-<?= ($idx+1) ?>" class="carousel-item <?= $idx === 0 ? 'active' : '' ?>">
+                                                    <div id="crl-<?= ($idx + 1) ?>" class="carousel-item <?= $idx === 0 ? 'active' : '' ?>">
                                                         <div class="ratio ratio-16x9">
-                                                            <img src="img/anuncios/carros/<?= $id_veiculo ?>/<?= htmlspecialchars($ph) ?>" class="d-block img-fluid object-fit-cover" alt="Imagem <?= ($idx+1) ?>">
+                                                            <img src="img/anuncios/carros/<?= $id_veiculo ?>/<?= htmlspecialchars($ph) ?>" class="d-block img-fluid object-fit-cover" alt="Imagem <?= ($idx + 1) ?>">
                                                         </div>
                                                     </div>
                                                 <?php endforeach; ?>
@@ -118,37 +118,37 @@ $vendedor_est = '4.63';
                                 </div>
                             </div>
                             <div id="img-row" class="row g-0">
-                                                <?php if (!empty($photos)): ?>
-                                                    <?php foreach (array_slice($photos, 0, 4) as $idx => $ph): ?>
-                                                        <div class="col-3 <?= $idx === 0 ? 'selecionado' : '' ?>">
-                                                            <div class="carro-img ratio ratio-16x9" data-img="<?= ($idx+1) ?>">
-                                                                <img src="img/anuncios/carros/<?= $id_veiculo ?>/<?= htmlspecialchars($ph) ?>" alt="" class="img-fluid object-fit-cover">
-                                                            </div>
-                                                        </div>
-                                                    <?php endforeach; ?>
-                                                <?php else: ?>
-                                                    <div class="col-3 selecionado">
-                                                        <div class="carro-img ratio ratio-16x9" data-img="1">
-                                                            <img src="img/compras/1.png" alt="" class="img-fluid object-fit-cover">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <div class="carro-img ratio ratio-16x9" data-img="2">
-                                                            <img src="img/compras/2.png" alt="" class="img-fluid object-fit-cover">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <div class="carro-img ratio ratio-16x9" data-img="3">
-                                                            <img src="img/compras/3.png" alt="" class="img-fluid object-fit-cover">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <div class="carro-img ratio ratio-16x9" data-img="4">
-                                                            <img src="img/compras/4.png" alt="" class="img-fluid object-fit-cover">
-                                                        </div>
-                                                    </div>
-                                                <?php endif; ?>
+                                <?php if (!empty($photos)): ?>
+                                    <?php foreach (array_slice($photos, 0, 4) as $idx => $ph): ?>
+                                        <div class="col-3 <?= $idx === 0 ? 'selecionado' : '' ?>">
+                                            <div class="carro-img ratio ratio-16x9" data-img="<?= ($idx + 1) ?>">
+                                                <img src="img/anuncios/carros/<?= $id_veiculo ?>/<?= htmlspecialchars($ph) ?>" alt="" class="img-fluid object-fit-cover">
                                             </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <div class="col-3 selecionado">
+                                        <div class="carro-img ratio ratio-16x9" data-img="1">
+                                            <img src="img/compras/1.png" alt="" class="img-fluid object-fit-cover">
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="carro-img ratio ratio-16x9" data-img="2">
+                                            <img src="img/compras/2.png" alt="" class="img-fluid object-fit-cover">
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="carro-img ratio ratio-16x9" data-img="3">
+                                            <img src="img/compras/3.png" alt="" class="img-fluid object-fit-cover">
+                                        </div>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="carro-img ratio ratio-16x9" data-img="4">
+                                            <img src="img/compras/4.png" alt="" class="img-fluid object-fit-cover">
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -202,7 +202,7 @@ $vendedor_est = '4.63';
                                 </div>
                             <?php endif; ?>
                             <div class="row">
-                                <div class="col"<?= $carro['id_vendedor'] == $_SESSION['id'] ? " title=\"Você não pode enviar mensagem para si mesmo\"" : '' ?>>
+                                <div class="col" <?= $carro['id_vendedor'] == $_SESSION['id'] ? " title=\"Você não pode enviar mensagem para si mesmo\"" : '' ?>>
                                     <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2 shadow-sm" <?= $carro['id_vendedor'] == $_SESSION['id'] ? 'disabled' : '' ?>>Enviar mensagem</button>
                                 </div>
                             </div>
@@ -236,7 +236,7 @@ $vendedor_est = '4.63';
                                             <p class="mb-0">Ano</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold "><?= $carro['ano_fabricacao'].'/'.$carro['ano_modelo'] ?></p>
+                                            <p class="fw-semibold "><?= $carro['ano_fabricacao'] . '/' . $carro['ano_modelo'] ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
@@ -302,8 +302,11 @@ $vendedor_est = '4.63';
                             <hr class="w-100">
                             <div class="row px-4 pt-3">
                                 <p>Descrição do veículo</p>
-                                <p class="text-secondary">Blindado DVB (Divena) com vidros AGP B33; Downpipe, Stage 2 by Soldera, filtro K&N; Cor Preta GT com PPF Full transparente/fosco; Faróis LED PDLS Plus; Rodas RS Spyder em cinza acetinado; Interno Cinza Ardósia; Bancos elétricos com memória; Pacote Sport Chrono; Sistema de áudio BOSE; Sport Exhaust; PASM; Câmbio PDK; Teto Solar Panorâmico blindado; Painel e Multimídia TFT; Apple Car Play e Android Auto; Drive Mode no volante; Ar-condicionado Dual-Zone; Revisado Outros Opcionais: Comando de áudio no volante, Controle de estabilidade, Direção Elétrica, Distribuição eletrônica de frenagem, Kit Multimídia, Pára-choques na cor do veículo, Porta-copos.
-                                </p>
+                                <?php if (!empty($carro['descricao'])): ?>
+                                    <p class="text-secondary"><?= nl2br(htmlspecialchars($carro['descricao'])) ?></p>
+                                <?php else: ?>
+                                    <p class="text-muted">Descrição não disponível.</p>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>
@@ -321,15 +324,15 @@ $vendedor_est = '4.63';
                                     </button>
                                 </div>
                             </div>
-                            <a href="compras.php?vendedor=<?= $vendedor ?>&vendedor_img=<?= $vendedor_img ?>&vendedor_est=<?= $vendedor_est ?>" class="row px-2 text-decoration-none text-dark">
+                            <a href="compras.php?vendedor=<?= $vendedor ?>&vendedor_img=<?= $vendedor_img ?>&vendedor_est=<?= $vendedor_est ?>" class="row mb-3 px-2 text-decoration-none text-dark">
                                 <div class="rounded-3 border-2">
                                     <div class="row">
-                                        <div class="col p-2 d-flex align-items-center justify-content-center">
+                                        <div class="col-2 p-2 d-flex align-items-center justify-content-center">
                                             <div class="ratio ratio-1x1">
-                                                <img src="<?= $vendedor_img ?>" alt="" class="img-fluid rounded-3 shadow-sm">
+                                                <img src="<?= $vendedor_img ?>" alt="" class="img-fluid rounded-circle shadow-sm">
                                             </div></i>
                                         </div>
-                                        <div class="col-7 py-2">
+                                        <div class="col py-2">
                                             <div class="row">
                                                 <p class="fw-semibold mb-0"><?= $vendedor ?></p>
                                             </div>
@@ -337,12 +340,45 @@ $vendedor_est = '4.63';
                                                 <small class="fw-semibold mb-0"><?= $vendedor_est ?> <i class="bi bi-star-fill"></i></small>
                                             </div>
                                         </div>
-                                        <div class="col-3 d-inline-flex align-items-center text-nowrap">
-                                            <small>Aberto <i class="bi bi-circle-fill text-success" style="font-size: 0.5rem !important; vertical-align: middle;"></i></small>
-                                        </div>
                                     </div>
                                 </div>
                             </a>
+                            <div class="list-group small">
+                                <button class="list-group-item rounded-2 list-group-item-action d-flex text-muted fw-semibold" data-bs-toggle="collapse" data-bs-target="#horariosCollapse" aria-expanded="false" aria-controls="horariosCollapse">
+                                    <span class="me-auto"><span class="me-2"><i class="bi bi-circle-fill align-middle text-success" style="font-size: .4rem;"></i></span>Loja aberta - Abre às 9h00</span>
+                                    <span class="toggle-icon"><i class="bi bi-chevron-down"></i></span>
+                                </button>
+                                <div id="horariosCollapse" class="collapse">
+                                    <div class="list-group-item d-flex text-muted">
+                                        <span class="me-auto">Domingo:</span>
+                                        <span>09:00 - 18:00</span>
+                                    </div>
+                                    <div class="list-group-item d-flex text-muted">
+                                        <span class="me-auto">Segunda:</span>
+                                        <span>09:00 - 18:00</span>
+                                    </div>
+                                    <div class="list-group-item d-flex text-muted">
+                                        <span class="me-auto">Terça:</span>
+                                        <span>09:00 - 18:00</span>
+                                    </div>
+                                    <div class="list-group-item d-flex text-muted">
+                                        <span class="me-auto">Quarta:</span>
+                                        <span>09:00 - 18:00</span>
+                                    </div>
+                                    <div class="list-group-item d-flex text-muted">
+                                        <span class="me-auto">Quinta:</span>
+                                        <span>09:00 - 18:00</span>
+                                    </div>
+                                    <div class="list-group-item d-flex text-muted">
+                                        <span class="me-auto">Sexta:</span>
+                                        <span>09:00 - 18:00</span>
+                                    </div>
+                                    <div class="list-group-item d-flex text-muted rounded-bottom-2">
+                                        <span class="me-auto">Sábado:</span>
+                                        <span>09:00 - 18:00</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -352,7 +388,9 @@ $vendedor_est = '4.63';
     <?php include 'estruturas/footer/footer.php' ?>
 
 </body>
-<?php if (isset($conexao)) { mysqli_close($conexao); } ?>
+<?php if (isset($conexao)) {
+    mysqli_close($conexao);
+} ?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
@@ -361,9 +399,9 @@ $vendedor_est = '4.63';
         $('form').on('submit', function(e) {
             e.preventDefault();
             $.post('controladores/mensagens/enviar.php', {
-                de: <?= $_SESSION['id']?>,
-                para: <?= $carro['id_vendedor']?>,
-                anuncio: <?= $_GET['id']?>,
+                de: <?= $_SESSION['id'] ?>,
+                para: <?= $carro['id_vendedor'] ?>,
+                anuncio: <?= $_GET['id'] ?>,
                 texto: $('#mensagem-input').val()
             }, function(resposta) {
                 if (resposta == true) {
@@ -373,9 +411,9 @@ $vendedor_est = '4.63';
                 }
             })
         })
-        
-        const msgInput =  $('#mensagem-input');
-        const msgMax =  $('#max-mensagem');
+
+        const msgInput = $('#mensagem-input');
+        const msgMax = $('#max-mensagem');
         const max = 500;
 
         msgInput.attr('maxlength', max);
@@ -517,6 +555,19 @@ $vendedor_est = '4.63';
             progress.width(25 * (proximo.children().data('img') - 1) + '%');
             $(carousel).find('.min').text(selecionado);
         });
+
+        // Horários collapse toggle: update icon from chevron-down to chevron-up when expanded
+        const horariosCollapseEl = document.getElementById('horariosCollapse');
+        if (horariosCollapseEl) {
+            horariosCollapseEl.addEventListener('show.bs.collapse', function () {
+                $('.toggle-icon i').removeClass('bi-chevron-down').addClass('bi-chevron-up');
+                $('button.list-group-item').addClass('border-bottom-0').removeClass('rounded-2');
+            });
+            horariosCollapseEl.addEventListener('hide.bs.collapse', function () {
+                $('.toggle-icon i').removeClass('bi-chevron-up').addClass('bi-chevron-down');
+                $('button.list-group-item').removeClass('border-bottom-0').addClass('rounded-2');
+            });
+        }
     })
 </script>
 

@@ -769,20 +769,13 @@ while ($linha = mysqli_fetch_array($resultado)) {
                     $revisao = $carro['revisao'];
                     $id = $carro['id'];
                     $loc = 'São José dos Campos - SP';
-                    // fetch up to 6 photos for this anuncio
-                    $img1 = 'img/compras/1.png';
-                    $img2 = 'img/compras/2.png';
-                    $img3 = 'img/compras/3.png';
-                    $img4 = 'img/compras/4.png';
-                    $img5 = 'img/compras/5.png';
-                    $img6 = 'img/compras/6.png';
+                    // fetch photos for this anuncio into $imgs array (no predefined img1..img6)
+                    $imgs = [];
                     $qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id ORDER BY `ordem` ASC LIMIT 6");
                     if ($qr && mysqli_num_rows($qr) > 0) {
-                      $i = 1;
                       while ($r = mysqli_fetch_assoc($qr)) {
                         $path = 'img/anuncios/carros/' . $id . '/' . $r['caminho_foto'];
-                        ${'img' . $i} = $path;
-                        $i++;
+                        $imgs[] = $path;
                       }
                     }
                     $favoritado = $carro['favoritado'];
@@ -880,37 +873,41 @@ while ($linha = mysqli_fetch_array($resultado)) {
     <?php endif; ?>
     const cards = $('.card-compra');
     cards.each(function() {
-      let num = 1;
-      const card = $(this)
-      card.data('quant', card.find('.carro-img').children().length);
-      const quant = card.data('quant');
+      const card = $(this);
+      const carousel = card.find('.carousel');
+      const items = carousel.find('.carousel-item');
+      const quant = Math.max(1, items.length);
+      card.data('quant', quant);
       card.find('.max').text(quant);
-      card.find('.carousel-control-prev').on('click', function() {
-        if (num === 1) {
-          num = quant;
-        } else {
-          num--;
-        };
 
-        card.find('.min').text(num);
+      // set initial min based on active slide
+      let activeIdx = carousel.find('.carousel-item.active').index();
+      if (activeIdx === -1) activeIdx = 0;
+      card.find('.min').text(activeIdx + 1);
+
+      // update counter after slide finishes to avoid desync with animation
+      carousel.on('slid.bs.carousel', function() {
+        const idx = $(this).find('.carousel-item.active').index();
+        card.find('.min').text(idx + 1);
       });
-      card.find('.carousel-control-next').on('click', function() {
-        if (num === quant) {
-          num = 1;
-        } else {
-          num++;
-        };
-        card.find('.min').text(num);
-      });
+
+      // hide controls by default; show on hover only if there are multiple images
+      if (quant <= 1) {
+        card.find('.carousel-control-prev, .carousel-control-next, #img-quant').hide();
+      } else {
+        card.find('.carousel-control-prev, .carousel-control-next, #img-quant').hide();
+      }
 
       card.find('.favoritar-btn').hide();
 
       card.on('mouseenter', function() {
-        card.find('.favoritar-btn, .carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeIn(300);
+        if (quant > 1) card.find('.carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeIn(300);
+        card.find('.favoritar-btn').stop(true, true).fadeIn(300);
       });
 
       card.on('mouseleave', function() {
-        card.find('.favoritar-btn, .carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeOut(300);
+        if (quant > 1) card.find('.carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeOut(300);
+        card.find('.favoritar-btn').stop(true, true).fadeOut(300);
       });
     });
 

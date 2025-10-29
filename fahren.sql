@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 28/10/2025 às 11:20
+-- Tempo de geração: 29/10/2025 às 02:38
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -67,6 +67,7 @@ CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   `email` varchar(256) NOT NULL,
   `telefone` varchar(20) NOT NULL,
   `garantia` int(2) NOT NULL,
+  `descricao` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `placa` (`placa`),
   KEY `cor_fk` (`cor`),
@@ -74,23 +75,25 @@ CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   KEY `vendedor_fk` (`id_vendedor`),
   KEY `estado_fk` (`estado_local`),
   KEY `marca_fk` (`marca`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `anuncios_carros`
 --
 
-INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`, `marca`, `versao`, `carroceria`, `preco`, `condicao`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `blindagem`, `id_vendedor`, `imagens`, `leilao`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`) VALUES
-(28, 'A', 'seu', 'SP', '', 3, '3.9 V8 TURBO GASOLINA F1-DCT', 5, 51087.51, 'S', 42141, 2025, 2025, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'AAA1A17', '2025-10-10 20:41:00', 8, '1', '2', 'F', 'L', 'I', 'V', '1', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0),
-(29, 'A', 'vini', NULL, NULL, 4, '3.9 V8 TURBO GASOLINA F1-DCTa', NULL, 100000.00, 'N', 0, 2020, 2021, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'ZZZ3Z33', '2025-10-10 20:41:57', 4, '3', '2', 'V', 'L', 'A', 'V', '4', '', '0', 'vinicius@gmail.com', '(11) 11111-1111', 0),
-(30, 'A', '911', NULL, NULL, 3, 'v12', NULL, 4821.00, 'N', 0, 2022, 2022, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'FDA1R23', '2025-10-17 08:23:51', 5, '3', '3', 'F', 'L', 'D', 'V', '4', '', '0', 'kelwin@gmail.com', '(12) 98827-3730', 0),
-(31, 'A', 'da', NULL, NULL, 6, 'v12', NULL, 95.87, 'N', 0, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'GAG2T23', '2025-10-17 08:27:04', 4, '2', '3', 'V', 'L', 'A', 'D', '3', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0),
-(33, 'A', 'b12', 'SP', '', 3, '3.0 24V GASOLINA TURBO S PDK', 1, 698168.62, 'N', 0, 2024, 2025, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'DAD8D81', '2025-10-17 08:29:44', 3, '4', '1', 'V', 'L', 'A', 'V', '3', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0),
-(34, 'A', 'seu', NULL, NULL, 4, 'punto', NULL, 100000.00, 'S', 41, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'AAA1A11', '2025-10-26 20:30:29', 4, '3', '2', 'F', 'L', 'A', 'V', '3', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0),
-(35, 'A', 'b12', NULL, NULL, 4, 'punto', NULL, 5151511.53, 'N', 0, 2022, 2022, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'DAD2C41', '2025-10-26 21:02:09', 4, '2', '3', 'F', '0', 'D', 'T', '4', '', '1', 'vinicius@gmail.com', '(12) 98827-3730', 0),
-(36, 'A', 'b12', NULL, NULL, 2, 'punto', NULL, 52341.42, 'N', 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'ART4G32', '2025-10-26 21:09:47', 1, '2', '2', 'V', 'L', 'A', 'T', '3', '', '1', 'vinicius@gmail.com', '(11) 11111-1111', 0),
-(37, 'A', 'afda', NULL, NULL, 2, '3.9 V8 TURBO GASOLINA F1-DCT', NULL, 5843515.16, 'N', 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'TQF2A44', '2025-10-26 21:15:11', 2, '1', '1', 'V', '0', 'D', 'V', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0),
-(42, 'A', 'b12', NULL, NULL, 10, '3.9 V8 TURBO GASOLINA F1-DCT', NULL, 42141.42, 'N', 0, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'AAA1A12', '2025-10-28 07:02:34', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0);
+INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`, `marca`, `versao`, `carroceria`, `preco`, `condicao`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `blindagem`, `id_vendedor`, `imagens`, `leilao`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`, `descricao`) VALUES
+(28, 'A', 'seu', 'SP', '', 3, '3.9 V8 TURBO GASOLINA F1-DCT', 5, 51087.51, 'S', 42141, 2025, 2025, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'AAA1A17', '2025-10-10 20:41:00', 8, '1', '2', 'F', 'L', 'I', 'V', '1', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, ''),
+(29, 'A', 'vini', NULL, NULL, 4, '3.9 V8 TURBO GASOLINA F1-DCTa', NULL, 100000.00, 'N', 0, 2020, 2021, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'ZZZ3Z33', '2025-10-10 20:41:57', 4, '3', '2', 'V', 'L', 'A', 'V', '4', '', '0', 'vinicius@gmail.com', '(11) 11111-1111', 0, ''),
+(30, 'A', '911', NULL, NULL, 3, 'v12', NULL, 4821.00, 'N', 0, 2022, 2022, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'FDA1R23', '2025-10-17 08:23:51', 5, '3', '3', 'F', 'L', 'D', 'V', '4', '', '0', 'kelwin@gmail.com', '(12) 98827-3730', 0, ''),
+(31, 'A', 'da', NULL, NULL, 6, 'v12', NULL, 95.87, 'N', 0, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'GAG2T23', '2025-10-17 08:27:04', 4, '2', '3', 'V', 'L', 'A', 'D', '3', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, ''),
+(33, 'A', 'b12', 'SP', '', 3, '3.0 24V GASOLINA TURBO S PDK', 1, 698168.62, 'N', 0, 2024, 2025, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'DAD8D81', '2025-10-17 08:29:44', 3, '4', '1', 'V', 'L', 'A', 'V', '3', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, ''),
+(34, 'A', 'seu', NULL, NULL, 4, 'punto', NULL, 100000.00, 'S', 41, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'AAA1A11', '2025-10-26 20:30:29', 4, '3', '2', 'F', 'L', 'A', 'V', '3', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, ''),
+(35, 'A', 'b12', NULL, NULL, 4, 'punto', NULL, 5151511.53, 'N', 0, 2022, 2022, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'DAD2C41', '2025-10-26 21:02:09', 4, '2', '3', 'F', '0', 'D', 'T', '4', '', '1', 'vinicius@gmail.com', '(12) 98827-3730', 0, ''),
+(36, 'A', 'b12', NULL, NULL, 2, 'punto', NULL, 52341.42, 'N', 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'ART4G32', '2025-10-26 21:09:47', 1, '2', '2', 'V', 'L', 'A', 'T', '3', '', '1', 'vinicius@gmail.com', '(11) 11111-1111', 0, ''),
+(37, 'A', 'afda', NULL, NULL, 2, '3.9 V8 TURBO GASOLINA F1-DCT', NULL, 5843515.16, 'N', 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'TQF2A44', '2025-10-26 21:15:11', 2, '1', '1', 'V', '0', 'D', 'V', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, ''),
+(42, 'A', 'b12', NULL, NULL, 10, '3.9 V8 TURBO GASOLINA F1-DCT', NULL, 42141.42, 'N', 0, 2023, 2023, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'AAA1A12', '2025-10-28 07:02:34', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, ''),
+(43, 'A', 'amg gt', 'SP', '', 40, '4.0 V8 TURBO GASOLINA R 7G-DCT', 1, 1600000.00, 'S', 15000, 2017, 2018, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'AAA1111', '2025-10-28 19:29:33', 5, '1', '2', 'F', '0', 'D', 'D', '4', 'O', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, ''),
+(44, 'A', '488 spider', NULL, NULL, 2, 'punto', NULL, 4151.51, 'N', 0, 2024, 2024, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'DRT1T11', '2025-10-28 19:42:26', 2, '1', '0', 'F', '0', 'D', 'V', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, 'rqr1aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
 -- --------------------------------------------------------
 
@@ -243,7 +246,14 @@ CREATE TABLE IF NOT EXISTS `favoritos` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `usuario_id` (`usuario_id`,`anuncio_id`),
   KEY `anuncio_id` (`anuncio_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `favoritos`
+--
+
+INSERT INTO `favoritos` (`id`, `usuario_id`, `anuncio_id`, `data_criacao`) VALUES
+(64, 6, 37, '2025-10-28 22:00:04');
 
 -- --------------------------------------------------------
 
@@ -259,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `fotos_carros` (
   `ordem` int(11) DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `carro_id` (`carro_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `fotos_carros`
@@ -276,7 +286,26 @@ INSERT INTO `fotos_carros` (`id`, `carro_id`, `caminho_foto`, `ordem`) VALUES
 (8, 42, '1761645754_56b6797555bb.png', 1),
 (9, 42, '1761645754_44a277fc2847.png', 2),
 (10, 42, '1761645754_d9393f7f9b0b.png', 3),
-(11, 42, '1761645754_6794bc72a56c.png', 4);
+(11, 42, '1761645754_6794bc72a56c.png', 4),
+(12, 43, '1761690573_ae252a69526c.webp', 0),
+(13, 43, '1761690573_f55203ba4914.webp', 1),
+(14, 43, '1761690573_c9552d782fb6.webp', 2),
+(15, 43, '1761690573_c821c908180e.webp', 3),
+(16, 43, '1761690573_e2ab9af3eac9.webp', 4),
+(17, 43, '1761690573_5ae0f7ade9a6.webp', 5),
+(18, 43, '1761690573_ae7047cba327.webp', 6),
+(19, 43, '1761690573_e3c36406e44a.webp', 7),
+(20, 43, '1761690573_fe227dc15d95.webp', 8),
+(21, 43, '1761690573_59f6c451e34b.webp', 9),
+(22, 43, '1761690573_bc735cd41e0c.webp', 10),
+(23, 43, '1761690573_07d0e6d354bc.webp', 11),
+(24, 43, '1761690573_192a66948c5e.webp', 12),
+(25, 43, '1761690573_58a31b6b08ef.webp', 13),
+(26, 44, '1761691346_ac9e2e567328.png', 0),
+(27, 44, '1761691346_3b3b72157e9a.png', 1),
+(28, 44, '1761691346_ce10147511a8.png', 2),
+(29, 44, '1761691346_2b8f2b7b658f.png', 3),
+(30, 44, '1761691346_6231e04de7cd.png', 4);
 
 -- --------------------------------------------------------
 
@@ -538,7 +567,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `senha`, `data_criacao_conta`, `data_nascimento`, `avatar`) VALUES
-(6, 'Kelwin', 'Silva', 12, '12332131312', 'kelwin@gmail.com', '1', '2025-09-20 20:44:02', '2025-10-14', 'img/usuarios/avatares/usuario_6_1761513387.png'),
+(6, 'Kelwin', 'Silva', 11, '12332131312', 'kelwin@gmail.com', '1', '2025-09-20 20:44:02', '2025-10-14', 'img/usuarios/avatares/usuario_6_1761690604.jpg'),
 (7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1', '2025-10-02 22:40:54', NULL, '');
 
 --
