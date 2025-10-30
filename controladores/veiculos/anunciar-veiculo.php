@@ -4,11 +4,11 @@ include('../conexao_bd.php');
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $_SESSION['msg_alert'] = ['success', 'Cadastro feito com sucesso!'];
   $preco_post = isset($_POST['preco']) ? $_POST['preco'] : null;
-  $preco = null;
+  $preco = 0;
 
   if ($preco_post) {
-    $preco_limpo = str_replace(['R$', '.', ' ', ','], ['', '', '', '.'], $preco_post);
-    $preco = number_format((float)$preco_limpo, 2, '.', '');
+    // remove qualquer caractere não numérico e converte para inteiro
+    $preco = (int) preg_replace('/\D/', '', $preco_post);
   }
   
   $troca = isset($_POST['troca']) ? $_POST['troca'] : null;

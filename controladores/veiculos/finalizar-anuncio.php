@@ -21,10 +21,10 @@ $ano = isset($_SESSION['ano']) ? (int) $_SESSION['ano'] : 'NULL';
 $placa = !empty($_SESSION['placa']) ? mysqli_real_escape_string($conexao, $_SESSION['placa']) : 'NULL';
 $cor = isset($_SESSION['cor']) ? (int) $_SESSION['cor'] : 'NULL';
 $preco_post = isset($_SESSION['preco']) ? $_SESSION['preco'] : null;
-$preco = '0.00';
+$preco = 0;
 if ($preco_post) {
-    $preco_limpo = str_replace(['R$', '.', ' ', ','], ['', '', '', '.'], $preco_post);
-    $preco = number_format((float)$preco_limpo, 2, '.', '');
+    // remove qualquer caractere não numérico (p.ex. pontos de milhar) e mantenha o inteiro
+    $preco = (int) preg_replace('/\D/', '', $preco_post);
 }
 $condicao = isset($_SESSION['condicao']) ? mysqli_real_escape_string($conexao, $_SESSION['condicao']) : '';
 $quilometragem = isset($_SESSION['quilometragem']) ? preg_replace('/\D/', '', $_SESSION['quilometragem']) : 0;

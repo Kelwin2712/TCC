@@ -48,7 +48,7 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
                 <label for="preco-input" class="form-text mb-2">Preço<sup>*</sup></label>
                 <div class="position-relative">
                   <span class="position-absolute translate-middle-y top-50" style="margin-left: .75rem;">R$</span>
-                  <input type="text" class="form-control preco-input" style="padding-left: 2.25rem" id="preco-input" value="0,00" name="preco" placeholder="Informe o preço do veículo" required>
+                  <input type="text" class="form-control preco-input" style="padding-left: 2.25rem" id="preco-input" value="0" name="preco" placeholder="Informe o preço do veículo" required>
                 </div>
               </div>
               <div class="col">

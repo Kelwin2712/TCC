@@ -70,7 +70,7 @@
                 <p class="card-text text-nowrap small text-truncate"><?= $loc; ?></p>
             </div>
         </div>
-        <p class="card-text h5 fw-bold mb-2 preco-text">R$ <?= number_format($preco, 2, ',', '.'); ?></p>
+    <p class="card-text h5 fw-bold mb-2 preco-text">R$ <?= number_format($preco, 0, ',', '.'); ?></p>
     </div>
     <div class="card-footer border-top-0 bg-body">
         <div class="row mb-1">

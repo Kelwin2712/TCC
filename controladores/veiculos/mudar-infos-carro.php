@@ -11,27 +11,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $versao = $_POST['versao'] ?? '';
     $carroceria = $_POST['carroceria'] ?? '';
     $preco_raw = $_POST['preco'] ?? '';
-    // Normalize price sent in BR format (e.g. "1.234,56" or "1234,56") to SQL decimal format ("1234.56").
-    $preco = $preco_raw;
-    if ($preco !== '') {
-        // Remove spaces
-        $preco = str_replace(' ', '', $preco);
-        // If contains comma, assume BR format: remove dot thousands separators and convert comma to dot
-        if (strpos($preco, ',') !== false) {
-            $preco = str_replace('.', '', $preco);
-            $preco = str_replace(',', '.', $preco);
-        } else {
-            // No comma: remove any non-digit or dot, keep dot as decimal separator
-            $preco = preg_replace('/[^0-9.]/', '', $preco);
+    // New behavior: store price as integer (no decimal cents).
+    // Accept formats like "1.234" or "1.234,56" but only keep the integer part (before comma).
+    $preco = 0;
+    if ($preco_raw !== '') {
+        $p = trim($preco_raw);
+        // if contains comma, take part before comma
+        if (strpos($p, ',') !== false) {
+            $parts = explode(',', $p);
+            $p = $parts[0];
         }
-        // Ensure decimal part with two decimals
-        if (strpos($preco, '.') === false) {
-            $preco = $preco . '.00';
-        } else {
-            $preco = number_format((float)$preco, 2, '.', '');
-        }
-    } else {
-        $preco = '0.00';
+        // remove any non-digit characters (dots thousand separators etc.)
+        $p = preg_replace('/\D/', '', $p);
+        if ($p === '') $p = '0';
+        $preco = (int) $p;
     }
 
     // Read quilometragem from POST (submitted by the edit form). The form may contain formatted text like "0 km" or "12.345 km".
@@ -100,7 +93,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit();
         }
         $_SESSION['msg_alert'] = ['danger', 'Erro ao atualizar anúncio.'];
-        header('Location: ../../menu/anuncios.php');
+        header('Location: ../menu/anuncios.php');
         mysqli_close($conexao);
         exit();
     }
@@ -180,11 +173,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             }
         }
 
-        echo json_encode(['success' => true, 'message' => 'Alterações salvas', 'redirect' => '../../menu/anuncios.php']);
+        echo json_encode(['success' => true, 'message' => 'Alterações salvas', 'redirect' => '../menu/anuncios.php']);
         mysqli_close($conexao);
         exit();
     }
-    header('Location: ../../menu/anuncios.php');
+    header('Location: ../menu/anuncios.php');
     exit();
 } else {
     header('Location: ../../index.php');

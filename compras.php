@@ -771,7 +771,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
                     $loc = 'São José dos Campos - SP';
                     // fetch photos for this anuncio into $imgs array (no predefined img1..img6)
                     $imgs = [];
-                    $qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id ORDER BY `ordem` ASC LIMIT 6");
+                    $qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id ORDER BY `ordem` ASC");
                     if ($qr && mysqli_num_rows($qr) > 0) {
                       while ($r = mysqli_fetch_assoc($qr)) {
                         $path = 'img/anuncios/carros/' . $id . '/' . $r['caminho_foto'];

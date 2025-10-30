@@ -138,7 +138,7 @@ mysqli_close($conexao);
                 </div>
                 <div class="d-flex align-items-center position-relative">
                   <label for="preco-ate" class="text-dark position-absolute px-3">Até</label>
-                  <input type="text" id="preco-ate" class="form-control shadow-sm rounded-end-5 rounded-start-0 preco-input" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px; padding-left: 3rem;" value="<?= number_format($mais_caro, 2, ',', '.'); ?>">
+                  <input type="text" id="preco-ate" class="form-control shadow-sm rounded-end-5 rounded-start-0 preco-input" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px; padding-left: 3rem;" value="<?= number_format((int)$mais_caro, 0, ',', '.'); ?>">
                 </div>
 
               </div>

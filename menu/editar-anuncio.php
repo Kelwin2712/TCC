@@ -131,10 +131,8 @@ if ($qr) {
     /* circular delete button hidden by default, appears on hover/focus */
     .img-item .delete-mark {
         position: absolute;
-        top: .5rem;
-        right: .5rem;
         z-index: 10;
-        background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.5);
         color: white;
         width: 34px;
         height: 34px;
@@ -278,7 +276,7 @@ if ($qr) {
                                     <label for="preco-input" class="form-label">Preço</label>
                                     <div class="position-relative">
                                         <span class="position-absolute translate-middle-y top-50" style="margin-left: .75rem;">R$</span>
-                                        <input type="text" class="form-control shadow-sm preco-input" style="padding-left: 2.25rem" id="preco-input" value="<?= number_format($preco, 2, ',', '.'); ?>" name="preco" placeholder="Informe o preço do veículo" required>
+                                        <input type="text" class="form-control shadow-sm preco-input" style="padding-left: 2.25rem" id="preco-input" value="<?= number_format($preco, 0, ',', '.'); ?>" name="preco" placeholder="Informe o preço do veículo" required>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -472,7 +470,7 @@ if ($qr) {
                                                 ?>
                                                     <div class="col img-item existing-item" data-filename="<?= htmlspecialchars($p, ENT_QUOTES) ?>">
                                                         <div class="ratio ratio-16x9 position-relative">
-                                                            <button type="button" class="delete-mark" title="Marcar para deletar"><i class="bi bi-trash"></i></button>
+                                                            <button type="button" class="m-1 delete-mark position-absolute top-0 end-0" title="Marcar para deletar"><i class="bi bi-trash"></i></button>
                                                             <img src="<?= $src ?>" class="img-fluid object-fit-cover shadow-sm rounded-3">
                                                         </div>
                                                     </div>
