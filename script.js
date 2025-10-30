@@ -205,17 +205,25 @@ if (precoInput.length > 0) {
     }
 
     $(this).on('input', function () {
-      let value = $(this).val().replace(/\D/g, ''); // só números
+      // só mantém números
+      let digits = $(this).val().replace(/\D/g, '');
 
-      if (value === '' || value === '0') {
+      // remove zeros à esquerda, mas preserva "0" sozinho
+      digits = digits.replace(/^0+(?=\d)/, '');
+
+      if (digits === '') {
         $(this).val('0');
         return;
       }
 
-      // formata com separador de milhares no padrão BR
-      value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      // converte para número (garantia extra)
+      let num = parseInt(digits, 10);
+      if (isNaN(num)) num = 0;
 
-      $(this).val(value);
+      // formata com separador de milhares no padrão BR
+      const formatted = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+      $(this).val(formatted);
     });
 
     // se perder o foco e estiver vazio, força "0"
