@@ -24,6 +24,63 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <title>Fahren</title>
+  <style>
+    .vendedor-card {
+    position: relative;
+}
+
+.vendedor-radio {
+    position: absolute;
+    opacity: 0;
+}
+
+.vendedor-option {
+    border: 2px solid #dee2e6;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.vendedor-option:hover {
+    border-color: #adb5bd;
+    background-color: #f8f9fa;
+}
+
+.vendedor-radio:checked + .vendedor-option {
+    border-color: #0d6efd !important;
+    background-color: #f0f8ff;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.radio-indicator {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #dee2e6;
+    border-radius: 50%;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.vendedor-radio:checked + .vendedor-option .radio-indicator {
+    border-color: #0d6efd;
+    background-color: #0d6efd;
+}
+
+.vendedor-radio:checked + .vendedor-option .radio-indicator::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+  </style>
 </head>
 
 <body>
@@ -43,13 +100,10 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
         <div class="card">
           <form method="post" action="vender-fotos.php" class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
             <h3 class="mb-4 fw-bold">Preço e negociação</h3>
-            <div class="row row-cols-1 row-cols-md-2 w-100 g-4">
+            <div class="row row-cols-1 row-cols-md-2 w-100 g-4 mb-4">
               <div class="col">
                 <label for="preco-input" class="form-text mb-2">Preço<sup>*</sup></label>
-                <div class="position-relative">
-                  <span class="position-absolute translate-middle-y top-50" style="margin-left: .75rem;">R$</span>
-                  <input type="text" class="form-control preco-input" style="padding-left: 2.25rem" id="preco-input" value="0" name="preco" placeholder="Informe o preço do veículo" required>
-                </div>
+                <input type="text" class="form-control preco-input-rs" id="preco-input" value="0" name="preco" placeholder="Informe o preço do veículo" required>
               </div>
               <div class="col">
                 <label for="troca-select" class="form-text mb-2">Aceita troca<sup>*</sup></label>
@@ -58,13 +112,65 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
                   <option value="1">Sim</option>
                 </select>
               </div>
-              <div class="col">
-                <label for="email-input" class="form-text mb-2">Email de contato<sup>*</sup></label>
-                <input type="email" class="form-control" id="email-input" name="email" placeholder="Informe o email de contato" required>
-              </div>
-              <div class="col">
-                <label for="telefone-input" class="form-text mb-2">Telefone de contato<sup>*</sup></label>
-                <input type="text" class="form-control" id="telefone-input" name="telefone" maxlength="15" minlength="14" placeholder="Informe o telefone de contato" oninput="handlePhone(event)" required>
+            </div>
+            <div class="row d-flex w-100">
+              <div class="col d-flex flex-column gap-3">
+                <p class="form-text mb-0">Tipo de Vendedor</p>
+
+                <!-- Particular -->
+                <div class="vendedor-card">
+                  <input type="radio" name="tipo_vendedor" value="pf" id="vendedor-pf" class="vendedor-radio">
+                  <label for="vendedor-pf" class="vendedor-option d-flex justify-content-between w-100 border py-2 px-3 rounded-3 cursor-pointer">
+                    <div class="d-flex flex-column py-2 w-100">
+                      <p class="h6 fw-semibold text-dark mb-1">Particular</p>
+                      <p class="text-muted mb-0 small">Venda direta do proprietário do veículo</p>
+
+                      <!-- Campos do Particular (inicialmente escondidos) -->
+                      <div class="campos-particular mt-3 me-5" style="display: none;">
+                        <div class="d-flex w-100 gap-3">
+                          <div class="col">
+                            <label for="email-input" class="form-text mb-2">Email de contato<sup>*</sup></label>
+                            <input type="email" class="form-control" id="email-input" name="email" placeholder="Informe o email de contato" value="<?= $_SESSION['email'] ?>" required>
+                          </div>
+                          <div class="col">
+                            <label for="telefone-input" class="form-text mb-2">Telefone de contato<sup>*</sup></label>
+                            <input type="text" class="form-control" id="telefone-input" name="telefone" maxlength="15" minlength="14" value="<?= $_SESSION['telefone'] ?>" placeholder="Informe o telefone de contato" oninput="handlePhone(event)" required>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="radio-indicator"></div>
+                    </div>
+                  </label>
+                </div>
+
+                <!-- Loja -->
+                <div class="vendedor-card">
+                  <input type="radio" name="tipo_vendedor" value="pj" id="vendedor-pj" class="vendedor-radio">
+                  <label for="vendedor-pj" class="vendedor-option d-flex justify-content-between w-100 border py-2 px-3 rounded-3 cursor-pointer">
+                    <div class="d-flex flex-column py-2 w-100">
+                      <p class="h6 fw-semibold text-dark mb-1">Loja</p>
+                      <p class="text-muted mb-0 small">Venda por concessionária ou revendedora autorizada</p>
+
+                      <!-- Select da Loja (inicialmente escondido) -->
+                      <div class="campos-loja mt-3 me-5" style="display: none;">
+                        <div class="w-100">
+                          <label for="loja-select" class="form-text mb-2">Selecionar Loja<sup>*</sup></label>
+                          <select class="form-select" id="loja-select" name="loja_id" required>
+                            <option value="">Selecione uma loja</option>
+                            <?php foreach ($lojas as $loja): ?>
+                              <option value="<?= $loja['id'] ?>"><?= htmlspecialchars($loja['nome']) ?> - <?= htmlspecialchars($loja['cidade']) ?></option>
+                            <?php endforeach; ?>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <div class="radio-indicator"></div>
+                    </div>
+                  </label>
+                </div>
               </div>
             </div>
             <div class="row d-flex justify-content-between align-items-center w-100 mt-5">
@@ -89,6 +195,32 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
     const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
   })
+
+  $(document).ready(function() {
+    // Esconde todos os campos inicialmente
+    $('.campos-particular, .campos-loja').hide();
+    
+    // Quando um radio é selecionado
+    $('.vendedor-radio').on('change', function() {
+        // Remove required de todos os campos primeiro
+        $('#email-input, #telefone-input, #loja-select').prop('required', false);
+        
+        // Esconde todos os campos
+        $('.campos-particular, .campos-loja').slideUp(300);
+        
+        // Mostra os campos correspondentes ao tipo selecionado
+        if ($(this).val() === 'pf') {
+            $('.campos-particular').slideDown(300);
+            $('#email-input, #telefone-input').prop('required', true);
+        } else if ($(this).val() === 'pj') {
+            $('.campos-loja').slideDown(300);
+            $('#loja-select').prop('required', true);
+        }
+    });
+    
+    // Trigger change no carregamento se algum já estiver selecionado
+    $('.vendedor-radio:checked').trigger('change');
+});
 </script>
 
 </html>

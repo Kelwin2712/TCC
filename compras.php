@@ -289,10 +289,10 @@ while ($linha = mysqli_fetch_array($resultado)) {
                           </div>
                           <div class="row px-2 g-0 gap-2">
                             <div class="col">
-                              <input type="text" class="form-control" id="preco-min" placeholder="Preço mínimo">
+                              <input type="text" class="form-control preco-input" id="preco-min" placeholder="Preço mínimo">
                             </div>
                             <div class="col">
-                              <input type="text" class="form-control" id="preco-max" placeholder="Preço máximo">
+                              <input type="text" class="form-control preco-input" id="preco-max" placeholder="Preço máximo">
                             </div>
                           </div>
                           <div class="row mt-3">
@@ -1054,18 +1054,25 @@ while ($linha = mysqli_fetch_array($resultado)) {
     });
   });
 
-  $(document).on('click', 'button.favoritar', function() {
-    let anuncioID = $(this).data('anuncio');
+  (function() {
+    const currentUser = <?= isset($_SESSION['id']) ? json_encode($_SESSION['id']) : 'null' ?>;
 
-    console.log(anuncioID)
+    $(document).on('click', 'button.favoritar', function() {
+      let anuncioID = $(this).data('anuncio');
+      if (!currentUser) {
+        // not logged in: redirect to sign-in or show message
+        window.location.href = 'sign-in.php';
+        return;
+      }
 
-    $.post('controladores/veiculos/favoritar-veiculo.php', {
-      usuario: <?= $_SESSION['id'] ?>,
-      anuncio: anuncioID
-    }, function(resposta) {
-      console.log("Resposta do servidor:", resposta);
+      $.post('controladores/veiculos/favoritar-veiculo.php', {
+        usuario: currentUser,
+        anuncio: anuncioID
+      }, function(resposta) {
+        console.log("Resposta do servidor:", resposta);
+      }, 'json');
     });
-  });
+  })();
 </script>
 
 </html>

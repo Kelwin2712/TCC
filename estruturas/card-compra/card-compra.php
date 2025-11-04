@@ -34,6 +34,7 @@
                     <div class="text-bg-dark bg-opacity-50 rounded-pill py-1" style="font-size: .8rem; padding-left: .75rem; padding-right: .75rem;"><span class="min">1</span>/<span class="max"><?= $dataQuant ?></span></div>
                 </div>
             </div>
+            <?php if (isset($_SESSION['id']) && $_SESSION['id'] > 0): ?>
             <div class="row position-absolute top-0 end-0 p-2 favoritar-btn">
                 <div class="col-auto">
                     <button type="button" class="btn btn-sm text-bg-dark bg-opacity-50 position-relative favoritar rounded-circle" data-anuncio='<?= $id ?>'>
@@ -41,6 +42,7 @@
                     </button>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
         <button class="carousel-control-prev" style="display: none;" type="button" data-bs-target="#<?= $id ?>" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>

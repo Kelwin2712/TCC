@@ -451,14 +451,24 @@ mysqli_close($conexao);
       $("#recomendacao").remove();
     });
 
-    $('.favoritar').hide();
+    // hide favorite buttons and carousel controls initially
+    $('.card-compra').each(function() {
+      $(this).find('.favoritar').hide();
+      $(this).find('.carousel-control-prev, .carousel-control-next, #img-quant').hide();
+    });
 
     $('.card-compra').on('mouseenter', function() {
-      $(this).find('.favoritar').stop(true, true).fadeIn(300);
+      const card = $(this);
+      const quant = parseInt(card.find('.carousel-inner .carousel-item').length) || 0;
+      if (quant > 1) card.find('.carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeIn(300);
+      card.find('.favoritar').stop(true, true).fadeIn(300);
     });
 
     $('.card-compra').on('mouseleave', function() {
-      $(this).find('.favoritar').stop(true, true).fadeOut(300);
+      const card = $(this);
+      const quant = parseInt(card.find('.carousel-inner .carousel-item').length) || 0;
+      if (quant > 1) card.find('.carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeOut(300);
+      card.find('.favoritar').stop(true, true).fadeOut(300);
     });
   });
 </script>

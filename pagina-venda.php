@@ -41,7 +41,7 @@ $vendedor_est = '4.63';
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <title><?= $carro['marca'] . ' ' . $carro['modelo'] . ' ' . $carro['versao'] ?></title>
+    <title><?= strtoupper($carro['marca_nome'])  . ' ' . strtoupper($carro['modelo']) . ' ' . strtoupper($carro['versao']) ?></title>
     <link rel="stylesheet" href="style.css">
     <style>
         .carro-img {
@@ -202,8 +202,8 @@ $vendedor_est = '4.63';
                                 </div>
                             <?php endif; ?>
                             <div class="row">
-                                <div class="col" <?= $carro['id_vendedor'] == $_SESSION['id'] ? " title=\"Você não pode enviar mensagem para si mesmo\"" : '' ?>>
-                                    <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2 shadow-sm" <?= $carro['id_vendedor'] == $_SESSION['id'] ? 'disabled' : '' ?>>Enviar mensagem</button>
+                                <div class="col" <?= isset($_SESSION['id']) && $carro['id_vendedor'] == $_SESSION['id'] ? " title=\"Você não pode enviar mensagem para si mesmo\"" : '' ?>>
+                                    <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2 shadow-sm" <?= isset($_SESSION['id']) && $carro['id_vendedor'] == $_SESSION['id'] ? 'disabled' : '' ?>>Enviar mensagem</button>
                                 </div>
                             </div>
                         </form>
@@ -216,7 +216,7 @@ $vendedor_est = '4.63';
                         <div class="card-body py-4">
                             <div class="row mb-4 d-flex justify-content-between px-4">
                                 <div class="col-auto pe-0">
-                                    <h2 class="fw-bold mb-0 text-uppercase"><?= $carro['marca_nome'] ?> <?= $carro['modelo'] ?></h2>
+                                    <h2 class="fw-bold mb-0 text-uppercase"><?= $carro['marca_nome'] ?> <span class="text-success-emphasis"><?= $carro['modelo'] ?></span></h2>
                                     <p class="text-uppercase"><?= $carro['versao'] ?></p>
                                 </div>
                                 <div class="col">
@@ -299,15 +299,13 @@ $vendedor_est = '4.63';
                                     </div>
                                 </div>
                             </div>
-                            <hr class="w-100">
-                            <div class="row px-4 pt-3">
-                                <p>Descrição do veículo</p>
-                                <?php if (!empty($carro['descricao'])): ?>
+                            <?php if (!empty($carro['descricao'])): ?>
+                                <hr class="w-100">
+                                <div class="row px-4 pt-3">
+                                    <p>Descrição do veículo</p>
                                     <p class="text-secondary"><?= nl2br(htmlspecialchars($carro['descricao'])) ?></p>
-                                <?php else: ?>
-                                    <p class="text-muted">Descrição não disponível.</p>
-                                <?php endif; ?>
-                            </div>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -396,10 +394,12 @@ $vendedor_est = '4.63';
 <script src="script.js"></script>
 <script>
     $(function() {
+        const currentUser = <?= isset($_SESSION['id']) ? json_encode($_SESSION['id']) : 'null' ?>;
+
         $('form').on('submit', function(e) {
             e.preventDefault();
             $.post('controladores/mensagens/enviar.php', {
-                de: <?= $_SESSION['id'] ?>,
+                de: currentUser || 0,
                 para: <?= $carro['id_vendedor'] ?>,
                 anuncio: <?= $_GET['id'] ?>,
                 texto: $('#mensagem-input').val()

@@ -179,8 +179,8 @@ mysqli_close($conexao);
         const $final = $('#finalizar-btn');
         if ($final.length === 0) return; // not in temp mode
         const descLen = ($('#descricao').val() || '').trim().length;
-        // require at least 5 photos and description length between 100 and 1000
-        if (count >= 5 && descLen >= 100 && descLen <= 1000) {
+        // require at least 5 photos, and description is optional; if present must be between 100 and 1000
+        if (count >= 5 && (descLen === 0 || (descLen >= 100 && descLen <= 1000))) {
           $final.prop('disabled', false);
         } else {
           $final.prop('disabled', true);
@@ -296,7 +296,8 @@ mysqli_close($conexao);
         const count = $('#gallery .thumb-wrap').length;
         if (count < 5) { showAlert('danger', 'É necessário pelo menos 5 fotos para finalizar.'); return; }
         const desc = ($('#descricao').val() || '').trim();
-        if (desc.length < 100 || desc.length > 1000) { showAlert('danger', 'A descrição deve ter entre 100 e 1000 caracteres.'); return; }
+        // description is optional; if provided, enforce length constraints
+        if (desc.length > 0 && (desc.length < 100 || desc.length > 1000)) { showAlert('danger', 'A descrição deve ter entre 100 e 1000 caracteres.'); return; }
         // show confirmation modal
         const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
         modal.show();

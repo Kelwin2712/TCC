@@ -55,6 +55,26 @@ if (alt.length) {
   });
 }
 
+// Ensure carousel controls appear on card hover and hide on mouseleave (global handler)
+$(function() {
+  $('.card-compra').each(function() {
+    const card = $(this);
+    card.find('.carousel-control-prev, .carousel-control-next, #img-quant').hide();
+  });
+
+  $(document).on('mouseenter', '.card-compra', function() {
+    const card = $(this);
+    const quant = parseInt(card.find('.carousel-inner .carousel-item').length) || 0;
+    if (quant > 1) card.find('.carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeIn(300);
+  });
+
+  $(document).on('mouseleave', '.card-compra', function() {
+    const card = $(this);
+    const quant = parseInt(card.find('.carousel-inner .carousel-item').length) || 0;
+    if (quant > 1) card.find('.carousel-control-prev, .carousel-control-next, #img-quant').stop(true, true).fadeOut(300);
+  });
+});
+
 $(window).on("scroll", function () {
   const header = $("header.float");
   if (header.length === 0) return;
@@ -196,6 +216,20 @@ $('.sidebar-drop').on('click', function () {
 
 const precoInput = $('.preco-input');
 
+// helper: restore caret position so that the number of digits to the right
+// of the caret remains the same after formatting. prefixLen counts non-digit
+// characters at the start of the value (e.g., 'R$ ' has prefixLen=3).
+function restoreCaretByDigitsRight(el, formattedVal, digitsRight, prefixLen = 0) {
+  for (let pos = formattedVal.length; pos >= prefixLen; pos--) {
+    const rightDigits = formattedVal.slice(pos).replace(/\D/g, '').length;
+    if (rightDigits === digitsRight) {
+      try { el.setSelectionRange(pos, pos); } catch (e) {}
+      return;
+    }
+  }
+  try { el.setSelectionRange(formattedVal.length, formattedVal.length); } catch (e) {}
+}
+
 if (precoInput.length > 0) {
   precoInput.each(function () {
 
@@ -205,14 +239,23 @@ if (precoInput.length > 0) {
     }
 
     $(this).on('input', function () {
+      const el = this;
+      const $el = $(this);
+
+      // capture caret and compute digits to the right
+      const raw = $el.val();
+      const selStart = typeof el.selectionStart === 'number' ? el.selectionStart : raw.length;
+      const digitsRight = raw.slice(selStart).replace(/\D/g, '').length;
+
       // só mantém números
-      let digits = $(this).val().replace(/\D/g, '');
+      let digits = raw.replace(/\D/g, '');
 
       // remove zeros à esquerda, mas preserva "0" sozinho
       digits = digits.replace(/^0+(?=\d)/, '');
 
       if (digits === '') {
-        $(this).val('0');
+        $el.val('0');
+        try { el.setSelectionRange(1, 1); } catch (e) {}
         return;
       }
 
@@ -223,7 +266,10 @@ if (precoInput.length > 0) {
       // formata com separador de milhares no padrão BR
       const formatted = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-      $(this).val(formatted);
+      $el.val(formatted);
+
+      // restore caret so typing feels natural
+      restoreCaretByDigitsRight(el, formatted, digitsRight, 0);
     });
 
     // se perder o foco e estiver vazio, força "0"
@@ -231,6 +277,96 @@ if (precoInput.length > 0) {
       if ($(this).val().trim() === '') {
         $(this).val('0');
       }
+    });
+  });
+}
+
+// === Preco input with immutable R$ prefix ===
+const precoInputRS = $('.preco-input-rs');
+if (precoInputRS.length > 0) {
+  const PREFIX = 'R$ ';
+  const PREFIX_LEN = PREFIX.length;
+
+  precoInputRS.each(function () {
+    const el = this;
+    const $el = $(this);
+
+    // initialize value
+    if ($el.val().trim() === '' || !$el.val().startsWith(PREFIX)) {
+      $el.val(PREFIX + '0');
+    } else {
+      // normalize existing value
+      let digits = $el.val().replace(/\D/g, '');
+      let num = parseInt(digits || '0', 10);
+      if (isNaN(num)) num = 0;
+      const formatted = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      $el.val(PREFIX + formatted);
+    }
+
+    // prevent deleting the prefix, but allow full selection deletion to reset to 0
+    $el.on('keydown', function (e) {
+      const selStart = this.selectionStart;
+      const selEnd = this.selectionEnd;
+
+      // Backspace/Delete handling
+      if (e.key === 'Backspace' || e.key === 'Delete') {
+        // If selection includes numeric part (i.e., user selected everything or part after prefix),
+        // interpret as intent to clear and reset to R$ 0.
+        if (selStart <= PREFIX_LEN && selEnd > PREFIX_LEN) {
+          e.preventDefault();
+          $el.val(PREFIX + '0');
+          try { this.setSelectionRange(PREFIX_LEN + 1, PREFIX_LEN + 1); } catch (err) {}
+          return;
+        }
+
+        // Prevent deleting the prefix itself
+        if (selStart <= PREFIX_LEN && selEnd <= PREFIX_LEN) {
+          e.preventDefault();
+          this.setSelectionRange(PREFIX_LEN, PREFIX_LEN);
+          return;
+        }
+      }
+
+      // keep caret after prefix when navigating
+      if ((e.key === 'ArrowLeft' || e.key === 'Home') && selStart <= PREFIX_LEN) {
+        e.preventDefault();
+        this.setSelectionRange(PREFIX_LEN, PREFIX_LEN);
+        return;
+      }
+    });
+
+    // format on input (preserve caret position)
+    $el.on('input', function () {
+      const raw = $el.val();
+      const selStart = typeof el.selectionStart === 'number' ? el.selectionStart : raw.length;
+      const digitsRight = raw.slice(selStart).replace(/\D/g, '').length;
+
+      // extract digits only
+      let digits = raw.replace(/\D/g, '');
+      if (digits === '') digits = '0';
+      let num = parseInt(digits, 10);
+      if (isNaN(num)) num = 0;
+      const formatted = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      const newVal = PREFIX + formatted;
+      $el.val(newVal);
+
+      // restore caret position accounting for prefix
+      restoreCaretByDigitsRight(el, newVal, digitsRight, PREFIX_LEN);
+    });
+
+    // ensure caret cannot be placed inside prefix via mouse
+    $el.on('focus click mouseup', function () {
+      setTimeout(() => {
+        try {
+          if (el.selectionStart < PREFIX_LEN) {
+            el.setSelectionRange(PREFIX_LEN, PREFIX_LEN);
+          }
+        } catch (err) {}
+      }, 0);
+    });
+
+    $el.on('blur', function () {
+      if ($el.val().trim() === PREFIX) $el.val(PREFIX + '0');
     });
   });
 }
