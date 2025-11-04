@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 30/10/2025 às 11:24
+-- Tempo de geração: 04/11/2025 às 01:24
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -30,8 +30,8 @@ USE `fahren`;
 --
 
 DROP TABLE IF EXISTS `anuncios_carros`;
-CREATE TABLE IF NOT EXISTS `anuncios_carros` (
-  `id` int(12) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `anuncios_carros` (
+  `id` int(12) NOT NULL,
   `ativo` char(1) NOT NULL DEFAULT 'A',
   `modelo` varchar(75) DEFAULT NULL,
   `estado_local` char(2) DEFAULT NULL,
@@ -67,24 +67,19 @@ CREATE TABLE IF NOT EXISTS `anuncios_carros` (
   `email` varchar(256) NOT NULL,
   `telefone` varchar(20) NOT NULL,
   `garantia` int(2) NOT NULL,
-  `descricao` text NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `placa` (`placa`),
-  KEY `cor_fk` (`cor`),
-  KEY `carroceria_fk` (`carroceria`),
-  KEY `vendedor_fk` (`id_vendedor`),
-  KEY `estado_fk` (`estado_local`),
-  KEY `marca_fk` (`marca`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `descricao` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `anuncios_carros`
 --
 
 INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`, `marca`, `versao`, `carroceria`, `preco`, `condicao`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `blindagem`, `id_vendedor`, `imagens`, `leilao`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`, `descricao`) VALUES
-(43, 'A', 'amg gt', 'SP', '', 40, '4.0 V8 TURBO GASOLINA R 7G-DCT', 1, 1600000, 'S', 15000, 2017, 2018, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'AAA1111', '2025-10-28 19:29:33', 5, '1', '2', 'F', '0', 'D', 'D', '4', 'O', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'),
-(45, 'A', 'mustang', NULL, NULL, 18, '4.0 COUPÉ V6 12V GASOLINA 2P AUTOMÁTICO', NULL, 249900, 'U', 113000, 2009, 2010, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'FGR8A41', '2025-10-29 20:11:49', 2, '3', '1', 'F', 'L', 'D', 'D', '3', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-._.-'),
-(46, 'A', '911', NULL, NULL, 47, '3.0 24V H6 GASOLINA CARRERA S PDK', NULL, 970000, 'S', 4000, 2022, 2023, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'FQA9Q76', '2025-10-29 20:41:35', 10, '1', '2', 'F', '0', 'D', 'D', '4', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+(43, 'A', 'amg gt', 'SP', '', 40, '4.0 V8 TURBO GASOLINA R 7G-DCT', 1, 1600000, 'S', 15000, 2017, 2018, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'AAA1111', '2025-10-28 19:29:33', 5, '1', '2', 'F', '0', 'D', 'D', '4', 'O', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
+(45, 'A', 'mustang', NULL, NULL, 18, '4.0 COUPÉ V6 12V GASOLINA 2P AUTOMÁTICO', NULL, 249900, 'U', 113000, 2009, 2010, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'FGR8A41', '2025-10-29 20:11:49', 2, '3', '1', 'F', 'L', 'D', 'D', '3', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
+(46, 'A', '911', NULL, NULL, 47, '3.0 24V H6 GASOLINA CARRERA S PDK', NULL, 970000, 'S', 4000, 2022, 2023, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'FQA9Q76', '2025-10-29 20:41:35', 10, '1', '2', 'F', '0', 'D', 'D', '4', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
+(47, 'A', 'rs5', NULL, NULL, 4, '2.9 V6 TFSI GASOLINA SPORTBACK COMPETITI', NULL, 620000, 'N', 0, 2023, 2023, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'QTT1F11', '2025-10-30 21:16:39', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
+(48, 'A', 'camry', NULL, NULL, 56, '2.5 VVT-IE HYBRID XLE eCVT', NULL, 259900, 'U', 108000, 2022, 2023, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'FAF9A96', '2025-10-30 21:24:24', 2, '2', '2', 'F', 'L', 'D', 'D', '3', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
 -- --------------------------------------------------------
 
@@ -93,11 +88,10 @@ INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`
 --
 
 DROP TABLE IF EXISTS `carrocerias`;
-CREATE TABLE IF NOT EXISTS `carrocerias` (
-  `id` int(2) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `carrocerias` (
+  `id` int(2) NOT NULL,
+  `nome` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `carrocerias`
@@ -121,20 +115,16 @@ INSERT INTO `carrocerias` (`id`, `nome`) VALUES
 --
 
 DROP TABLE IF EXISTS `conversas`;
-CREATE TABLE IF NOT EXISTS `conversas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `conversas` (
+  `id` int(11) NOT NULL,
   `comprador_id` int(11) NOT NULL,
   `vendedor_id` int(11) NOT NULL,
   `anuncio_id` int(11) NOT NULL,
   `ultima_mensagem` text DEFAULT NULL,
   `data_ultima_mensagem` datetime DEFAULT current_timestamp(),
   `nao_lidas_comprador` int(11) DEFAULT 0,
-  `nao_lidas_vendedor` int(11) DEFAULT 0,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `conversa_unica` (`comprador_id`,`vendedor_id`,`anuncio_id`),
-  KEY `conversas_ibfk_3` (`anuncio_id`),
-  KEY `conversas_ibfk_2` (`vendedor_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=88 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `nao_lidas_vendedor` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -143,11 +133,10 @@ CREATE TABLE IF NOT EXISTS `conversas` (
 --
 
 DROP TABLE IF EXISTS `cores`;
-CREATE TABLE IF NOT EXISTS `cores` (
-  `id` int(2) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `cores` (
+  `id` int(2) NOT NULL,
+  `nome` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `cores`
@@ -175,10 +164,9 @@ INSERT INTO `cores` (`id`, `nome`) VALUES
 --
 
 DROP TABLE IF EXISTS `estados`;
-CREATE TABLE IF NOT EXISTS `estados` (
+CREATE TABLE `estados` (
   `uf` char(2) NOT NULL,
-  `nome` varchar(30) NOT NULL,
-  PRIMARY KEY (`uf`)
+  `nome` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -221,15 +209,12 @@ INSERT INTO `estados` (`uf`, `nome`) VALUES
 --
 
 DROP TABLE IF EXISTS `favoritos`;
-CREATE TABLE IF NOT EXISTS `favoritos` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `favoritos` (
+  `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
   `anuncio_id` int(11) NOT NULL,
-  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `usuario_id` (`usuario_id`,`anuncio_id`),
-  KEY `anuncio_id` (`anuncio_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -238,14 +223,12 @@ CREATE TABLE IF NOT EXISTS `favoritos` (
 --
 
 DROP TABLE IF EXISTS `fotos_carros`;
-CREATE TABLE IF NOT EXISTS `fotos_carros` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `fotos_carros` (
+  `id` int(11) NOT NULL,
   `carro_id` int(11) DEFAULT NULL,
   `caminho_foto` varchar(255) DEFAULT NULL,
-  `ordem` int(11) DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `carro_id` (`carro_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `ordem` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `fotos_carros`
@@ -294,7 +277,29 @@ INSERT INTO `fotos_carros` (`id`, `carro_id`, `caminho_foto`, `ordem`) VALUES
 (57, 46, '1761781295_fe76404a9df5.jpg', 8),
 (58, 46, '1761781295_492fcb45d13b.jpg', 9),
 (59, 46, '1761781295_1521e527e400.jpg', 10),
-(60, 46, '1761781295_89c424d7d42c.jpg', 11);
+(60, 46, '1761781295_89c424d7d42c.jpg', 11),
+(61, 47, '1761869799_f4fcef6b0c59.jpg', 0),
+(62, 47, '1761869799_42059f81199a.jpg', 1),
+(63, 47, '1761869799_d737c57a6cd0.jpg', 2),
+(64, 47, '1761869799_df00d48299e8.jpg', 3),
+(65, 47, '1761869799_d9251555efe8.jpg', 4),
+(66, 47, '1761869799_f852e4b2ae27.jpg', 5),
+(67, 47, '1761869799_c63c75a06c9e.jpg', 6),
+(68, 47, '1761869799_7644f0acfe97.jpg', 7),
+(69, 47, '1761869799_dd8ba794df73.jpg', 8),
+(70, 47, '1761869799_bdbd91b8fb5b.jpg', 9),
+(71, 47, '1761869799_7ef3669f60cb.jpg', 10),
+(72, 47, '1761869799_27131e25e8c6.jpg', 11),
+(73, 47, '1761869799_4b06175e8e67.jpg', 12),
+(74, 48, '1761870264_2e44b198a84f.webp', 0),
+(75, 48, '1761870264_8e75f1a12439.webp', 1),
+(76, 48, '1761870264_87d0540f909d.webp', 2),
+(77, 48, '1761870264_3eaa0cbb742c.webp', 3),
+(78, 48, '1761870264_7c648f943767.webp', 4),
+(79, 48, '1761870264_dc39eec8a902.webp', 5),
+(80, 48, '1761870264_0a18037c0701.webp', 6),
+(81, 48, '1761870264_39cc98ea3bad.webp', 7),
+(82, 48, '1761870264_e4070a6cc0a0.webp', 8);
 
 -- --------------------------------------------------------
 
@@ -303,8 +308,8 @@ INSERT INTO `fotos_carros` (`id`, `carro_id`, `caminho_foto`, `ordem`) VALUES
 --
 
 DROP TABLE IF EXISTS `lojas`;
-CREATE TABLE IF NOT EXISTS `lojas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `lojas` (
+  `id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
   `razao_social` varchar(100) DEFAULT NULL,
   `cnpj` varchar(18) DEFAULT NULL,
@@ -328,9 +333,8 @@ CREATE TABLE IF NOT EXISTS `lojas` (
   `hora_abre` time DEFAULT NULL,
   `hora_fecha` time DEFAULT NULL,
   `dias_funcionamento` varchar(50) DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `lojas`
@@ -346,13 +350,11 @@ INSERT INTO `lojas` (`id`, `nome`, `razao_social`, `cnpj`, `inscricao_estadual`,
 --
 
 DROP TABLE IF EXISTS `marcas`;
-CREATE TABLE IF NOT EXISTS `marcas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `marcas` (
+  `id` int(11) NOT NULL,
   `value` varchar(50) NOT NULL,
-  `nome` varchar(100) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `value` (`value`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `nome` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `marcas`
@@ -425,8 +427,8 @@ INSERT INTO `marcas` (`id`, `value`, `nome`) VALUES
 --
 
 DROP TABLE IF EXISTS `mensagens_chat`;
-CREATE TABLE IF NOT EXISTS `mensagens_chat` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `mensagens_chat` (
+  `id` int(11) NOT NULL,
   `de_usuario` int(11) NOT NULL,
   `para_usuario` int(11) NOT NULL,
   `anuncio` int(11) NOT NULL,
@@ -437,12 +439,8 @@ CREATE TABLE IF NOT EXISTS `mensagens_chat` (
   `double_apagada_de` tinyint(1) NOT NULL DEFAULT 0,
   `apagada_para` tinyint(1) NOT NULL DEFAULT 0,
   `double_apagada_para` tinyint(1) NOT NULL DEFAULT 0,
-  `resposta_id` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`),
-  KEY `mensagens_chat_ibfk_1` (`de_usuario`),
-  KEY `mensagens_chat_ibfk_2` (`para_usuario`),
-  KEY `mensagens_chat_ibfk_3` (`anuncio`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `resposta_id` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -451,8 +449,8 @@ CREATE TABLE IF NOT EXISTS `mensagens_chat` (
 --
 
 DROP TABLE IF EXISTS `reservas`;
-CREATE TABLE IF NOT EXISTS `reservas` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `reservas` (
+  `id` int(11) NOT NULL,
   `id_veiculo` int(11) NOT NULL,
   `nome` varchar(120) NOT NULL,
   `telefone` varchar(20) NOT NULL,
@@ -471,10 +469,8 @@ CREATE TABLE IF NOT EXISTS `reservas` (
   `observacoes` text DEFAULT NULL,
   `status` enum('pendente','confirmada','cancelada','realizada') DEFAULT 'pendente',
   `criado_em` datetime DEFAULT current_timestamp(),
-  `atualizado_em` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `id_veiculo` (`id_veiculo`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `atualizado_em` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -483,8 +479,8 @@ CREATE TABLE IF NOT EXISTS `reservas` (
 --
 
 DROP TABLE IF EXISTS `usuarios`;
-CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id` int(6) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `usuarios` (
+  `id` int(6) NOT NULL,
   `nome` varchar(30) NOT NULL,
   `sobrenome` varchar(30) NOT NULL,
   `telefone` bigint(15) DEFAULT NULL,
@@ -493,12 +489,8 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `senha` varchar(256) NOT NULL,
   `data_criacao_conta` datetime NOT NULL DEFAULT current_timestamp(),
   `data_nascimento` date DEFAULT NULL,
-  `avatar` varchar(255) NOT NULL DEFAULT 'img/user.png',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `telefone` (`telefone`),
-  UNIQUE KEY `cpf` (`cpf`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `avatar` varchar(255) NOT NULL DEFAULT 'img/user.png'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `usuarios`
@@ -507,6 +499,172 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `senha`, `data_criacao_conta`, `data_nascimento`, `avatar`) VALUES
 (6, 'Kelwin', 'Silva', 11, '12332131312', 'kelwin@gmail.com', '1', '2025-09-20 20:44:02', '2025-10-14', ''),
 (7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1', '2025-10-02 22:40:54', NULL, '');
+
+--
+-- Índices para tabelas despejadas
+--
+
+--
+-- Índices de tabela `anuncios_carros`
+--
+ALTER TABLE `anuncios_carros`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `placa` (`placa`),
+  ADD KEY `cor_fk` (`cor`),
+  ADD KEY `carroceria_fk` (`carroceria`),
+  ADD KEY `vendedor_fk` (`id_vendedor`),
+  ADD KEY `estado_fk` (`estado_local`),
+  ADD KEY `marca_fk` (`marca`);
+
+--
+-- Índices de tabela `carrocerias`
+--
+ALTER TABLE `carrocerias`
+  ADD PRIMARY KEY (`id`) USING BTREE;
+
+--
+-- Índices de tabela `conversas`
+--
+ALTER TABLE `conversas`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `conversa_unica` (`comprador_id`,`vendedor_id`,`anuncio_id`),
+  ADD KEY `conversas_ibfk_3` (`anuncio_id`),
+  ADD KEY `conversas_ibfk_2` (`vendedor_id`);
+
+--
+-- Índices de tabela `cores`
+--
+ALTER TABLE `cores`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Índices de tabela `estados`
+--
+ALTER TABLE `estados`
+  ADD PRIMARY KEY (`uf`);
+
+--
+-- Índices de tabela `favoritos`
+--
+ALTER TABLE `favoritos`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `usuario_id` (`usuario_id`,`anuncio_id`),
+  ADD KEY `anuncio_id` (`anuncio_id`);
+
+--
+-- Índices de tabela `fotos_carros`
+--
+ALTER TABLE `fotos_carros`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `carro_id` (`carro_id`);
+
+--
+-- Índices de tabela `lojas`
+--
+ALTER TABLE `lojas`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Índices de tabela `marcas`
+--
+ALTER TABLE `marcas`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `value` (`value`);
+
+--
+-- Índices de tabela `mensagens_chat`
+--
+ALTER TABLE `mensagens_chat`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `mensagens_chat_ibfk_1` (`de_usuario`),
+  ADD KEY `mensagens_chat_ibfk_2` (`para_usuario`),
+  ADD KEY `mensagens_chat_ibfk_3` (`anuncio`);
+
+--
+-- Índices de tabela `reservas`
+--
+ALTER TABLE `reservas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_veiculo` (`id_veiculo`);
+
+--
+-- Índices de tabela `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `telefone` (`telefone`),
+  ADD UNIQUE KEY `cpf` (`cpf`);
+
+--
+-- AUTO_INCREMENT para tabelas despejadas
+--
+
+--
+-- AUTO_INCREMENT de tabela `anuncios_carros`
+--
+ALTER TABLE `anuncios_carros`
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+
+--
+-- AUTO_INCREMENT de tabela `carrocerias`
+--
+ALTER TABLE `carrocerias`
+  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de tabela `conversas`
+--
+ALTER TABLE `conversas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+
+--
+-- AUTO_INCREMENT de tabela `cores`
+--
+ALTER TABLE `cores`
+  MODIFY `id` int(2) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT de tabela `favoritos`
+--
+ALTER TABLE `favoritos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+
+--
+-- AUTO_INCREMENT de tabela `fotos_carros`
+--
+ALTER TABLE `fotos_carros`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+
+--
+-- AUTO_INCREMENT de tabela `lojas`
+--
+ALTER TABLE `lojas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `marcas`
+--
+ALTER TABLE `marcas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+
+--
+-- AUTO_INCREMENT de tabela `mensagens_chat`
+--
+ALTER TABLE `mensagens_chat`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+
+--
+-- AUTO_INCREMENT de tabela `reservas`
+--
+ALTER TABLE `reservas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de tabela `usuarios`
+--
+ALTER TABLE `usuarios`
+  MODIFY `id` int(6) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restrições para tabelas despejadas
