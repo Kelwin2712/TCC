@@ -67,21 +67,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // include descricao if provided
     if ($descricao !== null) {
         $safe_desc = mysqli_real_escape_string($conexao, $descricao);
-        // basic server-side enforce 100-1000 chars (if not empty)
-        if ($safe_desc !== '' && (mb_strlen($descricao) < 100 || mb_strlen($descricao) > 1000)) {
-            // respond with error for AJAX or redirect with message
+        // server-side: allow empty description; only enforce a maximum length of 1000 characters
+        if ($safe_desc !== '' && mb_strlen($descricao) > 1000) {
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
                 header('Content-Type: application/json; charset=utf-8');
-                echo json_encode(['success' => false, 'message' => 'A descrição deve conter entre 100 e 1000 caracteres.']);
+                echo json_encode(['success' => false, 'message' => 'A descrição deve ter no máximo 1000 caracteres.']);
                 mysqli_close($conexao);
                 exit();
             }
-            $_SESSION['msg_alert'] = ['danger', 'A descrição deve conter entre 100 e 1000 caracteres.'];
+            $_SESSION['msg_alert'] = ['danger', 'A descrição deve ter no máximo 1000 caracteres.'];
             header('Location: ../../menu/editar-anuncio.php?id=' . $id_veiculo);
             mysqli_close($conexao);
             exit();
         }
-        // append to update
+        // append to update (allow empty string)
         $sql = str_replace(" WHERE id='$id_veiculo'", ", descricao='$safe_desc' WHERE id='$id_veiculo'", $sql);
     }
 

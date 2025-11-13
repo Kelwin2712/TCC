@@ -48,11 +48,15 @@
                     </div>
                     <div class="col-4">
                         <label class="form-label">Cidade</label>
-                        <input type="text" class="form-control shadow-sm" name="cidade">
+                        <select class="form-select shadow-sm" name="cidade" id="loja-cidade">
+                            <option value="">Selecione um município...</option>
+                        </select>
                     </div>
                     <div class="col-4">
                         <label class="form-label">Estado (UF)</label>
-                        <input type="text" class="form-control shadow-sm" name="estado" maxlength="2">
+                        <select class="form-select shadow-sm" name="estado" id="loja-estado">
+                            <option value="">Selecione um estado...</option>
+                        </select>
                     </div>
                 </div>
 
@@ -61,11 +65,11 @@
                 <div class="row g-3 mb-4">
                     <div class="col-6">
                         <label class="form-label">Telefone fixo</label>
-                        <input type="text" class="form-control shadow-sm" name="telefone_fixo">
+                        <input type="text" class="form-control shadow-sm telefone-mask" name="telefone_fixo">
                     </div>
                     <div class="col-6">
                         <label class="form-label">WhatsApp comercial<sup class="text-danger">*</sup></label>
-                        <input type="text" class="form-control shadow-sm" name="whatsapp" required>
+                        <input type="text" class="form-control shadow-sm telefone-mask" name="whatsapp" required>
                     </div>
                     <div class="col-6">
                         <label class="form-label">E-mail corporativo<sup class="text-danger">*</sup></label>
@@ -200,6 +204,44 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 logoPreview.src = '../img/user.png';
             }
+        });
+    }
+    // IBGE: popular selects de estado/municipio para criação de loja
+    const ibgeEstadosUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
+    const lojaEstado = document.getElementById('loja-estado');
+    const lojaCidade = document.getElementById('loja-cidade');
+
+    if (lojaEstado && lojaCidade) {
+        // popular estados
+        fetch(ibgeEstadosUrl).then(res => res.json()).then(estados => {
+            estados.sort((a,b) => a.nome.localeCompare(b.nome));
+            lojaEstado.innerHTML = '<option value="">Selecione um estado...</option>';
+            estados.forEach(e => {
+                const opt = document.createElement('option');
+                opt.value = e.sigla;
+                opt.dataset.id = e.id;
+                opt.textContent = `${e.nome} (${e.sigla})`;
+                lojaEstado.appendChild(opt);
+            });
+        }).catch(err => { console.error('Erro ao carregar estados IBGE:', err); });
+
+        lojaEstado.addEventListener('change', function() {
+            const estadoId = this.options[this.selectedIndex].dataset.id;
+            if (!estadoId) {
+                lojaCidade.innerHTML = '<option value="">Selecione um município...</option>';
+                return;
+            }
+            lojaCidade.innerHTML = '<option>Carregando municípios...</option>';
+            fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`).then(r => r.json()).then(list => {
+                list.sort((a,b) => a.nome.localeCompare(b.nome));
+                lojaCidade.innerHTML = '<option value="">Selecione um município...</option>';
+                list.forEach(m => {
+                    const o = document.createElement('option');
+                    o.value = m.nome;
+                    o.textContent = m.nome;
+                    lojaCidade.appendChild(o);
+                });
+            }).catch(err => { console.error('Erro ao carregar municípios IBGE:', err); lojaCidade.innerHTML = '<option value="">Erro ao carregar municípios</option>'; });
         });
     }
     // Capa preview

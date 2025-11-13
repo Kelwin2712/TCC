@@ -54,6 +54,7 @@ if (mysqli_num_rows($resultado) > 0) {
         $telefone = $linha['telefone'];
         $ativo = $linha['ativo'];
         $condicao = $linha['condicao'] ?? 'N';
+        $descricao = $linha['descricao'];
     } else {
         header('Location: anuncios.php');
     }
@@ -123,16 +124,21 @@ if ($qr) {
         transition: border-color .15s ease, background-color .15s ease;
         background-clip: padding-box;
     }
+
     .image-dropzone.dragover {
         border-color: #0d6efd;
-        background-color: rgba(13,110,253,0.03);
+        background-color: rgba(13, 110, 253, 0.03);
     }
-    .img-item { position: relative; }
+
+    .img-item {
+        position: relative;
+    }
+
     /* circular delete button hidden by default, appears on hover/focus */
     .img-item .delete-mark {
         position: absolute;
         z-index: 10;
-    background: rgba(0,0,0,0.5);
+        background: rgba(0, 0, 0, 0.5);
         color: white;
         width: 34px;
         height: 34px;
@@ -145,18 +151,23 @@ if ($qr) {
         padding: 0;
         font-size: 1rem;
     }
+
     /* show delete icon only on hover/focus for accessibility */
     .img-item:hover .delete-mark,
     .img-item:focus-within .delete-mark {
         display: flex;
     }
+
     /* marked state: reduce image opacity (no green/highlight) */
     .img-item.marked img {
         opacity: 0.6;
         transition: opacity .12s ease;
     }
+
     /* remove previous new-badge usage (new previews match existing images) */
-    .img-item .new-badge { display: none; }
+    .img-item .new-badge {
+        display: none;
+    }
 
     /* Switch estilo Uiverse - Versão Fahren */
     .form-switch {
@@ -214,22 +225,24 @@ if ($qr) {
     .form-switch label .btn-text {
         display: none;
     }
-    
+
     /* Add-image tile (appear like other image cards but darker and with +) */
     .img-item.add-item .ratio {
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: rgba(0,0,0,0.03);
+        background-color: rgba(0, 0, 0, 0.03);
         border-radius: .5rem;
         cursor: pointer;
         transition: background-color .15s ease, transform .12s ease;
-        color: rgba(33,37,41,0.8);
+        color: rgba(33, 37, 41, 0.8);
     }
+
     .img-item.add-item .ratio:hover {
-        background-color: rgba(0,0,0,0.06);
+        background-color: rgba(0, 0, 0, 0.06);
         transform: translateY(-2px);
     }
+
     .img-item.add-item .add-plus {
         font-size: 2rem;
         line-height: 1;
@@ -240,9 +253,10 @@ if ($qr) {
         height: 100%;
         user-select: none;
     }
+
     .img-item.add-item:focus-within .ratio,
     .img-item.add-item:focus .ratio {
-        outline: 3px solid rgba(13,110,253,0.12);
+        outline: 3px solid rgba(13, 110, 253, 0.12);
     }
 </style>
 
@@ -293,6 +307,18 @@ if ($qr) {
                                 <div class="col">
                                     <label for="telefone-input" class="form-label">Telefone de contato</label>
                                     <input type="text" class="form-control shadow-sm text-capitalize" id="telefone-input" value="<?= $telefone ?>" name="telefone" placeholder="Informe a placa do veículo" required>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Estado</label>
+                                    <select id="anuncio-estado" name="estado_local" class="form-select">
+                                        <option value="">Selecione um estado...</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label class="form-label">Cidade</label>
+                                    <select id="anuncio-cidade" name="cidade" class="form-select">
+                                        <option value="">Selecione um município...</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -433,8 +459,8 @@ if ($qr) {
                                 <!-- descricao editavel abaixo de placa/garantia -->
                                 <div class="col-12 mt-3">
                                     <label for="descricao-input" class="form-label">Descrição do veículo</label>
-                                    <textarea id="descricao-input" name="descricao" class="form-control" rows="4" maxlength="1000" placeholder="Descreva o veículo (100 a 1000 caracteres)"><?= htmlspecialchars($linha['descricao'] ?? '', ENT_QUOTES) ?></textarea>
-                                    <div class="form-text text-end"><span id="desc-count"><?= mb_strlen($linha['descricao'] ?? '') ?></span>/1000</div>
+                                    <textarea id="descricao-input" name="descricao" class="form-control" rows="4" maxlength="1000" placeholder="Descreva o veículo"><?= htmlspecialchars($descricao ?? '', ENT_QUOTES) ?></textarea>
+                                    <div class="form-text text-end"><span id="desc-count"><?= mb_strlen($descricao ?? '') ?></span>/1000</div>
                                 </div>
                             </div>
                         </div>
@@ -447,38 +473,38 @@ if ($qr) {
                         </div>
 
                         <div class="col d-flex justify-content-between">
-                                <div class="w-100">
-                                    <div class="d-flex justify-content-end align-items-center mb-2">
-                                        <div>
-                                            <small class="text-muted mb-2">Fotos existentes: <?= count($photos) ?></small>
-                                        </div>
+                            <div class="w-100">
+                                <div class="d-flex justify-content-end align-items-center mb-2">
+                                    <div>
+                                        <small class="text-muted mb-2">Fotos existentes: <?= count($photos) ?></small>
                                     </div>
+                                </div>
 
-                                    <div id="image-dropzone" class="image-dropzone">
-                                        <input type="file" id="new-fotos-input" name="new_fotos[]" accept="image/*" multiple style="display:none;">
-                                        <div id="images-grid" class="row row-cols-3 row-cols-xxl-5 row-gap-3 mb-0 g-3">
-                                                <!-- Add-image tile: appears as the FIRST card among images -->
-                                                <div class="col img-item add-item" role="button" tabindex="0" aria-label="Adicionar fotos">
-                                                    <div class="ratio ratio-16x9 position-relative">
-                                                        <div class="add-plus"><i class="bi bi-plus-lg"></i></div>
-                                                    </div>
-                                                </div>
-                                                <?php
-                                                    // render existing photos
-                                                    foreach ($photos as $p):
-                                                        $src = '../img/anuncios/carros/' . $id_veiculo . '/' . $p;
-                                                ?>
-                                                    <div class="col img-item existing-item" data-filename="<?= htmlspecialchars($p, ENT_QUOTES) ?>">
-                                                        <div class="ratio ratio-16x9 position-relative">
-                                                            <button type="button" class="m-1 delete-mark position-absolute top-0 end-0" title="Marcar para deletar"><i class="bi bi-trash"></i></button>
-                                                            <img src="<?= $src ?>" class="img-fluid object-fit-cover shadow-sm rounded-3">
-                                                        </div>
-                                                    </div>
-                                                <?php endforeach; ?>
+                                <div id="image-dropzone" class="image-dropzone">
+                                    <input type="file" id="new-fotos-input" name="new_fotos[]" accept="image/*" multiple style="display:none;">
+                                    <div id="images-grid" class="row row-cols-3 row-cols-xxl-5 row-gap-3 mb-0 g-3">
+                                        <!-- Add-image tile: appears as the FIRST card among images -->
+                                        <div class="col img-item add-item" role="button" tabindex="0" aria-label="Adicionar fotos">
+                                            <div class="ratio ratio-16x9 position-relative">
+                                                <div class="add-plus"><i class="bi bi-plus-lg"></i></div>
+                                            </div>
                                         </div>
+                                        <?php
+                                        // render existing photos
+                                        foreach ($photos as $p):
+                                            $src = '../img/anuncios/carros/' . $id_veiculo . '/' . $p;
+                                        ?>
+                                            <div class="col img-item existing-item" data-filename="<?= htmlspecialchars($p, ENT_QUOTES) ?>">
+                                                <div class="ratio ratio-16x9 position-relative">
+                                                    <button type="button" class="m-1 delete-mark position-absolute top-0 end-0" title="Marcar para deletar"><i class="bi bi-trash"></i></button>
+                                                    <img src="<?= $src ?>" class="img-fluid object-fit-cover shadow-sm rounded-3">
+                                                </div>
+                                            </div>
+                                        <?php endforeach; ?>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                     <hr class="my-5">
                     <div class="row d-flex align-items-stretch">
@@ -494,9 +520,15 @@ if ($qr) {
                                     <div class="row">
                                         <div class="col">
                                             <select class="form-select shadow-sm" id="condicao-select" aria-label="Default select example" name="condicao" required>
-                                                <option value="N" <?php if (($condicao ?? 'N') === 'N') { echo 'selected'; } ?>>Novo</option>
-                                                <option value="S" <?php if (($condicao ?? '') === 'S') { echo 'selected'; } ?>>Seminovo</option>
-                                                <option value="U" <?php if (($condicao ?? '') === 'U' || ($quilometragem > 0 && empty($condicao))) { echo 'selected'; } ?>>Usado</option>
+                                                <option value="N" <?php if (($condicao ?? 'N') === 'N') {
+                                                                        echo 'selected';
+                                                                    } ?>>Novo</option>
+                                                <option value="S" <?php if (($condicao ?? '') === 'S') {
+                                                                        echo 'selected';
+                                                                    } ?>>Seminovo</option>
+                                                <option value="U" <?php if (($condicao ?? '') === 'U' || ($quilometragem > 0 && empty($condicao))) {
+                                                                        echo 'selected';
+                                                                    } ?>>Usado</option>
                                             </select>
                                         </div>
                                         <div class="col-8" style="display: none;">
@@ -636,13 +668,17 @@ if ($qr) {
                                     <hr>
 
                                     <div class="row g-3">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <label class="form-label">Estado</label>
-                                            <input type="text" id="view-reserva-estado" name="estado" class="form-control" maxlength="2">
+                                            <select id="view-reserva-estado" name="estado" class="form-select">
+                                                <option value="">Carregando estados...</option>
+                                            </select>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-5">
                                             <label class="form-label">Cidade</label>
-                                            <input type="text" id="view-reserva-cidade" name="cidade" class="form-control">
+                                            <select id="view-reserva-cidade" name="cidade" class="form-select">
+                                                <option value="">Selecione um estado primeiro...</option>
+                                            </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label class="form-label">Bairro</label>
@@ -777,14 +813,20 @@ if ($qr) {
 
                                                 <!-- Endereço do visitante -->
                                                 <div class="row g-3 mt-2 mb-2">
-                                                    <div class="col-12"><h6 class="mb-2">Endereço</h6></div>
-                                                    <div class="col-md-1">
-                                                        <label for="reserva-estado" class="form-label">Estado</label>
-                                                        <input type="text" class="form-control" id="reserva-estado" name="estado" placeholder="SP" maxlength="2">
+                                                    <div class="col-12">
+                                                        <h6 class="mb-2">Endereço</h6>
                                                     </div>
                                                     <div class="col-md-3">
+                                                        <label for="reserva-estado" class="form-label">Estado</label>
+                                                        <select class="form-select" id="reserva-estado" name="estado">
+                                                            <option value="">Carregando estados...</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-5">
                                                         <label for="reserva-cidade" class="form-label">Cidade</label>
-                                                        <input type="text" class="form-control" id="reserva-cidade" name="cidade" placeholder="Cidade">
+                                                        <select class="form-select" id="reserva-cidade" name="cidade">
+                                                            <option value="">Selecione um estado primeiro...</option>
+                                                        </select>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <label for="reserva-bairro" class="form-label">Bairro</label>
@@ -840,7 +882,8 @@ if ($qr) {
                 }
 
                 // Helpers locais
-                function format_phone_display_local($digits) {
+                function format_phone_display_local($digits)
+                {
                     $digits_only = preg_replace('/\D+/', '', $digits);
                     if ($digits_only === '') return '';
                     if (strlen($digits_only) <= 2) return '(' . $digits_only . ')';
@@ -855,9 +898,10 @@ if ($qr) {
                     return '(' . $area . ') ' . $firstPart . '-' . $last4;
                 }
 
-                function day_abbr_pt_local($date) {
+                function day_abbr_pt_local($date)
+                {
                     $w = date('w', strtotime($date));
-                    $map = ['dom','seg','ter','qua','qui','sex','sab'];
+                    $map = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'];
                     return $map[$w] ?? '';
                 }
 
@@ -868,34 +912,39 @@ if ($qr) {
                     <?php if (!empty($reservas)): ?>
                         <?php foreach ($reservas as $res): ?>
                             <?php
-                                $badgeClass = 'bg-warning-subtle text-warning-emphasis';
-                                switch ($res['status']) {
-                                    case 'confirmada': $badgeClass = 'bg-success-subtle text-success-emphasis'; break;
-                                    case 'cancelada': $badgeClass = 'bg-danger-subtle text-danger-emphasis'; break;
-                                    case 'realizada': $badgeClass = 'bg-info-subtle text-info-emphasis'; break;
-                                }
-                                $data_display = day_abbr_pt_local($res['data']);
-                                $dia = date('d', strtotime($res['data']));
+                            $badgeClass = 'bg-warning-subtle text-warning-emphasis';
+                            switch ($res['status']) {
+                                case 'confirmada':
+                                    $badgeClass = 'bg-success-subtle text-success-emphasis';
+                                    break;
+                                case 'cancelada':
+                                    $badgeClass = 'bg-danger-subtle text-danger-emphasis';
+                                    break;
+                                case 'realizada':
+                                    $badgeClass = 'bg-info-subtle text-info-emphasis';
+                                    break;
+                            }
+                            $data_display = day_abbr_pt_local($res['data']);
+                            $dia = date('d', strtotime($res['data']));
                             ?>
                             <div class="col-12">
                                 <div class="card rounded-5 reserva-card" role="button" data-id="<?= $res['id'] ?>"
-                                     data-nome="<?= htmlspecialchars($res['nome'], ENT_QUOTES) ?>"
-                                     data-telefone="<?= htmlspecialchars(format_phone_display_local($res['telefone']), ENT_QUOTES) ?>"
-                                     data-email="<?= htmlspecialchars($res['email'], ENT_QUOTES) ?>"
-                                     data-preferencia_contato="<?= htmlspecialchars($res['preferencia_contato'], ENT_QUOTES) ?>"
-                                     data-data="<?= $res['data'] ?>"
-                                     data-hora="<?= $res['hora'] ?>"
-                                     data-acompanhantes_qtd="<?= $res['acompanhantes_qtd'] ?>"
-                                     data-estado="<?= htmlspecialchars($res['estado'], ENT_QUOTES) ?>"
-                                     data-cidade="<?= htmlspecialchars($res['cidade'], ENT_QUOTES) ?>"
-                                     data-bairro="<?= htmlspecialchars($res['bairro'], ENT_QUOTES) ?>"
-                                     data-rua="<?= htmlspecialchars($res['rua'], ENT_QUOTES) ?>"
-                                     data-numero="<?= htmlspecialchars($res['numero'], ENT_QUOTES) ?>"
-                                     data-complemento="<?= htmlspecialchars($res['complemento'], ENT_QUOTES) ?>"
-                                     data-cep="<?= htmlspecialchars($res['cep'], ENT_QUOTES) ?>"
-                                     data-observacoes="<?= htmlspecialchars($res['observacoes'], ENT_QUOTES) ?>"
-                                     data-status="<?= $res['status'] ?>"
-                                     >
+                                    data-nome="<?= htmlspecialchars($res['nome'], ENT_QUOTES) ?>"
+                                    data-telefone="<?= htmlspecialchars(format_phone_display_local($res['telefone']), ENT_QUOTES) ?>"
+                                    data-email="<?= htmlspecialchars($res['email'], ENT_QUOTES) ?>"
+                                    data-preferencia_contato="<?= htmlspecialchars($res['preferencia_contato'], ENT_QUOTES) ?>"
+                                    data-data="<?= $res['data'] ?>"
+                                    data-hora="<?= $res['hora'] ?>"
+                                    data-acompanhantes_qtd="<?= $res['acompanhantes_qtd'] ?>"
+                                    data-estado="<?= htmlspecialchars($res['estado'], ENT_QUOTES) ?>"
+                                    data-cidade="<?= htmlspecialchars($res['cidade'], ENT_QUOTES) ?>"
+                                    data-bairro="<?= htmlspecialchars($res['bairro'], ENT_QUOTES) ?>"
+                                    data-rua="<?= htmlspecialchars($res['rua'], ENT_QUOTES) ?>"
+                                    data-numero="<?= htmlspecialchars($res['numero'], ENT_QUOTES) ?>"
+                                    data-complemento="<?= htmlspecialchars($res['complemento'], ENT_QUOTES) ?>"
+                                    data-cep="<?= htmlspecialchars($res['cep'], ENT_QUOTES) ?>"
+                                    data-observacoes="<?= htmlspecialchars($res['observacoes'], ENT_QUOTES) ?>"
+                                    data-status="<?= $res['status'] ?>">
                                     <div class="card-body d-flex px-0 gap-4">
                                         <div class="d-flex flex-column text-center justify-content-center align-items-center px-4 border-end">
                                             <span class="fs-6 text-uppercase"><?= $data_display ?></span>
@@ -993,7 +1042,7 @@ if ($qr) {
         $("#garantia-select option[value='<?= $garantia ?>']").prop('selected', true);
         $("#proprietario-select option[value='<?= $proprietario ?>']").prop('selected', true);
         $("#troca-select option[value='<?= $troca ?>']").prop('selected', true);
-    $("#condicao-select option[value='<?= $condicao ?? 'N' ?>']").prop('selected', true);
+        $("#condicao-select option[value='<?= $condicao ?? 'N' ?>']").prop('selected', true);
 
         imgCard.hover(
             function() {
@@ -1097,7 +1146,7 @@ if ($qr) {
 
         dateInput.attr('min', new Date().toISOString().split('T')[0]);
         dateInput.val(new Date().toISOString().split('T')[0]);
-        
+
         // --- Handlers para abrir/editar/alterar status/excluir reservas a partir dos cards nesta página ---
         function fillViewModalFromCard($card) {
             const id = $card.data('id');
@@ -1109,8 +1158,8 @@ if ($qr) {
             $('#view-reserva-data').val($card.data('data'));
             $('#view-reserva-hora').val($card.data('hora'));
             $('#view-reserva-acomp').val($card.data('acompanhantes_qtd'));
-            $('#view-reserva-estado').val($card.data('estado'));
-            $('#view-reserva-cidade').val($card.data('cidade'));
+            // set state (UF) and load municipalities, then set city
+            setViewModalLocation($card.data('estado'), $card.data('cidade'));
             $('#view-reserva-bairro').val($card.data('bairro'));
             $('#view-reserva-rua').val($card.data('rua'));
             $('#view-reserva-numero').val($card.data('numero'));
@@ -1146,10 +1195,18 @@ if ($qr) {
             $card.data('status', status);
             $badge.removeClass('bg-warning-subtle text-warning-emphasis bg-success-subtle text-success-emphasis bg-danger-subtle text-danger-emphasis bg-info-subtle text-info-emphasis bg-secondary-subtle text-secondary');
             switch (status) {
-                case 'confirmada': $badge.addClass('bg-success-subtle text-success-emphasis'); break;
-                case 'cancelada': $badge.addClass('bg-danger-subtle text-danger-emphasis'); break;
-                case 'realizada': $badge.addClass('bg-info-subtle text-info-emphasis'); break;
-                default: $badge.addClass('bg-warning-subtle text-warning-emphasis'); break;
+                case 'confirmada':
+                    $badge.addClass('bg-success-subtle text-success-emphasis');
+                    break;
+                case 'cancelada':
+                    $badge.addClass('bg-danger-subtle text-danger-emphasis');
+                    break;
+                case 'realizada':
+                    $badge.addClass('bg-info-subtle text-info-emphasis');
+                    break;
+                default:
+                    $badge.addClass('bg-warning-subtle text-warning-emphasis');
+                    break;
             }
         }
 
@@ -1211,13 +1268,19 @@ if ($qr) {
                         alert('Erro: ' + resp.message);
                     }
                 })
-                .fail(function() { alert('Erro ao salvar.'); });
+                .fail(function() {
+                    alert('Erro ao salvar.');
+                });
         });
 
         // Confirmar reserva
         $('#view-reserva-confirm').on('click', function() {
             const id = $('#view-reserva-id').val();
-            $.post('../controladores/reservas/atualizar-reserva.php', {id: id, action: 'status', status: 'confirmada'})
+            $.post('../controladores/reservas/atualizar-reserva.php', {
+                    id: id,
+                    action: 'status',
+                    status: 'confirmada'
+                })
                 .done(function(resp) {
                     if (resp.success) {
                         updateCardStatus(id, 'confirmada');
@@ -1229,7 +1292,11 @@ if ($qr) {
         // Cancelar reserva
         $('#view-reserva-cancel').on('click', function() {
             const id = $('#view-reserva-id').val();
-            $.post('../controladores/reservas/atualizar-reserva.php', {id: id, action: 'status', status: 'cancelada'})
+            $.post('../controladores/reservas/atualizar-reserva.php', {
+                    id: id,
+                    action: 'status',
+                    status: 'cancelada'
+                })
                 .done(function(resp) {
                     if (resp.success) {
                         updateCardStatus(id, 'cancelada');
@@ -1241,7 +1308,11 @@ if ($qr) {
         // Voltar para pendente
         $('#view-reserva-to-pendente, #view-reserva-to-pendente-2').on('click', function() {
             const id = $('#view-reserva-id').val();
-            $.post('../controladores/reservas/atualizar-reserva.php', {id: id, action: 'status', status: 'pendente'})
+            $.post('../controladores/reservas/atualizar-reserva.php', {
+                    id: id,
+                    action: 'status',
+                    status: 'pendente'
+                })
                 .done(function(resp) {
                     if (resp.success) {
                         updateCardStatus(id, 'pendente');
@@ -1253,7 +1324,11 @@ if ($qr) {
         // Marcar como realizada
         $('#view-reserva-to-realizada').on('click', function() {
             const id = $('#view-reserva-id').val();
-            $.post('../controladores/reservas/atualizar-reserva.php', {id: id, action: 'status', status: 'realizada'})
+            $.post('../controladores/reservas/atualizar-reserva.php', {
+                    id: id,
+                    action: 'status',
+                    status: 'realizada'
+                })
                 .done(function(resp) {
                     if (resp.success) {
                         updateCardStatus(id, 'realizada');
@@ -1266,16 +1341,22 @@ if ($qr) {
         $('#view-reserva-delete').on('click', function() {
             if (!confirm('Tem certeza que deseja excluir esta reserva?')) return;
             const id = $('#view-reserva-id').val();
-            $.post('../controladores/reservas/deletar-reserva.php', {id: id})
+            $.post('../controladores/reservas/deletar-reserva.php', {
+                    id: id
+                })
                 .done(function(resp) {
                     if (resp.success) {
-                        $('.reserva-card[data-id="' + id + '"]').parent().fadeOut(300, function() { $(this).remove(); });
+                        $('.reserva-card[data-id="' + id + '"]').parent().fadeOut(300, function() {
+                            $(this).remove();
+                        });
                         const modalEl = document.getElementById('view-reserva-view-modal');
                         const modal = bootstrap.Modal.getInstance(modalEl);
                         if (modal) modal.hide();
                     } else alert(resp.message);
                 })
-                .fail(function() { alert('Erro ao excluir.'); });
+                .fail(function() {
+                    alert('Erro ao excluir.');
+                });
         });
 
         // ---- Image editor: drag & drop, paste, add, mark for delete (apply on save) ----
@@ -1308,7 +1389,7 @@ if ($qr) {
         }
 
         function addFilesList(list) {
-            for (let i=0;i<list.length;i++) {
+            for (let i = 0; i < list.length; i++) {
                 const f = list[i];
                 if (!f || !f.type.startsWith('image/')) continue;
                 newFiles.push(f);
@@ -1317,7 +1398,9 @@ if ($qr) {
         }
 
         // Open file input when clicking the add-image tile (or pressing Enter/Space when focused)
-        $imagesGrid.on('click', '.img-item.add-item', function() { $fileInput.trigger('click'); });
+        $imagesGrid.on('click', '.img-item.add-item', function() {
+            $fileInput.trigger('click');
+        });
         $imagesGrid.on('keydown', '.img-item.add-item', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -1333,10 +1416,15 @@ if ($qr) {
         });
 
         $dropzone.on('dragover', function(e) {
-            e.preventDefault(); e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
             $(this).addClass('dragover');
         });
-        $dropzone.on('dragleave dragend drop', function(e) { e.preventDefault(); e.stopPropagation(); $(this).removeClass('dragover'); });
+        $dropzone.on('dragleave dragend drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            $(this).removeClass('dragover');
+        });
         $dropzone.on('drop', function(e) {
             const dt = e.originalEvent.dataTransfer;
             if (!dt) return;
@@ -1350,7 +1438,7 @@ if ($qr) {
             const items = (e.originalEvent.clipboardData || e.clipboardData).items;
             if (!items) return;
             const files = [];
-            for (let i=0;i<items.length;i++) {
+            for (let i = 0; i < items.length; i++) {
                 const it = items[i];
                 if (it.kind === 'file') {
                     const f = it.getAsFile();
@@ -1362,7 +1450,8 @@ if ($qr) {
 
         // toggle deletion for existing items
         $imagesGrid.on('click', '.existing-item .delete-mark', function(e) {
-            e.preventDefault(); e.stopPropagation();
+            e.preventDefault();
+            e.stopPropagation();
             const $item = $(this).closest('.existing-item');
             const filename = $item.data('filename');
             if (!$item.hasClass('marked')) {
@@ -1383,9 +1472,9 @@ if ($qr) {
             e.preventDefault();
             const fd = new FormData(this);
             // append deletions
-            for (let i=0;i<deletions.length;i++) fd.append('delete_photos[]', deletions[i]);
+            for (let i = 0; i < deletions.length; i++) fd.append('delete_photos[]', deletions[i]);
             // append new files
-            for (let i=0;i<newFiles.length;i++) {
+            for (let i = 0; i < newFiles.length; i++) {
                 const f = newFiles[i];
                 if (!f) continue;
                 fd.append('new_fotos[]', f, f.name);
@@ -1402,7 +1491,7 @@ if ($qr) {
                 processData: false,
                 contentType: false,
                 dataType: 'json'
-            }).done(function(resp){
+            }).done(function(resp) {
                 if (resp && resp.success) {
                     if (resp.redirect) location.href = resp.redirect;
                     else location.reload();
@@ -1424,6 +1513,109 @@ if ($qr) {
                 $descCount.text($(this).val().length);
             });
         }
+
+        // --- Localização (IBGE): popular selects de estados e municípios para reservas ---
+        const ibgeEstadosUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
+
+        function populateStates() {
+            $.getJSON(ibgeEstadosUrl, function(estados) {
+                estados.sort((a, b) => a.nome.localeCompare(b.nome));
+                const $reservaEstados = $('#reserva-estado');
+                const $viewEstados = $('#view-reserva-estado');
+                const $anuncioEstados = $('#anuncio-estado');
+                $reservaEstados.empty().append('<option value="">Selecione um estado...</option>');
+                $viewEstados.empty().append('<option value="">Selecione um estado...</option>');
+                if ($anuncioEstados.length) $anuncioEstados.empty().append('<option value="">Selecione um estado...</option>');
+                $.each(estados, function(i, estado) {
+                    const opt = `<option value="${estado.sigla}" data-id="${estado.id}">${estado.nome} (${estado.sigla})</option>`;
+                    $reservaEstados.append(opt);
+                    $viewEstados.append(opt);
+                    if ($anuncioEstados.length) $anuncioEstados.append(opt);
+                });
+            });
+        }
+
+        function loadMunicipiosFor($estadoSelect, $municipioSelect, selectedCity) {
+            const $sel = $($estadoSelect);
+            const $mun = $($municipioSelect);
+            const estadoId = $sel.find('option:selected').data('id');
+            if (!estadoId) {
+                $mun.html('<option value="">Selecione um estado primeiro...</option>');
+                return;
+            }
+            const urlMunicipios = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`;
+            $mun.html('<option value="">Carregando municípios...</option>');
+            $.getJSON(urlMunicipios, function(municipios) {
+                municipios.sort((a, b) => a.nome.localeCompare(b.nome));
+                $mun.empty().append('<option value="">Selecione um município...</option>');
+                $.each(municipios, function(i, municipio) {
+                    $mun.append(`<option value="${municipio.nome}">${municipio.nome}</option>`);
+                });
+                if (selectedCity) {
+                    // try to select by exact match
+                    $mun.val(selectedCity);
+                    // fallback: try case-insensitive match
+                    if (!$mun.val() && selectedCity) {
+                        const opts = $mun.find('option');
+                        opts.each(function() {
+                            if ($(this).text().toLowerCase() === selectedCity.toLowerCase()) {
+                                $mun.val($(this).val());
+                                return false;
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        // wire change handlers
+        $(document).on('change', '#reserva-estado', function() {
+            loadMunicipiosFor('#reserva-estado', '#reserva-cidade');
+        });
+        $(document).on('change', '#view-reserva-estado', function() {
+            loadMunicipiosFor('#view-reserva-estado', '#view-reserva-cidade');
+        });
+        // also wire anuncio estado change so municipios carreguem quando editando anúncio
+        $(document).on('change', '#anuncio-estado', function() { loadMunicipiosFor('#anuncio-estado', '#anuncio-cidade'); });
+
+        // expose a helper to set view modal location (state UF and city name)
+        function setViewModalLocation(stateUf, cityName, attempt = 0) {
+            // retry a few times if states are still loading
+            if (attempt > 12) return; // give up
+            if ($('#view-reserva-estado option').length <= 1) {
+                setTimeout(function() {
+                    setViewModalLocation(stateUf, cityName, attempt + 1);
+                }, 150);
+                return;
+            }
+            if (!stateUf) {
+                $('#view-reserva-estado').val('');
+                $('#view-reserva-cidade').html('<option value="">Selecione um estado primeiro...</option>');
+                return;
+            }
+            $('#view-reserva-estado').val(stateUf);
+            // after state is set, load municipios and set city
+            loadMunicipiosFor('#view-reserva-estado', '#view-reserva-cidade', cityName);
+        }
+
+        // initialize states on page load
+        populateStates();
+        // set anuncio location if available from server
+        <?php if (!empty($estado_local)): ?>
+                // wait for states to populate and then set
+                (function waitAndSetAnuncio(attempt) {
+                    if (attempt > 12) return;
+                    if ($('#anuncio-estado option').length <= 1) {
+                        setTimeout(function() {
+                            waitAndSetAnuncio(attempt + 1);
+                        }, 150);
+                        return;
+                    }
+                    $('#anuncio-estado').val('<?= $estado_local ?>');
+                    // load municipios and select city
+                    loadMunicipiosFor('#anuncio-estado', '#anuncio-cidade', '<?= addslashes($cidade) ?>');
+                })(0);
+        <?php endif; ?>
     })
 </script>
 

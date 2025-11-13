@@ -7,7 +7,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $cpf = str_replace('-', '', str_replace('.', '', $_POST['cpf']));
     $data_nascimento = $_POST['data-nascimento'];
     $email = $_POST['email'];
-    $telefone = str_replace(')', '', str_replace('(', '', str_replace('-', '', $_POST['telefone'])));
+    $telefone = str_replace(' ', '', str_replace(')', '', str_replace('(', '', str_replace('-', '', $_POST['telefone']))));
 
     // handle avatar upload if present
     $avatar_path = null;
@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $_SESSION['email'] = $email;
     $_SESSION['telefone'] = $telefone;
 
-    $_SESSION['msg_alert'] = ['success', 'Alterações feitas com sucesso!'];
+    $_SESSION['msg_alert'] = ['success', 'Alterações feitas com sucesso! Telefone: '.$_SESSION['telefone']];
     header('Location: ../menu/configuracoes.php');
     exit();
 } else {

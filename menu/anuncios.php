@@ -84,7 +84,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
                             $troca = $carro['aceita_troca'];
                             $revisao = $carro['revisao'];
                             $id = $carro['id'];
-                            $loc = 'São José dos Campos - SP';
+                            $loc = $carro['cidade'] . ' - '  . $carro['estado_local'];
                             // fetch first photo for this anuncio
                             $img1 = '../img/compras/1.png';
                             $qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id ORDER BY `ordem` ASC LIMIT 1");

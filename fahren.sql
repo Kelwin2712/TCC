@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 04/11/2025 às 01:24
+-- Tempo de geração: 13/11/2025 às 11:04
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `fahren`
 --
-CREATE DATABASE IF NOT EXISTS `fahren` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `fahren`;
 
 -- --------------------------------------------------------
 
@@ -29,7 +27,6 @@ USE `fahren`;
 -- Estrutura para tabela `anuncios_carros`
 --
 
-DROP TABLE IF EXISTS `anuncios_carros`;
 CREATE TABLE `anuncios_carros` (
   `id` int(12) NOT NULL,
   `ativo` char(1) NOT NULL DEFAULT 'A',
@@ -37,7 +34,7 @@ CREATE TABLE `anuncios_carros` (
   `estado_local` char(2) DEFAULT NULL,
   `cidade` varchar(255) DEFAULT NULL,
   `marca` int(2) DEFAULT NULL,
-  `versao` varchar(40) DEFAULT NULL,
+  `versao` varchar(150) DEFAULT NULL,
   `carroceria` int(2) DEFAULT NULL,
   `preco` int(9) NOT NULL DEFAULT 0,
   `condicao` char(1) NOT NULL DEFAULT 'U',
@@ -46,8 +43,10 @@ CREATE TABLE `anuncios_carros` (
   `ano_modelo` int(4) DEFAULT NULL,
   `propulsao` varchar(10) DEFAULT NULL,
   `combustivel` varchar(20) DEFAULT NULL,
+  `cambio` char(1) DEFAULT NULL COMMENT 'A=Automático, M=Manual, C=CVT, T=Automatizado',
   `blindagem` char(1) DEFAULT '0',
   `id_vendedor` int(10) DEFAULT NULL,
+  `tipo_vendedor` char(1) NOT NULL DEFAULT '0',
   `imagens` varchar(255) DEFAULT NULL,
   `leilao` char(1) DEFAULT NULL,
   `portas_qtd` smallint(1) DEFAULT 4,
@@ -64,8 +63,8 @@ CREATE TABLE `anuncios_carros` (
   `estado_conservacao` char(1) NOT NULL,
   `uso_anterior` char(1) NOT NULL,
   `aceita_troca` char(1) NOT NULL,
-  `email` varchar(256) NOT NULL,
-  `telefone` varchar(20) NOT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `telefone` varchar(20) DEFAULT NULL,
   `garantia` int(2) NOT NULL,
   `descricao` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -74,12 +73,16 @@ CREATE TABLE `anuncios_carros` (
 -- Despejando dados para a tabela `anuncios_carros`
 --
 
-INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`, `marca`, `versao`, `carroceria`, `preco`, `condicao`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `blindagem`, `id_vendedor`, `imagens`, `leilao`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`, `descricao`) VALUES
-(43, 'A', 'amg gt', 'SP', '', 40, '4.0 V8 TURBO GASOLINA R 7G-DCT', 1, 1600000, 'S', 15000, 2017, 2018, 'abarth', 'abarth', '0', 6, NULL, NULL, 4, 5, 'AAA1111', '2025-10-28 19:29:33', 5, '1', '2', 'F', '0', 'D', 'D', '4', 'O', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
-(45, 'A', 'mustang', NULL, NULL, 18, '4.0 COUPÉ V6 12V GASOLINA 2P AUTOMÁTICO', NULL, 249900, 'U', 113000, 2009, 2010, NULL, NULL, '0', 6, NULL, NULL, 4, 5, 'FGR8A41', '2025-10-29 20:11:49', 2, '3', '1', 'F', 'L', 'D', 'D', '3', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
-(46, 'A', '911', NULL, NULL, 47, '3.0 24V H6 GASOLINA CARRERA S PDK', NULL, 970000, 'S', 4000, 2022, 2023, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'FQA9Q76', '2025-10-29 20:41:35', 10, '1', '2', 'F', '0', 'D', 'D', '4', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
-(47, 'A', 'rs5', NULL, NULL, 4, '2.9 V6 TFSI GASOLINA SPORTBACK COMPETITI', NULL, 620000, 'N', 0, 2023, 2023, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'QTT1F11', '2025-10-30 21:16:39', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
-(48, 'A', 'camry', NULL, NULL, 56, '2.5 VVT-IE HYBRID XLE eCVT', NULL, 259900, 'U', 108000, 2022, 2023, NULL, NULL, '0', 7, NULL, NULL, 4, 5, 'FAF9A96', '2025-10-30 21:24:24', 2, '2', '2', 'F', 'L', 'D', 'D', '3', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
+INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`, `marca`, `versao`, `carroceria`, `preco`, `condicao`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `cambio`, `blindagem`, `id_vendedor`, `tipo_vendedor`, `imagens`, `leilao`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`, `descricao`) VALUES
+(43, 'A', 'amg gt', 'DF', 'Brasília', 40, '4.0 V8 TURBO GASOLINA R 7G-DCT', 1, 1600000, 'S', 15000, 2017, 2018, 'abarth', 'abarth', NULL, '0', 6, '0', NULL, NULL, 4, 5, 'AAA1111', '2025-10-28 19:29:33', 5, '1', '2', 'F', '0', 'D', 'D', '4', 'O', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, ''),
+(45, 'A', 'mustang', 'MS', 'Bela Vista', 18, '4.0 COUPÉ V6 12V GASOLINA 2P AUTOMÁTICO', 1, 249900, 'U', 113000, 2009, 2010, 'abarth', 'abarth', NULL, '0', 6, '0', NULL, NULL, 4, 5, 'FGR8A41', '2025-10-29 20:11:49', 2, '3', '1', 'F', 'L', 'D', 'D', '3', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, ''),
+(46, 'A', '911', NULL, NULL, 47, '3.0 24V H6 GASOLINA CARRERA S PDK', NULL, 970000, 'S', 4000, 2022, 2023, NULL, NULL, NULL, '0', 7, '0', NULL, NULL, 4, 5, 'FQA9Q76', '2025-10-29 20:41:35', 10, '1', '2', 'F', '0', 'D', 'D', '4', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
+(47, 'A', 'rs5', NULL, NULL, 4, '2.9 V6 TFSI GASOLINA SPORTBACK COMPETITION PLUS QUATTRO TIPTRONIC\n', NULL, 620000, 'N', 0, 2023, 2023, NULL, NULL, NULL, '0', 7, '0', NULL, NULL, 4, 5, 'QTT1F11', '2025-10-30 21:16:39', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, NULL),
+(48, 'A', 'camry', NULL, NULL, 56, '2.5 VVT-IE HYBRID XLE eCVT', NULL, 259900, 'U', 108000, 2022, 2023, NULL, NULL, NULL, '0', 7, '0', NULL, NULL, 4, 5, 'FAF9A96', '2025-10-30 21:24:24', 2, '2', '2', 'F', 'L', 'D', 'D', '3', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'),
+(49, 'A', 'c 63 amg', 'TO', 'Palmas', 40, '2.0 TURBO PHEV S E PERFORMANCE F1 EDITION 4MATIC+ SPEEDSHIFT\n', 1, 869000, 'N', 0, 2023, 2024, 'abarth', 'abarth', NULL, '0', 6, '0', NULL, NULL, 4, 5, 'HWS9G83', '2025-11-11 14:43:56', 1, '1', '2', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, 'Outros Opcionais: Comando de áudio no volante, Controle de estabilidade, Direção Elétrica, Distribuição eletrônica de frenagem, Kit Multimídia, Pára-choques na cor do veículo.'),
+(50, 'A', '320i', 'PB', 'João Pessoa', 6, '2.0 16V TURBO FLEX SPORT GP AUTOMÁTICO', NULL, 215900, 'S', 65000, 2021, 2022, NULL, NULL, NULL, '0', 6, '0', NULL, NULL, 4, 5, 'HIU7S68', '2025-11-11 16:27:21', 1, '2', '1', 'F', '0', 'D', 'D', '3', 'P', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, 'Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste'),
+(56, 'A', 'm5', NULL, NULL, 6, '4.4 V8 TWINPOWER GASOLINA COMPETITION M XDRIVE STEPTRONIC', NULL, 700000, 'N', 0, 2021, 2021, NULL, NULL, NULL, '0', 6, '1', NULL, NULL, 4, 5, 'GHA0G75', '2025-11-11 19:58:03', 2, '2', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, ''),
+(57, 'A', '911', 'MG', 'Belo Horizonte', 47, '3.0 24V H6 GASOLINA CARRERA 4 GTS CABRIOLET PDK', NULL, 1160000, 'N', 0, 2024, 2024, NULL, NULL, NULL, '0', 6, '0', NULL, NULL, 4, 5, 'UYD9F88', '2025-11-12 20:43:47', 1, '1', '4', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '');
 
 -- --------------------------------------------------------
 
@@ -87,7 +90,6 @@ INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`
 -- Estrutura para tabela `carrocerias`
 --
 
-DROP TABLE IF EXISTS `carrocerias`;
 CREATE TABLE `carrocerias` (
   `id` int(2) NOT NULL,
   `nome` varchar(50) NOT NULL
@@ -114,7 +116,6 @@ INSERT INTO `carrocerias` (`id`, `nome`) VALUES
 -- Estrutura para tabela `conversas`
 --
 
-DROP TABLE IF EXISTS `conversas`;
 CREATE TABLE `conversas` (
   `id` int(11) NOT NULL,
   `comprador_id` int(11) NOT NULL,
@@ -132,7 +133,6 @@ CREATE TABLE `conversas` (
 -- Estrutura para tabela `cores`
 --
 
-DROP TABLE IF EXISTS `cores`;
 CREATE TABLE `cores` (
   `id` int(2) NOT NULL,
   `nome` varchar(50) NOT NULL
@@ -163,7 +163,6 @@ INSERT INTO `cores` (`id`, `nome`) VALUES
 -- Estrutura para tabela `estados`
 --
 
-DROP TABLE IF EXISTS `estados`;
 CREATE TABLE `estados` (
   `uf` char(2) NOT NULL,
   `nome` varchar(30) NOT NULL
@@ -208,7 +207,6 @@ INSERT INTO `estados` (`uf`, `nome`) VALUES
 -- Estrutura para tabela `favoritos`
 --
 
-DROP TABLE IF EXISTS `favoritos`;
 CREATE TABLE `favoritos` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
@@ -222,7 +220,6 @@ CREATE TABLE `favoritos` (
 -- Estrutura para tabela `fotos_carros`
 --
 
-DROP TABLE IF EXISTS `fotos_carros`;
 CREATE TABLE `fotos_carros` (
   `id` int(11) NOT NULL,
   `carro_id` int(11) DEFAULT NULL,
@@ -299,7 +296,40 @@ INSERT INTO `fotos_carros` (`id`, `carro_id`, `caminho_foto`, `ordem`) VALUES
 (79, 48, '1761870264_dc39eec8a902.webp', 5),
 (80, 48, '1761870264_0a18037c0701.webp', 6),
 (81, 48, '1761870264_39cc98ea3bad.webp', 7),
-(82, 48, '1761870264_e4070a6cc0a0.webp', 8);
+(82, 48, '1761870264_e4070a6cc0a0.webp', 8),
+(83, 49, '1762883036_40477f52486a.webp', 0),
+(84, 49, '1762883036_0aab3c817ad3.webp', 1),
+(85, 49, '1762883036_9a23bd17fc3b.webp', 2),
+(86, 49, '1762883036_5110253fc674.webp', 3),
+(87, 49, '1762883036_d5c7726e9770.webp', 4),
+(88, 50, '1762889241_b18b4729712c.jpg', 0),
+(89, 50, '1762889241_ddda129e5c2d.jpg', 1),
+(90, 50, '1762889241_7e894f305ef7.jpg', 2),
+(91, 50, '1762889241_73d304b3f9e0.jpg', 3),
+(92, 50, '1762889241_dee398594b03.jpg', 4),
+(93, 50, '1762889241_15cf1e80675e.jpg', 5),
+(94, 50, '1762889241_f9049ee9fa2c.jpg', 6),
+(104, 56, '1762901883_1bc9dbaffbe8.jpg', 0),
+(105, 56, '1762901883_e21203352f67.jpg', 1),
+(106, 56, '1762901883_81a7b67b62e4.jpg', 2),
+(107, 56, '1762901883_5f21286195b7.jpg', 3),
+(108, 56, '1762901883_23aece23031b.jpg', 4),
+(109, 56, '1762901883_13e3a14e3627.jpg', 5),
+(110, 56, '1762901883_357c5922db0e.jpg', 6),
+(111, 56, '1762901883_4f6373ed2deb.jpg', 7),
+(112, 57, '1762991027_ed6870c2cdee.webp', 0),
+(113, 57, '1762991027_25f64aeef703.webp', 1),
+(114, 57, '1762991027_b3492cf99121.webp', 2),
+(115, 57, '1762991027_04e52e4efdee.webp', 3),
+(116, 57, '1762991027_ca7b6764d3ce.webp', 4),
+(117, 57, '1762991027_ebd92db5908f.webp', 5),
+(118, 57, '1762991027_76c6ee505eba.webp', 6),
+(119, 57, '1762991027_9ef07ff5e598.webp', 7),
+(120, 57, '1762991027_2f3938de971e.webp', 8),
+(121, 57, '1762991027_8188d48f4ee9.webp', 9),
+(122, 57, '1762991027_3b2d817cff9c.webp', 10),
+(123, 57, '1762991027_d22898f556d7.webp', 11),
+(124, 57, '1762991027_67d99d8050d1.webp', 12);
 
 -- --------------------------------------------------------
 
@@ -307,7 +337,6 @@ INSERT INTO `fotos_carros` (`id`, `carro_id`, `caminho_foto`, `ordem`) VALUES
 -- Estrutura para tabela `lojas`
 --
 
-DROP TABLE IF EXISTS `lojas`;
 CREATE TABLE `lojas` (
   `id` int(11) NOT NULL,
   `nome` varchar(100) NOT NULL,
@@ -341,7 +370,8 @@ CREATE TABLE `lojas` (
 --
 
 INSERT INTO `lojas` (`id`, `nome`, `razao_social`, `cnpj`, `inscricao_estadual`, `endereco`, `numero`, `seguidores`, `cep`, `bairro`, `cidade`, `estado`, `telefone_fixo`, `whatsapp`, `email_corporativo`, `site`, `instagram`, `facebook`, `logo`, `capa`, `descricao_loja`, `hora_abre`, `hora_fecha`, `dias_funcionamento`, `created_at`) VALUES
-(2, 'Kelwin', '', '', '', '', '', 0, '', '', '', '', '', '123', 'a@a.a', '', '', '', '', '', 'A', '21:50:00', '21:50:00', 'Domingo,Segunda', '2025-10-09 00:50:16');
+(2, 'Kelwin', '', '', '', '', '', 0, '', '', '', '', '', '123', 'a@a.a', '', '', '', '', '', 'A', '21:50:00', '21:50:00', 'Domingo,Segunda', '2025-10-09 00:50:16'),
+(3, 'Fahren Imports', '', '', '', '', '', 0, '', '', '', '', '', '(12) 98827-3730', 'kelwin@gmail.com', '', '', '', 'logo-oficial (1).png', '', 'Teste', '20:50:00', '10:50:00', '1,2,3', '2025-11-11 22:57:04');
 
 -- --------------------------------------------------------
 
@@ -349,7 +379,6 @@ INSERT INTO `lojas` (`id`, `nome`, `razao_social`, `cnpj`, `inscricao_estadual`,
 -- Estrutura para tabela `marcas`
 --
 
-DROP TABLE IF EXISTS `marcas`;
 CREATE TABLE `marcas` (
   `id` int(11) NOT NULL,
   `value` varchar(50) NOT NULL,
@@ -426,7 +455,6 @@ INSERT INTO `marcas` (`id`, `value`, `nome`) VALUES
 -- Estrutura para tabela `mensagens_chat`
 --
 
-DROP TABLE IF EXISTS `mensagens_chat`;
 CREATE TABLE `mensagens_chat` (
   `id` int(11) NOT NULL,
   `de_usuario` int(11) NOT NULL,
@@ -448,7 +476,6 @@ CREATE TABLE `mensagens_chat` (
 -- Estrutura para tabela `reservas`
 --
 
-DROP TABLE IF EXISTS `reservas`;
 CREATE TABLE `reservas` (
   `id` int(11) NOT NULL,
   `id_veiculo` int(11) NOT NULL,
@@ -472,13 +499,21 @@ CREATE TABLE `reservas` (
   `atualizado_em` datetime DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `reservas`
+--
+
+INSERT INTO `reservas` (`id`, `id_veiculo`, `nome`, `telefone`, `email`, `preferencia_contato`, `data`, `hora`, `acompanhantes_qtd`, `estado`, `cidade`, `bairro`, `rua`, `numero`, `complemento`, `cep`, `observacoes`, `status`, `criado_em`, `atualizado_em`) VALUES
+(7, 43, 'Kelwin', '11111111111', 'kelwin@gmail.com', 'whatsapp', '2025-11-11', '12:03:00', 2, 'SP', 'Teste', 'teste', 'etes', '231', 'teste', '24115-151', 'Teste', 'pendente', '2025-11-11 14:56:37', '2025-11-11 14:56:37'),
+(8, 45, 'Cleitinho', '12988273730', 'kelwin@gmail.com', 'whatsapp', '2025-11-11', '14:51:00', 12, 'SP', 'Teste', 'teste', 'etes', '421', 'teste', '24115-151', 'Teste', 'pendente', '2025-11-11 14:57:10', '2025-11-11 14:57:51'),
+(9, 45, 'Cleitin', '12988273731', 'kelwinrocha5@gmail.com', 'whatsapp', '2025-11-28', '23:01:00', 120, 'SP', 'Teste', 'teste', 'etes', '42', 'teste', '12551-252', 'Teste', 'pendente', '2025-11-11 14:57:40', '2025-11-11 14:58:35');
+
 -- --------------------------------------------------------
 
 --
 -- Estrutura para tabela `usuarios`
 --
 
-DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios` (
   `id` int(6) NOT NULL,
   `nome` varchar(30) NOT NULL,
@@ -497,7 +532,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `senha`, `data_criacao_conta`, `data_nascimento`, `avatar`) VALUES
-(6, 'Kelwin', 'Silva', 11, '12332131312', 'kelwin@gmail.com', '1', '2025-09-20 20:44:02', '2025-10-14', ''),
+(6, 'Kelwin', 'Silva', 12988273730, '', 'kelwin@gmail.com', '1', '2025-09-20 20:44:02', '2025-10-14', ''),
 (7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1', '2025-10-02 22:40:54', NULL, '');
 
 --
@@ -604,7 +639,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `anuncios_carros`
 --
 ALTER TABLE `anuncios_carros`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT de tabela `carrocerias`
@@ -634,13 +669,13 @@ ALTER TABLE `favoritos`
 -- AUTO_INCREMENT de tabela `fotos_carros`
 --
 ALTER TABLE `fotos_carros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=125;
 
 --
 -- AUTO_INCREMENT de tabela `lojas`
 --
 ALTER TABLE `lojas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `marcas`
@@ -658,7 +693,7 @@ ALTER TABLE `mensagens_chat`
 -- AUTO_INCREMENT de tabela `reservas`
 --
 ALTER TABLE `reservas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`

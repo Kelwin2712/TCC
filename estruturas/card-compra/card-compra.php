@@ -10,7 +10,7 @@
     $imgCount = count($imgs_arr);
     $dataQuant = $imgCount > 0 ? $imgCount : 1;
     ?>
-    <div id="<?= $id ?>" class="carousel slide card-img-top position-relative" data-quant="<?= $dataQuant ?>">
+    <div id="<?= $id ?>" class="carousel slide card-img-top position-relative border-bottom" data-quant="<?= $dataQuant ?>">
         <div class="carousel-inner">
             <a class="carro-img" href="pagina-venda.php?id=<?= $id?>">
                 <?php if ($imgCount > 0): ?>

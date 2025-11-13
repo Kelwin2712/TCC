@@ -9,7 +9,7 @@ $codicao = $_GET['codicao'] ?? 'usado';
 $categoria = $_GET['categoria'] ?? null;
 $vendedor = $_GET['vendedor'] ?? null;
 $vendedor_img = $_GET['vendedor_img'] ?? null;
-$vendedor_est = $_GET['vendedor_est'] ?? null;
+$vendedor_seg = $_GET['vendedor_seg'] ?? null;
 
 $page = $_GET['page'] ?? 1;
 
@@ -32,6 +32,57 @@ if ($sort === 'preco') {
   $order_sql = " ORDER BY carros.quilometragem " . ($dir === 'asc' ? 'ASC' : 'DESC');
 }
 
+$whereParts = [];
+$whereParts[] = "ativo = 'A'";
+
+// optional codicao filter (accept single or comma-separated values: novo,seminovo,usado)
+if (isset($_GET['codicao']) && trim($_GET['codicao']) !== '') {
+  $cod_raw = trim($_GET['codicao']);
+  $cod_map = [
+    'novo' => 'N',
+    'seminovo' => 'S',
+    'usado' => 'U'
+  ];
+  $parts = array_filter(array_map('trim', explode(',', $cod_raw)));
+  $codes = [];
+  foreach ($parts as $p) {
+    $pl = strtolower($p);
+    if (isset($cod_map[$pl])) $codes[] = $cod_map[$pl];
+  }
+  if (count($codes) > 0) {
+    $codes_esc = array_map(function($c) use ($conexao){ return mysqli_real_escape_string($conexao, $c); }, $codes);
+    $whereParts[] = "carros.condicao IN ('" . implode("','", $codes_esc) . "')";
+  }
+}
+
+// optional exact marca filter (accept both name and value)
+if (isset($_GET['marca']) && trim($_GET['marca']) !== '') {
+  $m = mysqli_real_escape_string($conexao, $_GET['marca']);
+  $whereParts[] = "(marcas.nome = '$m' OR marcas.value = '$m')";
+}
+
+// optional modelo filter (partial match)
+if (isset($_GET['modelo']) && trim($_GET['modelo']) !== '') {
+  $mo = mysqli_real_escape_string($conexao, $_GET['modelo']);
+  $whereParts[] = "carros.modelo LIKE '%$mo%'";
+}
+
+// search query q: match marca, modelo or 'marca modelo' combined
+// Only apply q filter if marca AND modelo are NOT explicitly set (to avoid conflicting with lateral filters)
+if (isset($_GET['q']) && trim($_GET['q']) !== '' && !isset($_GET['marca']) && !isset($_GET['modelo'])) {
+  $q_raw = $_GET['q'];
+  $q_esc = mysqli_real_escape_string($conexao, $q_raw);
+  $whereParts[] = "(marcas.nome LIKE '%$q_esc%' OR carros.modelo LIKE '%$q_esc%' OR CONCAT(marcas.nome, ' ', carros.modelo) LIKE '%$q_esc%')";
+}
+
+// optional versao filter (match with trim and case-insensitive)
+if (isset($_GET['versao']) && trim($_GET['versao']) !== '') {
+  $v = mysqli_real_escape_string($conexao, $_GET['versao']);
+  $whereParts[] = "TRIM(carros.versao) = TRIM('$v')";
+}
+
+$where_sql = count($whereParts) ? ' WHERE ' . implode(' AND ', $whereParts) : '';
+
 $sql = "SELECT 
   carros.*, 
   marcas.nome AS marca_nome,
@@ -42,8 +93,7 @@ INNER JOIN
   marcas ON carros.marca = marcas.id
 LEFT JOIN 
   favoritos ON favoritos.anuncio_id = carros.id 
-         AND favoritos.usuario_id = '$id'
-WHERE ativo = 'A'" . $order_sql . "\nLIMIT $quantidade";
+         AND favoritos.usuario_id = '$id'" . $where_sql . $order_sql . "\nLIMIT $quantidade";
 
 $resultado = mysqli_query($conexao, $sql);
 
@@ -130,42 +180,42 @@ while ($linha = mysqli_fetch_array($resultado)) {
             <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-flex flex-column d-none d-md-block" style="max-height: 100vh;">
               <div id="filtros-over" class="overflow-y-auto rounded-2 border border-opacity-25 shadow-sm" style="max-height: 100%;">
                 <div class="accordion w-100" id="accordionPanelsStayOpenExample">
-                  <?php if (isset($vendedor)) {
-                    echo "<!-- Vendedor ⬇️ -->
-                  <div class=\"accordion-item border-0 border-bottom\">
-                    <h2 class=\"accordion-header\">
-                      <button class=\"accordion-button\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#vendedor\" aria-expanded=\"true\" aria-controls=\"vendedor\">
-                        Vendedor
-                      </button>
-                    </h2>
-                    <div id=\"vendedor\" class=\"accordion-collapse collapse show\">
-                      <div class=\"accordion-body\">
-                        <div class=\"row\">
-                          <div class=\"rounded-3 border-2\">
-                                    <div class=\"row\">
-                                        <div class=\"col p-2 d-flex align-items-center justify-content-center\">
-                                            <div class=\"ratio ratio-1x1\">
-                                                <img src=\"" . $vendedor_img . "\" alt=\"\" class=\"img-fluid rounded-3 shadow-sm\">
-                                            </div></i>
-                                        </div>
-                                        <div class=\"col-7 py-2\">
-                                            <div class=\"row\">
-                                                <p class=\"fw-semibold mb-0\">" . $vendedor . "</p>
-                                            </div>
-                                            <div class=\"row\">
-                                                <small class=\"fw-semibold mb-0\">" . $vendedor_est . "<i class=\"bi bi-star-fill ms-1\"></i></small>
-                                            </div>
-                                        </div>
-                                        <div class=\"col-3 d-inline-flex align-items-center text-nowrap\">
-                                            <small>Aberto <i class=\"bi bi-circle-fill text-success\" style=\"font-size: 0.5rem !important; vertical-align: middle;\"></i></small>
-                                        </div>
-                                    </div>
+                  <?php if (isset($vendedor)): ?>
+                    <!-- Vendedor ⬇️ -->
+                    <div class="accordion-item border-0 border-bottom">
+                      <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#vendedor" aria-expanded="true" aria-controls="vendedor">
+                          Vendedor
+                        </button>
+                      </h2>
+                      <div id="vendedor" class="accordion-collapse collapse show">
+                        <div class="accordion-body">
+                          <div class="row">
+                            <div class="rounded-3 border-2">
+                              <div class="row">
+                                <div class="col p-2 d-flex align-items-center justify-content-center">
+                                  <div class="ratio ratio-1x1">
+                                    <img src="<?= $vendedor_img ?>" alt="" class="img-fluid rounded-3 shadow-sm">
+                                  </div></i>
                                 </div>
+                                <div class="col-7 py-2">
+                                  <div class="row">
+                                    <p class="fw-semibold mb-0"><?= $vendedor ?></p>
+                                  </div>
+                                  <div class="row">
+                                    <small title="Seguidores" class="fw-semibold mb-0"><i class="bi bi-person-fill me-1"></i><?= $vendedor_seg ?></small>
+                                  </div>
+                                </div>
+                                <div class="col-3 d-inline-flex align-items-center text-nowrap">
+                                  <small>Aberto <i class="bi bi-circle-fill text-success" style="font-size: 0.5rem !important; vertical-align: middle;"></i></small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>";
-                  }; ?>
+                  <?php endif; ?>
                   <!-- Modelo ⬇️ -->
                   <div class="accordion-item border-0 border-bottom">
                     <h2 class="accordion-header">
@@ -175,17 +225,12 @@ while ($linha = mysqli_fetch_array($resultado)) {
                     </h2>
                     <div id="modelo" class="accordion-collapse collapse show">
                       <div class="accordion-body">
-                        <div class="row mb-4">
-                          <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" <?php if ($tipo == 'carro') {
-                                                                                                                      echo 'checked';
-                                                                                                                    } ?>>
-                            <label class="btn btn-outline-dark rounded-start-5" for="btnradio1"><i class="bi bi-car-front-fill"></i> Carros</label>
-
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off" <?php if ($tipo == 'moto') {
-                                                                                                                      echo 'checked';
-                                                                                                                    } ?>>
-                            <label class="btn btn-outline-dark rounded-end-5" for="btnradio2"><i class="bi bi-bicycle"></i> Motos</label>
+                        <div class="row px-1 mb-3">
+                          <div class="mb-1">
+                            <h6>Localização</h6>
+                          </div>
+                          <div class="row px-2 g-0 gap-2">
+                            <input type="text" class="form-control" id="localizacao" autocomplete="off" placeholder="Informe o estado ou cidade">
                           </div>
                         </div>
                         <div class="row px-1">
@@ -193,9 +238,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
                             <h6>Estado</h6>
                             <div class="row ps-3">
                               <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="usados" <?php if ($codicao == 'usado') {
-                                                                                              echo 'checked';
-                                                                                            } ?>>
+                                <input class="form-check-input condicao-input" type="checkbox" id="usados" data-val="usado">
                                 <label class="form-check-label" for="usados">
                                   Usados
                                 </label>
@@ -204,9 +247,16 @@ while ($linha = mysqli_fetch_array($resultado)) {
                                 </small>
                               </div>
                               <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="novos" <?php if ($codicao == 'novo') {
-                                                                                              echo 'checked';
-                                                                                            } ?>>
+                                <input class="form-check-input condicao-input" type="checkbox" id="seminovos" data-val="seminovo">
+                                <label class="form-check-label" for="seminovos">
+                                  Seminovos
+                                </label>
+                                <small class="float-end">
+                                  (—)
+                                </small>
+                              </div>
+                              <div class="form-check">
+                                <input class="form-check-input condicao-input" type="checkbox" id="novos" data-val="novo">
                                 <label class="form-check-label" for="novos">
                                   Novos
                                 </label>
@@ -233,7 +283,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
                             <div id="modelos-input" class="mb-3 d-none">
                               <h6>Modelos</h6>
                               <div class="input-group">
-                                <select name="" id="" class="form-select">
+                                <select name="modelo" id="modelo-select" class="form-select">
                                   <option value="" selected hidden>Selecione o modelo</option>
                                   <option value="modelo-1">Modelo 1</option>
                                   <option value="modelo-2">Modelo 2</option>
@@ -252,7 +302,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
                             <div id="versoes-input" class="mb-3 d-none">
                               <h6>Versões</h6>
                               <div class="input-group">
-                                <select name="" id="" class="form-select">
+                                <select name="versao" id="versao-select" class="form-select">
                                   <option value="" selected hidden>Selecione a versão</option>
                                   <option value="versao-1">Versão 1</option>
                                   <option value="versao-2">Versão 2</option>
@@ -734,6 +784,11 @@ while ($linha = mysqli_fetch_array($resultado)) {
               </div>
             </div>
             <div class="col">
+              <?php if (isset($vendedor)):?>
+              <div class="mt-4">
+                <img src="https://preview.redd.it/bugatti-chiron-spotted-in-same-parking-garage-back-to-back-v0-08ed1s0xv6ne1.jpg?width=640&crop=smart&auto=webp&s=ccef8f6c11ef172dbe050cd06911e0f01920d714" class="w-100 border h-auto object-fit-cover rounded-4" style="aspect-ratio: 1/.125;">
+              </div>
+              <?php endif ?>
               <div class="row pt-4">
                 <div class="col-auto me-auto">
                   <div class="fw-semibold small py-3">
@@ -768,7 +823,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
                     $troca = $carro['aceita_troca'];
                     $revisao = $carro['revisao'];
                     $id = $carro['id'];
-                    $loc = 'São José dos Campos - SP';
+                    $loc = $carro['cidade'] . ' - '  . $carro['estado_local'];
                     // fetch photos for this anuncio into $imgs array (no predefined img1..img6)
                     $imgs = [];
                     $qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id ORDER BY `ordem` ASC");
@@ -795,10 +850,10 @@ while ($linha = mysqli_fetch_array($resultado)) {
                 <ul class="pagination pagination-dark">
                   <?php $qs = "&sort=" . urlencode($sort) . "&dir=" . urlencode($dir); ?>
                   <li class="page-item <?php if ($page == 1) {
-                                            echo 'disabled';
-                                          } ?>">
-                      <a class="page-link" href="compras.php?page=<?= $page - 1 ?><?= $qs ?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
-                    </li>
+                                          echo 'disabled';
+                                        } ?>">
+                    <a class="page-link" href="compras.php?page=<?= $page - 1 ?><?= $qs ?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
+                  </li>
                   <?php if ($page >= 3) {
                     echo '<li class="page-item">
                   <a class="page-link" href="compras.php?page=1' . $qs . '" tabindex="-1" aria-disabled="true">1</a>
@@ -814,10 +869,10 @@ while ($linha = mysqli_fetch_array($resultado)) {
                                                                                                     } else {
                                                                                                       echo $page - 1;
                                                                                                     } ?><?= $qs ?>"><?php if ($page == 1) {
-                                                                                                            echo $page;
-                                                                                                          } else {
-                                                                                                            echo $page - 1;
-                                                                                                          } ?></a></li>
+                                                                                                                      echo $page;
+                                                                                                                    } else {
+                                                                                                                      echo $page - 1;
+                                                                                                                    } ?></a></li>
                   <li class="page-item <?php if ($page != 1) {
                                           echo 'active';
                                         } ?>"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
@@ -825,28 +880,28 @@ while ($linha = mysqli_fetch_array($resultado)) {
                                                                                           } else {
                                                                                             echo $page;
                                                                                           } ?><?= $qs ?>"><?php if ($page == 1) {
-                                                                                                  echo $page + 1;
-                                                                                                } else {
-                                                                                                  echo $page;
-                                                                                                } ?></a></li>
+                                                                                                            echo $page + 1;
+                                                                                                          } else {
+                                                                                                            echo $page;
+                                                                                                          } ?></a></li>
                   <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
                                                                                       echo $page + 2;
                                                                                     } else {
                                                                                       echo $page + 1;
                                                                                     } ?><?= $qs ?>"><?php if ($page == 1) {
-                                                                                            echo $page + 2;
-                                                                                          } else {
-                                                                                            echo $page + 1;
-                                                                                          } ?></a></li>
+                                                                                                      echo $page + 2;
+                                                                                                    } else {
+                                                                                                      echo $page + 1;
+                                                                                                    } ?></a></li>
                   <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
                                                                                       echo $page + 3;
                                                                                     } else {
                                                                                       echo $page + 2;
                                                                                     } ?><?= $qs ?>"><?php if ($page == 1) {
-                                                                                            echo $page + 3;
-                                                                                          } else {
-                                                                                            echo $page + 2;
-                                                                                          } ?></a></li>
+                                                                                                      echo $page + 3;
+                                                                                                    } else {
+                                                                                                      echo $page + 2;
+                                                                                                    } ?></a></li>
                   <li class="page-item">
                     <a class="page-link" href="compras.php?page=<?= $page + 1 ?><?= $qs ?>"><i class="bi bi-caret-right-fill"></i></a>
                   </li>
@@ -859,18 +914,30 @@ while ($linha = mysqli_fetch_array($resultado)) {
   </main>
   <?php include 'estruturas/footer/footer.php' ?>
 </body>
-<?php if (isset($conexao)) { mysqli_close($conexao); } ?>
+<?php if (isset($conexao)) {
+  mysqli_close($conexao);
+} ?>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 <script src="script.js"></script>
 <script>
   $(function() {
     <?php if (isset($_GET['marca'])): ?>
-      const marca = <?= json_encode($_GET['marca']) ?>;
-
-      $('#marca-select option[selected]').prop('selected', false);
-      $('#marca-select option[value="' + marca + '"]').prop('selected', true);
+      const initialMarca = <?= json_encode($_GET['marca']) ?>;
     <?php endif; ?>
+    <?php if (isset($_GET['modelo'])): ?>
+      const initialModelo = <?= json_encode($_GET['modelo']) ?>;
+    <?php endif; ?>
+    <?php if (isset($_GET['versao'])): ?>
+      const initialVersao = <?= json_encode($_GET['versao']) ?>;
+    <?php endif; ?>
+    <?php if (isset($_GET['q'])): ?>
+      const searchQ = <?= json_encode($_GET['q']) ?>;
+      $('#navbar-search').val(searchQ);
+      $('#global-search').val(searchQ);
+    <?php endif; ?>
+    // expose searchQ to other handlers
+    const pageSearchQ = typeof searchQ !== 'undefined' ? searchQ : null;
     const cards = $('.card-compra');
     cards.each(function() {
       const card = $(this);
@@ -1000,36 +1067,269 @@ while ($linha = mysqli_fetch_array($resultado)) {
     const marcasInput = $("#marcas-input");
     const modelosInput = $("#modelos-input");
     const versoesInput = $("#versoes-input");
+    // prepare flags to distinguish programmatic preselection from user actions
+    let suppressMarcaNav = false;
+    let suppressModeloNav = false;
 
-    marcasInput.find("select").on("change", function() {
-      if ($(this).val()) {
+    // helper: populate models for a marca and optionally preselect modelo (does not navigate)
+    function populateModels(marcaVal, preselectModelo) {
+      if (!marcaVal) return;
+      console.log('[populateModels] marcaVal=', marcaVal, 'preselectModelo=', preselectModelo);
+      modelosInput.removeClass('d-none');
+      marcasInput.find('button').removeClass('d-none');
+      const $modelo = $('#modelo-select');
+      $modelo.empty();
+      $modelo.append($('<option>', {
+        value: '',
+        text: 'Carregando modelos...',
+        hidden: true,
+        selected: true
+      }));
+      $.getJSON('controladores/filters/get_models.php', {
+          marca: marcaVal
+        })
+        .done(function(data) {
+          $modelo.empty();
+          $modelo.append($('<option>', {
+            value: '',
+            text: 'Selecione o modelo',
+            hidden: true,
+            selected: true
+          }));
+          if (Array.isArray(data) && data.length) {
+            data.forEach(function(m) {
+              $modelo.append($('<option>', {
+                value: m,
+                text: m
+              }));
+            });
+          }
+          modelosInput.removeClass('d-none');
+          marcasInput.find('button').removeClass('d-none');
+          modelosInput.find('button').removeClass('d-none');
+          if (preselectModelo) {
+            suppressModeloNav = true;
+            $modelo.val(preselectModelo).trigger('change');
+          } else if (pageSearchQ) {
+            // try to infer model from q
+            const sq = pageSearchQ.toLowerCase();
+            let matched = null;
+            $modelo.find('option').each(function() {
+              const t = $(this).text().toLowerCase();
+              if (t !== '' && sq.indexOf(t) !== -1) {
+                matched = $(this).val();
+                return false;
+              }
+            });
+            if (matched) {
+              suppressModeloNav = true;
+              $modelo.val(matched).trigger('change');
+            }
+          }
+        })
+        .fail(function() {
+          // on error show the modelos block so user can retry
+          modelosInput.removeClass('d-none');
+          marcasInput.find('button').removeClass('d-none');
+        });
+    }
+
+    // helper: populate versions for marca+modelo and optionally preselect versao (does not navigate)
+    function populateVersions(marcaVal, modeloVal, preselectVersao) {
+      if (!marcaVal || !modeloVal) return;
+      console.log('[populateVersions] marca=', marcaVal, 'modelo=', modeloVal, 'preselectVersao=', preselectVersao);
+      const $versao = $('#versao-select');
+      $versao.empty();
+      $versao.append($('<option>', { value: '', text: 'Carregando versões...', hidden: true, selected: true }));
+      versoesInput.removeClass('d-none');
+      modelosInput.find('button').removeClass('d-none');
+      $.getJSON('controladores/filters/get_versions.php', { marca: marcaVal, modelo: modeloVal })
+        .done(function(data) {
+          $versao.empty();
+          $versao.append($('<option>', { value: '', text: 'Selecione a versão', hidden: true, selected: true }));
+          if (Array.isArray(data) && data.length) {
+            data.forEach(function(v) {
+              $versao.append($('<option>', { value: v, text: v }));
+            });
+            versoesInput.removeClass('d-none');
+            versoesInput.find('button').removeClass('d-none');
+          }
+          if (preselectVersao) {
+            $versao.val(preselectVersao);
+            versoesInput.removeClass('d-none');
+            versoesInput.find('button').removeClass('d-none');
+          }
+          modelosInput.removeClass('d-none');
+          modelosInput.find('button').removeClass('d-none');
+        })
+        .fail(function() {
+          modelosInput.removeClass('d-none');
+          modelosInput.find('button').removeClass('d-none');
+        });
+    }
+
+    // if the page was loaded with an explicit marca param, prepopulate models (no navigation)
+    if (typeof initialMarca !== 'undefined' && initialMarca) {
+      console.log('[init] initialMarca=', initialMarca, 'initialModelo=', typeof initialModelo !== 'undefined' ? initialModelo : null);
+      suppressMarcaNav = true; // mark this as programmatic
+      populateModels(initialMarca, typeof initialModelo !== 'undefined' ? initialModelo : null);
+    }
+
+    // if the page search contains a brand name, try to preselect the matching brand (don't navigate)
+    if (pageSearchQ) {
+      const sq = pageSearchQ.toLowerCase();
+      $('#marca-select option').each(function() {
+        const val = $(this).val();
+        const txt = $(this).text().toLowerCase();
+        if (val && txt && sq.indexOf(txt) !== -1) {
+          console.log('[init] pageSearchQ matched marca option', txt, val);
+          suppressMarcaNav = true;
+          $('#marca-select').val(val);
+          populateModels(val, null);
+          return false; // break loop
+        }
+      });
+    }
+
+    // when brand changes, fetch models for that brand and populate the modelo-select
+    marcasInput.find("select").on("change", function(e) {
+      const isUser = !!e.originalEvent; // true when event came from a real user action
+      const marcaVal = $(this).val();
+      if (!marcaVal) {
+        // clear models and versions
+        modelosInput.addClass("d-none");
+        modelosInput.find("select").val("");
+        marcasInput.find("button").addClass("d-none");
+        versoesInput.addClass("d-none");
+        versoesInput.find("select").val("");
+        // navigate clearing marca filters when the user clicked the clear (or user manually cleared)
+        if (isUser) {
+          const url = new URL(window.location.href);
+          url.searchParams.delete('marca');
+          url.searchParams.delete('modelo');
+          url.searchParams.delete('versao');
+          url.searchParams.delete('q');
+          url.searchParams.delete('page');
+          window.location.href = url.toString();
+        } else {
+          // programmatic clear (from our code) — only reset suppression
+          suppressMarcaNav = false;
+        }
+        return;
+      }
+      // If this change came from a real user action, always treat it as user selection and navigate immediately.
+      if (isUser) {
+        const url = new URL(window.location.href);
+        url.searchParams.set('marca', marcaVal);
+        url.searchParams.delete('modelo');
+        url.searchParams.delete('versao');
+        // set q to brand name so search box reflects selection
+        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
+        url.searchParams.set('q', brandText);
+        url.searchParams.delete('page');
+        window.location.href = url.toString();
+        return;
+      }
+
+      // otherwise it was programmatic (preselection) — if suppression active, populate models without navigating
+      if (suppressMarcaNav) {
         modelosInput.removeClass("d-none");
         marcasInput.find("button").removeClass("d-none");
+        suppressMarcaNav = false; // clear suppression immediately so next user action behaves normally
+        populateModels(marcaVal, typeof initialModelo !== 'undefined' ? initialModelo : null);
       } else {
-        modelosInput.addClass("d-none");
-        marcasInput.find("button").addClass("d-none");
+        // defensive fallback: navigate to apply marca filter
+        const url = new URL(window.location.href);
+        url.searchParams.set('marca', marcaVal);
+        url.searchParams.delete('modelo');
+        url.searchParams.delete('versao');
+        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
+        url.searchParams.set('q', brandText);
+        url.searchParams.delete('page');
+        window.location.href = url.toString();
       }
     });
 
-    modelosInput.find("select").on("change", function() {
-      if ($(this).val()) {
-        versoesInput.removeClass("d-none");
-        modelosInput.find("button").removeClass("d-none");
-      } else {
+    // when model changes, fetch versions for selected brand+model
+    modelosInput.find("select").on("change", function(e) {
+      const isUser = !!e.originalEvent;
+      const modeloVal = $(this).val();
+      const marcaVal = $('#marca-select').val();
+      if (!modeloVal) {
         versoesInput.addClass("d-none");
+        versoesInput.find("select").val("");
         modelosInput.find("button").addClass("d-none");
+        if (isUser) {
+          // user cleared modelo: navigate and keep marca
+          const url = new URL(window.location.href);
+          url.searchParams.delete('modelo');
+          url.searchParams.delete('versao');
+          url.searchParams.delete('q');
+          url.searchParams.delete('page');
+          window.location.href = url.toString();
+        } else {
+          // programmatic clear
+          suppressModeloNav = false;
+        }
+        return;
+      }
+
+      if (isUser) {
+        // user-driven selection: navigate to apply marca+modelo filter
+        const url = new URL(window.location.href);
+        url.searchParams.set('marca', marcaVal);
+        url.searchParams.set('modelo', modeloVal);
+        // set q to 'Brand Model' so search input reflects selection
+        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
+        url.searchParams.set('q', brandText + ' ' + modeloVal);
+        url.searchParams.delete('versao');
+        url.searchParams.delete('page');
+        window.location.href = url.toString();
+        return;
+      }
+
+      // programmatic change: populate versions without navigating
+      if (suppressModeloNav) {
+        modelosInput.removeClass("d-none");
+        marcasInput.find("button").removeClass("d-none");
+        suppressModeloNav = false; // clear suppression immediately
+        populateVersions(marcaVal, modeloVal, typeof initialVersao !== 'undefined' ? initialVersao : null);
+      } else {
+        // defensive fallback: navigate
+        const url = new URL(window.location.href);
+        url.searchParams.set('marca', marcaVal);
+        url.searchParams.set('modelo', modeloVal);
+        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
+        url.searchParams.set('q', brandText + ' ' + modeloVal);
+        url.searchParams.delete('versao');
+        url.searchParams.delete('page');
+        window.location.href = url.toString();
       }
     });
 
     versoesInput.find("select").on("change", function() {
-      if ($(this).val()) {
+      const versaoVal = $(this).val();
+      if (versaoVal) {
         versoesInput.find("button").removeClass("d-none");
+        // navigate to apply version filter
+        const marcaVal = $('#marca-select').val();
+        const modeloVal = $('#modelo-select').val();
+        const url = new URL(window.location.href);
+        if (marcaVal) url.searchParams.set('marca', marcaVal);
+        if (modeloVal) url.searchParams.set('modelo', modeloVal);
+        url.searchParams.set('versao', versaoVal);
+        // set q to 'Brand Model Version' for search input
+        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
+        url.searchParams.set('q', (brandText ? brandText + ' ' : '') + (modeloVal ? modeloVal + ' ' : '') + versaoVal);
+        url.searchParams.delete('page');
+        window.location.href = url.toString();
       } else {
         versoesInput.find("button").addClass("d-none");
       }
     });
 
     marcasInput.find("button").on("click", function() {
+      // user clicked clear on marca: clear filters and reload page to reflect it
       marcasInput.find("select").val("");
       marcasInput.find("button").addClass("d-none");
       modelosInput.find("button").addClass("d-none");
@@ -1038,19 +1338,94 @@ while ($linha = mysqli_fetch_array($resultado)) {
       modelosInput.find("select").val("");
       versoesInput.addClass("d-none");
       versoesInput.find("select").val("");
+      const url = new URL(window.location.href);
+      url.searchParams.delete('marca');
+      url.searchParams.delete('modelo');
+      url.searchParams.delete('versao');
+      url.searchParams.delete('q');
+      url.searchParams.delete('page');
+      window.location.href = url.toString();
     });
 
     modelosInput.find("button").on("click", function() {
+      // user clicked clear on modelo: clear modelo/versao and reload (keep marca)
       modelosInput.find("select").val("");
       modelosInput.find("button").addClass("d-none");
       versoesInput.find("button").addClass("d-none");
       versoesInput.addClass("d-none");
       versoesInput.find("select").val("");
+      const url = new URL(window.location.href);
+      url.searchParams.delete('modelo');
+      url.searchParams.delete('versao');
+      url.searchParams.delete('q');
+      url.searchParams.delete('page');
+      window.location.href = url.toString();
     });
 
     versoesInput.find("button").on("click", function() {
+      // user clicked clear on versao: clear versao and reload (keep marca+modelo)
       versoesInput.find("select").val("");
       versoesInput.find("button").addClass("d-none");
+      const url = new URL(window.location.href);
+      url.searchParams.delete('versao');
+      url.searchParams.delete('q');
+      url.searchParams.delete('page');
+      window.location.href = url.toString();
+    });
+
+    // Condição checkboxes (usado / seminovo / novo)
+    // Initialize checkboxes based on URL param (not server-side)
+    function initializeCondicaoCheckboxes() {
+      const url = new URL(window.location.href);
+      const codicaoParam = url.searchParams.get('codicao') || '';
+      const values = codicaoParam ? codicaoParam.split(',').map(v => v.trim()) : [];
+
+      $('.condicao-input').each(function() {
+        const val = $(this).attr('data-val');
+        const isChecked = values.includes(val);
+        $(this).prop('checked', isChecked);
+      });
+    }
+
+    // Initialize on page load
+    initializeCondicaoCheckboxes();
+
+    // Debounce changes so user can toggle multiple boxes before navigation
+    let condicaoTimer = null;
+    const CONDICAO_DEBOUNCE_MS = 450; // 1.5 seconds
+
+    $('.condicao-input').on('change', function() {
+      // Prevent unchecking if it's the last one checked
+      const checkedCount = $('.condicao-input:checked').length;
+      if (checkedCount === 0) {
+        // Revert this checkbox back to checked
+        $(this).prop('checked', true);
+        return;
+      }
+
+      // clear any previous timer
+      if (condicaoTimer) clearTimeout(condicaoTimer);
+      condicaoTimer = setTimeout(function() {
+        // collect checked condicao values
+        const vals = [];
+        $('.condicao-input:checked').each(function() {
+          const v = $(this).attr('data-val');
+          if (v) vals.push(v);
+        });
+
+        const url = new URL(window.location.href);
+        // remove page when changing filters
+        url.searchParams.delete('page');
+
+        if (vals.length === 1) {
+          url.searchParams.set('codicao', vals[0]);
+        } else if (vals.length > 1) {
+          // multiple values: join with comma
+          url.searchParams.set('codicao', vals.join(','));
+        }
+
+        window.location.href = url.toString();
+      }, CONDICAO_DEBOUNCE_MS);
     });
   });
 

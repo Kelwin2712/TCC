@@ -16,7 +16,8 @@
 
           <div class="d-flex align-items-center position-relative">
             <i class="bi bi-search text-dark position-absolute px-3"></i>
-            <input type="search" class="form-control bg-transparent ps-5 rounded-pill" placeholder="Buscar modelo ou marca" aria-label="Search">
+            <input id="navbar-search" type="search" class="form-control bg-transparent ps-5 rounded-pill" placeholder="Buscar modelo ou marca" aria-label="Search">
+            <div class="search-suggestions dropdown-menu p-2" style="width:320px; max-height:300px; overflow:auto; display:none; right:0; position:absolute; top:calc(100% + 6px);"></div>
           </div>
         </div>
         <div class="d-flex gap-2">

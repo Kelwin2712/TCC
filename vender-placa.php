@@ -46,6 +46,7 @@ if (!isset($_SESSION['id'])) {
                     name="placa"
                     id="placa"
                     placeholder="ABC1D23"
+                    autocomplete="off"
                     style="font-size: calc(300% + 1.25vw); line-height: 1; border: none !important; outline: none !important; box-shadow: none !important;background: transparent !important;" maxlength="7" required>
                 </div>
               </div>

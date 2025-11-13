@@ -11,12 +11,7 @@
             <li class="nav-item mb-2">
               <a href="compras.php?tipo=carro&codicao=novo" class="nav-link p-0 text-body-secondary">Carros novos</a>
             </li>
-            <li class="nav-item mb-2">
-              <a href="compras.php?tipo=moto&codicao=usado" class="nav-link p-0 text-body-secondary">Motos usados</a>
-            </li>
-            <li class="nav-item mb-2">
-              <a href="compras.php?tipo=moto&codicao=novo" class="nav-link p-0 text-body-secondary">Motos novos</a>
-            </li>
+            <!-- motos removed -->
           </ul>
         </div>
         <div class="col-6 col-md-2 mb-3">
@@ -25,9 +20,7 @@
             <li class="nav-item mb-2">
               <a href="#" class="nav-link p-0 text-body-secondary">Carro</a>
             </li>
-            <li class="nav-item mb-2">
-              <a href="#" class="nav-link p-0 text-body-secondary">Moto</a>
-            </li>
+            <!-- moto removed -->
           </ul>
         </div>
         <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">

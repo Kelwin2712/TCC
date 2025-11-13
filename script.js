@@ -370,3 +370,228 @@ if (precoInputRS.length > 0) {
     });
   });
 }
+
+// === Search suggestions / autocomplete (marcas & modelos) ===
+(function () {
+  const debounce = (fn, wait) => {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn(...args), wait);
+    };
+  };
+
+  // Client-side cache for fast local filtering
+  const searchCache = {
+    marcas: [],
+    modelos: [],
+    total: 0,
+    fetching: false,
+    lastFetched: 0
+  };
+
+  function prefetchIndexIfNeeded(force = false) {
+    if (searchCache.fetching) return;
+    // if we already have data and not forcing, do a lightweight check (get total)
+    searchCache.fetching = true;
+    $.getJSON('controladores/search_index.php')
+      .done(function (data) {
+        const serverTotal = (data && data.total) ? parseInt(data.total, 10) : 0;
+        if (force || searchCache.marcas.length === 0 || serverTotal > (searchCache.total || 0)) {
+          searchCache.marcas = data.marcas || [];
+          searchCache.modelos = data.modelos || [];
+          searchCache.total = serverTotal;
+          searchCache.lastFetched = Date.now();
+        }
+      })
+      .always(function () {
+        searchCache.fetching = false;
+      });
+  }
+
+  function localFilter(q) {
+    const lcq = q.toLowerCase();
+    const marcas = searchCache.marcas.filter(m => m && m.toLowerCase().indexOf(lcq) !== -1);
+    const modelos = searchCache.modelos.filter(m => {
+      const combined = ((m.marca || '') + ' ' + (m.modelo || '')).toLowerCase();
+      return combined.indexOf(lcq) !== -1;
+    });
+
+    // sort by position then alphabetically
+    marcas.sort((a, b) => {
+      const ap = a.toLowerCase().indexOf(lcq);
+      const bp = b.toLowerCase().indexOf(lcq);
+      if (ap !== bp) return ap - bp;
+      return a.localeCompare(b, undefined, { sensitivity: 'base' });
+    });
+    modelos.sort((x, y) => {
+      const xcombined = ((x.marca || '') + ' ' + (x.modelo || '')).toLowerCase();
+      const ycombined = ((y.marca || '') + ' ' + (y.modelo || '')).toLowerCase();
+      const xp = xcombined.indexOf(lcq);
+      const yp = ycombined.indexOf(lcq);
+      if (xp !== yp) return xp - yp;
+      const cmp = (x.modelo || '').localeCompare((y.modelo || ''), undefined, { sensitivity: 'base' });
+      if (cmp !== 0) return cmp;
+      return (x.marca || '').localeCompare((y.marca || ''), undefined, { sensitivity: 'base' });
+    });
+
+    return { marcas: marcas.slice(0, 40), modelos: modelos.slice(0, 80) };
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"]+/g, function (s) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[s];
+    });
+  }
+
+  function capitalizeWords(str) {
+    return String(str).split(/\s+/).map(s => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()).join(' ');
+  }
+
+  function highlightMatch(text, q) {
+    if (!q) return escapeHtml(capitalizeWords(text));
+    const escaped = escapeHtml(text);
+    // create regex from tokens to bold each occurrence
+    const tokens = q.trim().split(/\s+/).filter(Boolean).map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+    if (tokens.length === 0) return escapeHtml(capitalizeWords(text));
+    const regex = new RegExp('(' + tokens.join('|') + ')', 'ig');
+    // apply capitalization then replace (on the original-case-aware escaped string)
+    const capitalized = capitalizeWords(escaped);
+    return capitalized.replace(regex, '<strong>$1</strong>');
+  }
+
+  function renderSuggestions($box, data, $input, q) {
+    $box.empty();
+    const marcas = data.marcas || [];
+    const modelos = data.modelos || [];
+
+    if (marcas.length === 0 && modelos.length === 0) {
+      $box.append('<div class="text-muted small">Nenhum resultado</div>');
+      return;
+    }
+
+    if (marcas.length > 0) {
+      $box.append('<div class="fw-bold small text-muted ps-1">Marcas</div>');
+      marcas.forEach(function (m) {
+        const display = capitalizeWords(m);
+        const highlighted = highlightMatch(m, q);
+        const $item = $('<a href="#" class="dropdown-item small"></a>').html(highlighted);
+        $item.on('click', function (e) {
+          e.preventDefault();
+          // navigate to compras with q set to marca
+          window.location.href = 'compras.php?q=' + encodeURIComponent(display);
+        });
+        $box.append($item);
+      });
+    }
+
+    if (modelos.length > 0) {
+      $box.append('<div class="fw-bold small text-muted ps-1 mt-1">Modelos</div>');
+      modelos.forEach(function (m) {
+        const rawLabel = ((m.marca ? (m.marca + ' ') : '') + (m.modelo || '')).trim();
+        const highlighted = highlightMatch(rawLabel, q);
+        const display = capitalizeWords(rawLabel);
+        const $item = $('<a href="#" class="dropdown-item small"></a>').html(highlighted);
+        $item.on('click', function (e) {
+          e.preventDefault();
+          // navigate to compras with q set to full label so catalog filters by it
+          window.location.href = 'compras.php?q=' + encodeURIComponent(display);
+        });
+        $box.append($item);
+      });
+    }
+  }
+
+  function attachAutocomplete(selector) {
+    const $els = $(selector);
+    if ($els.length === 0) return;
+    $els.each(function () {
+      const $input = $(this);
+      let $box = $input.siblings('.search-suggestions');
+      if ($box.length === 0) {
+        $box = $('<div class="search-suggestions dropdown-menu p-2"></div>');
+        $input.after($box);
+      }
+
+      let currentIndex = -1;
+      const clearActive = () => { $box.find('.dropdown-item').removeClass('active'); };
+      const setActive = (idx) => {
+        clearActive();
+        const items = $box.find('.dropdown-item');
+        if (idx >= 0 && idx < items.length) {
+          $(items.get(idx)).addClass('active');
+          // ensure visible
+          const el = items.get(idx);
+          if (el && el.scrollIntoView) el.scrollIntoView({ block: 'nearest' });
+        }
+      };
+
+      const doSearch = debounce(function () {
+        const q = $input.val().trim();
+        if (q.length < 2) { $box.hide(); return; }
+
+        // If we have cache data, use local filtering (fast)
+        if (searchCache.marcas.length > 0 || searchCache.modelos.length > 0) {
+          const data = localFilter(q);
+          renderSuggestions($box, data, $input, q);
+          currentIndex = -1;
+          $box.show();
+          return;
+        }
+
+        // otherwise, attempt network search but don't show "Erro na busca" unless cache empty
+        $.getJSON('controladores/search_suggestions.php', { q: q })
+          .done(function (data) {
+            renderSuggestions($box, data, $input, q);
+            currentIndex = -1;
+            $box.show();
+          })
+          .fail(function () {
+            // fallback: try prefetch index once
+            prefetchIndexIfNeeded(true);
+            // show generic no-results if cache empty, avoid persistent error message
+            if ((searchCache.marcas.length === 0 && searchCache.modelos.length === 0)) {
+              $box.empty().append('<div class="text-muted small">Nenhum resultado</div>').show();
+            } else {
+              const data = localFilter(q);
+              renderSuggestions($box, data, $input, q);
+              currentIndex = -1;
+              $box.show();
+            }
+          });
+      }, 120);
+
+  // prefetch when user focuses the input so subsequent typing is instant
+  $input.on('focus', function () { prefetchIndexIfNeeded(); });
+  $input.on('input', function () { doSearch(); });
+      $input.on('keydown', function (e) {
+        const items = $box.find('.dropdown-item');
+        if (e.key === 'Escape') { $box.hide(); return; }
+        if (items.length === 0) return;
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          currentIndex = Math.min(currentIndex + 1, items.length - 1);
+          setActive(currentIndex);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          currentIndex = Math.max(currentIndex - 1, 0);
+          setActive(currentIndex);
+        } else if (e.key === 'Enter') {
+          // if an item is active, trigger its click; otherwise, if single item, click it
+          if (currentIndex >= 0) {
+            e.preventDefault();
+            const itemsArr = $box.find('.dropdown-item');
+            $(itemsArr.get(currentIndex)).trigger('click');
+          }
+        }
+      });
+
+      $input.on('blur', function () { setTimeout(function () { $box.hide(); }, 200); });
+    });
+  }
+
+  $(function () {
+    attachAutocomplete('#global-search');
+    attachAutocomplete('#navbar-search');
+  });
+})();

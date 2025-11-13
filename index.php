@@ -26,8 +26,8 @@ $resultado = mysqli_query($conexao, $sql);
 $mais_caro = 0.00;
 
 if ($resultado && mysqli_num_rows($resultado) > 0) {
-    $linha = mysqli_fetch_array($resultado);
-    $mais_caro = $linha['maior'];
+  $linha = mysqli_fetch_array($resultado);
+  $mais_caro = $linha['maior'];
 }
 
 mysqli_close($conexao);
@@ -84,66 +84,133 @@ mysqli_close($conexao);
         <div class="card-body px-4 py-2">
           <div id="recomendacao" class="row bg-body-tertiary shadow-sm rounded-top-4 rounded-bottom-3 px-1 py-2 align-items-center d-flex">
             <div class="col">
-              <span><i class="bi bi-arrow-right me-2"></i>Recomendação: Lamborghini Aventador SVJ </span>
+              <span class="small"><i class="bi bi-arrow-right me-2"></i>Recomendação: Lamborghini Aventador SVJ </span>
             </div>
             <div class="col-auto ">
               <button type="button" class="btn-close" aria-label="Close"></button>
             </div>
           </div>
-          <div class="row">
-            <input type="text" class="form-control border-0 my-3" placeholder="Encontre o modelo que você procura...">
+            <div class="row position-relative">
+            <input id="global-search" type="text" class="form-control border-0 my-3" placeholder="Encontre o modelo que você procura...">
+            <button class="btn d-lg-none me-3 w-auto p-0 border-0 position-absolute translate-middle-y top-50 end-0"><i class="bi bi-search"></i></button>
+            <div class="search-suggestions dropdown-menu p-2" style="width:100%; max-height:300px; overflow:auto; display:none;"></div>
           </div>
-          <div class="row g-2">
-            <div class="ps-0 col col-md-2">
-              <div class="d-flex align-items-center position-relative">
-                <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
-                <select id="marca-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
-                  <option value="">Marca</option>
-                  <?php foreach ($marcas as $marca): ?>
-                    <option value="<?= $marca['value'] ?>"><?= $marca['nome'] ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-            </div>
-            <div class="col col-md-2">
-              <div class="d-flex align-items-center position-relative">
-                <label for="modelo-select" class="d-flex align-items-center"><i class="bi bi-car-front position-absolute px-3"></i></label>
-                <select id="modelo-select" class="form-select rounded-pill shadow-sm bg-transparent" disabled style="padding-left: 3rem;">
-                  <option value="" selected>Modelo</option>
-                  <option value="0">Audi R8 Spyder</option>
-                  <option value="1">Ferrari 488</option>
-                  <option value="2">Porsche Macan</option>
-                  <option value="3">Mercedes-Benz AMG GT63</option>
-                  <option value="4">Lamborghini Gallardo</option>
-                  <option value="5">BMW X7</option>
-                </select>
-              </div>
-            </div>
-            <div class="col col-md-2 col-xl-auto">
-              <div class="d-flex align-items-center position-relative">
-                <label for="estado-select" class="d-flex align-items-center"><i class="bi bi-pin-map position-absolute px-3"></i></label>
-                <select id="estado-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
-                  <option value="">Estado</option>
-                  <?php foreach ($estados as $estado): ?>
-                    <option value="<?= $estado['uf'] ?>"><?= $estado['nome'] ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-            </div>
-            <div class="col col-md-2 col-xl-auto">
-              <div class="input-group flex-nowrap">
-                <div class="d-flex align-items-center position-relative">
-                  <label for="preco-de" class="text-dark position-absolute px-3">De</label>
-                  <input type="text" id="preco-de" class="form-control shadow-sm rounded-start-5 rounded-end-0 preco-input" placeholder="R$--" aria-label="Preço mínimo" style="max-width: 150px; padding-left: 3rem;">
-                </div>
-                <div class="d-flex align-items-center position-relative">
-                  <label for="preco-ate" class="text-dark position-absolute px-3">Até</label>
-                  <input type="text" id="preco-ate" class="form-control shadow-sm rounded-end-5 rounded-start-0 preco-input" placeholder="R$--" aria-label="Preço máximo" style="max-width: 150px; padding-left: 3rem;" value="<?= number_format((int)$mais_caro, 0, ',', '.'); ?>">
-                </div>
+          <div class="d-lg-none d-flex">
+            <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" class="btn btn-sm border rounded-pill px-3"><i class="bi bi-funnel me-2"></i></i>Filtros</button>
+            <div class="offcanvas rounded-top-5 overflow-hidden h-auto py-3 offcanvas-bottom" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+              <div class="offcanvas-body small d-flex flex-column gap-3">
+                <div class="d-flex flex-column gap-2 mb-3">
+                  <div class="col">
+                    <div class="d-flex align-items-center position-relative">
+                      <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
+                      <select id="marca-select" class="form-select rounded-pill bg-transparent" style="padding-left: 3rem;">
+                        <option value="">Marca</option>
+                        <?php foreach ($marcas as $marca): ?>
+                          <option value="<?= $marca['value'] ?>"><?= $marca['nome'] ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <div class="d-flex align-items-center position-relative">
+                      <label for="modelo-select" class="d-flex align-items-center"><i class="bi bi-car-front position-absolute px-3"></i></label>
+                      <select id="modelo-select" class="form-select rounded-pill bg-transparent" disabled style="padding-left: 3rem;">
+                        <option value="" selected>Modelo</option>
+                        <option value="0">Audi R8 Spyder</option>
+                        <option value="1">Ferrari 488</option>
+                        <option value="2">Porsche Macan</option>
+                        <option value="3">Mercedes-Benz AMG GT63</option>
+                        <option value="4">Lamborghini Gallardo</option>
+                        <option value="5">BMW X7</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="d-flex align-items-center position-relative">
+                      <label for="estado-select" class="d-flex align-items-center"><i class="bi bi-pin-map position-absolute px-3"></i></label>
+                      <select id="estado-select" class="form-select rounded-pill bg-transparent" style="padding-left: 3rem;">
+                        <option value="">Estado</option>
+                        <?php foreach ($estados as $estado): ?>
+                          <option value="<?= $estado['uf'] ?>"><?= $estado['nome'] ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="gap-3 d-flex">
+                  <div class="col">
+                    <div class="d-flex align-items-center position-relative">
+                      <label for="preco-de" class="text-dark position-absolute px-3">De</label>
+                      <input type="text" id="preco-de" class="form-control rounded-pill preco-input-rs" placeholder="R$--" aria-label="Preço mínimo" style="padding-left: 3rem;">
+                    </div>
+                  </div>
+                  <div class="col">
 
+                    <div class="d-flex align-items-center position-relative">
+                      <label for="preco-ate" class="text-dark position-absolute px-3">Até</label>
+                      <input type="text" id="preco-ate" class="form-control rounded-pill preco-input-rs" placeholder="R$--" aria-label="Preço máximo" style="padding-left: 3rem;" value="<?= number_format((int)$mais_caro, 0, ',', '.'); ?>">
+                    </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="d-flex mt-auto flex-column gap-2">
+                  <button type="button" class="btn border rounded-pill px-4 me-3 w-100" data-bs-dismiss="offcanvas">Cancelar</button>
+                  <button type="button" data-bs-dismiss="offcanvas" aria-label="Close" class="btn btn-dark rounded-pill px-4 w-100">Aplicar</button>
+                </div>
               </div>
             </div>
-            <div class="col-12 col-md-auto ms-auto">
+          </div>
+          <div class="d-lg-flex flex-wrap gap-3 gap-xl-4 align-items-center d-none">
+            <div class="d-flex gap-1 gap-xl-2">
+              <div class="col col-xl-auto">
+                <div class="d-flex align-items-center position-relative">
+                  <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
+                  <select id="marca-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
+                    <option value="">Marca</option>
+                    <?php foreach ($marcas as $marca): ?>
+                      <option value="<?= $marca['value'] ?>"><?= $marca['nome'] ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+              <div class="col col-xl-auto">
+                <div class="d-flex align-items-center position-relative">
+                  <label for="modelo-select" class="d-flex align-items-center"><i class="bi bi-car-front position-absolute px-3"></i></label>
+                  <select id="modelo-select" class="form-select rounded-pill shadow-sm bg-transparent" disabled style="padding-left: 3rem;">
+                    <option value="" selected>Modelo</option>
+                    <option value="0">Audi R8 Spyder</option>
+                    <option value="1">Ferrari 488</option>
+                    <option value="2">Porsche Macan</option>
+                    <option value="3">Mercedes-Benz AMG GT63</option>
+                    <option value="4">Lamborghini Gallardo</option>
+                    <option value="5">BMW X7</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col col-xl-auto">
+                <div class="d-flex align-items-center position-relative">
+                  <label for="estado-select" class="d-flex align-items-center"><i class="bi bi-pin-map position-absolute px-3"></i></label>
+                  <select id="estado-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
+                    <option value="">Estado</option>
+                    <?php foreach ($estados as $estado): ?>
+                      <option value="<?= $estado['uf'] ?>"><?= $estado['nome'] ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+              <div class="col col-xl-auto">
+                <div class="input-group flex-nowrap">
+                  <div class="d-flex align-items-center position-relative">
+                    <label for="preco-de" class="text-dark position-absolute px-3">De</label>
+                    <input type="text" id="preco-de" class="form-control shadow-sm rounded-start-5 rounded-end-0 preco-input-rs" placeholder="R$--" aria-label="Preço mínimo" style="padding-left: 3rem; width: 160px">
+                  </div>
+                  <div class="d-flex align-items-center position-relative">
+                    <label for="preco-ate" class="text-dark position-absolute px-3">Até</label>
+                    <input type="text" id="preco-ate" class="form-control shadow-sm rounded-end-5 rounded-start-0 preco-input-rs" placeholder="R$--" aria-label="Preço máximo" style="padding-left: 3rem; width: 160px" value="<?= number_format((int)$mais_caro, 0, ',', '.'); ?>">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col ms-auto">
               <a href="compras.php" class="btn btn-dark rounded-pill shadow-sm px-3 w-100"><i class="bi bi-search me-2"></i>Pesquisar</a>
             </div>
           </div>
@@ -153,9 +220,6 @@ mysqli_close($conexao);
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
         <h4 class="col-8 fw-semibold">Categorias</h4>
-        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php?categoria">
-          (Ver todas as categorias)
-        </a>
       </div>
       <div id="categorias-carousel" class="carousel carousel-dark multi-carousel multi-carousel-6 px-4">
         <div class="carousel-inner">
@@ -237,9 +301,6 @@ mysqli_close($conexao);
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
         <h4 class="col-8 fw-semibold">Principais marcas</h4>
-        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php"">
-          (Ver todas as marcas)
-        </a>
       </div>
       <div class=" row g-3 align-items-stretch justify-content-between row-cols-3 row-cols-lg-6">
           <div class="col d-flex">
@@ -277,8 +338,8 @@ mysqli_close($conexao);
     <div class="container py-4">
       <div class="row mb-4 align-items-center">
         <h4 class="col-8 fw-semibold">Carros mais procurados</h4>
-        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php"">
-          (Ver todas as marcas)
+        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 small link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php"">
+          (Ver todos os carros)
         </a>
       </div>
       <div id="populares-carousel" class="carousel carousel-dark multi-carousel multi-carousel-5 px-4">

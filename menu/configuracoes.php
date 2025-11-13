@@ -126,41 +126,16 @@ mysqli_close($conexao);
                     <div class="col d-flex flex-column justify-content-between">
                         <div class="row row-cols-2 row-gap-3 mb-3">
                             <div class="col">
-                                <label for="estado-input" class="form-label">Estado</label>
-                                <input type="text" list="estado-list" class="form-control shadow-sm" id="estado-input" placeholder="Estado">
-                                <datalist id="estado-list">
-                                    <option value="Acre">
-                                    <option value="Alagoas">
-                                    <option value="Amapá">
-                                    <option value="Amazonas">
-                                    <option value="Bahia">
-                                    <option value="Ceará">
-                                    <option value="Distrito Federal">
-                                    <option value="Espírito Santo">
-                                    <option value="Goiás">
-                                    <option value="Maranhão">
-                                    <option value="Mato Grosso">
-                                    <option value="Mato Grosso do Sul">
-                                    <option value="Minas Gerais">
-                                    <option value="Pará">
-                                    <option value="Paraíba">
-                                    <option value="Paraná">
-                                    <option value="Pernambuco">
-                                    <option value="Piauí">
-                                    <option value="Rio de Janeiro">
-                                    <option value="Rio Grande do Norte">
-                                    <option value="Rio Grande do Sul">
-                                    <option value="Rondônia">
-                                    <option value="Roraima">
-                                    <option value="Santa Catarina">
-                                    <option value="São Paulo">
-                                    <option value="Sergipe">
-                                    <option value="Tocantins">
-                                </datalist>
+                                <label for="config-estado" class="form-label">Estado</label>
+                                <select id="config-estado" name="estado_ui" class="form-select shadow-sm">
+                                    <option value="">Selecione um estado...</option>
+                                </select>
                             </div>
                             <div class="col">
-                                <label for="cidade-input" class="form-label">Cidade</label>
-                                <input type="text" class="form-control shadow-sm" id="cidade-input" placeholder="Cidade">
+                                <label for="config-cidade" class="form-label">Cidade</label>
+                                <select id="config-cidade" name="cidade_ui" class="form-select shadow-sm">
+                                    <option value="">Selecione um município...</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -320,6 +295,30 @@ mysqli_close($conexao);
                 $("#info-form button[type='submit']").prop('disabled', false);
             }
         });
+        // IBGE: popular selects de estado/municipio para configuracoes (apenas UI)
+        const ibgeEstadosUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
+        function populateStatesConfig() {
+            $.getJSON(ibgeEstadosUrl, function(estados) {
+                estados.sort((a,b) => a.nome.localeCompare(b.nome));
+                const $est = $('#config-estado');
+                $est.empty().append('<option value="">Selecione um estado...</option>');
+                estados.forEach(function(e) { $est.append($('<option/>').attr('value', e.sigla).attr('data-id', e.id).text(e.nome + ' ('+e.sigla+')')); });
+            });
+        }
+        function loadMunicipiosConfig() {
+            const $est = $('#config-estado');
+            const $mun = $('#config-cidade');
+            const estadoId = $est.find('option:selected').data('id');
+            if (!estadoId) { $mun.html('<option value="">Selecione um estado primeiro...</option>'); return; }
+            $mun.html('<option>Carregando municípios...</option>');
+            $.getJSON('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + estadoId + '/municipios', function(list) {
+                list.sort((a,b) => a.nome.localeCompare(b.nome));
+                $mun.empty().append('<option value="">Selecione um município...</option>');
+                list.forEach(function(m) { $mun.append($('<option/>').attr('value', m.nome).text(m.nome)); });
+            });
+        }
+        $(document).on('change', '#config-estado', loadMunicipiosConfig);
+        populateStatesConfig();
     });
 </script>
 

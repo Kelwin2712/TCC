@@ -232,11 +232,15 @@ mysqli_close($conexao);
                                 <div class="row g-3">
                                     <div class="col-md-2">
                                         <label class="form-label">Estado</label>
-                                        <input type="text" id="reserva-estado" name="estado" class="form-control" maxlength="2">
+                                        <select id="reserva-estado" name="estado" class="form-select">
+                                            <option value="">Selecione um estado...</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-4">
                                         <label class="form-label">Cidade</label>
-                                        <input type="text" id="reserva-cidade" name="cidade" class="form-control">
+                                        <select id="reserva-cidade" name="cidade" class="form-select">
+                                            <option value="">Selecione um município...</option>
+                                        </select>
                                     </div>
                                     <div class="col-md-6">
                                         <label class="form-label">Bairro</label>
@@ -335,8 +339,8 @@ mysqli_close($conexao);
             $('#reserva-data').val($card.data('data'));
             $('#reserva-hora').val($card.data('hora'));
             $('#reserva-acomp').val($card.data('acompanhantes_qtd'));
-            $('#reserva-estado').val($card.data('estado'));
-            $('#reserva-cidade').val($card.data('cidade'));
+            // set state and city via helper (loads municipios when needed)
+            setModalLocation($card.data('estado'), $card.data('cidade'));
             $('#reserva-bairro').val($card.data('bairro'));
             $('#reserva-rua').val($card.data('rua'));
             $('#reserva-numero').val($card.data('numero'));
@@ -391,6 +395,11 @@ mysqli_close($conexao);
             const modal = new bootstrap.Modal(modalEl);
             modal.show();
         });
+
+        const dateInput = $('input[type="date"]')
+
+        dateInput.attr('min', new Date().toISOString().split('T')[0]);
+        dateInput.val(new Date().toISOString().split('T')[0]);
 
         // Salvar alterações (update)
         $('#reserva-save').on('click', function() {
@@ -492,6 +501,71 @@ mysqli_close($conexao);
                 })
                 .fail(function() { alert('Erro ao excluir.'); });
         });
+
+        // --- IBGE: popular selects de estados e municípios para reservas ---
+        const ibgeEstadosUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
+
+        function populateStates() {
+            $.getJSON(ibgeEstadosUrl, function(estados) {
+                estados.sort((a, b) => a.nome.localeCompare(b.nome));
+                const $reservaEstados = $('#reserva-estado');
+                $reservaEstados.empty().append('<option value="">Selecione um estado...</option>');
+                $.each(estados, function(i, estado) {
+                    const opt = `<option value="${estado.sigla}" data-id="${estado.id}">${estado.nome} (${estado.sigla})</option>`;
+                    $reservaEstados.append(opt);
+                });
+            });
+        }
+
+        function loadMunicipiosFor($estadoSelect, $municipioSelect, selectedCity) {
+            const $sel = $($estadoSelect);
+            const $mun = $($municipioSelect);
+            const estadoId = $sel.find('option:selected').data('id');
+            if (!estadoId) {
+                $mun.html('<option value="">Selecione um estado primeiro...</option>');
+                return;
+            }
+            const urlMunicipios = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`;
+            $mun.html('<option value="">Carregando municípios...</option>');
+            $.getJSON(urlMunicipios, function(municipios) {
+                municipios.sort((a, b) => a.nome.localeCompare(b.nome));
+                $mun.empty().append('<option value="">Selecione um município...</option>');
+                $.each(municipios, function(i, municipio) {
+                    $mun.append(`<option value="${municipio.nome}">${municipio.nome}</option>`);
+                });
+                if (selectedCity) {
+                    $mun.val(selectedCity);
+                    if (!$mun.val() && selectedCity) {
+                        const opts = $mun.find('option');
+                        opts.each(function() {
+                            if ($(this).text().toLowerCase() === selectedCity.toLowerCase()) {
+                                $mun.val($(this).val());
+                                return false;
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        $(document).on('change', '#reserva-estado', function() { loadMunicipiosFor('#reserva-estado', '#reserva-cidade'); });
+
+        function setModalLocation(stateUf, cityName, attempt = 0) {
+            if (attempt > 12) return;
+            if ($('#reserva-estado option').length <= 1) {
+                setTimeout(function() { setModalLocation(stateUf, cityName, attempt + 1); }, 150);
+                return;
+            }
+            if (!stateUf) {
+                $('#reserva-estado').val('');
+                $('#reserva-cidade').html('<option value="">Selecione um estado primeiro...</option>');
+                return;
+            }
+            $('#reserva-estado').val(stateUf);
+            loadMunicipiosFor('#reserva-estado', '#reserva-cidade', cityName);
+        }
+
+        populateStates();
     })
 </script>
 

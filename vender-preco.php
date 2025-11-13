@@ -11,6 +11,14 @@ $_SESSION['ipva'] = isset($_POST['ipva']) ? $_POST['ipva'] : null;
 $_SESSION['licenciamento'] = isset($_POST['licenciamento']) ? $_POST['licenciamento'] : null;
 $_SESSION['consevacao'] = isset($_POST['consevacao']) ? $_POST['consevacao'] : null;
 $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior'] : null;
+// carregar lista de lojas para o select (se disponível)
+include_once 'controladores/conexao_bd.php';
+$lojas = [];
+$res_lojas = mysqli_query($conexao, "SELECT id, nome, cidade FROM lojas ORDER BY nome ASC");
+if ($res_lojas) {
+  while ($l = mysqli_fetch_assoc($res_lojas)) $lojas[] = $l;
+}
+mysqli_close($conexao);
 ?>
 
 <!DOCTYPE html>
@@ -134,7 +142,21 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
                           </div>
                           <div class="col">
                             <label for="telefone-input" class="form-text mb-2">Telefone de contato<sup>*</sup></label>
-                            <input type="text" class="form-control" id="telefone-input" name="telefone" maxlength="15" minlength="14" value="<?= $_SESSION['telefone'] ?>" placeholder="Informe o telefone de contato" oninput="handlePhone(event)" required>
+                            <input type="text" class="form-control telefone-mask" id="telefone-input" name="telefone" maxlength="15" minlength="14" value="<?= isset($_SESSION['telefone']) ? $_SESSION['telefone'] : '' ?>" placeholder="Informe o telefone de contato" oninput="handlePhone(event)" required>
+                          </div>
+                        </div>
+                        <div class="row mt-2">
+                          <div class="col">
+                            <label class="form-text mb-2">Estado</label>
+                            <select class="form-select" id="particular-estado" name="estado">
+                              <option value="">Selecione um estado...</option>
+                            </select>
+                          </div>
+                          <div class="col">
+                            <label class="form-text mb-2">Cidade</label>
+                            <select class="form-select" id="particular-cidade" name="cidade">
+                              <option value="">Selecione um município...</option>
+                            </select>
                           </div>
                         </div>
                       </div>
@@ -220,6 +242,44 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
     
     // Trigger change no carregamento se algum já estiver selecionado
     $('.vendedor-radio:checked').trigger('change');
+});
+</script>
+
+<script>
+// IBGE: popular selects de estado/municipio para o bloco Particular
+$(function() {
+  const ibgeEstadosUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
+
+  function populateEstadosParticular() {
+    $.getJSON(ibgeEstadosUrl, function(estados) {
+      estados.sort((a,b) => a.nome.localeCompare(b.nome));
+      const $est = $('#particular-estado');
+      const $mun = $('#particular-cidade');
+      $est.empty().append('<option value="">Selecione um estado...</option>');
+      $mun.empty().append('<option value="">Selecione um município...</option>');
+      estados.forEach(function(e) {
+        const opt = $('<option/>').attr('value', e.sigla).attr('data-id', e.id).text(e.nome + ' (' + e.sigla + ')');
+        $est.append(opt);
+      });
+    });
+  }
+
+  function loadMunicipiosForParticular() {
+    const $est = $('#particular-estado');
+    const $mun = $('#particular-cidade');
+    const estadoId = $est.find('option:selected').data('id');
+    if (!estadoId) { $mun.html('<option value="">Selecione um estado primeiro...</option>'); return; }
+    const url = `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${estadoId}/municipios`;
+    $mun.html('<option>Carregando municípios...</option>');
+    $.getJSON(url, function(list) {
+      list.sort((a,b) => a.nome.localeCompare(b.nome));
+      $mun.empty().append('<option value="">Selecione um município...</option>');
+      list.forEach(function(m) { $mun.append($('<option/>').attr('value', m.nome).text(m.nome)); });
+    });
+  }
+
+  $(document).on('change', '#particular-estado', loadMunicipiosForParticular);
+  populateEstadosParticular();
 });
 </script>
 

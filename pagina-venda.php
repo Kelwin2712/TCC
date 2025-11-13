@@ -29,7 +29,7 @@ if ($qr) {
 
 $vendedor = $carro['vendedor_nome'] . ' ' . $carro['vendedor_sobrenome'];
 $vendedor_img = !empty($carro['vendedor_avatar']) ? $carro['vendedor_avatar'] : 'img/usuarios/avatares/user.png';
-$vendedor_est = '4.63';
+$vendedor_seg = '8.000.000.000';
 ?>
 
 <!DOCTYPE html>
@@ -220,7 +220,7 @@ $vendedor_est = '4.63';
                                     <p class="text-uppercase"><?= $carro['versao'] ?></p>
                                 </div>
                                 <div class="col">
-                                    <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> São José dos Campos - <?= $carro['estado_local'] ?></p>
+                                    <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> <?= $carro['cidade'] . ' - '  . $carro['estado_local'] ?></p>
                                 </div>
                                 <div class="col-auto">
                                     <button type="button" class="btn p-0 favoritar favoritar-danger">
@@ -322,7 +322,7 @@ $vendedor_est = '4.63';
                                     </button>
                                 </div>
                             </div>
-                            <a href="compras.php?vendedor=<?= $vendedor ?>&vendedor_img=<?= $vendedor_img ?>&vendedor_est=<?= $vendedor_est ?>" class="row mb-3 px-2 text-decoration-none text-dark">
+                            <a href="compras.php?vendedor=<?= $vendedor ?>&vendedor_img=<?= $vendedor_img ?>&vendedor_seg=<?= $vendedor_seg ?>" class="row mb-3 px-2 text-decoration-none text-dark">
                                 <div class="rounded-3 border-2">
                                     <div class="row">
                                         <div class="col-2 p-2 d-flex align-items-center justify-content-center">
@@ -335,7 +335,7 @@ $vendedor_est = '4.63';
                                                 <p class="fw-semibold mb-0"><?= $vendedor ?></p>
                                             </div>
                                             <div class="row">
-                                                <small class="fw-semibold mb-0"><?= $vendedor_est ?> <i class="bi bi-star-fill"></i></small>
+                                                <small class="fw-semibold mb-0"><i class="bi bi-person-fill me-1"></i><?= $vendedor_seg ?></small>
                                             </div>
                                         </div>
                                     </div>

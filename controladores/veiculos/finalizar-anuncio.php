@@ -39,6 +39,31 @@ $uso_anterior = isset($_SESSION['uso_anterior']) ? mysqli_real_escape_string($co
 $troca = isset($_SESSION['troca']) ? (int) $_SESSION['troca'] : 0;
 $email = isset($_SESSION['email']) ? mysqli_real_escape_string($conexao, $_SESSION['email']) : NULL;
 $telefone = isset($_SESSION['telefone']) ? mysqli_real_escape_string($conexao, $_SESSION['telefone']) : NULL;
+// optional location saved during flow
+$estado_local = isset($_SESSION['estado_local']) ? mysqli_real_escape_string($conexao, $_SESSION['estado_local']) : '';
+$cidade = isset($_SESSION['cidade']) ? mysqli_real_escape_string($conexao, $_SESSION['cidade']) : '';
+// tipo_vendedor: expect 'pf' or 'pj' in session (from form). Map to 0 = Particular, 1 = Loja
+$tipo_vendedor = 0;
+$loja_id = null;
+if (isset($_SESSION['tipo_vendedor'])) {
+    $tipo_v = $_SESSION['tipo_vendedor'];
+    $tipo_vendedor = ($tipo_v === 'pj') ? 1 : 0;
+}
+if (isset($_SESSION['loja_id']) && (int)$_SESSION['loja_id'] > 0) {
+    $loja_id = (int) $_SESSION['loja_id'];
+}
+
+// If seller is a loja, prefer loja's contact info (email_corporativo / whatsapp or telefone_fixo)
+if ($tipo_vendedor === 1 && $loja_id) {
+    $resL = mysqli_query($conexao, "SELECT email_corporativo, whatsapp, telefone_fixo FROM lojas WHERE id = " . $loja_id . " LIMIT 1");
+    if ($resL && mysqli_num_rows($resL) > 0) {
+        $rl = mysqli_fetch_assoc($resL);
+        if (!empty($rl['email_corporativo'])) $email = mysqli_real_escape_string($conexao, $rl['email_corporativo']);
+        // prefer whatsapp, then telefone_fixo
+        $tel = !empty($rl['whatsapp']) ? $rl['whatsapp'] : $rl['telefone_fixo'];
+        if (!empty($tel)) $telefone = mysqli_real_escape_string($conexao, $tel);
+    }
+}
 
 // Insert anuncio
 // Before inserting anuncio, check if there are uploaded files (from this request) or temp files for this user.
@@ -83,18 +108,78 @@ if (($uploaded_count + count($temp_photos)) < 5) {
 $descricao = '';
 if (isset($_POST['descricao'])) {
     $descricao = mysqli_real_escape_string($conexao, trim($_POST['descricao']));
-    // enforce limits server-side
-    if (mb_strlen($descricao) < 100 || mb_strlen($descricao) > 1000) {
-        echo json_encode(['success' => false, 'message' => 'A descrição deve ter entre 100 e 1000 caracteres.']);
+    // enforce limits server-side: description is optional, but if provided must be at most 1000 chars
+    if (mb_strlen($descricao) > 1000) {
+        echo json_encode(['success' => false, 'message' => 'A descrição deve ter no máximo 1000 caracteres.']);
         mysqli_close($conexao);
         exit;
     }
 }
 
-$sql = "INSERT INTO anuncios_carros(modelo, marca, versao, ano_fabricacao, ano_modelo, placa, cor, descricao, id_vendedor, preco, condicao, quilometragem, quant_proprietario, revisao, vistoria, sinistro, ipva, licenciamento, estado_conservacao, uso_anterior, aceita_troca, email, telefone) VALUES ('{$modelo}', {$marca}, '{$versao}', {$fabr}, {$ano}, ".(is_string($placa)?"'{$placa}'":'NULL').", {$cor}, '" . $descricao . "', {$uid}, '{$preco}', '{$condicao}', '{$quilometragem}', {$proprietario}, '{$revisao}', '{$vistoria}', '{$sinistro}', '{$ipva}', '{$licenciamento}', {$consevacao}, '{$uso_anterior}', '{$troca}', '{$email}', '{$telefone}')";
+$cols = [
+    'modelo','marca','versao','ano_fabricacao','ano_modelo','placa','cor','descricao','id_vendedor','preco','condicao','quilometragem','quant_proprietario','revisao','vistoria','sinistro','ipva','licenciamento','estado_conservacao','uso_anterior','aceita_troca','email','telefone'
+];
+
+$values = array();
+$values[] = "'" . $modelo . "'";
+$values[] = (int) $marca;
+$values[] = "'" . $versao . "'";
+$values[] = (int) $fabr;
+$values[] = (int) $ano;
+$values[] = is_string($placa) ? "'" . $placa . "'" : 'NULL';
+$values[] = (int) $cor;
+$values[] = "'" . $descricao . "'";
+$values[] = (int) $uid;
+$values[] = (int) $preco;
+$values[] = "'" . $condicao . "'";
+$values[] = "'" . $quilometragem . "'";
+$values[] = (int) $proprietario;
+$values[] = "'" . $revisao . "'";
+$values[] = "'" . $vistoria . "'";
+$values[] = "'" . $sinistro . "'";
+$values[] = "'" . $ipva . "'";
+$values[] = "'" . $licenciamento . "'";
+$values[] = (int) $consevacao;
+$values[] = "'" . $uso_anterior . "'";
+$values[] = "'" . $troca . "'";
+$values[] = ($email === NULL ? 'NULL' : "'" . $email . "'");
+$values[] = ($telefone === NULL ? 'NULL' : "'" . $telefone . "'");
+// include location if present (anuncios_carros may have columns estado_local and cidade)
+$r_tmp = mysqli_query($conexao, "SHOW COLUMNS FROM anuncios_carros LIKE 'estado_local'");
+if ($r_tmp && mysqli_num_rows($r_tmp) > 0) {
+    $cols[] = 'estado_local';
+    $values[] = ($estado_local === '' ? 'NULL' : "'" . $estado_local . "'");
+}
+$r_tmp = mysqli_query($conexao, "SHOW COLUMNS FROM anuncios_carros LIKE 'cidade'");
+if ($r_tmp && mysqli_num_rows($r_tmp) > 0) {
+    $cols[] = 'cidade';
+    $values[] = ($cidade === '' ? 'NULL' : "'" . $cidade . "'");
+}
+
+// Check if database has tipo_vendedor and loja_id columns; include only if present to remain backward-compatible
+$has_tipo = false;
+$has_loja = false;
+$r = mysqli_query($conexao, "SHOW COLUMNS FROM anuncios_carros LIKE 'tipo_vendedor'");
+if ($r && mysqli_num_rows($r) > 0) $has_tipo = true;
+$r = mysqli_query($conexao, "SHOW COLUMNS FROM anuncios_carros LIKE 'loja_id'");
+if ($r && mysqli_num_rows($r) > 0) $has_loja = true;
+
+if ($has_tipo) {
+    $cols[] = 'tipo_vendedor';
+    $values[] = $tipo_vendedor;
+}
+if ($has_loja) {
+    $cols[] = 'loja_id';
+    $values[] = ($loja_id ? $loja_id : 'NULL');
+}
+
+$sql = "INSERT INTO anuncios_carros(" . implode(',', $cols) . ") VALUES (" . implode(',', $values) . ")";
 
 if (!mysqli_query($conexao, $sql)) {
-    echo json_encode(['success' => false, 'message' => 'Erro ao inserir anúncio']);
+    $err = mysqli_error($conexao);
+    // return informative JSON for debugging
+    echo json_encode(['success' => false, 'message' => 'Erro ao inserir anúncio: ' . $err]);
+    mysqli_close($conexao);
     exit;
 }
 

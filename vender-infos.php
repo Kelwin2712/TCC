@@ -83,7 +83,7 @@ mysqli_close($conexao);
                   <label for="modelo-input">Modelo<sup>*</sup></label>
                   <a href="#" class="link-dark">Não encontrou o modelo?</a>
                 </div>
-                <input type="text" class="form-control" id="modelo-input" name="modelo" placeholder="Escolha um modelo" required>
+                <input type="text" autocomplete="off" class="form-control" id="modelo-input" name="modelo" placeholder="Escolha um modelo" required>
               </div>
               <div class="col-sm-6 mb-2">
                 <label for="fabr-select" class="form-text mb-2">Ano de fabricação<sup>*</sup></label>
@@ -108,7 +108,7 @@ mysqli_close($conexao);
                   <label for="versao-input">Versão<sup>*</sup></label>
                   <a href="#" class="link-dark">Não encontrou a versão?</a>
                 </div>
-                <input type="text" class="form-control" id="versao-input" name="versao" placeholder="Escolha uma versão" required>
+                <input type="text" class="form-control" autocomplete="off" id="versao-input" name="versao" placeholder="Escolha uma versão" required>
               </div>
               <div class="col-xl-6 mb-2">
                 <div class="d-flex justify-content-between mb-2 form-text">

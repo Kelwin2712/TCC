@@ -1,5 +1,5 @@
 <div class="nav-item dropdown">
-    <button class="btn border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle"></i>&nbsp;<?= $_SESSION['nome'] ?></button>
+    <button class="btn border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-fill"></i>&nbsp;<?= $_SESSION['nome'] ?></button>
     <ul class="dropdown-menu">
         <li><a class="dropdown-item" href="menu/configuracoes.php"><i class="bi bi-person-fill me-2"></i>Perfil</a></li>
         <hr class="dropdown-divider">

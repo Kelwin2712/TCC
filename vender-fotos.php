@@ -16,6 +16,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $_SESSION['troca'] = isset($_POST['troca']) ? $_POST['troca'] : ($_SESSION['troca'] ?? null);
   $_SESSION['email'] = isset($_POST['email']) ? $_POST['email'] : ($_SESSION['email'] ?? null);
   $_SESSION['telefone'] = isset($_POST['telefone']) ? $_POST['telefone'] : ($_SESSION['telefone'] ?? null);
+  // save seller type and selected loja (if any)
+  if (isset($_POST['tipo_vendedor'])) {
+    $_SESSION['tipo_vendedor'] = $_POST['tipo_vendedor']; // expected 'pf' or 'pj'
+  }
+  if (isset($_POST['loja_id'])) {
+    $_SESSION['loja_id'] = (int) $_POST['loja_id'];
+  }
+  // save optional location from previous step (estado/cidade)
+  if (isset($_POST['estado'])) {
+    $_SESSION['estado_local'] = $_POST['estado'];
+  }
+  if (isset($_POST['cidade'])) {
+    $_SESSION['cidade'] = $_POST['cidade'];
+  }
   // operate in temp mode (no carro_id yet)
   $carro_id = 0;
   // fetch any temp photos already uploaded for this user
@@ -117,7 +131,7 @@ mysqli_close($conexao);
             <hr class="my-4">
 
             <div class="mb-3">
-              <label for="descricao" class="form-label">Descrição do anúncio <small class="text-muted">(mín. 100 — máx. 1000 caracteres)</small></label>
+              <label for="descricao" class="form-label">Descrição do anúncio <small class="text-muted">(opcional — máx. 1000 caracteres)</small></label>
               <textarea id="descricao" name="descricao" class="form-control" rows="6" maxlength="1000" placeholder="Descreva o veículo: estado, opcionais, histórico, diferenciais..."></textarea>
               <div class="form-text text-end"><span id="desc-count">0</span>/1000</div>
             </div>
@@ -179,7 +193,7 @@ mysqli_close($conexao);
         const $final = $('#finalizar-btn');
         if ($final.length === 0) return; // not in temp mode
         const descLen = ($('#descricao').val() || '').trim().length;
-        // require at least 5 photos, and description is optional; if present must be between 100 and 1000
+  // require at least 5 photos, and description is optional; if present must be at most 1000 chars
         if (count >= 5 && (descLen === 0 || (descLen >= 100 && descLen <= 1000))) {
           $final.prop('disabled', false);
         } else {
@@ -297,7 +311,7 @@ mysqli_close($conexao);
         if (count < 5) { showAlert('danger', 'É necessário pelo menos 5 fotos para finalizar.'); return; }
         const desc = ($('#descricao').val() || '').trim();
         // description is optional; if provided, enforce length constraints
-        if (desc.length > 0 && (desc.length < 100 || desc.length > 1000)) { showAlert('danger', 'A descrição deve ter entre 100 e 1000 caracteres.'); return; }
+  if (desc.length > 1000) { showAlert('danger', 'A descrição deve ter no máximo 1000 caracteres.'); return; }
         // show confirmation modal
         const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
         modal.show();
@@ -319,14 +333,21 @@ mysqli_close($conexao);
           contentType: false,
           dataType: 'json',
           success: function(res) {
+            console.log('finalizar-anuncio response:', res);
             if (res && res.success) {
               showAlert('success', res.message || 'Anúncio publicado.');
               if (res.redirect) setTimeout(function() { window.location.href = res.redirect; }, 900);
             } else {
+              // log server message for debugging
+              console.error('finalizar-anuncio failed:', res);
               showAlert('danger', (res && res.message) ? res.message : 'Erro ao finalizar anúncio.');
             }
           },
-          error: function() { showAlert('danger', 'Erro ao finalizar anúncio.'); }
+          error: function(xhr, status, err) {
+            // log full response to console for debugging
+            console.error('finalizar-anuncio AJAX error:', status, err, xhr.responseText);
+            showAlert('danger', 'Erro ao finalizar anúncio. Veja console para detalhes.');
+          }
         }).always(function() {
           $btn.prop('disabled', false).text('Sim, publicar');
           const modalEl = document.getElementById('confirmModal');
