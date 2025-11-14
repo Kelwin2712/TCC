@@ -3,7 +3,4 @@
   <label class="form-check-label" for="<?= $id;?>">
     <?= $text;?>
   </label>
-  <small class="float-end">
-    (34)
-  </small>
 </div>

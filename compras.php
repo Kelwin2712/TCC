@@ -11,6 +11,11 @@ $vendedor = $_GET['vendedor'] ?? null;
 $vendedor_img = $_GET['vendedor_img'] ?? null;
 $vendedor_seg = $_GET['vendedor_seg'] ?? null;
 
+// Get URL params for lateral filters (marca, modelo, versao)
+$url_marca = $_GET['marca'] ?? '';
+$url_modelo = $_GET['modelo'] ?? '';
+$url_versao = $_GET['versao'] ?? '';
+
 $page = $_GET['page'] ?? 1;
 
 $quantidade = 3;
@@ -81,6 +86,20 @@ if (isset($_GET['versao']) && trim($_GET['versao']) !== '') {
   $whereParts[] = "TRIM(carros.versao) = TRIM('$v')";
 }
 
+// optional cor filter (accept single or comma-separated color ids)
+if (isset($_GET['cor']) && trim($_GET['cor']) !== '') {
+  $cor_raw = trim($_GET['cor']);
+  $parts_cor = array_filter(array_map('trim', explode(',', $cor_raw)));
+  $cor_ids = [];
+  foreach ($parts_cor as $c) {
+    if (ctype_digit($c)) $cor_ids[] = $c;
+  }
+  if (count($cor_ids) > 0) {
+    $cor_esc = array_map(function($c) use ($conexao){ return mysqli_real_escape_string($conexao, $c); }, $cor_ids);
+    $whereParts[] = "carros.cor IN ('" . implode("','", $cor_esc) . "')";
+  }
+}
+
 $where_sql = count($whereParts) ? ' WHERE ' . implode(' AND ', $whereParts) : '';
 
 $sql = "SELECT 
@@ -116,6 +135,15 @@ $marcas = [];
 
 while ($linha = mysqli_fetch_array($resultado)) {
   $marcas[] = $linha;
+}
+// fetch available colors for sidebar filter
+$sql = "SELECT id, nome FROM cores";
+$resultado = mysqli_query($conexao, $sql);
+$cores = [];
+if ($resultado) {
+  while ($linha = mysqli_fetch_array($resultado)) {
+    $cores[] = $linha;
+  }
 }
 // keep DB connection open to fetch fotos for each anuncio below
 ?>
@@ -242,27 +270,18 @@ while ($linha = mysqli_fetch_array($resultado)) {
                                 <label class="form-check-label" for="usados">
                                   Usados
                                 </label>
-                                <small class="float-end">
-                                  (5421)
-                                </small>
                               </div>
                               <div class="form-check">
                                 <input class="form-check-input condicao-input" type="checkbox" id="seminovos" data-val="seminovo">
                                 <label class="form-check-label" for="seminovos">
                                   Seminovos
                                 </label>
-                                <small class="float-end">
-                                  (—)
-                                </small>
                               </div>
                               <div class="form-check">
                                 <input class="form-check-input condicao-input" type="checkbox" id="novos" data-val="novo">
                                 <label class="form-check-label" for="novos">
                                   Novos
                                 </label>
-                                <small class="float-end">
-                                  (815)
-                                </small>
                               </div>
                             </div>
                           </div>
@@ -271,51 +290,31 @@ while ($linha = mysqli_fetch_array($resultado)) {
                             <div id="marcas-input" class="mb-3">
                               <h6>Marcas</h6>
                               <div class="input-group">
-                                <select id="marca-select" name="" id="" class="form-select">
-                                  <option value="" selected hidden>Selecione a marca</option>
+                                <select id="marca-select" name="" class="form-select">
+                                  <option value="" selected>Todas as marcas</option>
                                   <?php foreach ($marcas as $marca): ?>
-                                    <option value="<?= $marca['value'] ?>"><?= $marca['nome'] ?></option>
+                                    <option value="<?= $marca['value'] ?>" <?php if ($url_marca === $marca['value']) echo 'selected'; ?>><?= $marca['nome'] ?></option>
                                   <?php endforeach; ?>
                                 </select>
-                                <button class="btn bg-white border d-none">X</button>
+                                <button class="btn bg-white border <?php echo empty($url_marca) ? 'd-none' : ''; ?>">X</button>
                               </div>
                             </div>
-                            <div id="modelos-input" class="mb-3 d-none">
+                            <div id="modelos-input" class="mb-3 <?php echo empty($url_marca) ? 'd-none' : ''; ?>">
                               <h6>Modelos</h6>
                               <div class="input-group">
                                 <select name="modelo" id="modelo-select" class="form-select">
-                                  <option value="" selected hidden>Selecione o modelo</option>
-                                  <option value="modelo-1">Modelo 1</option>
-                                  <option value="modelo-2">Modelo 2</option>
-                                  <option value="modelo-3">Modelo 3</option>
-                                  <option value="modelo-4">Modelo 4</option>
-                                  <option value="modelo-5">Modelo 5</option>
-                                  <option value="modelo-6">Modelo 6</option>
-                                  <option value="modelo-7">Modelo 7</option>
-                                  <option value="modelo-8">Modelo 8</option>
-                                  <option value="modelo-9">Modelo 9</option>
-                                  <option value="modelo-10">Modelo 10</option>
+                                  <option value="" selected>Todos os modelos</option>
                                 </select>
-                                <button class="btn bg-white border d-none">X</button>
+                                <button class="btn bg-white border <?php echo empty($url_modelo) ? 'd-none' : ''; ?>">X</button>
                               </div>
                             </div>
-                            <div id="versoes-input" class="mb-3 d-none">
+                            <div id="versoes-input" class="mb-3 <?php echo empty($url_modelo) ? 'd-none' : ''; ?>">
                               <h6>Versões</h6>
                               <div class="input-group">
                                 <select name="versao" id="versao-select" class="form-select">
-                                  <option value="" selected hidden>Selecione a versão</option>
-                                  <option value="versao-1">Versão 1</option>
-                                  <option value="versao-2">Versão 2</option>
-                                  <option value="versao-3">Versão 3</option>
-                                  <option value="versao-4">Versão 4</option>
-                                  <option value="versao-5">Versão 5</option>
-                                  <option value="versao-6">Versão 6</option>
-                                  <option value="versao-7">Versão 7</option>
-                                  <option value="versao-8">Versão 8</option>
-                                  <option value="versao-9">Versão 9</option>
-                                  <option value="versao-10">Versão 10</option>
+                                  <option value="" selected>Todas as versões</option>
                                 </select>
-                                <button class="btn bg-white border d-none">X</button>
+                                <button class="btn bg-white border <?php echo empty($url_versao) ? 'd-none' : ''; ?>">X</button>
                               </div>
                             </div>
                           </div>
@@ -339,45 +338,10 @@ while ($linha = mysqli_fetch_array($resultado)) {
                           </div>
                           <div class="row px-2 g-0 gap-2">
                             <div class="col">
-                              <input type="text" class="form-control preco-input" id="preco-min" placeholder="Preço mínimo">
+                              <input type="text" class="form-control preco-input-rs" id="preco-min" placeholder="Preço mínimo">
                             </div>
                             <div class="col">
-                              <input type="text" class="form-control preco-input" id="preco-max" placeholder="Preço máximo">
-                            </div>
-                          </div>
-                          <div class="row mt-3">
-                            <h6 class="small mb-0">Faixa de preço específico</h6>
-                            <div class="row row-cols-2 row-cols-xxl-3 gy-1">
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">≤ 50 mil</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">≤ 75 mil</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">≤ 100 mil</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">≤ 150 mil</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">≤ 250 mil</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">≤ 500 mil</div>
-                                </button>
-                              </div>
+                              <input type="text" class="form-control preco-input-rs" id="preco-max" placeholder="Preço máximo">
                             </div>
                           </div>
                         </div>
@@ -406,86 +370,6 @@ while ($linha = mysqli_fetch_array($resultado)) {
                               <input type="text" class="form-control" id="ano-max" placeholder="Ano máximo">
                             </div>
                           </div>
-                          <div class="row mt-3">
-                            <h6 class="small mb-0">Ano específico</h6>
-                            <div class="row row-cols-2 row-cols-xxl-4 gy-1">
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2025</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2024</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2023</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2022</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2021</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2020</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2019</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2018</div>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row mt-3">
-                            <h6 class="small mb-2">Intervalos de tempo</h6>
-                            <div class="row row-cols-1 row-cols-md-2 ps-1 gx-0">
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2025-2022</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2022-2019</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2019-2016</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2016-2013</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2013-2010</div>
-                                </button>
-                              </div>
-                              <div class="col">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small text-nowrap">2010-2000</div>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -512,31 +396,6 @@ while ($linha = mysqli_fetch_array($resultado)) {
                               <input type="text" class="form-control" id="km-max" placeholder="km máximo">
                             </div>
                           </div>
-                          <div class="row mt-3">
-                            <h6 class="small mb-0">Quilometragens específico</h6>
-                            <div class="row gy-1">
-                              <div class="col-6">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small">&lt; 20K</div>
-                                </button>
-                              </div>
-                              <div class="col-6">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small">20K-50K</div>
-                                </button>
-                              </div>
-                              <div class="col-6">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small">50K-100K</div>
-                                </button>
-                              </div>
-                              <div class="col-6">
-                                <button class="btn bg-secondary-subtle w-auto rounded-pill py-0 px-2">
-                                  <div class="small">&gt; 100K</div>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -552,58 +411,16 @@ while ($linha = mysqli_fetch_array($resultado)) {
                     <div id="cor" class="accordion-collapse collapse">
                       <div class="accordion-body">
                         <div class="row ps-3">
-                          <?php
-                          $text = 'Branco';
-                          $id = 'branco';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Preto';
-                          $id = 'preto';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Vermelho';
-                          $id = 'verm';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Azul';
-                          $id = 'azul';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Cinza';
-                          $id = 'cinza';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Prata';
-                          $id = 'prata';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Vinho';
-                          $id = 'vinho';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Marrom';
-                          $id = 'marrom';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Laranja';
-                          $id = 'laranja';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Amarelo';
-                          $id = 'amarelo';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Dourado';
-                          $id = 'dourado';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Verde';
-                          $id = 'verde';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Bege';
-                          $id = 'bege';
-                          include $filter_check_caminho ?>
+                          <?php if (!empty($cores)): ?>
+                            <?php foreach ($cores as $cor): ?>
+                              <div class="form-check col-12">
+                                <input class="form-check-input cor-input" type="checkbox" id="cor-<?= $cor['id'] ?>" data-val="<?= $cor['id'] ?>">
+                                <label class="form-check-label" for="cor-<?= $cor['id'] ?>"><?= htmlspecialchars($cor['nome']) ?></label>
+                              </div>
+                            <?php endforeach; ?>
+                          <?php else: ?>
+                            <div class="form-text">Sem cores cadastradas</div>
+                          <?php endif; ?>
                         </div>
                       </div>
                     </div>
@@ -631,6 +448,22 @@ while ($linha = mysqli_fetch_array($resultado)) {
                           $id = 'hat';
                           include $filter_check_caminho ?>
                           <?php
+                          $text = 'Perua';
+                          $id = 'per';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'SUV';
+                          $id = 'suv';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Fastback';
+                          $id = 'fas';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Conversível';
+                          $id = 'con';
+                          include $filter_check_caminho ?>
+                          <?php
                           $text = 'Pickup';
                           $id = 'pic';
                           include $filter_check_caminho ?>
@@ -641,6 +474,10 @@ while ($linha = mysqli_fetch_array($resultado)) {
                           <?php
                           $text = 'Minivan';
                           $id = 'min';
+                          include $filter_check_caminho ?>
+                          <?php
+                          $text = 'Van';
+                          $id = 'van';
                           include $filter_check_caminho ?>
                           <?php
                           $text = 'Supercarro';
@@ -936,8 +773,8 @@ while ($linha = mysqli_fetch_array($resultado)) {
       $('#navbar-search').val(searchQ);
       $('#global-search').val(searchQ);
     <?php endif; ?>
-    // expose searchQ to other handlers
-    const pageSearchQ = typeof searchQ !== 'undefined' ? searchQ : null;
+    // expose searchQ to other handlers (mutable so search bar can update sidebar)
+    let pageSearchQ = typeof searchQ !== 'undefined' ? searchQ : null;
     const cards = $('.card-compra');
     cards.each(function() {
       const card = $(this);
@@ -1071,6 +908,66 @@ while ($linha = mysqli_fetch_array($resultado)) {
     let suppressMarcaNav = false;
     let suppressModeloNav = false;
 
+    // Helper: update button visibility based on select value
+    function updateButtonVisibility() {
+      const marcaVal = $('#marca-select').val();
+      const modeloVal = $('#modelo-select').val();
+      const versaoVal = $('#versao-select').val();
+
+      // Show marca button only if marca is selected
+      if (marcaVal) {
+        marcasInput.find('button').removeClass('d-none');
+      } else {
+        marcasInput.find('button').addClass('d-none');
+      }
+
+      // Show modelo button only if modelo is selected
+      if (modeloVal) {
+        modelosInput.find('button').removeClass('d-none');
+      } else {
+        modelosInput.find('button').addClass('d-none');
+      }
+
+      // Show versao button only if versao is selected
+      if (versaoVal) {
+        versoesInput.find('button').removeClass('d-none');
+      } else {
+        versoesInput.find('button').addClass('d-none');
+      }
+    }
+
+    // Call on page load
+    updateButtonVisibility();
+
+    // Sync: search bar -> sidebar (one-way). Debounced input will try to match a brand in sidebar
+    let searchSyncTimer = null;
+    const SEARCH_SYNC_MS = 600;
+    function handleSearchSync(q) {
+      pageSearchQ = q; // update global used by populateModels
+      if (!q || q.trim() === '') return;
+      const sq = q.toLowerCase();
+      let matchedMarca = null;
+      $('#marca-select option').each(function() {
+        const val = $(this).val();
+        const txt = $(this).text().toLowerCase();
+        if (val && txt && sq.indexOf(txt) !== -1) {
+          matchedMarca = val;
+          return false; // break
+        }
+      });
+      if (matchedMarca) {
+        // programmatic set: do not navigate, populate models and let populateModels infer model from pageSearchQ
+        suppressMarcaNav = true;
+        $('#marca-select').val(matchedMarca).trigger('change');
+      }
+    }
+
+    $('#global-search, #navbar-search').on('input', function() {
+      const v = $(this).val() || '';
+      if (searchSyncTimer) clearTimeout(searchSyncTimer);
+      searchSyncTimer = setTimeout(function() { handleSearchSync(v); }, SEARCH_SYNC_MS);
+    });
+
     // helper: populate models for a marca and optionally preselect modelo (does not navigate)
     function populateModels(marcaVal, preselectModelo) {
       if (!marcaVal) return;
@@ -1081,7 +978,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
       $modelo.empty();
       $modelo.append($('<option>', {
         value: '',
-        text: 'Carregando modelos...',
+        text: '',
         hidden: true,
         selected: true
       }));
@@ -1092,7 +989,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
           $modelo.empty();
           $modelo.append($('<option>', {
             value: '',
-            text: 'Selecione o modelo',
+            text: 'Todos os modelos',
             hidden: true,
             selected: true
           }));
@@ -1146,7 +1043,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
       $.getJSON('controladores/filters/get_versions.php', { marca: marcaVal, modelo: modeloVal })
         .done(function(data) {
           $versao.empty();
-          $versao.append($('<option>', { value: '', text: 'Selecione a versão', hidden: true, selected: true }));
+          $versao.append($('<option>', { value: '', text: 'Todas as versões', hidden: true, selected: true }));
           if (Array.isArray(data) && data.length) {
             data.forEach(function(v) {
               $versao.append($('<option>', { value: v, text: v }));
@@ -1173,6 +1070,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
       console.log('[init] initialMarca=', initialMarca, 'initialModelo=', typeof initialModelo !== 'undefined' ? initialModelo : null);
       suppressMarcaNav = true; // mark this as programmatic
       populateModels(initialMarca, typeof initialModelo !== 'undefined' ? initialModelo : null);
+      setTimeout(updateButtonVisibility, 100);
     }
 
     // if the page search contains a brand name, try to preselect the matching brand (don't navigate)
@@ -1223,9 +1121,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
         url.searchParams.set('marca', marcaVal);
         url.searchParams.delete('modelo');
         url.searchParams.delete('versao');
-        // set q to brand name so search box reflects selection
-        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
-        url.searchParams.set('q', brandText);
+        // do not update search input when selecting marca in sidebar
         url.searchParams.delete('page');
         window.location.href = url.toString();
         return;
@@ -1243,10 +1139,15 @@ while ($linha = mysqli_fetch_array($resultado)) {
         url.searchParams.set('marca', marcaVal);
         url.searchParams.delete('modelo');
         url.searchParams.delete('versao');
-        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
-        url.searchParams.set('q', brandText);
+        // do not update search input when navigating for marca
         url.searchParams.delete('page');
         window.location.href = url.toString();
+        return;
+      }
+
+      // Mark button visibility
+      if (!isUser) {
+        updateButtonVisibility();
       }
     });
 
@@ -1279,9 +1180,7 @@ while ($linha = mysqli_fetch_array($resultado)) {
         const url = new URL(window.location.href);
         url.searchParams.set('marca', marcaVal);
         url.searchParams.set('modelo', modeloVal);
-        // set q to 'Brand Model' so search input reflects selection
-        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
-        url.searchParams.set('q', brandText + ' ' + modeloVal);
+        // do not update search input when selecting modelo in sidebar
         url.searchParams.delete('versao');
         url.searchParams.delete('page');
         window.location.href = url.toString();
@@ -1294,23 +1193,23 @@ while ($linha = mysqli_fetch_array($resultado)) {
         marcasInput.find("button").removeClass("d-none");
         suppressModeloNav = false; // clear suppression immediately
         populateVersions(marcaVal, modeloVal, typeof initialVersao !== 'undefined' ? initialVersao : null);
+        updateButtonVisibility();
       } else {
         // defensive fallback: navigate
         const url = new URL(window.location.href);
         url.searchParams.set('marca', marcaVal);
         url.searchParams.set('modelo', modeloVal);
-        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
-        url.searchParams.set('q', brandText + ' ' + modeloVal);
+        // do not update search input when navigating for modelo
         url.searchParams.delete('versao');
         url.searchParams.delete('page');
         window.location.href = url.toString();
       }
     });
 
-    versoesInput.find("select").on("change", function() {
+    versoesInput.find("select").on("change", function(e) {
+      const isUser = !!e.originalEvent;
       const versaoVal = $(this).val();
       if (versaoVal) {
-        versoesInput.find("button").removeClass("d-none");
         // navigate to apply version filter
         const marcaVal = $('#marca-select').val();
         const modeloVal = $('#modelo-select').val();
@@ -1318,26 +1217,17 @@ while ($linha = mysqli_fetch_array($resultado)) {
         if (marcaVal) url.searchParams.set('marca', marcaVal);
         if (modeloVal) url.searchParams.set('modelo', modeloVal);
         url.searchParams.set('versao', versaoVal);
-        // set q to 'Brand Model Version' for search input
-        const brandText = $('#marca-select option[value="' + marcaVal + '"]').text();
-        url.searchParams.set('q', (brandText ? brandText + ' ' : '') + (modeloVal ? modeloVal + ' ' : '') + versaoVal);
+        // do not update search input when selecting versao in sidebar
         url.searchParams.delete('page');
         window.location.href = url.toString();
-      } else {
-        versoesInput.find("button").addClass("d-none");
+      } else if (!isUser) {
+        updateButtonVisibility();
       }
     });
 
     marcasInput.find("button").on("click", function() {
-      // user clicked clear on marca: clear filters and reload page to reflect it
-      marcasInput.find("select").val("");
-      marcasInput.find("button").addClass("d-none");
-      modelosInput.find("button").addClass("d-none");
-      versoesInput.find("button").addClass("d-none");
-      modelosInput.addClass("d-none");
-      modelosInput.find("select").val("");
-      versoesInput.addClass("d-none");
-      versoesInput.find("select").val("");
+      // user clicked clear on marca: remove marca/modelo/versao from URL and reload
+      // (don't manipulate selects; let PHP do the rendering on reload)
       const url = new URL(window.location.href);
       url.searchParams.delete('marca');
       url.searchParams.delete('modelo');
@@ -1348,12 +1238,8 @@ while ($linha = mysqli_fetch_array($resultado)) {
     });
 
     modelosInput.find("button").on("click", function() {
-      // user clicked clear on modelo: clear modelo/versao and reload (keep marca)
-      modelosInput.find("select").val("");
-      modelosInput.find("button").addClass("d-none");
-      versoesInput.find("button").addClass("d-none");
-      versoesInput.addClass("d-none");
-      versoesInput.find("select").val("");
+      // user clicked clear on modelo: remove modelo/versao from URL and reload
+      // (don't manipulate selects; let PHP do the rendering on reload)
       const url = new URL(window.location.href);
       url.searchParams.delete('modelo');
       url.searchParams.delete('versao');
@@ -1363,9 +1249,8 @@ while ($linha = mysqli_fetch_array($resultado)) {
     });
 
     versoesInput.find("button").on("click", function() {
-      // user clicked clear on versao: clear versao and reload (keep marca+modelo)
-      versoesInput.find("select").val("");
-      versoesInput.find("button").addClass("d-none");
+      // user clicked clear on versao: remove versao from URL and reload
+      // (don't manipulate selects; let PHP do the rendering on reload)
       const url = new URL(window.location.href);
       url.searchParams.delete('versao');
       url.searchParams.delete('q');
@@ -1389,6 +1274,45 @@ while ($linha = mysqli_fetch_array($resultado)) {
 
     // Initialize on page load
     initializeCondicaoCheckboxes();
+
+    // Colors filter initialization + handler
+    function initializeCorCheckboxes() {
+      const url = new URL(window.location.href);
+      const corParam = url.searchParams.get('cor') || '';
+      const values = corParam ? corParam.split(',').map(v => v.trim()) : [];
+      $('.cor-input').each(function() {
+        const val = $(this).attr('data-val');
+        const isChecked = values.includes(val);
+        $(this).prop('checked', isChecked);
+      });
+    }
+    initializeCorCheckboxes();
+
+    let corTimer = null;
+    const COR_DEBOUNCE_MS = 800;
+    $('.cor-input').on('change', function() {
+      // collect checked colors
+      const checked = $('.cor-input:checked').length;
+      // allow zero selection meaning 'all' (no filter)
+      if (corTimer) clearTimeout(corTimer);
+      corTimer = setTimeout(function() {
+        const vals = [];
+        $('.cor-input:checked').each(function() {
+          const v = $(this).attr('data-val');
+          if (v) vals.push(v);
+        });
+        const url = new URL(window.location.href);
+        url.searchParams.delete('page');
+        if (vals.length === 0) {
+          url.searchParams.delete('cor');
+        } else if (vals.length === 1) {
+          url.searchParams.set('cor', vals[0]);
+        } else {
+          url.searchParams.set('cor', vals.join(','));
+        }
+        window.location.href = url.toString();
+      }, COR_DEBOUNCE_MS);
+    });
 
     // Debounce changes so user can toggle multiple boxes before navigation
     let condicaoTimer = null;
