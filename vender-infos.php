@@ -123,6 +123,32 @@ mysqli_close($conexao);
                 </select>
               </div>
             </div>
+            <div class="row w-100 px-5 mt-3">
+              <div class="form-text mb-2">Carroceria<sup>*</sup></div>
+              <div class="d-flex gap-3 row-cols-5 flex-wrap w-100">
+                <?php
+                $carrocerias = [
+                  'Hatchback',
+                  'Sedan',
+                  'SUV',
+                  'Crossover',
+                  'Picape',
+                  'Coupé',
+                  'Conversível',
+                  'Perua',
+                  'Minivan',
+                  'Van'
+                ];
+                foreach ($carrocerias as $carroceria): ?>
+                  <div class="col">
+                    <input class="d-none" type="radio" name="carroceria" id="<?= strtolower($carroceria) ?>" value="<?= $carroceria ?>" required>
+                    <label class="rounded-3" for="<?= strtolower($carroceria) ?>">
+                      <?= $carroceria ?>
+                    </label>
+                  </div>
+                <?php endforeach; ?>
+              </div>
+            </div>
             <div class="row d-flex justify-content-between align-items-center w-100 mt-5">
               <div class="col-auto">
                 <a href="vender-placa.php" class="btn text-muted"><i class="bi bi-caret-left"></i>&nbsp;Voltar</a>
