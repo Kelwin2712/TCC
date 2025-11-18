@@ -36,6 +36,13 @@ $ipva = isset($_SESSION['ipva']) ? mysqli_real_escape_string($conexao, $_SESSION
 $licenciamento = isset($_SESSION['licenciamento']) ? mysqli_real_escape_string($conexao, $_SESSION['licenciamento']) : 'NULL';
 $consevacao = isset($_SESSION['consevacao']) ? (int) $_SESSION['consevacao'] : 'NULL';
 $uso_anterior = isset($_SESSION['uso_anterior']) ? mysqli_real_escape_string($conexao, $_SESSION['uso_anterior']) : 'NULL';
+$carroceria = isset($_SESSION['carroceria']) ? (int) $_SESSION['carroceria'] : 'NULL';
+$propulsao = isset($_SESSION['propulsao']) ? mysqli_real_escape_string($conexao, $_SESSION['propulsao']) : '';
+$combustivel = isset($_SESSION['combustivel']) ? mysqli_real_escape_string($conexao, $_SESSION['combustivel']) : '';
+$cambio = isset($_SESSION['cambio']) ? mysqli_real_escape_string($conexao, $_SESSION['cambio']) : '';
+$blindagem = isset($_SESSION['blindagem']) ? (int) $_SESSION['blindagem'] : 0;
+$portas_qtd = isset($_SESSION['portas_qtd']) ? (int) $_SESSION['portas_qtd'] : 'NULL';
+$assentos_qtd = isset($_SESSION['assentos_qtd']) ? (int) $_SESSION['assentos_qtd'] : 'NULL';
 $troca = isset($_SESSION['troca']) ? (int) $_SESSION['troca'] : 0;
 $email = isset($_SESSION['email']) ? mysqli_real_escape_string($conexao, $_SESSION['email']) : NULL;
 $telefone = isset($_SESSION['telefone']) ? mysqli_real_escape_string($conexao, $_SESSION['telefone']) : NULL;
@@ -117,7 +124,7 @@ if (isset($_POST['descricao'])) {
 }
 
 $cols = [
-    'modelo','marca','versao','ano_fabricacao','ano_modelo','placa','cor','descricao','id_vendedor','preco','condicao','quilometragem','quant_proprietario','revisao','vistoria','sinistro','ipva','licenciamento','estado_conservacao','uso_anterior','aceita_troca','email','telefone'
+    'modelo','marca','versao','ano_fabricacao','ano_modelo','placa','cor','carroceria','propulsao','combustivel','cambio','blindagem','portas_qtd','assentos_qtd','descricao','id_vendedor','preco','condicao','quilometragem','quant_proprietario','revisao','vistoria','sinistro','ipva','licenciamento','estado_conservacao','uso_anterior','aceita_troca','email','telefone'
 ];
 
 $values = array();
@@ -128,6 +135,13 @@ $values[] = (int) $fabr;
 $values[] = (int) $ano;
 $values[] = is_string($placa) ? "'" . $placa . "'" : 'NULL';
 $values[] = (int) $cor;
+$values[] = is_numeric($carroceria) ? (int) $carroceria : 'NULL';
+$values[] = "'" . $propulsao . "'";
+$values[] = "'" . $combustivel . "'";
+$values[] = "'" . $cambio . "'";
+$values[] = (int) $blindagem;
+$values[] = is_numeric($portas_qtd) ? (int) $portas_qtd : 'NULL';
+$values[] = is_numeric($assentos_qtd) ? (int) $assentos_qtd : 'NULL';
 $values[] = "'" . $descricao . "'";
 $values[] = (int) $uid;
 $values[] = (int) $preco;

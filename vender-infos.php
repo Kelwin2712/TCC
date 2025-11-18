@@ -32,6 +32,14 @@ while ($linha = mysqli_fetch_array($resultado)) {
   $cores[] = $linha;
 }
 
+$sql = "SELECT * FROM carrocerias ORDER BY id ASC";
+$resultado = mysqli_query($conexao, $sql);
+
+$carrocerias = [];
+while ($linha = mysqli_fetch_array($resultado)) {
+  $carrocerias[] = $linha;
+}
+
 mysqli_close($conexao);
 ?>
 
@@ -46,6 +54,26 @@ mysqli_close($conexao);
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <title>Fahren</title>
+  <style>
+    input[name="carroceria"]+label {
+      color: var(--bs-secondary-color);
+      cursor: pointer;
+      border: var(--bs-border-width) var(--bs-border-style) var(--bs-border-color);
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    input[name="carroceria"]+label img {
+      opacity: 0.7;
+    }
+
+    input[name="carroceria"]:checked+label {
+      --bs-text-opacity: 1;
+      --bs-border-opacity: 1;
+      background-color: var(--bs-primary-bg-subtle);
+      border-color: rgba(var(--bs-primary-rgb), var(--bs-border-opacity));
+      color: rgba(var(--bs-primary-rgb), var(--bs-text-opacity));
+    }
+  </style>
 </head>
 
 <body>
@@ -63,7 +91,7 @@ mysqli_close($conexao);
           <button type="button" class="position-absolute top-0 start-100 translate-middle btn btn-sm bg-body-secondary rounded-pill" style="width: 2rem; height:2rem;">3</button>
         </div>
         <div class="card">
-          <form method="post" action="vender-condicao.php" class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
+          <form method="post" action="vender-add.php" class="card-body p-5 d-flex flex-column justify-content-center align-items-center">
             <h3 class="mb-4 fw-bold">Informe os dados do veículo</h3>
             <div class="row w-100 px-5">
               <div class="col-md-6 mb-2">
@@ -124,26 +152,33 @@ mysqli_close($conexao);
               </div>
             </div>
             <div class="row w-100 px-5 mt-3">
-              <div class="form-text mb-2">Carroceria<sup>*</sup></div>
-              <div class="d-flex gap-3 row-cols-5 flex-wrap w-100">
+              <div class="form-text">Carroceria<sup>*</sup></div>
+              <div class="row row-cols-5 g-3 my-0">
                 <?php
-                $carrocerias = [
-                  'Hatchback',
-                  'Sedan',
-                  'SUV',
-                  'Crossover',
-                  'Picape',
-                  'Coupé',
-                  'Conversível',
-                  'Perua',
-                  'Minivan',
-                  'Van'
-                ];
-                foreach ($carrocerias as $carroceria): ?>
+                // helper to build a filename-friendly slug from the DB name
+                function _slugify_carroceria($s) {
+                  $s = trim($s);
+                  $s = iconv('UTF-8', 'ASCII//TRANSLIT', $s);
+                  $s = preg_replace('/[^A-Za-z0-9]+/', '', $s);
+                  return strtolower($s);
+                }
+
+                foreach ($carrocerias as $c):
+                  $slug = _slugify_carroceria($c['nome']);
+                  $fid = 'carroceria-' . $c['id'];
+                  $svgPath = __DIR__ . '/img/carroceria/' . $slug . '.svg';
+                  $webPath = 'img/carroceria/' . $slug . '.svg';
+                ?>
                   <div class="col">
-                    <input class="d-none" type="radio" name="carroceria" id="<?= strtolower($carroceria) ?>" value="<?= $carroceria ?>" required>
-                    <label class="rounded-3" for="<?= strtolower($carroceria) ?>">
-                      <?= $carroceria ?>
+                    <input class="d-none" type="radio" name="carroceria" id="<?= $fid ?>" value="<?= $c['id'] ?>" required>
+                    <label class="rounded-3 d-block text-center p-4" for="<?= $fid ?>">
+                      <?php if (is_file($svgPath)): ?>
+                        <?= file_get_contents($svgPath) ?>
+                      <?php else: ?>
+                        <div style="height:48px"></div>
+                      <?php endif; ?>
+                      <br>
+                      <?= htmlspecialchars($c['nome'], ENT_QUOTES) ?>
                     </label>
                   </div>
                 <?php endforeach; ?>

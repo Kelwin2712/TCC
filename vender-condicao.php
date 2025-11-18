@@ -7,6 +7,13 @@ $_SESSION['versao'] = isset($_POST['versao']) ? $_POST['versao'] : $_SESSION['ve
 $_SESSION['cor'] = isset($_POST['cor']) ? $_POST['cor'] : $_SESSION['cor'];
 $_SESSION['ano'] = isset($_POST['ano']) ? $_POST['ano'] : $_SESSION['ano'];
 $_SESSION['fabr'] = isset($_POST['fabr']) ? $_POST['fabr'] : $_SESSION['fabr'];
+$_SESSION['carroceria'] = isset($_POST['carroceria']) ? $_POST['carroceria'] : $_SESSION['carroceria'];
+$_SESSION['propulsao'] = isset($_POST['propulsao']) ? $_POST['propulsao'] : $_SESSION['propulsao'];
+$_SESSION['combustivel'] = isset($_POST['combustivel']) ? $_POST['combustivel'] : $_SESSION['combustivel'];
+$_SESSION['cambio'] = isset($_POST['cambio']) ? $_POST['cambio'] : $_SESSION['cambio'];
+$_SESSION['blindagem'] = isset($_POST['blindagem']) ? $_POST['blindagem'] : $_SESSION['blindagem'];
+$_SESSION['portas_qtd'] = isset($_POST['portas_qtd']) ? $_POST['portas_qtd'] : $_SESSION['portas_qtd'];
+$_SESSION['assentos_qtd'] = isset($_POST['assentos_qtd']) ? $_POST['assentos_qtd'] : $_SESSION['assentos_qtd'];
 ?>
 
 <!DOCTYPE html>

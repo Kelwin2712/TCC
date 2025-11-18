@@ -33,7 +33,6 @@ if (mysqli_num_rows($resultado) > 0) {
         $combustivel = $linha['combustivel'];
         $blindagem = $linha['blindagem'];
         $id_vendedor = $linha['id_vendedor'];
-        $imagens = $linha['imagens'];
         $leilao = $linha['leilao'];
         $portas_qtd = $linha['portas_qtd'];
         $assentos_qtd = $linha['assentos_qtd'];
@@ -397,21 +396,16 @@ if ($qr) {
                                 <div class="col">
                                     <label for="propulsao-select" class="form-label">Propulsão</label>
                                     <select class="form-select shadow-sm" id="propulsao-select" aria-label="Default select example" name="propulsao" required>
-                                        <?php foreach ($marcas as $marca_o): ?>
-                                            <option value="<?= $marca_o['value'] ?>" <?php if ($marca == $marca_o['value']) {
-                                                                                            echo 'selected';
-                                                                                        } ?>><?= $marca_o['nome'] ?></option>
-                                        <?php endforeach; ?>
+                                        <option value="">Selecione a propulsão</option>
+                                        <option value="eletrico" <?php if ($propulsao === 'eletrico') echo 'selected'; ?>>Elétrico</option>
+                                        <option value="combustao" <?php if ($propulsao === 'combustao') echo 'selected'; ?>>Combustão</option>
+                                        <option value="hibrido" <?php if ($propulsao === 'hibrido') echo 'selected'; ?>>Híbrido</option>
                                     </select>
                                 </div>
                                 <div class="col">
                                     <label for="combustivel-select" class="form-label">Combustível</label>
                                     <select class="form-select shadow-sm" id="combustivel-select" aria-label="Default select example" name="combustivel" required>
-                                        <?php foreach ($marcas as $marca_o): ?>
-                                            <option value="<?= $marca_o['value'] ?>" <?php if ($marca == $marca_o['value']) {
-                                                                                            echo 'selected';
-                                                                                        } ?>><?= $marca_o['nome'] ?></option>
-                                        <?php endforeach; ?>
+                                        <option value="" selected hidden>Selecione o combustível</option>
                                     </select>
                                 </div>
                                 <div class="col">
@@ -432,14 +426,24 @@ if ($qr) {
                                         <option value="3">3 assentos</option>
                                         <option value="4">4 assentos</option>
                                         <option value="5">5 assentos</option>
-                                        <option value="6">6 ou mais assentos</option>
+                                        <option value="6">6 assentos</option>
+                                        <option value="7">7 assentos</option>
+                                        <option value="8">8 ou mais assentos</option>
+                                    </select>
+                                </div>
+                                <div class="col">
+                                    <label for="cambio-select" class="form-label">Câmbio</label>
+                                    <select class="form-select shadow-sm" id="cambio-select" aria-label="Default select example" name="cambio" required>
+                                        <option value="">Selecione o câmbio</option>
+                                        <option value="A" <?php if (isset($linha) && $linha['cambio'] === 'A') echo 'selected'; ?>>Automático</option>
+                                        <option value="M" <?php if (isset($linha) && $linha['cambio'] === 'M') echo 'selected'; ?>>Manual</option>
                                     </select>
                                 </div>
                                 <div class="col">
                                     <label for="blindagem-select" class="form-label">Blindagem</label>
                                     <select class="form-select shadow-sm" id="blindagem-select" aria-label="Default select example" name="blindagem" required>
-                                        <option value="0">Sem blindagem</option>
-                                        <option value="1">Com blindagem</option>
+                                        <option value="0" <?php if ($blindagem == 0) echo 'selected'; ?>>Sem blindagem</option>
+                                        <option value="1" <?php if ($blindagem == 1) echo 'selected'; ?>>Com blindagem</option>
                                     </select>
                                 </div>
                                 <div class="col">
@@ -1597,6 +1601,35 @@ if ($qr) {
             // after state is set, load municipios and set city
             loadMunicipiosFor('#view-reserva-estado', '#view-reserva-cidade', cityName);
         }
+
+        // Propulsão field dynamic loader
+        const propulsaoSelect = $('#propulsao-select');
+        const combustivelSelect = $('#combustivel-select');
+        
+        const propulsaoConfig = {
+            'eletrico': { combustivel: 'Elétrico', opcoes: ['Elétrico'] },
+            'combustao': { combustivel: 'Gasolina', opcoes: ['Gasolina', 'Álcool', 'Flex', 'Diesel', 'GNV'] },
+            'hibrido': { combustivel: 'HEV', opcoes: ['HEV', 'PHEV'] }
+        };
+        
+        function updateCombustivelOptions() {
+            const selectedValue = propulsaoSelect.val();
+            combustivelSelect.empty();
+            combustivelSelect.append('<option value="" selected hidden>Selecione o combustível</option>');
+            
+            if (selectedValue && propulsaoConfig[selectedValue]) {
+                const opcoes = propulsaoConfig[selectedValue].opcoes;
+                opcoes.forEach(function(opcao) {
+                    combustivelSelect.append('<option value="' + opcao + '"' + (opcao === '<?= htmlspecialchars($combustivel ?? '') ?>' ? ' selected' : '') + '>' + opcao + '</option>');
+                });
+            }
+        }
+        
+        // Initialize on page load
+        updateCombustivelOptions();
+        
+        // Update when propulsão changes
+        propulsaoSelect.on('change', updateCombustivelOptions);
 
         // initialize states on page load
         populateStates();

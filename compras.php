@@ -55,7 +55,9 @@ if (isset($_GET['codicao']) && trim($_GET['codicao']) !== '') {
     if (isset($cod_map[$pl])) $codes[] = $cod_map[$pl];
   }
   if (count($codes) > 0) {
-    $codes_esc = array_map(function($c) use ($conexao){ return mysqli_real_escape_string($conexao, $c); }, $codes);
+    $codes_esc = array_map(function ($c) use ($conexao) {
+      return mysqli_real_escape_string($conexao, $c);
+    }, $codes);
     $whereParts[] = "carros.condicao IN ('" . implode("','", $codes_esc) . "')";
   }
 }
@@ -95,9 +97,87 @@ if (isset($_GET['cor']) && trim($_GET['cor']) !== '') {
     if (ctype_digit($c)) $cor_ids[] = $c;
   }
   if (count($cor_ids) > 0) {
-    $cor_esc = array_map(function($c) use ($conexao){ return mysqli_real_escape_string($conexao, $c); }, $cor_ids);
+    $cor_esc = array_map(function ($c) use ($conexao) {
+      return mysqli_real_escape_string($conexao, $c);
+    }, $cor_ids);
     $whereParts[] = "carros.cor IN ('" . implode("','", $cor_esc) . "')";
   }
+}
+
+// optional carroceria filter (accept single or comma-separated carroceria ids)
+if (isset($_GET['carroceria']) && trim($_GET['carroceria']) !== '') {
+  $carroceria_raw = trim($_GET['carroceria']);
+  $parts_car = array_filter(array_map('trim', explode(',', $carroceria_raw)));
+  $carroceria_ids = [];
+  foreach ($parts_car as $c) {
+    if (ctype_digit($c)) $carroceria_ids[] = $c;
+  }
+  if (count($carroceria_ids) > 0) {
+    $carroceria_esc = array_map(function ($c) use ($conexao) {
+      return mysqli_real_escape_string($conexao, $c);
+    }, $carroceria_ids);
+    $whereParts[] = "carros.carroceria IN ('" . implode("','", $carroceria_esc) . "')";
+  }
+}
+
+// optional propulsao filter (parent categories: comb, hib, ele)
+// and optional combustivel filter (subtypes: gas, alc, fle, die, gnv, hev, phe, mhe, ele)
+// When both parent(s) and subtype(s) are present, combine them with OR so
+// the query returns cars matching either the selected propulsao parents
+// or the selected combustivel subtypes (e.g., Elétrico OR Gasolina).
+
+$propClause = '';
+$combClause = '';
+
+if (isset($_GET['propulsao']) && trim($_GET['propulsao']) !== '') {
+  $parts_prop = array_filter(array_map('trim', explode(',', $_GET['propulsao'])));
+  $map = [
+    'comb' => 'combustao',
+    'hib' => 'hibrido',
+    'ele' => 'eletrico'
+  ];
+  $vals = [];
+  foreach ($parts_prop as $p) {
+    $pl = strtolower($p);
+    if (isset($map[$pl])) $vals[] = $map[$pl];
+  }
+  if (count($vals) > 0) {
+    $vals_esc = array_map(function ($c) use ($conexao) { return mysqli_real_escape_string($conexao, $c); }, $vals);
+    $propClause = "carros.propulsao IN ('" . implode("','", $vals_esc) . "')";
+  }
+}
+
+if (isset($_GET['combustivel']) && trim($_GET['combustivel']) !== '') {
+  $parts_comb = array_filter(array_map('trim', explode(',', $_GET['combustivel'])));
+  $mapc = [
+    'gas' => 'Gasolina',
+    'alc' => 'Álcool',
+    'fle' => 'Flex',
+    'die' => 'Diesel',
+    'gnv' => 'GNV',
+    'hev' => 'HEV',
+    'phe' => 'PHEV',
+    'mhe' => 'MHEV',
+    'ele' => 'Elétrico'
+  ];
+  $cvals = [];
+  foreach ($parts_comb as $c) {
+    $cl = strtolower($c);
+    if (isset($mapc[$cl])) $cvals[] = $mapc[$cl];
+  }
+  if (count($cvals) > 0) {
+    $cvals_esc = array_map(function ($c) use ($conexao) { return mysqli_real_escape_string($conexao, $c); }, $cvals);
+    $combClause = "carros.combustivel IN ('" . implode("','", $cvals_esc) . "')";
+  }
+}
+
+// Add combined clause: if both exist, wrap with OR to avoid impossible AND
+if ($propClause !== '' && $combClause !== '') {
+  $whereParts[] = "(" . $propClause . " OR " . $combClause . ")";
+} elseif ($propClause !== '') {
+  $whereParts[] = $propClause;
+} elseif ($combClause !== '') {
+  $whereParts[] = $combClause;
 }
 
 $where_sql = count($whereParts) ? ' WHERE ' . implode(' AND ', $whereParts) : '';
@@ -145,6 +225,15 @@ if ($resultado) {
     $cores[] = $linha;
   }
 }
+// fetch available carrocerias for sidebar filter
+$sql = "SELECT id, nome FROM carrocerias";
+$resultado = mysqli_query($conexao, $sql);
+$carrocerias = [];
+if ($resultado) {
+  while ($linha = mysqli_fetch_array($resultado)) {
+    $carrocerias[] = $linha;
+  }
+}
 // keep DB connection open to fetch fotos for each anuncio below
 ?>
 
@@ -185,7 +274,7 @@ if ($resultado) {
     <div class="container-fluid">
       <div class="row d-flex justify-content-center">
         <div class="col-12 col-lg-10 col-lg-10">
-          <div class="row pt-5">
+          <div class="row pt-5 pb-3 pb-lg-0">
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
               <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="." class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Home</a></li>
@@ -204,8 +293,11 @@ if ($resultado) {
                   }; ?></h4>
             </nav>
           </div>
+          <div class="row px-3 pt-3 border-top d-flex d-lg-none">
+            <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" class="btn bg-white btn-sm border rounded-pill px-3 w-auto"><i class="bi bi-funnel me-2"></i></i>Filtros</button>
+          </div>
           <div class="row g-4">
-            <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-flex flex-column d-none d-md-block" style="max-height: 100vh;">
+            <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-lg-flex flex-column d-none" style="max-height: 100vh;">
               <div id="filtros-over" class="overflow-y-auto rounded-2 border border-opacity-25 shadow-sm" style="max-height: 100%;">
                 <div class="accordion w-100" id="accordionPanelsStayOpenExample">
                   <?php if (isset($vendedor)): ?>
@@ -428,61 +520,23 @@ if ($resultado) {
                   <!-- Carroceria ⬇️ -->
                   <div class="accordion-item border-0 border-bottom">
                     <h2 class="accordion-header">
-                      <button class="accordion-button <?php if ($categoria == null or $categoria == 'ele' or $categoria == 'hib') {
-                                                        echo ' collapsed';
-                                                      } ?>" type="button" data-bs-toggle="collapse" data-bs-target="#carroceria" aria-expanded="true" aria-controls="carroceria">
+                      <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#carroceria" aria-expanded="false" aria-controls="carroceria">
                         Carroceria
                       </button>
                     </h2>
-                    <div id="carroceria" class="accordion-collapse collapse <?php if ($categoria != null and $categoria != 'ele' and $categoria != 'hib') {
-                                                                              echo 'show';
-                                                                            } ?>">
+                    <div id="carroceria" class="accordion-collapse collapse">
                       <div class="accordion-body">
                         <div class="row ps-3">
-                          <?php
-                          $text = 'Sedan';
-                          $id = 'sed';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Hatchback';
-                          $id = 'hat';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Perua';
-                          $id = 'per';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'SUV';
-                          $id = 'suv';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Fastback';
-                          $id = 'fas';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Conversível';
-                          $id = 'con';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Pickup';
-                          $id = 'pic';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Coupé';
-                          $id = 'cou';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Minivan';
-                          $id = 'min';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Van';
-                          $id = 'van';
-                          include $filter_check_caminho ?>
-                          <?php
-                          $text = 'Supercarro';
-                          $id = 'sup';
-                          include $filter_check_caminho ?>
+                          <?php if (!empty($carrocerias)): ?>
+                            <?php foreach ($carrocerias as $carroceria): ?>
+                              <div class="form-check col-12">
+                                <input class="form-check-input carroceria-input" type="checkbox" id="carroceria-<?= $carroceria['id'] ?>" data-val="<?= $carroceria['id'] ?>">
+                                <label class="form-check-label" for="carroceria-<?= $carroceria['id'] ?>"><?= htmlspecialchars($carroceria['nome']) ?></label>
+                              </div>
+                            <?php endforeach; ?>
+                          <?php else: ?>
+                            <div class="form-text">Sem carrocerias cadastradas</div>
+                          <?php endif; ?>
                         </div>
                       </div>
                     </div>
@@ -557,18 +611,6 @@ if ($resultado) {
                           $text = 'Elétrico';
                           $id = 'ele';
                           include $filter_check_caminho ?>
-                          <div id="ele-tipos" class="ps-3">
-                            <?php
-                            $text = 'BEV';
-                            $id = 'bev';
-                            include $filter_check_caminho;
-                            ?>
-                            <?php
-                            $text = 'FCEV';
-                            $id = 'fce';
-                            include $filter_check_caminho;
-                            ?>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -621,10 +663,10 @@ if ($resultado) {
               </div>
             </div>
             <div class="col">
-              <?php if (isset($vendedor)):?>
-              <div class="mt-4">
-                <img src="https://preview.redd.it/bugatti-chiron-spotted-in-same-parking-garage-back-to-back-v0-08ed1s0xv6ne1.jpg?width=640&crop=smart&auto=webp&s=ccef8f6c11ef172dbe050cd06911e0f01920d714" class="w-100 border h-auto object-fit-cover rounded-4" style="aspect-ratio: 1/.125;">
-              </div>
+              <?php if (isset($vendedor)): ?>
+                <div class="mt-4">
+                  <img src="https://preview.redd.it/bugatti-chiron-spotted-in-same-parking-garage-back-to-back-v0-08ed1s0xv6ne1.jpg?width=640&crop=smart&auto=webp&s=ccef8f6c11ef172dbe050cd06911e0f01920d714" class="w-100 border h-auto object-fit-cover rounded-4" style="aspect-ratio: 1/.125;">
+                </div>
               <?php endif ?>
               <div class="row pt-4">
                 <div class="col-auto me-auto">
@@ -632,7 +674,7 @@ if ($resultado) {
                     <?= $qtd_resultados; ?> resultados encontrados
                   </div>
                 </div>
-                <div class="col-auto d-flex align-items-center">
+                <div class="col-auto d-flex align-items-center mb-3">
                   <button id="ordenar-btn" class="btn btn-light border me-2" disabled><i class="bi bi-filter"></i></button>
                   <div class="small">Ordenar por: </div>
                   <div class="col-auto">
@@ -819,19 +861,107 @@ if ($resultado) {
     $("#hib").addClass('propulsao');
     $("#comb").addClass('propulsao');
 
-    $('.propulsao:checked').each(function() {
-      $("#" + $(this).attr('id') + "-tipos").children().each(function(i, e) {
-        $(e).find('input').prop('checked', true);
-      });
+    // Note: do not auto-check children on page load based only on parent state.
+    // Children will be initialized from the `combustivel` URL param and parents
+    // will be synced from children in `initializePropulsaoCheckboxes`.
+
+    // When a parent (comb, hib, ele) is clicked, toggle all its children to match the parent state.
+    // This will be the only place children are auto-toggled; child unchecks will NOT be reverted.
+    $('.propulsao').on('change', function() {
+      const parentId = $(this).attr('id');
+      const container = $('#' + parentId + '-tipos');
+      if (container.length) {
+        const isParentChecked = $(this).is(':checked');
+        container.find('input').prop('checked', isParentChecked);
+      }
     });
 
-    $('.propulsao').each(function() {
-      $(this).on("change", function() {
-        const propu = this;
-        $("#" + $(this).attr('id') + "-tipos").children().each(function(i, e) {
-          $(e).find('input').prop('checked', $(propu).prop('checked'));
+    // Initialize propulsao checkboxes from URL and wire changes to update search params
+    function initializePropulsaoCheckboxes() {
+      const url = new URL(window.location.href);
+      const propParam = url.searchParams.get('propulsao');
+      const combParam = url.searchParams.get('combustivel');
+      const parents = propParam ? propParam.split(',').map(v => v.trim()) : [];
+      const subs = combParam ? combParam.split(',').map(v => v.trim()) : [];
+
+      ['comb','hib','ele'].forEach(function(id) {
+        const el = $('#' + id);
+        if (el.length) el.prop('checked', parents.includes(id));
+      });
+
+      // Only check actual subtype checkboxes (gas, alc, fle, die, gnv, hev, phe, mhe)
+      // Do NOT check parent-only boxes (ele)
+      const subtypeIds = ['gas','alc','fle','die','gnv','hev','phe','mhe'];
+      subs.forEach(function(s) {
+        if (subtypeIds.includes(s)) {
+          const el = $('#' + s);
+          if (el.length) el.prop('checked', true);
+        }
+      });
+      // If any child subtype is checked, ensure its parent is checked as well
+      const parentMap = {
+        'comb': '#comb-tipos',
+        'hib': '#hib-tipos',
+        'ele': null
+      };
+      Object.keys(parentMap).forEach(function(pid) {
+        const container = parentMap[pid];
+        if (!container) return;
+        if ($(container + ' input:checked').length > 0) {
+          const pel = $('#' + pid);
+          if (pel.length) pel.prop('checked', true);
+        }
+      });
+    }
+    initializePropulsaoCheckboxes();
+
+    // Do not auto-check children on load; children are initialized from the
+    // `combustivel` URL parameter and parents are synced from children.
+
+    let propTimer = null;
+    const PROP_DEBOUNCE_MS = 600;
+    $(document).on('change', '.propulsao, #comb-tipos input, #hib-tipos input', function() {
+      if (propTimer) clearTimeout(propTimer);
+      propTimer = setTimeout(function() {
+        // Sync parent states based on children: if any child is checked, parent must be checked.
+        // If all children are unchecked, parent is unchecked.
+        const parentContainers = { 'comb': '#comb-tipos', 'hib': '#hib-tipos' };
+        Object.keys(parentContainers).forEach(function(pid) {
+          const cont = parentContainers[pid];
+          const anyChild = $(cont + ' input:checked').length > 0;
+          const pel = $('#' + pid);
+          if (pel.length) {
+            if (anyChild && !pel.is(':checked')) {
+              pel.prop('checked', true);
+            } else if (!anyChild && pel.is(':checked')) {
+              pel.prop('checked', false);
+            }
+          }
         });
-      })
+
+        // Build lists from current DOM state (do not modify, only read)
+        const parents = [];
+        $('.propulsao:checked').each(function() { parents.push($(this).attr('id')); });
+        const subs = [];
+        $('#comb-tipos input:checked, #hib-tipos input:checked').each(function() { subs.push($(this).attr('id')); });
+
+        const url = new URL(window.location.href);
+        url.searchParams.delete('page');
+
+        if (parents.length === 0) {
+          url.searchParams.delete('propulsao');
+        } else {
+          url.searchParams.set('propulsao', parents.join(','));
+        }
+
+        if (subs.length === 0) {
+          url.searchParams.delete('combustivel');
+        } else {
+          url.searchParams.set('combustivel', subs.join(','));
+        }
+
+        window.location.href = url.toString();
+      }, PROP_DEBOUNCE_MS);
     });
 
     const order_btn = $('#ordenar-btn');
@@ -942,6 +1072,7 @@ if ($resultado) {
     // Sync: search bar -> sidebar (one-way). Debounced input will try to match a brand in sidebar
     let searchSyncTimer = null;
     const SEARCH_SYNC_MS = 600;
+
     function handleSearchSync(q) {
       pageSearchQ = q; // update global used by populateModels
       if (!q || q.trim() === '') return;
@@ -965,7 +1096,9 @@ if ($resultado) {
     $('#global-search, #navbar-search').on('input', function() {
       const v = $(this).val() || '';
       if (searchSyncTimer) clearTimeout(searchSyncTimer);
-      searchSyncTimer = setTimeout(function() { handleSearchSync(v); }, SEARCH_SYNC_MS);
+      searchSyncTimer = setTimeout(function() {
+        handleSearchSync(v);
+      }, SEARCH_SYNC_MS);
     });
 
     // helper: populate models for a marca and optionally preselect modelo (does not navigate)
@@ -1037,16 +1170,32 @@ if ($resultado) {
       console.log('[populateVersions] marca=', marcaVal, 'modelo=', modeloVal, 'preselectVersao=', preselectVersao);
       const $versao = $('#versao-select');
       $versao.empty();
-      $versao.append($('<option>', { value: '', text: 'Carregando versões...', hidden: true, selected: true }));
+      $versao.append($('<option>', {
+        value: '',
+        text: 'Carregando versões...',
+        hidden: true,
+        selected: true
+      }));
       versoesInput.removeClass('d-none');
       modelosInput.find('button').removeClass('d-none');
-      $.getJSON('controladores/filters/get_versions.php', { marca: marcaVal, modelo: modeloVal })
+      $.getJSON('controladores/filters/get_versions.php', {
+          marca: marcaVal,
+          modelo: modeloVal
+        })
         .done(function(data) {
           $versao.empty();
-          $versao.append($('<option>', { value: '', text: 'Todas as versões', hidden: true, selected: true }));
+          $versao.append($('<option>', {
+            value: '',
+            text: 'Todas as versões',
+            hidden: true,
+            selected: true
+          }));
           if (Array.isArray(data) && data.length) {
             data.forEach(function(v) {
-              $versao.append($('<option>', { value: v, text: v }));
+              $versao.append($('<option>', {
+                value: v,
+                text: v
+              }));
             });
             versoesInput.removeClass('d-none');
             versoesInput.find('button').removeClass('d-none');
@@ -1314,6 +1463,42 @@ if ($resultado) {
       }, COR_DEBOUNCE_MS);
     });
 
+    // Carroceria filter initialization and handler
+    function initializeCarroceriaCheckboxes() {
+      const url = new URL(window.location.href);
+      const carroceriaParam = url.searchParams.get('carroceria');
+      const values = carroceriaParam ? carroceriaParam.split(',').map(v => v.trim()) : [];
+      $('.carroceria-input').each(function() {
+        const val = $(this).attr('data-val');
+        const isChecked = values.includes(val);
+        $(this).prop('checked', isChecked);
+      });
+    }
+    initializeCarroceriaCheckboxes();
+
+    let carroceriaTimer = null;
+    const CARROCERIA_DEBOUNCE_MS = 800;
+    $('.carroceria-input').on('change', function() {
+      if (carroceriaTimer) clearTimeout(carroceriaTimer);
+      carroceriaTimer = setTimeout(function() {
+        const vals = [];
+        $('.carroceria-input:checked').each(function() {
+          const v = $(this).attr('data-val');
+          if (v) vals.push(v);
+        });
+        const url = new URL(window.location.href);
+        url.searchParams.delete('page');
+        if (vals.length === 0) {
+          url.searchParams.delete('carroceria');
+        } else if (vals.length === 1) {
+          url.searchParams.set('carroceria', vals[0]);
+        } else {
+          url.searchParams.set('carroceria', vals.join(','));
+        }
+        window.location.href = url.toString();
+      }, CARROCERIA_DEBOUNCE_MS);
+    });
+
     // Debounce changes so user can toggle multiple boxes before navigation
     let condicaoTimer = null;
     const CONDICAO_DEBOUNCE_MS = 450; // 1.5 seconds
@@ -1351,6 +1536,41 @@ if ($resultado) {
         window.location.href = url.toString();
       }, CONDICAO_DEBOUNCE_MS);
     });
+
+    // Auto-expand/collapse accordions based on active filters
+    function updateAccordionState() {
+      const checkAccordion = function(accordionId, checkboxSelector) {
+        const accordion = $(`#${accordionId}`);
+        const button = accordion.prev().find('button');
+        const hasChecked = $(checkboxSelector).is(':checked');
+        
+        if (hasChecked) {
+          // Open accordion
+          accordion.addClass('show');
+          button.removeClass('collapsed').attr('aria-expanded', 'true');
+        } else {
+          // Close accordion
+          accordion.removeClass('show');
+          button.addClass('collapsed').attr('aria-expanded', 'false');
+        }
+      };
+      
+      // Check each accordion
+      checkAccordion('cor', '.cor-input:checked');
+      checkAccordion('carroceria', '.carroceria-input:checked');
+      // propulsão accordion: consider parent or any subtype checked
+      checkAccordion('propulsao', '.propulsao:checked, #comb-tipos input:checked, #hib-tipos input:checked');
+      // Add more accordions here as needed
+    }
+    
+    // Initialize on page load
+    updateAccordionState();
+    
+    // Update when filters change (include propulsao child/parents)
+    $(document).on('change', '.cor-input, .carroceria-input, .propulsao, #comb-tipos input, #hib-tipos input', function() {
+      updateAccordionState();
+    });
+
   });
 
   (function() {

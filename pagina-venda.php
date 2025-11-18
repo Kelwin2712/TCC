@@ -9,7 +9,7 @@ if (!$id_veiculo) {
     exit;
 }
 
-$sql = "SELECT carros.*, marcas.nome as marca_nome, usuarios.nome as vendedor_nome, usuarios.sobrenome as vendedor_sobrenome, usuarios.avatar as vendedor_avatar FROM anuncios_carros carros INNER JOIN marcas ON carros.marca = marcas.id INNER JOIN usuarios ON carros.id_vendedor = usuarios.id WHERE carros.id = $id_veiculo";
+$sql = "SELECT carros.*, marcas.nome as marca_nome, cores.nome as cor_nome, usuarios.nome as vendedor_nome, usuarios.sobrenome as vendedor_sobrenome, usuarios.avatar as vendedor_avatar FROM anuncios_carros carros INNER JOIN cores ON carros.cor = cores.id  INNER JOIN marcas ON carros.marca = marcas.id INNER JOIN usuarios ON carros.id_vendedor = usuarios.id WHERE carros.id = $id_veiculo";
 $resultado = mysqli_query($conexao, $sql);
 
 
@@ -29,7 +29,7 @@ if ($qr) {
 
 $vendedor = $carro['vendedor_nome'] . ' ' . $carro['vendedor_sobrenome'];
 $vendedor_img = !empty($carro['vendedor_avatar']) ? $carro['vendedor_avatar'] : 'img/usuarios/avatares/user.png';
-$vendedor_seg = '8.000.000.000';
+$vendedor_seg = '100.000';
 ?>
 
 <!DOCTYPE html>
@@ -252,7 +252,7 @@ $vendedor_seg = '8.000.000.000';
                                             <p class="mb-0">Cor</p>
                                         </div>
                                         <div class="row">
-                                            <p class="fw-semibold text-capitalize"><?= $carro['cor'] ?></p>
+                                            <p class="fw-semibold text-capitalize"><?= $carro['cor_nome'] ?></p>
                                         </div>
                                     </div>
                                     <div class="col-3">
