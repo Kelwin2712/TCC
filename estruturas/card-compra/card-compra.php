@@ -12,12 +12,12 @@
     ?>
     <div id="<?= $id ?>" class="carousel slide card-img-top position-relative border-bottom" data-quant="<?= $dataQuant ?>">
         <div class="carousel-inner">
-            <a class="carro-img" href="pagina-venda.php?id=<?= $id?>">
+            <a class="carro-img" href="pagina-venda.php?id=<?= $id ?>">
                 <?php if ($imgCount > 0): ?>
                     <?php foreach ($imgs_arr as $index => $src): ?>
                         <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
                             <div class="ratio ratio-4x3">
-                                <img src="<?= $src; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem <?= ($index+1) ?>">
+                                <img src="<?= $src; ?>" class="d-block img-fluid object-fit-cover" alt="Imagem <?= ($index + 1) ?>">
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -35,13 +35,13 @@
                 </div>
             </div>
             <?php if (isset($_SESSION['id']) && $_SESSION['id'] > 0): ?>
-            <div class="row position-absolute top-0 end-0 p-2 favoritar-btn">
-                <div class="col-auto">
-                    <button type="button" class="btn btn-sm text-bg-dark bg-opacity-50 position-relative favoritar rounded-circle" data-anuncio='<?= $id ?>'>
-                        <i class="bi <?= ($favoritado == 1) ? 'bi-heart-fill' : 'bi-heart'  ?>"></i>
-                    </button>
+                <div class="row position-absolute top-0 end-0 p-2 favoritar-btn">
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-sm text-bg-dark bg-opacity-50 position-relative favoritar rounded-circle" data-anuncio='<?= $id ?>'>
+                            <i class="bi <?= ($favoritado == 1) ? 'bi-heart-fill' : 'bi-heart'  ?>"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
             <?php endif; ?>
         </div>
         <button class="carousel-control-prev" style="display: none;" type="button" data-bs-target="#<?= $id ?>" data-bs-slide="prev">
@@ -54,9 +54,10 @@
         </button>
     </div>
     <div class="card-body pb-1 d-flex flex-column justify-content-between">
-        <div class="row mb-3">
-            <a href="pagina-venda.php?id=<?= $id?>" class="text-decoration-none text-dark stretched-link">
-                <h5 class="card-title fw-bold mb-1 text-uppercase"><?= $marca?> <?= $modelo?></h5>
+        <div class="d-flex flex-column">
+            <div class="row mb-3">
+            <a href="pagina-venda.php?id=<?= $id ?>" class="text-decoration-none text-dark stretched-link">
+                <h5 class="card-title fw-bold mb-0 text-uppercase"><?= $marca ?> <?= $modelo ?></h5>
             </a>
             <p class="card-text text-uppercase text-secondary small"><?= $versao; ?></p>
         </div>
@@ -72,12 +73,13 @@
                 <p class="card-text text-nowrap small text-truncate"><?= $loc; ?></p>
             </div>
         </div>
-    <p class="card-text h5 fw-bold mb-2 preco-text">R$ <?= number_format($preco, 0, ',', '.'); ?></p>
+        </div>
+        <p class="card-text h5 fw-bold mb-2 preco-text">R$ <?= number_format($preco, 0, ',', '.'); ?></p>
     </div>
     <div class="card-footer border-top-0 bg-body">
         <div class="row mb-1">
             <div class="col">
-                <button class="btn btn-dark rounded-5 text-uppercase fw-bold w-100">Comprar</button>
+                <button class="btn btn-dark rounded-5 text-uppercase fw-bold w-100">Ver carro</button>
             </div>
         </div>
     </div>

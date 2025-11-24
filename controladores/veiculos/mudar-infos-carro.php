@@ -41,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $combustivel = $_POST['combustivel'] ?? '';
     $cambio = $_POST['cambio'] ?? '';
     $blindagem = $_POST['blindagem'] ?? '';
-    $leilao = $_POST['leilao'] ?? '';
     $portas_qtd = $_POST['portas_qtd'] ?? '';
     $assentos_qtd = $_POST['assentos_qtd'] ?? '';
     $placa = $_POST['placa'] ?? '';
@@ -62,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $sql = "UPDATE anuncios_carros SET 
         estado_local='$estado_local', cidade='$cidade', marca='$marca', modelo='$modelo', versao='$versao', carroceria='$carroceria', preco='$preco', quilometragem='$quilometragem', 
-        ano_fabricacao='$ano_fabricacao', ano_modelo='$ano_modelo', propulsao='$propulsao', combustivel='$combustivel', cambio='$cambio', blindagem='$blindagem', leilao='$leilao', portas_qtd='$portas_qtd', assentos_qtd='$assentos_qtd', 
+        ano_fabricacao='$ano_fabricacao', ano_modelo='$ano_modelo', propulsao='$propulsao', combustivel='$combustivel', cambio='$cambio', blindagem='$blindagem', portas_qtd='$portas_qtd', assentos_qtd='$assentos_qtd', 
     placa='$placa', cor='$cor', quant_proprietario='$proprietario', revisao='$revisao', vistoria='$vistoria', sinistro='$sinistro', ipva='$ipva', licenciamento='$licenciamento', 
     condicao='$condicao', estado_conservacao='$conservacao', uso_anterior='$uso', aceita_troca='$aceita_troca', email='$email', telefone='$telefone', garantia='$garantia' 
         WHERE id='$id_veiculo'";

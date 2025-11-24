@@ -1,0 +1,158 @@
+/* Custom Carousel - Responsive and Smooth Scrolling */
+
+.carousel-custom {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.carousel-custom-inner {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+  padding: 0.5rem 0;
+  /* Show peek of next/previous items */
+  scroll-padding-right: 10%;
+  scroll-padding-left: 10%;
+}
+
+.carousel-custom-inner::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* When carousel is in the middle (not at start/end), show 5% peek on both sides */
+.carousel-custom.carousel-custom-peek-middle .carousel-custom-inner {
+  scroll-padding-right: 5%;
+  scroll-padding-left: 5%;
+}
+
+.carousel-custom-item {
+  flex-shrink: 0;
+  width: 100%;
+  transition: opacity 0.3s ease;
+}
+
+/* Base column classes - apply to all screen sizes */
+.carousel-custom-cols-1 .carousel-custom-item { width: calc(100% - 0rem); }
+.carousel-custom-cols-2 .carousel-custom-item { width: calc(50% - 0.5rem); }
+.carousel-custom-cols-3 .carousel-custom-item { width: calc(33.333% - 0.667rem); }
+.carousel-custom-cols-4 .carousel-custom-item { width: calc(25% - 0.75rem); }
+.carousel-custom-cols-5 .carousel-custom-item { width: calc(20% - 0.8rem); }
+.carousel-custom-cols-6 .carousel-custom-item { width: calc(16.666% - 0.833rem); }
+.carousel-custom-cols-7 .carousel-custom-item { width: calc(14.285% - 0.857rem); }
+.carousel-custom-cols-8 .carousel-custom-item { width: calc(12.5% - 0.875rem); }
+
+/* Responsive column classes - similar to Bootstrap */
+/* sm: 576px - 1 item */
+.carousel-custom-cols-sm-1 .carousel-custom-item { width: calc(100% - 0rem); }
+
+/* md: 768px - 2 items */
+@media (min-width: 768px) {
+  .carousel-custom-cols-md-2 .carousel-custom-item { width: calc(50% - 0.5rem); }
+  .carousel-custom-cols-md-3 .carousel-custom-item { width: calc(33.333% - 0.667rem); }
+  .carousel-custom-cols-md-4 .carousel-custom-item { width: calc(25% - 0.75rem); }
+  .carousel-custom-cols-md-5 .carousel-custom-item { width: calc(20% - 0.8rem); }
+  .carousel-custom-cols-md-6 .carousel-custom-item { width: calc(16.666% - 0.833rem); }
+}
+
+/* lg: 992px - larger screens */
+@media (min-width: 992px) {
+  .carousel-custom-cols-lg-2 .carousel-custom-item { width: calc(50% - 0.5rem); }
+  .carousel-custom-cols-lg-3 .carousel-custom-item { width: calc(33.333% - 0.667rem); }
+  .carousel-custom-cols-lg-4 .carousel-custom-item { width: calc(25% - 0.75rem); }
+  .carousel-custom-cols-lg-5 .carousel-custom-item { width: calc(20% - 0.8rem); }
+  .carousel-custom-cols-lg-6 .carousel-custom-item { width: calc(16.666% - 0.833rem); }
+}
+
+/* xl: 1200px - extra large screens */
+@media (min-width: 1200px) {
+  .carousel-custom-cols-xl-2 .carousel-custom-item { width: calc(50% - 0.5rem); }
+  .carousel-custom-cols-xl-3 .carousel-custom-item { width: calc(33.333% - 0.667rem); }
+  .carousel-custom-cols-xl-4 .carousel-custom-item { width: calc(25% - 0.75rem); }
+  .carousel-custom-cols-xl-5 .carousel-custom-item { width: calc(20% - 0.8rem); }
+  .carousel-custom-cols-xl-6 .carousel-custom-item { width: calc(16.666% - 0.833rem); }
+}
+
+/* xxl: 1400px - ultra-wide screens */
+@media (min-width: 1400px) {
+  .carousel-custom-cols-xxl-2 .carousel-custom-item { width: calc(50% - 0.5rem); }
+  .carousel-custom-cols-xxl-3 .carousel-custom-item { width: calc(33.333% - 0.667rem); }
+  .carousel-custom-cols-xxl-4 .carousel-custom-item { width: calc(25% - 0.75rem); }
+  .carousel-custom-cols-xxl-5 .carousel-custom-item { width: calc(20% - 0.8rem); }
+  .carousel-custom-cols-xxl-6 .carousel-custom-item { width: calc(16.666% - 0.833rem); }
+  .carousel-custom-cols-xxl-7 .carousel-custom-item { width: calc(14.285% - 0.857rem); }
+  .carousel-custom-cols-xxl-8 .carousel-custom-item { width: calc(12.5% - 0.875rem); }
+}
+
+/* Navigation buttons */
+.carousel-custom-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background-color: white;
+  color: black;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.carousel-custom-nav-btn:hover {
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-custom-nav-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  background-color: white;
+}
+
+.carousel-custom-prev {
+  left: 0;
+}
+
+.carousel-custom-next {
+  right: 0;
+}
+
+/* Hide buttons by default when data-show-arrows is not set or is false */
+.carousel-custom[data-show-arrows="false"] .carousel-custom-nav-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Show buttons on hover when data-show-arrows is false */
+.carousel-custom[data-show-arrows="false"]:hover .carousel-custom-nav-btn {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Wrapper for spacing */
+.carousel-custom-wrapper {
+  padding: 1rem;
+  position: relative;
+}
+
+/* Shadow on card items (optional) */
+.carousel-custom-item.card {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.carousel-custom-item.card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: box-shadow 0.3s ease;
+}

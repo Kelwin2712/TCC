@@ -9,7 +9,18 @@ if (!$id_veiculo) {
     exit;
 }
 
-$sql = "SELECT carros.*, marcas.nome as marca_nome, cores.nome as cor_nome, usuarios.nome as vendedor_nome, usuarios.sobrenome as vendedor_sobrenome, usuarios.avatar as vendedor_avatar FROM anuncios_carros carros INNER JOIN cores ON carros.cor = cores.id  INNER JOIN marcas ON carros.marca = marcas.id INNER JOIN usuarios ON carros.id_vendedor = usuarios.id WHERE carros.id = $id_veiculo";
+$sql = "SELECT carros.*, 
+    marcas.nome as marca_nome, 
+    cores.nome as cor_nome, 
+    usuarios.nome as usuario_nome, usuarios.sobrenome as usuario_sobrenome, usuarios.avatar as usuario_avatar, COALESCE(usuarios.seguidores,0) AS usuario_seguidores,
+    lojas.id AS loja_id_db, lojas.nome AS loja_nome, lojas.logo AS loja_logo, COALESCE(lojas.seguidores,0) AS loja_seguidores
+    , lojas.horarios AS loja_horarios
+    FROM anuncios_carros carros
+    INNER JOIN cores ON carros.cor = cores.id
+    INNER JOIN marcas ON carros.marca = marcas.id
+    LEFT JOIN usuarios ON carros.id_vendedor = usuarios.id
+    LEFT JOIN lojas ON carros.id_vendedor = lojas.id
+    WHERE carros.id = $id_veiculo";
 $resultado = mysqli_query($conexao, $sql);
 
 
@@ -27,9 +38,105 @@ if ($qr) {
     while ($r = mysqli_fetch_assoc($qr)) $photos[] = $r['caminho_foto'];
 }
 
-$vendedor = $carro['vendedor_nome'] . ' ' . $carro['vendedor_sobrenome'];
-$vendedor_img = !empty($carro['vendedor_avatar']) ? $carro['vendedor_avatar'] : 'img/usuarios/avatares/user.png';
-$vendedor_seg = '100.000';
+// determine display info for vendedor: if anuncio is from a loja (tipo_vendedor=1 and loja_id present), prefer loja info
+$vendedor = '';
+$vendedor_img = 'img/usuarios/avatares/user.png';
+$vendedor_seg_count = 0;
+// prefer loja when tipo_vendedor indicates 'pj' (1) and loja exists
+if (isset($carro['tipo_vendedor']) && (int)$carro['tipo_vendedor'] === 1 && !empty($carro['loja_id_db'])) {
+    // loja name
+    $vendedor = $carro['loja_nome'] ?: ($carro['usuario_nome'] . ' ' . $carro['usuario_sobrenome']);
+    // try to use loja logo stored in img/lojas/{id}/{logo}
+    if (!empty($carro['loja_logo']) && file_exists(__DIR__ . '/img/lojas/' . $carro['loja_id_db'] . '/' . $carro['loja_logo'])) {
+        $vendedor_img = 'img/lojas/' . $carro['loja_id_db'] . '/' . $carro['loja_logo'];
+    } else {
+        // fallback to user's avatar if present
+        $vendedor_img = !empty($carro['usuario_avatar']) ? $carro['usuario_avatar'] : 'img/usuarios/avatares/user.png';
+    }
+    $vendedor_seg_count = isset($carro['loja_seguidores']) ? (int)$carro['loja_seguidores'] : (isset($carro['usuario_seguidores']) ? (int)$carro['usuario_seguidores'] : 0);
+} else {
+    // default: use user info
+    $vendedor = trim(($carro['usuario_nome'] ?? '') . ' ' . ($carro['usuario_sobrenome'] ?? '')) ?: 'Vendedor';
+    $vendedor_img = !empty($carro['usuario_avatar']) ? $carro['usuario_avatar'] : 'img/usuarios/avatares/user.png';
+    $vendedor_seg_count = isset($carro['usuario_seguidores']) ? (int)$carro['usuario_seguidores'] : 0;
+}
+$vendedor_seg = number_format($vendedor_seg_count, 0, ',', '.');
+
+// Horários da loja (se aplicável)
+$loja_horarios = null;
+$loja_open_now = false;
+$loja_today_label = '';
+$loja_today_open = null;
+$loja_today_close = null;
+if (isset($carro['tipo_vendedor']) && (int)$carro['tipo_vendedor'] === 1 && !empty($carro['loja_id_db'])) {
+    if (!empty($carro['loja_horarios'])) {
+        $tmp = json_decode($carro['loja_horarios'], true);
+        if (is_array($tmp)) $loja_horarios = $tmp;
+    }
+
+    // compute if open right now and today's open/close times
+    if (is_array($loja_horarios)) {
+        $dias = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+        $now = new DateTime();
+        $today_idx = (int)$now->format('w'); // 0 (Sunday) - 6 (Saturday)
+        $entry = isset($loja_horarios[$today_idx]) ? $loja_horarios[$today_idx] : null;
+        if ($entry && !empty($entry['aberto'])) {
+            $abre = isset($entry['abre']) ? $entry['abre'] : null;
+            $fecha = isset($entry['fecha']) ? $entry['fecha'] : null;
+            if ($abre) $loja_today_open = $abre;
+            if ($fecha) $loja_today_close = $fecha;
+
+            if ($abre && $fecha) {
+                // build DateTime for today
+                $dt_abre = DateTime::createFromFormat('H:i', $abre);
+                $dt_fecha = DateTime::createFromFormat('H:i', $fecha);
+                if ($dt_abre && $dt_fecha) {
+                    // attach today's date
+                    $dt_abre->setDate((int)$now->format('Y'), (int)$now->format('m'), (int)$now->format('d'));
+                    $dt_fecha->setDate((int)$now->format('Y'), (int)$now->format('m'), (int)$now->format('d'));
+                    // if fecha <= abre assume closing next day
+                    if ($dt_fecha <= $dt_abre) {
+                        $dt_fecha->modify('+1 day');
+                    }
+                    if ($now >= $dt_abre && $now < $dt_fecha) {
+                        $loja_open_now = true;
+                    }
+                }
+            }
+        }
+        $loja_today_label = $dias[$today_idx];
+    }
+}
+
+// determine if current user already favorited this anuncio
+$user_id = $_SESSION['id'] ?? null;
+$favoritado = 0;
+if ($user_id) {
+    $uid = mysqli_real_escape_string($conexao, $user_id);
+    $aid = (int)$id_veiculo;
+    $qf = mysqli_query($conexao, "SELECT id FROM favoritos WHERE usuario_id = '$uid' AND anuncio_id = $aid LIMIT 1");
+    if ($qf && mysqli_num_rows($qf) > 0) $favoritado = 1;
+}
+
+// ensure seguidores table exists and check if current user follows this vendedor
+$seguindo = 0;
+$vendedor_id = isset($carro['id_vendedor']) ? (int)$carro['id_vendedor'] : 0;
+if ($user_id && $vendedor_id) {
+        // create table if needed (no-op if already exists)
+        $create = "CREATE TABLE IF NOT EXISTS seguidores (
+            id INT NOT NULL AUTO_INCREMENT,
+            seguidor_id INT NOT NULL,
+            seguido_id INT NOT NULL,
+            criado_em DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY uniq_seg (seguidor_id, seguido_id),
+            KEY idx_seguido (seguido_id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
+        @mysqli_query($conexao, $create);
+
+        $q = @mysqli_query($conexao, "SELECT id FROM seguidores WHERE seguidor_id = " . (int)$user_id . " AND seguido_id = " . $vendedor_id . " LIMIT 1");
+        if ($q && mysqli_num_rows($q) > 0) $seguindo = 1;
+}
 ?>
 
 <!DOCTYPE html>
@@ -56,6 +163,28 @@ $vendedor_seg = '100.000';
             opacity: 1 !important;
         }
     </style>
+    <script>
+        // Register click for this vehicle on page load (not on reload)
+        document.addEventListener('DOMContentLoaded', function() {
+            const vehicleId = <?= json_encode($id_veiculo) ?>;
+            const sessionKey = 'vehicle_' + vehicleId + '_clicked';
+            
+            // Check if already clicked in this session
+            if (!sessionStorage.getItem(sessionKey)) {
+                // Mark as clicked in this session
+                sessionStorage.setItem(sessionKey, 'true');
+                
+                // Send click to server
+                fetch('controladores/registrar-click.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: 'id_veiculo=' + vehicleId
+                }).catch(err => console.log('Click registered'));
+            }
+        });
+    </script>
 </head>
 
 <body>
@@ -223,8 +352,11 @@ $vendedor_seg = '100.000';
                                     <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> <?= $carro['cidade'] . ' - '  . $carro['estado_local'] ?></p>
                                 </div>
                                 <div class="col-auto">
-                                    <button type="button" class="btn p-0 favoritar favoritar-danger">
-                                        <i class="bi bi-heart text-secondary fs-5"></i>
+                                    <?php
+                                    $heart_class = $favoritado ? 'bi-heart-fill text-danger' : 'bi-heart text-secondary';
+                                    ?>
+                                    <button type="button" class="btn p-0 favoritar favoritar-danger" data-anuncio="<?= $id_veiculo ?>" data-favoritado="<?= $favoritado ?>">
+                                        <i class="bi <?= $heart_class ?> fs-5"></i>
                                     </button>
                                 </div>
                             </div>
@@ -317,9 +449,16 @@ $vendedor_seg = '100.000';
                                     <p>Vendedor</p>
                                 </div>
                                 <div class="col">
-                                    <button type="button" class="btn btn-sm bg-primary-subtle text-primary px-2 float-end rounded-3" style="padding-top: .125rem; padding-bottom: .125rem;">
-                                        <div id="seguir-btn" class="small">Seguir</div>
-                                    </button>
+                                    <?php if (!isset($_SESSION['id']) || $_SESSION['id'] != $carro['id_vendedor']): ?>
+                                        <?php
+                                        // render initial follow button text based on $seguindo
+                                        $seguir_text = $seguindo ? 'Seguindo <i class="bi bi-check"></i>' : 'Seguir';
+                                        $seguir_btn_classes = $seguindo ? 'text-secondary' : 'text-primary bg-primary-subtle';
+                                        ?>
+                                        <button id="seguir-action-btn" type="button" class="btn btn-sm px-2 float-end rounded-3 <?= $seguir_btn_classes ?>" style="padding-top: .125rem; padding-bottom: .125rem;">
+                                            <div id="seguir-btn" class="small"><?= $seguir_text ?></div>
+                                        </button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <a href="compras.php?vendedor=<?= $vendedor ?>&vendedor_img=<?= $vendedor_img ?>&vendedor_seg=<?= $vendedor_seg ?>" class="row mb-3 px-2 text-decoration-none text-dark">
@@ -335,48 +474,50 @@ $vendedor_seg = '100.000';
                                                 <p class="fw-semibold mb-0"><?= $vendedor ?></p>
                                             </div>
                                             <div class="row">
-                                                <small class="fw-semibold mb-0"><i class="bi bi-person-fill me-1"></i><?= $vendedor_seg ?></small>
+                                                <small class="fw-semibold mb-0"><i class="bi bi-person-fill me-1"></i><span id="vendedor-seguidores"><?= $vendedor_seg ?></span></small>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </a>
-                            <div class="list-group small">
-                                <button class="list-group-item rounded-2 list-group-item-action d-flex text-muted fw-semibold" data-bs-toggle="collapse" data-bs-target="#horariosCollapse" aria-expanded="false" aria-controls="horariosCollapse">
-                                    <span class="me-auto"><span class="me-2"><i class="bi bi-circle-fill align-middle text-success" style="font-size: .4rem;"></i></span>Loja aberta - Abre às 9h00</span>
-                                    <span class="toggle-icon"><i class="bi bi-chevron-down"></i></span>
-                                </button>
-                                <div id="horariosCollapse" class="collapse">
-                                    <div class="list-group-item d-flex text-muted">
-                                        <span class="me-auto">Domingo:</span>
-                                        <span>09:00 - 18:00</span>
-                                    </div>
-                                    <div class="list-group-item d-flex text-muted">
-                                        <span class="me-auto">Segunda:</span>
-                                        <span>09:00 - 18:00</span>
-                                    </div>
-                                    <div class="list-group-item d-flex text-muted">
-                                        <span class="me-auto">Terça:</span>
-                                        <span>09:00 - 18:00</span>
-                                    </div>
-                                    <div class="list-group-item d-flex text-muted">
-                                        <span class="me-auto">Quarta:</span>
-                                        <span>09:00 - 18:00</span>
-                                    </div>
-                                    <div class="list-group-item d-flex text-muted">
-                                        <span class="me-auto">Quinta:</span>
-                                        <span>09:00 - 18:00</span>
-                                    </div>
-                                    <div class="list-group-item d-flex text-muted">
-                                        <span class="me-auto">Sexta:</span>
-                                        <span>09:00 - 18:00</span>
-                                    </div>
-                                    <div class="list-group-item d-flex text-muted rounded-bottom-2">
-                                        <span class="me-auto">Sábado:</span>
-                                        <span>09:00 - 18:00</span>
+                            <?php if (isset($carro['tipo_vendedor']) && (int)$carro['tipo_vendedor'] === 1 && !empty($carro['loja_id_db'])): ?>
+                                <div class="list-group small">
+                                    <?php
+                                        $dotClass = $loja_open_now ? 'text-success' : 'text-danger';
+                                        $statusText = '';
+                                        if ($loja_open_now) {
+                                            $closeAt = $loja_today_close ? htmlspecialchars($loja_today_close) : 'horário desconhecido';
+                                            $statusText = "Loja aberta - Fecha às $closeAt";
+                                        } else {
+                                            $openAt = $loja_today_open ? htmlspecialchars($loja_today_open) : 'horário desconhecido';
+                                            $statusText = "Loja fechada - Abre às $openAt";
+                                        }
+                                    ?>
+                                    <button class="list-group-item rounded-2 list-group-item-action d-flex text-muted fw-semibold" data-bs-toggle="collapse" data-bs-target="#horariosCollapse" aria-expanded="false" aria-controls="horariosCollapse">
+                                        <span class="me-auto"><span class="me-2"><i class="bi bi-circle-fill align-middle <?= $dotClass ?>" style="font-size: .4rem;"></i></span><?= $statusText ?></span>
+                                        <span class="toggle-icon"><i class="bi bi-chevron-down"></i></span>
+                                    </button>
+                                    <div id="horariosCollapse" class="collapse">
+                                        <?php
+                                            $dias = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
+                                            for ($d = 0; $d < 7; $d++):
+                                                $line = '<span class="me-auto">' . $dias[$d] . ':</span>';
+                                                $display = 'Fechado';
+                                                if (is_array($loja_horarios) && isset($loja_horarios[$d]) && !empty($loja_horarios[$d]['aberto'])) {
+                                                    $a = $loja_horarios[$d]['abre'] ?? null;
+                                                    $f = $loja_horarios[$d]['fecha'] ?? null;
+                                                    if ($a && $f) $display = htmlspecialchars($a) . ' - ' . htmlspecialchars($f);
+                                                    else $display = ($a || $f) ? htmlspecialchars($a ?? $f) : 'Horário não informado';
+                                                }
+                                        ?>
+                                            <div class="list-group-item d-flex text-muted<?= $d === 6 ? ' rounded-bottom-2' : '' ?>">
+                                                <?= $line ?>
+                                                <span><?= $display ?></span>
+                                            </div>
+                                        <?php endfor; ?>
                                     </div>
                                 </div>
-                            </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -395,6 +536,27 @@ $vendedor_seg = '100.000';
 <script>
     $(function() {
         const currentUser = <?= isset($_SESSION['id']) ? json_encode($_SESSION['id']) : 'null' ?>;
+
+        // Favoritar button handler (same behavior as index/compras)
+        $(document).on('click', 'button.favoritar', function() {
+            let anuncioID = $(this).data('anuncio');
+            if (!currentUser) {
+                window.location.href = 'sign-in.php';
+                return;
+            }
+
+            const $btn = $(this);
+            const $icon = $btn.find('i');
+
+            $.post('controladores/veiculos/favoritar-veiculo.php', {
+                usuario: currentUser,
+                anuncio: anuncioID
+            }, function(resposta) {
+                // Toggle heart icon and color
+                $icon.toggleClass('bi-heart bi-heart-fill');
+                $icon.toggleClass('text-secondary text-danger');
+            }, 'json');
+        });
 
         $('form').on('submit', function(e) {
             e.preventDefault();
@@ -436,22 +598,49 @@ $vendedor_seg = '100.000';
         $(carousel).find('.max').text(quant);
 
         const seguir_info = $("#seguir-btn");
-        const seguir_btn = seguir_info.parent();
+        const seguir_btn = $('#seguir-action-btn');
+        const vendedorId = <?= json_encode($vendedor_id) ?>;
 
         const progress = $('.progress-bar.bg-transparent').parent();
 
         seguir_btn.on('click', function() {
-            if (seguir_info.html() == 'Seguir') {
-                seguir_info.html('Seguindo <i class="bi bi-check"></i>');
-                seguir_btn.removeClass('text-primary');
-                seguir_btn.removeClass('bg-primary-subtle');
-                seguir_btn.addClass('text-secondary');
-            } else {
-                seguir_info.html('Seguir');
-                seguir_btn.addClass('text-primary');
-                seguir_btn.addClass('bg-primary-subtle');
-                seguir_btn.removeClass('text-secondary');
-            };
+            if (!currentUser) {
+                window.location.href = 'sign-in.php';
+                return;
+            }
+
+            // disable button briefly to prevent double clicks
+            seguir_btn.prop('disabled', true);
+
+            $.post('controladores/usuarios/seguir.php', { seguido: vendedorId }, function(res) {
+                if (!res || !res.success) {
+                    // error: re-enable and optionally show message
+                    seguir_btn.prop('disabled', false);
+                    return;
+                }
+
+                const action = res.action; // 'follow' or 'unfollow'
+                const count = typeof res.seguidores !== 'undefined' ? res.seguidores : null;
+
+                if (action === 'follow') {
+                    seguir_info.html('Seguindo <i class="bi bi-check"></i>');
+                    seguir_btn.removeClass('text-primary bg-primary-subtle').addClass('text-secondary');
+                } else if (action === 'unfollow') {
+                    seguir_info.html('Seguir');
+                    seguir_btn.addClass('text-primary bg-primary-subtle').removeClass('text-secondary');
+                }
+
+                if (count !== null) {
+                    // update followers count in UI (format with dots)
+                    const formatted = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+                    $('#vendedor-seguidores').text(formatted);
+                }
+
+                // re-enable
+                seguir_btn.prop('disabled', false);
+            }, 'json').fail(function() {
+                seguir_btn.prop('disabled', false);
+            });
         });
 
         $(".carro-img").on('click', function() {

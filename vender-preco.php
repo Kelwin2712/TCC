@@ -14,10 +14,21 @@ $_SESSION['uso_anterior'] = isset($_POST['uso_anterior']) ? $_POST['uso_anterior
 // carregar lista de lojas para o select (se disponível)
 include_once 'controladores/conexao_bd.php';
 $lojas = [];
-$res_lojas = mysqli_query($conexao, "SELECT id, nome, cidade FROM lojas ORDER BY nome ASC");
-if ($res_lojas) {
-  while ($l = mysqli_fetch_assoc($res_lojas)) $lojas[] = $l;
+
+// load only lojas where current user has permission to edit anúncios (pode_editar_anuncio)
+$uid = isset($_SESSION['id']) ? (int)$_SESSION['id'] : 0;
+if ($uid) {
+  $sql_lojas = "SELECT l.id, l.nome, l.cidade, COALESCE(l.seguidores,0) AS seguidores
+                 FROM lojas l
+                 JOIN equipe e ON e.loja_id = l.id AND e.usuario_id = $uid AND e.pode_editar_anuncio = 1
+                 GROUP BY l.id
+                 ORDER BY l.nome ASC";
+  $res_lojas = mysqli_query($conexao, $sql_lojas);
+  if ($res_lojas) {
+    while ($l = mysqli_fetch_assoc($res_lojas)) $lojas[] = $l;
+  }
 }
+
 mysqli_close($conexao);
 ?>
 
@@ -111,7 +122,7 @@ mysqli_close($conexao);
             <div class="row row-cols-1 row-cols-md-2 w-100 g-4 mb-4">
               <div class="col">
                 <label for="preco-input" class="form-text mb-2">Preço<sup>*</sup></label>
-                <input type="text" class="form-control preco-input-rs" id="preco-input" value="0" name="preco" placeholder="Informe o preço do veículo" required>
+                <input type="text" class="form-control preco-input-rs" id="preco-input" value="0" name="preco" placeholder="Informe o preço do veículo" autocomplete="off" required>
               </div>
               <div class="col">
                 <label for="troca-select" class="form-text mb-2">Aceita troca<sup>*</sup></label>

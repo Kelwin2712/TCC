@@ -26,19 +26,39 @@
                                     echo 'active';
                                 } ?>" href="mensagens.php"><i class="bi bi-chat-left-text-fill"></i>&nbsp;Mensagens</a>
             <hr class="mx-3">
+            <?php
+            // ensure DB connection and compute pending invites before rendering the collapse button
+            include_once(__DIR__ . '/../../conexao_bd.php');
+            $pending_invites = [];
+            $pending_count = 0;
+            if (isset($_SESSION['id']) && isset($conexao) && $conexao) {
+                $uid_pending = (int) $_SESSION['id'];
+                $pq = "SELECT e.loja_id, l.nome as loja_nome, l.logo as loja_logo FROM equipe e JOIN lojas l ON l.id = e.loja_id WHERE e.usuario_id = $uid_pending AND e.status = 'P' ORDER BY e.created_at DESC";
+                $pres = mysqli_query($conexao, $pq);
+                if ($pres) {
+                    while ($r = mysqli_fetch_assoc($pres)) $pending_invites[] = $r;
+                }
+                $pending_count = count($pending_invites);
+            }
+            ?>
+
             <button class="nav-link sidebar-drop w-100 text-start <?= isset($loja_id_selected) ? '' : 'collapsed'?>" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-                <span>
-                    <i class="bi bi-building-fill"></i>&nbsp;Lojas
+                <span class="d-flex align-items-center justify-content-between w-100">
+                    <span class="position-relative" style="display:inline-block;">
+                        <i class="bi bi-building-fill"></i>&nbsp;Lojas
+                        <?php if ($pending_count > 0): ?>
+                            <span id="lojas-pending-dot" aria-hidden="true" style="position:absolute; top:-6px; right:-8px; width:10px; height:10px; background:#dc3545; border-radius:50%; display:inline-block; box-shadow:0 0 0 2px rgba(0,0,0,0.04);"></span>
+                        <?php endif; ?>
+                    </span>
                 </span>
             </button>
 
             <div class="collapse mx-3 <?= isset($loja_id_selected) ? 'show' : ''?>" id="collapseExample">
-                <div class="py-2 d-flex flex-column">
+                <div id="lojas-list" class="py-2 d-flex flex-column">
                     <?php
-                    include('../conexao_bd.php');
 
                     // fetch current user's avatar if available (fallback to default)
-                                    $user_avatar_src = '../img/usuarios/avatares/user.png';
+                    $user_avatar_src = '../img/usuarios/avatares/user.png';
                     if (isset($_SESSION['id'])) {
                         if (!empty($_SESSION['avatar'])) {
                             $user_avatar_src = '../' . $_SESSION['avatar'];
@@ -54,22 +74,58 @@
                         }
                     }
 
-                    $sql = "SELECT nome, id FROM lojas";
-                    $resultado = mysqli_query($conexao, $sql);
-
+                    // fetch lojas where current user is an active member
                     $lojas = [];
-
-                    while ($linha = mysqli_fetch_array($resultado)) {
-                        $lojas[] = $linha;
+                    if (isset($_SESSION['id'])) {
+                        $uid = (int) $_SESSION['id'];
+                        $sql = "SELECT l.id, l.nome, l.logo FROM lojas l JOIN equipe e ON e.loja_id = l.id WHERE e.usuario_id = $uid AND e.status = 'A' ORDER BY l.nome ASC";
+                        $resultado = mysqli_query($conexao, $sql);
+                        while ($linha = mysqli_fetch_array($resultado)) {
+                            $lojas[] = $linha;
+                        }
                     }
 
                     foreach ($lojas as $loja_side):
+                        // determine logo path
+                        $logoPath = '../img/logo-fahren-bg.jpg';
+                        $possible = __DIR__ . '/../../img/lojas/' . $loja_side['id'] . '/';
+                        if (!empty($loja_side['logo']) && file_exists($possible . $loja_side['logo'])) {
+                            $logoPath = '../img/lojas/' . $loja_side['id'] . '/' . $loja_side['logo'];
+                        }
                     ?>
                     <a href="loja.php?id=<?= $loja_side['id']?>" class="nav-link <?= $loja_id_selected == $loja_side['id'] ? 'active' : ''?> p-2 text-capitalize">
-                        <img src="../img/logo-fahren-bg.jpg" alt="Foto de Perfil" width="28" height="28" class="rounded-circle me-2">
+                        <img src="<?= $logoPath ?>" alt="Foto de Perfil" width="28" height="28" class="rounded-circle me-2" onerror="this.src='../img/logo-fahren-bg.jpg'">
                         <?= $loja_side['nome'] ?>
                     </a>
                     <?php endforeach; ?>
+
+                    <!-- pending invites rendered inside collapse -->
+                    <?php if (!empty($pending_invites)): ?>
+                        <div class="mt-3">
+                            <?php foreach ($pending_invites as $inv):
+                                $logoPathI = '../img/logo-fahren-bg.jpg';
+                                $possibleI = __DIR__ . '/../../img/lojas/' . $inv['loja_id'] . '/';
+                                if (!empty($inv['loja_logo']) && file_exists($possibleI . $inv['loja_logo'])) {
+                                    $logoPathI = '../img/lojas/' . $inv['loja_id'] . '/' . $inv['loja_logo'];
+                                }
+                            ?>
+                            <div class="card mb-2">
+                                <div class="card-body p-2 d-flex gap-2 align-items-center">
+                                    <img src="<?= $logoPathI ?>" width="48" height="48" class="rounded-circle me-2" alt="logo" onerror="this.src='../img/logo-fahren-bg.jpg'">
+                                    <div class="flex-grow-1">
+                                        <div class="small text-muted">Você recebeu um convite:</div>
+                                        <div class="fw-semibold text-capitalize"><?= htmlspecialchars($inv['loja_nome']) ?></div>
+                                    </div>
+                                    <div class="d-flex gap-1 ms-2">
+                                        <button class="btn btn-sm btn-success accept-invite" data-loja="<?= $inv['loja_id'] ?>" title="Aceitar"><i class="bi bi-check-lg"></i></button>
+                                        <button class="btn btn-sm btn-danger decline-invite" data-loja="<?= $inv['loja_id'] ?>" title="Recusar"><i class="bi bi-x-lg"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+
                     <button class="nav-link p-2 d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#loja-modal">
                         <span class="d-inline-flex justify-content-center align-items-center bg-body-secondary rounded-circle me-2"
                             style="width:28px; height:28px;">
@@ -95,4 +151,59 @@
             </ul>
         </div>
     </div>
+    
 </aside>
+
+<script>
+document.addEventListener('click', function(e){
+                        if(e.target && e.target.closest && e.target.closest('.accept-invite')){
+        const btn = e.target.closest('.accept-invite');
+        const lojaId = btn.dataset.loja;
+        if(!confirm('Aceitar convite para esta loja?')) return;
+        const p = new URLSearchParams(); p.append('loja_id', lojaId); p.append('usuario_id', <?= isset($_SESSION['id']) ? (int)$_SESSION['id'] : 0 ?>); p.append('action','accept');
+        fetch('../controladores/loja/responder-convite.php', { method:'POST', body: p }).then(r=>r.json()).then(res=>{
+            if(!res.success) { alert(res.message||'Erro'); return; }
+            // remove the invite card
+            const card = btn.closest('.card'); if(card) card.remove();
+            // if backend returned loja info, insert into lojas list if not already present
+            if (res.loja && res.loja.id) {
+                const lojaIdNum = res.loja.id;
+                const lojasList = document.getElementById('lojas-list');
+                if (lojasList && !lojasList.querySelector('[data-loja-id="'+lojaIdNum+'"]')) {
+                    const a = document.createElement('a');
+                    a.href = 'loja.php?id=' + lojaIdNum;
+                    a.className = 'nav-link p-2 text-capitalize';
+                    a.setAttribute('data-loja-id', lojaIdNum);
+                    const img = document.createElement('img');
+                    img.src = res.loja.logo_url || '../img/logo-fahren-bg.jpg';
+                    img.width = 28; img.height = 28; img.className = 'rounded-circle me-2'; img.alt = 'Logo'; img.setAttribute('onerror', "this.src='../img/logo-fahren-bg.jpg'");
+                    a.appendChild(img);
+                    a.insertAdjacentHTML('beforeend', res.loja.nome);
+                    // insert before the 'Criar nova loja' button (last element)
+                    // find the create button
+                    const createBtn = lojasList.querySelector('[data-bs-target="#loja-modal"]').closest('.nav-link');
+                    if (createBtn) lojasList.insertBefore(a, createBtn);
+                    else lojasList.appendChild(a);
+                }
+            }
+            // hide red dot if no pending invites remain
+            const remainingInvites = document.querySelectorAll('#collapseExample .card');
+            const dot = document.getElementById('lojas-pending-dot');
+            if (dot && remainingInvites.length === 0) dot.remove();
+        }).catch(err=>{ console.error(err); alert('Erro de rede'); });
+    }
+                        if(e.target && e.target.closest && e.target.closest('.decline-invite')){
+        const btn = e.target.closest('.decline-invite');
+        const lojaId = btn.dataset.loja;
+        if(!confirm('Recusar convite?')) return;
+        const p = new URLSearchParams(); p.append('loja_id', lojaId); p.append('usuario_id', <?= isset($_SESSION['id']) ? (int)$_SESSION['id'] : 0 ?>); p.append('action','decline');
+        fetch('../controladores/loja/responder-convite.php', { method:'POST', body: p }).then(r=>r.json()).then(res=>{
+            if(!res.success) { alert(res.message||'Erro'); return; }
+            const card = btn.closest('.card'); if(card) card.remove();
+            const remainingInvites = document.querySelectorAll('#collapseExample .card');
+            const dot = document.getElementById('lojas-pending-dot');
+            if (dot && remainingInvites.length === 0) dot.remove();
+        }).catch(err=>{ console.error(err); alert('Erro de rede'); });
+    }
+});
+</script>

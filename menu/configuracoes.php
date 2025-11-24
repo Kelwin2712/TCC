@@ -13,15 +13,19 @@ $cpf = $_SESSION['cpf'] ?? '';
 $email = $_SESSION['email'] ?? '';
 $data_nascimento = $_SESSION['data_nascimento'] ?? '';
 
-// fetch avatar from DB if available
+// fetch avatar and saved location from DB if available
 include_once '../controladores/conexao_bd.php';
 $avatar = null;
+$saved_estado = null;
+$saved_cidade = null;
 if (isset($_SESSION['id'])) {
     $uid = (int) $_SESSION['id'];
-    $res = mysqli_query($conexao, "SELECT avatar FROM usuarios WHERE id = $uid");
+    $res = mysqli_query($conexao, "SELECT avatar, estado_local, cidade FROM usuarios WHERE id = $uid LIMIT 1");
     if ($res && mysqli_num_rows($res) > 0) {
         $row = mysqli_fetch_assoc($res);
         $avatar = $row['avatar'];
+        $saved_estado = $row['estado_local'];
+        $saved_cidade = $row['cidade'];
     }
 }
 mysqli_close($conexao);
@@ -58,10 +62,6 @@ mysqli_close($conexao);
                     <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-1">Suas informações</label>
                     <input type="radio" class="btn-check" name="telas" id="tela-2" autocomplete="off">
                     <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-2">Segurança e Privacidade</label>
-                    <input type="radio" class="btn-check" name="telas" id="tela-3" autocomplete="off">
-                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-3">Notificações</label>
-                    <input type="radio" class="btn-check" name="telas" id="tela-4" autocomplete="off">
-                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-4">Formas de pagamento</label>
                 </div>
                 <form action="../controladores/mudar-infos.php" class="row d-flex align-items-stretch" id="info-form" method="POST" enctype="multipart/form-data">
                     <div class="col-4">
@@ -297,28 +297,80 @@ mysqli_close($conexao);
         });
         // IBGE: popular selects de estado/municipio para configuracoes (apenas UI)
         const ibgeEstadosUrl = 'https://servicodados.ibge.gov.br/api/v1/localidades/estados';
-        function populateStatesConfig() {
+
+        // expose saved values from server for auto-selection
+        const savedEstado = <?= json_encode($saved_estado) ?>;
+        const savedCidade = <?= json_encode($saved_cidade) ?>;
+
+        function populateStatesConfig(callback) {
             $.getJSON(ibgeEstadosUrl, function(estados) {
                 estados.sort((a,b) => a.nome.localeCompare(b.nome));
                 const $est = $('#config-estado');
                 $est.empty().append('<option value="">Selecione um estado...</option>');
                 estados.forEach(function(e) { $est.append($('<option/>').attr('value', e.sigla).attr('data-id', e.id).text(e.nome + ' ('+e.sigla+')')); });
+                if (typeof callback === 'function') callback();
             });
         }
-        function loadMunicipiosConfig() {
+
+        function loadMunicipiosConfig(callback) {
             const $est = $('#config-estado');
             const $mun = $('#config-cidade');
             const estadoId = $est.find('option:selected').data('id');
-            if (!estadoId) { $mun.html('<option value="">Selecione um estado primeiro...</option>'); return; }
+            if (!estadoId) { $mun.html('<option value="">Selecione um estado primeiro...</option>'); if (typeof callback === 'function') callback(); return; }
             $mun.html('<option>Carregando municípios...</option>');
             $.getJSON('https://servicodados.ibge.gov.br/api/v1/localidades/estados/' + estadoId + '/municipios', function(list) {
                 list.sort((a,b) => a.nome.localeCompare(b.nome));
                 $mun.empty().append('<option value="">Selecione um município...</option>');
                 list.forEach(function(m) { $mun.append($('<option/>').attr('value', m.nome).text(m.nome)); });
+                // auto-select saved city if present
+                if (typeof savedCidade !== 'undefined' && savedCidade) {
+                    const opt = $mun.find('option').filter(function() { return $(this).val().toLowerCase() === savedCidade.toLowerCase(); }).first();
+                    if (opt && opt.length) $mun.val(opt.val());
+                }
+                if (typeof callback === 'function') callback();
             });
         }
+        // When user changes state or city in settings, persist to server
+        $(document).on('change', '#config-estado', function() {
+            // after loading municipios, also attempt to persist selected state (cidade may be empty until user selects)
+            const uf = $(this).val() || '';
+            try {
+                $.post('../controladores/usuarios/atualizar-localizacao.php', { estado_local: uf, cidade: '' }, function(res) {
+                    if (res && res.success) {
+                        showAlert('success', res.message || 'Estado salvo.');
+                    } else if (res && !res.success) {
+                        showAlert('danger', res.message || 'Erro ao salvar estado.');
+                    }
+                }, 'json').fail(function() {
+                    showAlert('danger', 'Erro ao salvar estado.');
+                });
+            } catch (e) {}
+        });
+
+        $(document).on('change', '#config-cidade', function() {
+            const cidade = $(this).val() || '';
+            const uf = $('#config-estado').val() || '';
+            try {
+                $.post('../controladores/usuarios/atualizar-localizacao.php', { estado_local: uf, cidade: cidade }, function(res) {
+                    if (res && res.success) {
+                        showAlert('success', res.message || 'Cidade salva.');
+                    } else if (res && !res.success) {
+                        showAlert('danger', res.message || 'Erro ao salvar cidade.');
+                    }
+                }, 'json').fail(function() {
+                    showAlert('danger', 'Erro ao salvar cidade.');
+                });
+            } catch (e) {}
+        });
         $(document).on('change', '#config-estado', loadMunicipiosConfig);
-        populateStatesConfig();
+        // call populate and auto-select saved values when available
+        populateStatesConfig(function() {
+            if (typeof savedEstado !== 'undefined' && savedEstado) {
+                $('#config-estado').val(savedEstado);
+                // load municipios and auto-select saved city inside the loader
+                loadMunicipiosConfig();
+            }
+        });
     });
 </script>
 

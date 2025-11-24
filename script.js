@@ -126,18 +126,68 @@ function showToggleSenha(input, ButtonID) {
   }
 }
 
-$(window).scroll(function () {
-  if ($(this).scrollTop() > 100) {
-    $('#top-button').fadeIn();
-  } else {
-    $('#top-button').fadeOut();
-  }
-});
+(function () {
+  const $topBtn = $('#top-button');
+  let visible = false;
 
-$("#top-button").click(function () {
-  $("html, body").animate({ scrollTop: 0 }, "slow");
-  return false;
-});
+  // Show/hide with guarded animations to avoid queueing
+  function showTop() {
+    if (visible) return;
+    visible = true;
+    $topBtn.stop(true, true).fadeIn(200);
+  }
+
+  function hideTop() {
+    if (!visible) return;
+    visible = false;
+    $topBtn.stop(true, true).fadeOut(200);
+  }
+
+  $(window).on('scroll.topbtn', function () {
+    try {
+      const y = $(this).scrollTop();
+      if (y > 100) showTop(); else hideTop();
+    } catch (e) {
+      // defensive: if anything fails, ensure button hidden
+      hideTop();
+    }
+  });
+
+  // Robust click handler: prevent repeated clicks, use native smooth scroll when available
+  $topBtn.on('click', function (e) {
+    e.preventDefault();
+    const $btn = $(this);
+    if ($btn.data('scrolling')) return; // already scrolling
+
+    // mark as scrolling and disable interactions
+    $btn.data('scrolling', true).attr('aria-disabled', 'true').prop('disabled', true).addClass('opacity-75');
+
+    // cancel any queued jQuery animations on html/body
+    $('html, body').stop(true);
+
+    const startTime = Date.now();
+    const MAX_WAIT = 3000; // ms fallback
+
+    if ('scrollBehavior' in document.documentElement.style) {
+      // native smooth
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // fallback to jQuery animate
+      $('html, body').animate({ scrollTop: 0 }, 400);
+    }
+
+    // Monitor until scroll reaches top (or timeout) to re-enable the button
+    (function waitUntilTop() {
+      const now = Date.now();
+      const y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop;
+      if (y === 0 || now - startTime > MAX_WAIT) {
+        $btn.data('scrolling', false).attr('aria-disabled', 'false').prop('disabled', false).removeClass('opacity-75');
+        return;
+      }
+      requestAnimationFrame(waitUntilTop);
+    })();
+  });
+})();
 
 // === Máscaras de entrada ===
 

@@ -88,6 +88,20 @@ if (isset($_GET['versao']) && trim($_GET['versao']) !== '') {
   $whereParts[] = "TRIM(carros.versao) = TRIM('$v')";
 }
 
+// optional estado_local filter (state code, 2 chars)
+if (isset($_GET['estado_local']) && trim($_GET['estado_local']) !== '') {
+  $estado = mysqli_real_escape_string($conexao, trim($_GET['estado_local']));
+  if (strlen($estado) === 2 && ctype_alpha($estado)) {
+    $whereParts[] = "carros.estado_local = '" . strtoupper($estado) . "'";
+  }
+}
+
+// optional cidade filter (city name)
+if (isset($_GET['cidade']) && trim($_GET['cidade']) !== '') {
+  $cidade = mysqli_real_escape_string($conexao, $_GET['cidade']);
+  $whereParts[] = "carros.cidade = '$cidade'";
+}
+
 // optional cor filter (accept single or comma-separated color ids)
 if (isset($_GET['cor']) && trim($_GET['cor']) !== '') {
   $cor_raw = trim($_GET['cor']);
@@ -120,6 +134,118 @@ if (isset($_GET['carroceria']) && trim($_GET['carroceria']) !== '') {
   }
 }
 
+// optional preco (price) range filter: accept numeric values for min and/or max
+// URL params: preco_min, preco_max (numbers in BRL with optional k/kk suffixes, decimals ignored)
+if ((isset($_GET['preco_min']) && trim($_GET['preco_min']) !== '') || (isset($_GET['preco_max']) && trim($_GET['preco_max']) !== '')) {
+  // Parse price with k/kk support: "200k" -> 200000, "1.5kk" -> 1500000, "50k" -> 50000
+  $parsePriceWithSuffix = function ($s) {
+    if (empty($s)) return null;
+    $s = strtolower(trim($s));
+    $digits_only = preg_replace('/[^0-9,.]/', '', $s);
+    $digits_only = str_replace([',', '.'], '', $digits_only); // remove separators
+    $num = (int)$digits_only;
+    if (strpos($s, 'kk') !== false) $num *= 1000000;
+    elseif (strpos($s, 'k') !== false) $num *= 1000;
+    return $num;
+  };
+  $pmin = isset($_GET['preco_min']) ? $parsePriceWithSuffix($_GET['preco_min']) : null;
+  $pmax = isset($_GET['preco_max']) ? $parsePriceWithSuffix($_GET['preco_max']) : null;
+  if ($pmin !== null && $pmax !== null) {
+    if ($pmin > $pmax) {
+      $tmp = $pmin;
+      $pmin = $pmax;
+      $pmax = $tmp;
+    }
+    $whereParts[] = "carros.preco BETWEEN $pmin AND $pmax";
+  } elseif ($pmin !== null) {
+    $whereParts[] = "carros.preco >= $pmin";
+  } elseif ($pmax !== null) {
+    $whereParts[] = "carros.preco <= $pmax";
+  }
+}
+
+// optional quilometragem (km) range filter: km_min, km_max
+if ((isset($_GET['km_min']) && trim($_GET['km_min']) !== '') || (isset($_GET['km_max']) && trim($_GET['km_max']) !== '')) {
+  $kmin = isset($_GET['km_min']) ? preg_replace('/\D/', '', $_GET['km_min']) : '';
+  $kmax = isset($_GET['km_max']) ? preg_replace('/\D/', '', $_GET['km_max']) : '';
+  $kmin = $kmin === '' ? null : (int)$kmin;
+  $kmax = $kmax === '' ? null : (int)$kmax;
+  if ($kmin !== null && $kmax !== null) {
+    if ($kmin > $kmax) {
+      $tmp = $kmin;
+      $kmin = $kmax;
+      $kmax = $tmp;
+    }
+    $whereParts[] = "carros.quilometragem BETWEEN $kmin AND $kmax";
+  } elseif ($kmin !== null) {
+    $whereParts[] = "carros.quilometragem >= $kmin";
+  } elseif ($kmax !== null) {
+    $whereParts[] = "carros.quilometragem <= $kmax";
+  }
+}
+
+// optional ano (year) range filter applied to ano_fabricacao: ano_min, ano_max
+if ((isset($_GET['ano_min']) && trim($_GET['ano_min']) !== '') || (isset($_GET['ano_max']) && trim($_GET['ano_max']) !== '')) {
+  $amin = isset($_GET['ano_min']) ? preg_replace('/\D/', '', $_GET['ano_min']) : '';
+  $amax = isset($_GET['ano_max']) ? preg_replace('/\D/', '', $_GET['ano_max']) : '';
+  $amin = $amin === '' ? null : (int)$amin;
+  $amax = $amax === '' ? null : (int)$amax;
+  if ($amin !== null && $amax !== null) {
+    if ($amin > $amax) {
+      $tmp = $amin;
+      $amin = $amax;
+      $amax = $tmp;
+    }
+    $whereParts[] = "carros.ano_fabricacao BETWEEN $amin AND $amax";
+  } elseif ($amin !== null) {
+    $whereParts[] = "carros.ano_fabricacao >= $amin";
+  } elseif ($amax !== null) {
+    $whereParts[] = "carros.ano_fabricacao <= $amax";
+  }
+}
+
+// optional cambio filter (Automático / Manual)
+if (isset($_GET['cambio']) && trim($_GET['cambio']) !== '') {
+  $cambio_raw = trim($_GET['cambio']);
+  $parts_cam = array_filter(array_map('trim', explode(',', $cambio_raw)));
+  $mapCam = [
+    'aut' => 'A',
+    'man' => 'M'
+  ];
+  $camVals = [];
+  foreach ($parts_cam as $c) {
+    $cl = strtolower($c);
+    if (isset($mapCam[$cl])) $camVals[] = $mapCam[$cl];
+  }
+  if (count($camVals) > 0) {
+    $camVals_esc = array_map(function ($c) use ($conexao) {
+      return mysqli_real_escape_string($conexao, $c);
+    }, $camVals);
+    $whereParts[] = "carros.cambio IN ('" . implode("','", $camVals_esc) . "')";
+  }
+}
+
+// optional blindagem filter (Sim / Não)
+if (isset($_GET['blindagem']) && trim($_GET['blindagem']) !== '') {
+  $blind_raw = trim($_GET['blindagem']);
+  $parts_bli = array_filter(array_map('trim', explode(',', $blind_raw)));
+  $mapBli = [
+    'bli' => '1',
+    'n-bli' => '0'
+  ];
+  $bliVals = [];
+  foreach ($parts_bli as $b) {
+    $bl = strtolower($b);
+    if (isset($mapBli[$bl])) $bliVals[] = $mapBli[$bl];
+  }
+  if (count($bliVals) > 0) {
+    $bliVals_esc = array_map(function ($c) use ($conexao) {
+      return mysqli_real_escape_string($conexao, $c);
+    }, $bliVals);
+    $whereParts[] = "carros.blindagem IN ('" . implode("','", $bliVals_esc) . "')";
+  }
+}
+
 // optional propulsao filter (parent categories: comb, hib, ele)
 // and optional combustivel filter (subtypes: gas, alc, fle, die, gnv, hev, phe, mhe, ele)
 // When both parent(s) and subtype(s) are present, combine them with OR so
@@ -142,7 +268,9 @@ if (isset($_GET['propulsao']) && trim($_GET['propulsao']) !== '') {
     if (isset($map[$pl])) $vals[] = $map[$pl];
   }
   if (count($vals) > 0) {
-    $vals_esc = array_map(function ($c) use ($conexao) { return mysqli_real_escape_string($conexao, $c); }, $vals);
+    $vals_esc = array_map(function ($c) use ($conexao) {
+      return mysqli_real_escape_string($conexao, $c);
+    }, $vals);
     $propClause = "carros.propulsao IN ('" . implode("','", $vals_esc) . "')";
   }
 }
@@ -166,7 +294,9 @@ if (isset($_GET['combustivel']) && trim($_GET['combustivel']) !== '') {
     if (isset($mapc[$cl])) $cvals[] = $mapc[$cl];
   }
   if (count($cvals) > 0) {
-    $cvals_esc = array_map(function ($c) use ($conexao) { return mysqli_real_escape_string($conexao, $c); }, $cvals);
+    $cvals_esc = array_map(function ($c) use ($conexao) {
+      return mysqli_real_escape_string($conexao, $c);
+    }, $cvals);
     $combClause = "carros.combustivel IN ('" . implode("','", $cvals_esc) . "')";
   }
 }
@@ -182,6 +312,21 @@ if ($propClause !== '' && $combClause !== '') {
 
 $where_sql = count($whereParts) ? ' WHERE ' . implode(' AND ', $whereParts) : '';
 
+$countSql = "SELECT COUNT(*) AS total FROM anuncios_carros carros INNER JOIN marcas ON carros.marca = marcas.id" . $where_sql;
+$countRes = mysqli_query($conexao, $countSql);
+if (!$countRes) {
+  die("Erro na contagem de resultados: " . mysqli_error($conexao));
+}
+$countRow = mysqli_fetch_assoc($countRes);
+$total_results = isset($countRow['total']) ? (int)$countRow['total'] : 0;
+
+// pagination calculations
+$per_page = (int)$quantidade; // already defined above
+$total_pages = $per_page > 0 ? max(1, (int)ceil($total_results / $per_page)) : 1;
+$page = max(1, (int)$page);
+if ($page > $total_pages) $page = $total_pages;
+$offset = ($page - 1) * $per_page;
+
 $sql = "SELECT 
   carros.*, 
   marcas.nome AS marca_nome,
@@ -192,18 +337,15 @@ INNER JOIN
   marcas ON carros.marca = marcas.id
 LEFT JOIN 
   favoritos ON favoritos.anuncio_id = carros.id 
-         AND favoritos.usuario_id = '$id'" . $where_sql . $order_sql . "\nLIMIT $quantidade";
+         AND favoritos.usuario_id = '$id'" . $where_sql . $order_sql . "\nLIMIT $offset, $per_page";
 
 $resultado = mysqli_query($conexao, $sql);
-
 if (!$resultado) {
   die("Erro na consulta SQL: " . mysqli_error($conexao));
 }
 
 $carros = [];
-
 $qtd_resultados = mysqli_num_rows($resultado) ?? 0;
-
 while ($linha = mysqli_fetch_array($resultado)) {
   $carros[] = $linha;
 }
@@ -262,6 +404,62 @@ if ($resultado) {
   .card-compra .favoritar-btn {
     z-index: 3;
   }
+
+  /* Offcanvas full-screen (top to bottom) for mobile filters */
+  .offcanvas-top.vh-100 {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    top: 0 !important;
+  }
+
+  @media (max-width: 991.98px) {
+    .offcanvas-top .offcanvas-body {
+      padding: 0.5rem 1rem 2.5rem 1rem;
+      overflow: auto;
+    }
+  }
+
+  /* Pagination disabled look */
+  .pagination .page-item.disabled .page-link,
+  .pagination .page-link.disabled {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .pagination .page-link {
+    transition: opacity .15s ease-in-out;
+  }
+
+  /* No-results responsive container */
+  .no-results-container .no-results-inner {
+    width: 100%;
+    padding: 2rem 1rem;
+  }
+
+  @media (min-width: 992px) {
+
+    /* On large screens let the block size naturally so it fits the sidebar
+       and leaves space above the footer. Avoid forcing full-viewport height. */
+    .no-results-container {
+      min-height: auto;
+      margin-top: 1rem;
+      display: block;
+    }
+  }
+
+  @media (max-width: 991.98px) {
+
+    /* On small screens ensure the message fits without revealing the footer */
+    .no-results-container {
+      min-height: auto;
+      display: block;
+    }
+
+    .no-results-container .no-results-inner {
+      padding-top: 1.25rem;
+      padding-bottom: 1.25rem;
+    }
+  }
 </style>
 
 <body>
@@ -276,25 +474,24 @@ if ($resultado) {
         <div class="col-12 col-lg-10 col-lg-10">
           <div class="row pt-5 pb-3 pb-lg-0">
             <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-              <ol class="breadcrumb">
+              <ol class="breadcrumb" id="dynamic-breadcrumb">
                 <li class="breadcrumb-item"><a href="." class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover">Home</a></li>
-
-                <?php if (isset($vendedor)) {
-                  echo "<li class=\"breadcrumb-item\"><a href=\"compras.php\" class=\"link-dark link-underline-opacity-0 link-underline-opacity-100-hover\">Carros</a></li>
-                <li class=\"breadcrumb-item active text-dark fw-semibold\" aria-current=\"page\">" . $vendedor . "</li>";
-                } else {
-                  echo "<li class=\"breadcrumb-item active text-dark fw-semibold\" aria-current=\"page\">Carros</li>";
-                }; ?>
               </ol>
-              <h4><?php if (isset($vendedor)) {
-                    echo "Anúncios de " . $vendedor;
-                  } else {
-                    echo "Carros de todo o Brasil!";
-                  }; ?></h4>
+
             </nav>
           </div>
           <div class="row px-3 pt-3 border-top d-flex d-lg-none">
             <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" class="btn bg-white btn-sm border rounded-pill px-3 w-auto"><i class="bi bi-funnel me-2"></i></i>Filtros</button>
+          </div>
+          <!-- Offcanvas (mobile) for filters: will receive the existing #filtros-over element at runtime -->
+          <div class="offcanvas offcanvas-top vh-100" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasBottomLabel">
+            <div class="offcanvas-header">
+              <h5 class="offcanvas-title" id="offcanvasBottomLabel">Filtros</h5>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body p-0">
+              <!-- filters (moved from sidebar) -->
+            </div>
           </div>
           <div class="row g-4">
             <div id="filtros-col" class="col-4 col-xl-3 col-xxl-2 vh-100 position-sticky top-0 pt-4 d-lg-flex flex-column d-none" style="max-height: 100vh;">
@@ -349,8 +546,15 @@ if ($resultado) {
                           <div class="mb-1">
                             <h6>Localização</h6>
                           </div>
-                          <div class="row px-2 g-0 gap-2">
-                            <input type="text" class="form-control" id="localizacao" autocomplete="off" placeholder="Informe o estado ou cidade">
+                          <div class="row px-2 g-0 gap-2 position-relative">
+                            <div class="position-relative w-100">
+                              <input type="text" class="form-control" id="localizacao" autocomplete="off" placeholder="Informe o estado ou cidade">
+                              <button type="button" class="btn btn-sm position-absolute" id="localizacao-clear" style="right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #999; display: none;">
+                                <i class="bi bi-x-circle-fill"></i>
+                              </button>
+                            </div>
+                            <div id="localizacao-suggestions" class="position-absolute w-100" style="top: 100%; left: 16px; right: 16px; background: white; border: 1px solid #dee2e6; border-top: none; border-radius: 0 0 0.375rem 0.375rem; max-height: 300px; overflow-y: auto; z-index: 1000; display: none; box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);">
+                            </div>
                           </div>
                         </div>
                         <div class="row px-1">
@@ -456,10 +660,10 @@ if ($resultado) {
                           </div>
                           <div class="row px-2 g-0 gap-2">
                             <div class="col">
-                              <input type="text" class="form-control" id="ano-min" placeholder="Ano mínimo">
+                              <input type="text" inputmode="numeric" maxlength="4" class="form-control" id="ano-min" placeholder="Ano mínimo">
                             </div>
                             <div class="col">
-                              <input type="text" class="form-control" id="ano-max" placeholder="Ano máximo">
+                              <input type="text" inputmode="numeric" maxlength="4" class="form-control" id="ano-max" placeholder="Ano máximo">
                             </div>
                           </div>
                         </div>
@@ -664,9 +868,25 @@ if ($resultado) {
             </div>
             <div class="col">
               <?php if (isset($vendedor)): ?>
-                <div class="mt-4">
-                  <img src="https://preview.redd.it/bugatti-chiron-spotted-in-same-parking-garage-back-to-back-v0-08ed1s0xv6ne1.jpg?width=640&crop=smart&auto=webp&s=ccef8f6c11ef172dbe050cd06911e0f01920d714" class="w-100 border h-auto object-fit-cover rounded-4" style="aspect-ratio: 1/.125;">
+                <?php
+                // try to load loja by name and display its capa if available
+                $vendedor_esc = mysqli_real_escape_string($conexao, $vendedor);
+                $qr = mysqli_query($conexao, "SELECT id, capa FROM lojas WHERE nome = '$vendedor_esc' LIMIT 1");
+                $capaPath = null;
+                if ($qr && mysqli_num_rows($qr) > 0) {
+                  $row = mysqli_fetch_assoc($qr);
+                  if (!empty($row['capa'])) {
+                    $possible = 'img/lojas/' . $row['id'] . '/' . $row['capa'];
+                    if (is_file(__DIR__ . '/' . $possible)) $capaPath = $possible;
+                    else $capaPath = $possible; // keep path even if file not present
+                  }
+                }
+                ?>
+                <?php if (isset($capaPath)):?>
+                <div class="capa-loja mt-4">
+                  <img src="<?= $capaPath?>" class="w-100 border h-auto object-fit-cover rounded-4" style="aspect-ratio: 1/.125;">
                 </div>
+                <?php endif?>
               <?php endif ?>
               <div class="row pt-4">
                 <div class="col-auto me-auto">
@@ -687,35 +907,45 @@ if ($resultado) {
                   </div>
                 </div>
               </div>
-              <div id="area-compra" class="row row-cols-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-2">
-                <?php
-                foreach ($carros as $carro): ?>
-                  <div class="col">
-                    <?php
-                    $marca = $carro['marca_nome'];
-                    $modelo = $carro['modelo'];
-                    $versao = $carro['versao'];
-                    $preco = $carro['preco'];
-                    $ano = $carro['ano_fabricacao'] . '/' . $carro['ano_modelo'];
-                    $km = $carro['quilometragem'];
-                    $cor = $carro['cor'];
-                    $troca = $carro['aceita_troca'];
-                    $revisao = $carro['revisao'];
-                    $id = $carro['id'];
-                    $loc = $carro['cidade'] . ' - '  . $carro['estado_local'];
-                    // fetch photos for this anuncio into $imgs array (no predefined img1..img6)
-                    $imgs = [];
-                    $qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id ORDER BY `ordem` ASC");
-                    if ($qr && mysqli_num_rows($qr) > 0) {
-                      while ($r = mysqli_fetch_assoc($qr)) {
-                        $path = 'img/anuncios/carros/' . $id . '/' . $r['caminho_foto'];
-                        $imgs[] = $path;
+              <div id="area-compra" class="row <?= empty($carros) ? '' : 'row-cols-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-6 g-3 g-lg-2' ?>">
+                <?php if (!empty($carros)): ?>
+                  <?php
+                  foreach ($carros as $carro): ?>
+                    <div class="col">
+                      <?php
+                      $marca = $carro['marca_nome'];
+                      $modelo = $carro['modelo'];
+                      $versao = $carro['versao'];
+                      $preco = $carro['preco'];
+                      $ano = $carro['ano_fabricacao'] . '/' . $carro['ano_modelo'];
+                      $km = $carro['quilometragem'];
+                      $cor = $carro['cor'];
+                      $troca = $carro['aceita_troca'];
+                      $revisao = $carro['revisao'];
+                      $id = $carro['id'];
+                      $loc = $carro['cidade'] . ' - '  . $carro['estado_local'];
+                      // fetch photos for this anuncio into $imgs array (no predefined img1..img6)
+                      $imgs = [];
+                      $qr = mysqli_query($conexao, "SELECT caminho_foto FROM fotos_carros WHERE carro_id = $id ORDER BY `ordem` ASC");
+                      if ($qr && mysqli_num_rows($qr) > 0) {
+                        while ($r = mysqli_fetch_assoc($qr)) {
+                          $path = 'img/anuncios/carros/' . $id . '/' . $r['caminho_foto'];
+                          $imgs[] = $path;
+                        }
                       }
-                    }
-                    $favoritado = $carro['favoritado'];
-                    include 'estruturas/card-compra/card-compra.php'; ?>
+                      $favoritado = $carro['favoritado'];
+                      include 'estruturas/card-compra/card-compra.php'; ?>
+                    </div>
+                  <?php endforeach; ?>
+                <?php else: ?>
+                  <div class="col-12 text-muted no-results-container d-flex justify-content-center align-items-center">
+                    <div class="no-results-inner">
+                      <i class="bi bi-emoji-frown display-4 mb-3"></i>
+                      <div class="h5 fw-semibold">Nenhum carro encontrado</div>
+                      <div class="small">Tente ajustar os filtros para ampliar sua busca.</div>
+                    </div>
                   </div>
-                <?php endforeach; ?>
+                <?php endif ?>
               </div>
             </div>
           </div>
@@ -728,61 +958,44 @@ if ($resultado) {
               <nav aria-label="Page navigation example">
                 <ul class="pagination pagination-dark">
                   <?php $qs = "&sort=" . urlencode($sort) . "&dir=" . urlencode($dir); ?>
-                  <li class="page-item <?php if ($page == 1) {
-                                          echo 'disabled';
-                                        } ?>">
-                    <a class="page-link" href="compras.php?page=<?= $page - 1 ?><?= $qs ?>" tabindex="-1" aria-disabled="true"><i class="bi bi-caret-left-fill"></i></a>
+                  <?php
+                  // render previous
+                  $prev_disabled = $page <= 1;
+                  $next_disabled = $page >= $total_pages;
+                  ?>
+                  <li class="page-item <?= $prev_disabled ? 'disabled' : '' ?>">
+                    <a class="page-link <?= $prev_disabled ? 'disabled' : '' ?>" href="<?= $prev_disabled ? '#' : 'compras.php?page=' . ($page - 1) . $qs ?>" aria-disabled="<?= $prev_disabled ? 'true' : 'false' ?>"><i class="bi bi-caret-left-fill"></i></a>
                   </li>
-                  <?php if ($page >= 3) {
-                    echo '<li class="page-item">
-                  <a class="page-link" href="compras.php?page=1' . $qs . '" tabindex="-1" aria-disabled="true">1</a>
-                </li>
-                <li class="page-item disabled">
-                  <a class="page-link" href="#" tabindex="-1" aria-disabled="true">...</a>
-                </li>';
-                  }; ?>
-                  <li class="page-item <?php if ($page == 1) {
-                                          echo 'active';
-                                        } ?>"><a class="page-link border-0" href="compras.php?page=<?php if ($page == 1) {
-                                                                                                      echo $page;
-                                                                                                    } else {
-                                                                                                      echo $page - 1;
-                                                                                                    } ?><?= $qs ?>"><?php if ($page == 1) {
-                                                                                                                      echo $page;
-                                                                                                                    } else {
-                                                                                                                      echo $page - 1;
-                                                                                                                    } ?></a></li>
-                  <li class="page-item <?php if ($page != 1) {
-                                          echo 'active';
-                                        } ?>"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
-                                                                                            echo $page + 1;
-                                                                                          } else {
-                                                                                            echo $page;
-                                                                                          } ?><?= $qs ?>"><?php if ($page == 1) {
-                                                                                                            echo $page + 1;
-                                                                                                          } else {
-                                                                                                            echo $page;
-                                                                                                          } ?></a></li>
-                  <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
-                                                                                      echo $page + 2;
-                                                                                    } else {
-                                                                                      echo $page + 1;
-                                                                                    } ?><?= $qs ?>"><?php if ($page == 1) {
-                                                                                                      echo $page + 2;
-                                                                                                    } else {
-                                                                                                      echo $page + 1;
-                                                                                                    } ?></a></li>
-                  <li class="page-item"><a class="page-link" href="compras.php?page=<?php if ($page == 1) {
-                                                                                      echo $page + 3;
-                                                                                    } else {
-                                                                                      echo $page + 2;
-                                                                                    } ?><?= $qs ?>"><?php if ($page == 1) {
-                                                                                                      echo $page + 3;
-                                                                                                    } else {
-                                                                                                      echo $page + 2;
-                                                                                                    } ?></a></li>
-                  <li class="page-item">
-                    <a class="page-link" href="compras.php?page=<?= $page + 1 ?><?= $qs ?>"><i class="bi bi-caret-right-fill"></i></a>
+
+                  <?php
+                  // show first page + gap when current page is far
+                  if ($total_pages > 5 && $page > 3) {
+                    echo '<li class="page-item"><a class="page-link" href="compras.php?page=1' . $qs . '">1</a></li>';
+                    if ($page > 4) echo '<li class="page-item disabled"><a class="page-link" href="#">...</a></li>';
+                  }
+
+                  // determine start/end range (show up to 5 pages)
+                  $start = max(1, $page - 2);
+                  $end = min($total_pages, $page + 2);
+                  if ($end - $start < 4) {
+                    $start = max(1, $end - 4);
+                    $end = min($total_pages, $start + 4);
+                  }
+                  for ($p = $start; $p <= $end; $p++) {
+                    $active = $p == $page ? 'active' : '';
+                    echo '<li class="page-item ' . $active . '"><a class="page-link" href="compras.php?page=' . $p . $qs . '">' . $p . '</a></li>';
+                  }
+
+                  // show gap + last page when far
+                  if ($total_pages > 5 && $page < $total_pages - 2) {
+                    if ($page < $total_pages - 3) echo '<li class="page-item disabled"><a class="page-link" href="#">...</a></li>';
+                    echo '<li class="page-item"><a class="page-link" href="compras.php?page=' . $total_pages . $qs . '">' . $total_pages . '</a></li>';
+                  }
+
+                  // render next
+                  ?>
+                  <li class="page-item <?= $next_disabled ? 'disabled' : '' ?>">
+                    <a class="page-link <?= $next_disabled ? 'disabled' : '' ?>" href="<?= $next_disabled ? '#' : 'compras.php?page=' . ($page + 1) . $qs ?>" aria-disabled="<?= $next_disabled ? 'true' : 'false' ?>"><i class="bi bi-caret-right-fill"></i></a>
                   </li>
                 </ul>
               </nav>
@@ -801,6 +1014,235 @@ if ($resultado) {
 <script src="script.js"></script>
 <script>
   $(function() {
+    // Scroll position persistence
+    const SCROLL_STORAGE_KEY = 'fahren_scroll_positions';
+
+    // Save scroll positions before page unload (from filter changes)
+    function saveScrollPositions() {
+      const scrollData = {
+        mainScroll: $(window).scrollTop(),
+        sidebarScroll: $('#filtros-over').scrollTop() || 0
+      };
+      sessionStorage.setItem(SCROLL_STORAGE_KEY, JSON.stringify(scrollData));
+    }
+
+    // Offcanvas-aware navigation queue: when the filters offcanvas is open,
+    // queue navigation requests and only navigate when it is closed.
+    window.filterOffcanvasOpen = false;
+    window.pendingFilterNavigation = null;
+
+    window.queueOrNavigate = function(url) {
+      try {
+        if (window.filterOffcanvasOpen) {
+          window.pendingFilterNavigation = url.toString();
+          // Optionally show a subtle indicator that changes are pending
+          const off = document.getElementById('offcanvasBottom');
+          if (off) off.classList.add('filters-pending');
+          return;
+        }
+      } catch (e) {
+        // fallback to immediate navigation
+      }
+      saveScrollPositions();
+      window.location.href = url.toString();
+    };
+
+    window.applyPendingFilterNavigation = function() {
+      try {
+        // If we have a DOM-based builder, use it to collect all current filter states
+        const off = document.getElementById('offcanvasBottom');
+        if (typeof window.buildFilterUrlFromDom === 'function') {
+          const nav = window.buildFilterUrlFromDom();
+          if (off) off.classList.remove('filters-pending');
+          saveScrollPositions();
+          window.location.href = nav;
+          return;
+        }
+        if (window.pendingFilterNavigation) {
+          const nav = window.pendingFilterNavigation;
+          window.pendingFilterNavigation = null;
+          if (off) off.classList.remove('filters-pending');
+          saveScrollPositions();
+          window.location.href = nav;
+        }
+      } catch (e) {
+        console.error('Failed to apply pending navigation', e);
+      }
+    };
+
+    // Restore scroll positions after page load
+    function restoreScrollPositions() {
+      try {
+        const scrollData = JSON.parse(sessionStorage.getItem(SCROLL_STORAGE_KEY));
+        if (scrollData) {
+          // Restore main scroll
+          if (scrollData.mainScroll) {
+            $(window).scrollTop(scrollData.mainScroll);
+          }
+          // Restore sidebar scroll
+          if (scrollData.sidebarScroll && $('#filtros-over').length) {
+            $('#filtros-over').scrollTop(scrollData.sidebarScroll);
+          }
+          // Clear the stored data after restoring
+          sessionStorage.removeItem(SCROLL_STORAGE_KEY);
+        }
+      } catch (e) {
+        console.error('Error restoring scroll positions:', e);
+      }
+    }
+
+    // Restore scroll positions on page load with a small delay to ensure DOM is ready
+    setTimeout(function() {
+      restoreScrollPositions();
+    }, 100);
+
+    // Helper to capitalize first letter of each word
+    function capitalizeWords(str) {
+      return str.replace(/\b\w/g, function(char) {
+        return char.toUpperCase();
+      });
+    }
+
+    // Dynamic breadcrumb builder based on filters
+    const FILTER_ORDER = [{
+        name: 'codicao',
+        label: 'Carros',
+        // When all three conditions are selected, return a special token so
+        // the breadcrumb renderer can show just the label 'Carros'. Otherwise
+        // return the human-readable selected conditions joined with ' e '.
+        getValue: function(val) {
+          const parts = val.split(',').map(v => {
+            const map = {
+              'novo': 'Novo',
+              'seminovo': 'Seminovo',
+              'usado': 'Usado'
+            };
+            return map[v.toLowerCase()] || v;
+          });
+          const allSelected = parts.length === 3 && parts.includes('Novo') && parts.includes('Seminovo') && parts.includes('Usado');
+          if (allSelected) return '__ALL_COND__';
+          return parts.length ? parts.join(' e ') : null;
+        }
+      },
+      {
+        name: 'estado_local',
+        label: null,
+        getValue: (v) => v ? v.toUpperCase() : null
+      },
+      {
+        name: 'cidade',
+        label: null,
+        getValue: (v) => v ? capitalizeWords(v) : null
+      },
+      {
+        name: 'marca',
+        label: null,
+        getValue: (v) => v ? capitalizeWords(v) : null
+      },
+      {
+        name: 'modelo',
+        label: null,
+        getValue: (v) => v ? capitalizeWords(v) : null
+      },
+      {
+        name: 'versao',
+        label: null,
+        getValue: (v) => v ? capitalizeWords(v) : null
+      },
+      {
+        name: 'ano_min',
+        label: null,
+        getValue: (v) => v ? capitalizeWords(v) : null
+      },
+      {
+        name: 'ano_max',
+        label: null,
+        getValue: (v) => v ? capitalizeWords(v) : null
+      }
+    ];
+
+    function renderBreadcrumb() {
+      const url = new URL(window.location.href);
+      const params = url.searchParams;
+      const breadcrumbItems = [];
+
+      // Build breadcrumb items from active filters
+      FILTER_ORDER.forEach(function(filter, index) {
+        const val = params.get(filter.name);
+        if (val) {
+          const displayVal = filter.getValue(val);
+          if (displayVal) {
+            let displayLabel;
+            // Special token for codicao: when all conditions selected, show only 'Carros'
+            if (displayVal === '__ALL_COND__' && filter.label) {
+              displayLabel = filter.label;
+            } else {
+              displayLabel = filter.label ? filter.label + ' ' + displayVal : displayVal;
+            }
+            breadcrumbItems.push({
+              label: displayLabel,
+              paramName: filter.name,
+              index: index
+            });
+          }
+        }
+      });
+
+      // Render breadcrumb
+      const $breadcrumb = $('#dynamic-breadcrumb');
+
+      // Keep only Home link
+      $breadcrumb.find('li').slice(1).remove();
+
+      if (breadcrumbItems.length === 0) {
+        return;
+      }
+
+      // Add all breadcrumb items
+      breadcrumbItems.forEach(function(item, idx) {
+        const isLast = idx === breadcrumbItems.length - 1;
+        let $li;
+
+        if (isLast) {
+          // Last item: not clickable, bold
+          $li = $('<li class="breadcrumb-item active text-dark fw-semibold" aria-current="page"></li>');
+          $li.text(item.label);
+        } else {
+          // Previous items: clickable, remove subsequent filters
+          $li = $('<li class="breadcrumb-item"></li>');
+          const $link = $('<a href="#" class="link-dark link-underline-opacity-0 link-underline-opacity-100-hover"></a>');
+          $link.text(item.label);
+
+          $link.on('click', function(e) {
+            e.preventDefault();
+
+            // Find all filters that come after this one
+            const filtersToRemove = FILTER_ORDER.slice(item.index + 1).map(f => f.name);
+
+            // Build new URL removing filters after current one
+            const newUrl = new URL(window.location.href);
+            filtersToRemove.forEach(paramName => {
+              newUrl.searchParams.delete(paramName);
+            });
+            newUrl.searchParams.delete('page');
+
+            saveScrollPositions();
+            window.location.href = newUrl.toString();
+          });
+
+          $li.append($link);
+        }
+
+        $breadcrumb.append($li);
+      });
+
+      // Update title (no visible title element requested)
+      const lastItem = breadcrumbItems[breadcrumbItems.length - 1];
+    }
+
+    // Build breadcrumb on page load
+    renderBreadcrumb();
+
     <?php if (isset($_GET['marca'])): ?>
       const initialMarca = <?= json_encode($_GET['marca']) ?>;
     <?php endif; ?>
@@ -884,14 +1326,14 @@ if ($resultado) {
       const parents = propParam ? propParam.split(',').map(v => v.trim()) : [];
       const subs = combParam ? combParam.split(',').map(v => v.trim()) : [];
 
-      ['comb','hib','ele'].forEach(function(id) {
+      ['comb', 'hib', 'ele'].forEach(function(id) {
         const el = $('#' + id);
         if (el.length) el.prop('checked', parents.includes(id));
       });
 
       // Only check actual subtype checkboxes (gas, alc, fle, die, gnv, hev, phe, mhe)
       // Do NOT check parent-only boxes (ele)
-      const subtypeIds = ['gas','alc','fle','die','gnv','hev','phe','mhe'];
+      const subtypeIds = ['gas', 'alc', 'fle', 'die', 'gnv', 'hev', 'phe', 'mhe'];
       subs.forEach(function(s) {
         if (subtypeIds.includes(s)) {
           const el = $('#' + s);
@@ -925,7 +1367,10 @@ if ($resultado) {
       propTimer = setTimeout(function() {
         // Sync parent states based on children: if any child is checked, parent must be checked.
         // If all children are unchecked, parent is unchecked.
-        const parentContainers = { 'comb': '#comb-tipos', 'hib': '#hib-tipos' };
+        const parentContainers = {
+          'comb': '#comb-tipos',
+          'hib': '#hib-tipos'
+        };
         Object.keys(parentContainers).forEach(function(pid) {
           const cont = parentContainers[pid];
           const anyChild = $(cont + ' input:checked').length > 0;
@@ -941,9 +1386,13 @@ if ($resultado) {
 
         // Build lists from current DOM state (do not modify, only read)
         const parents = [];
-        $('.propulsao:checked').each(function() { parents.push($(this).attr('id')); });
+        $('.propulsao:checked').each(function() {
+          parents.push($(this).attr('id'));
+        });
         const subs = [];
-        $('#comb-tipos input:checked, #hib-tipos input:checked').each(function() { subs.push($(this).attr('id')); });
+        $('#comb-tipos input:checked, #hib-tipos input:checked').each(function() {
+          subs.push($(this).attr('id'));
+        });
 
         const url = new URL(window.location.href);
         url.searchParams.delete('page');
@@ -960,7 +1409,7 @@ if ($resultado) {
           url.searchParams.set('combustivel', subs.join(','));
         }
 
-        window.location.href = url.toString();
+        queueOrNavigate(url);
       }, PROP_DEBOUNCE_MS);
     });
 
@@ -992,7 +1441,7 @@ if ($resultado) {
         url.searchParams.set('sort', 'relevancia');
         url.searchParams.delete('dir');
         url.searchParams.delete('page');
-        window.location.href = url.toString();
+        queueOrNavigate(url);
         return;
       }
       // default to desc for new sorts
@@ -1000,7 +1449,7 @@ if ($resultado) {
       url.searchParams.set('sort', val);
       url.searchParams.set('dir', 'desc');
       url.searchParams.delete('page');
-      window.location.href = url.toString();
+      queueOrNavigate(url);
     });
 
     $(order_btn).on('click', function() {
@@ -1013,7 +1462,7 @@ if ($resultado) {
       url.searchParams.set('sort', sel);
       url.searchParams.set('dir', newDir);
       url.searchParams.delete('page');
-      window.location.href = url.toString();
+      queueOrNavigate(url);
     });
 
     $(window).on("scroll", function() {
@@ -1257,7 +1706,7 @@ if ($resultado) {
           url.searchParams.delete('versao');
           url.searchParams.delete('q');
           url.searchParams.delete('page');
-          window.location.href = url.toString();
+          queueOrNavigate(url);
         } else {
           // programmatic clear (from our code) — only reset suppression
           suppressMarcaNav = false;
@@ -1272,7 +1721,7 @@ if ($resultado) {
         url.searchParams.delete('versao');
         // do not update search input when selecting marca in sidebar
         url.searchParams.delete('page');
-        window.location.href = url.toString();
+        queueOrNavigate(url);
         return;
       }
 
@@ -1290,7 +1739,7 @@ if ($resultado) {
         url.searchParams.delete('versao');
         // do not update search input when navigating for marca
         url.searchParams.delete('page');
-        window.location.href = url.toString();
+        queueOrNavigate(url);
         return;
       }
 
@@ -1316,7 +1765,7 @@ if ($resultado) {
           url.searchParams.delete('versao');
           url.searchParams.delete('q');
           url.searchParams.delete('page');
-          window.location.href = url.toString();
+          queueOrNavigate(url);
         } else {
           // programmatic clear
           suppressModeloNav = false;
@@ -1332,7 +1781,7 @@ if ($resultado) {
         // do not update search input when selecting modelo in sidebar
         url.searchParams.delete('versao');
         url.searchParams.delete('page');
-        window.location.href = url.toString();
+        queueOrNavigate(url);
         return;
       }
 
@@ -1351,7 +1800,7 @@ if ($resultado) {
         // do not update search input when navigating for modelo
         url.searchParams.delete('versao');
         url.searchParams.delete('page');
-        window.location.href = url.toString();
+        queueOrNavigate(url);
       }
     });
 
@@ -1368,7 +1817,7 @@ if ($resultado) {
         url.searchParams.set('versao', versaoVal);
         // do not update search input when selecting versao in sidebar
         url.searchParams.delete('page');
-        window.location.href = url.toString();
+        queueOrNavigate(url);
       } else if (!isUser) {
         updateButtonVisibility();
       }
@@ -1383,7 +1832,7 @@ if ($resultado) {
       url.searchParams.delete('versao');
       url.searchParams.delete('q');
       url.searchParams.delete('page');
-      window.location.href = url.toString();
+      queueOrNavigate(url);
     });
 
     modelosInput.find("button").on("click", function() {
@@ -1394,7 +1843,7 @@ if ($resultado) {
       url.searchParams.delete('versao');
       url.searchParams.delete('q');
       url.searchParams.delete('page');
-      window.location.href = url.toString();
+      queueOrNavigate(url);
     });
 
     versoesInput.find("button").on("click", function() {
@@ -1404,7 +1853,7 @@ if ($resultado) {
       url.searchParams.delete('versao');
       url.searchParams.delete('q');
       url.searchParams.delete('page');
-      window.location.href = url.toString();
+      queueOrNavigate(url);
     });
 
     // Condição checkboxes (usado / seminovo / novo)
@@ -1413,6 +1862,14 @@ if ($resultado) {
       const url = new URL(window.location.href);
       const codicaoParam = url.searchParams.get('codicao') || '';
       const values = codicaoParam ? codicaoParam.split(',').map(v => v.trim()) : [];
+
+      // If no codicao param present, default to all three conditions checked
+      if (values.length === 0) {
+        $('.condicao-input').each(function() {
+          $(this).prop('checked', true);
+        });
+        return;
+      }
 
       $('.condicao-input').each(function() {
         const val = $(this).attr('data-val');
@@ -1423,6 +1880,226 @@ if ($resultado) {
 
     // Initialize on page load
     initializeCondicaoCheckboxes();
+
+    // If no `codicao` URL parameter was present, update the URL to explicitly
+    // include all three conditions so links/share include the current state.
+    (function ensureCodicaoParam() {
+      try {
+        const u = new URL(window.location.href);
+        const existing = u.searchParams.get('codicao');
+        if (!existing || existing.trim() === '') {
+          u.searchParams.set('codicao', 'usado,seminovo,novo');
+          history.replaceState(null, '', u.toString());
+          // re-render breadcrumb to reflect updated params
+          if (typeof renderBreadcrumb === 'function') renderBreadcrumb();
+        }
+      } catch (e) {
+        // ignore URL errors on older browsers
+      }
+    })();
+
+    // Location state tracking
+    let localizacaoEstado = null;
+    let localizacaoCidade = null;
+
+    // Function to show/hide clear button based on selection
+    function updateLocalizacaoClearButton() {
+      if (localizacaoEstado || localizacaoCidade) {
+        $('#localizacao-clear').show();
+      } else {
+        $('#localizacao-clear').hide();
+      }
+    }
+
+    // Initialize location from URL on page load
+    function initializeLocalizacao() {
+      const url = new URL(window.location.href);
+      const estadoParam = url.searchParams.get('estado_local');
+      const cidadeParam = url.searchParams.get('cidade');
+
+      if (estadoParam || cidadeParam) {
+        localizacaoEstado = estadoParam || null;
+        localizacaoCidade = cidadeParam || null;
+
+        // Build display text
+        let displayText = '';
+        if (cidadeParam) {
+          displayText = cidadeParam + (estadoParam ? ' - ' + estadoParam : '');
+        } else if (estadoParam) {
+          // Fetch state name from hidden data or just show UF
+          displayText = estadoParam;
+        }
+
+        $('#localizacao').val(displayText);
+        updateLocalizacaoClearButton();
+      }
+    }
+
+    initializeLocalizacao();
+
+    // Clear location button handler
+    $('#localizacao-clear').on('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      localizacaoEstado = null;
+      localizacaoCidade = null;
+      $('#localizacao').val('').focus();
+      $('#localizacao-suggestions').hide();
+      updateLocalizacaoClearButton();
+
+      // Remove filters from URL
+      const url = new URL(window.location.href);
+      url.searchParams.delete('estado_local');
+      url.searchParams.delete('cidade');
+      url.searchParams.delete('page');
+      queueOrNavigate(url);
+    });
+
+    // Location autocomplete initialization
+    let localizacaoTimer = null;
+    const LOCALIZACAO_DEBOUNCE_MS = 300;
+
+    $('#localizacao').on('input', function() {
+      const val = $(this).val().trim();
+
+      // If input is cleared, clear the stored state
+      if (val === '') {
+        localizacaoEstado = null;
+        localizacaoCidade = null;
+        updateLocalizacaoClearButton();
+      }
+
+      if (val.length < 2) {
+        $('#localizacao-suggestions').hide();
+        return;
+      }
+
+      if (localizacaoTimer) clearTimeout(localizacaoTimer);
+      localizacaoTimer = setTimeout(function() {
+        $.getJSON('controladores/get_locations.php', {
+            q: val
+          })
+          .done(function(data) {
+            const $suggestions = $('#localizacao-suggestions');
+            $suggestions.empty();
+
+            if (data.states && data.states.length > 0) {
+              $suggestions.append('<div class="px-2 py-2 border-bottom"><small class="text-muted">Estados</small></div>');
+              data.states.forEach(function(state) {
+                const $item = $('<div class="px-3 py-2" style="cursor: pointer; border-bottom: 1px solid #f0f0f0;">')
+                  .text(state.label)
+                  .addClass('location-suggestion')
+                  .data('type', 'estado')
+                  .data('value', state.value)
+                  .data('name', state.name)
+                  .on('click', function() {
+                    localizacaoEstado = state.value;
+                    localizacaoCidade = null;
+                    $('#localizacao').val(state.name);
+                    $suggestions.hide();
+                    updateLocalizacaoClearButton();
+                    // Persist selection asynchronously (do not block navigation)
+                    try {
+                      $.post('controladores/usuarios/atualizar-localizacao.php', {
+                        estado_local: state.value,
+                        cidade: ''
+                      }).fail(function() {
+                        // ignore errors silently; do not block UX
+                      });
+                    } catch (e) {}
+                    // Filter by state
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('estado_local', state.value);
+                    url.searchParams.delete('cidade');
+                    url.searchParams.delete('page');
+                    queueOrNavigate(url);
+                  })
+                  .on('mouseenter', function() {
+                    $(this).css('background-color', '#f8f9fa');
+                  })
+                  .on('mouseleave', function() {
+                    $(this).css('background-color', '');
+                  });
+                $suggestions.append($item);
+              });
+            }
+
+            if (data.cities && data.cities.length > 0) {
+              if (data.states && data.states.length > 0) {
+                $suggestions.append('<div class="px-2 py-2 border-bottom"><small class="text-muted">Cidades</small></div>');
+              }
+              data.cities.forEach(function(city) {
+                const $item = $('<div class="px-3 py-2" style="cursor: pointer; border-bottom: 1px solid #f0f0f0;">')
+                  .text(city.label)
+                  .addClass('location-suggestion')
+                  .data('type', 'cidade')
+                  .data('cidade', city.cidade)
+                  .data('estado', city.estado)
+                  .on('click', function() {
+                    localizacaoEstado = city.estado;
+                    localizacaoCidade = city.cidade;
+                    $('#localizacao').val(city.label);
+                    $suggestions.hide();
+                    updateLocalizacaoClearButton();
+                    // Persist selection asynchronously (do not block navigation)
+                    try {
+                      $.post('controladores/usuarios/atualizar-localizacao.php', {
+                        estado_local: city.estado,
+                        cidade: city.cidade
+                      }).fail(function() {
+                        // ignore errors silently; do not block UX
+                      });
+                    } catch (e) {}
+                    // Filter by state and city
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('estado_local', city.estado);
+                    url.searchParams.set('cidade', city.cidade);
+                    url.searchParams.delete('page');
+                    queueOrNavigate(url);
+                  })
+                  .on('mouseenter', function() {
+                    $(this).css('background-color', '#f8f9fa');
+                  })
+                  .on('mouseleave', function() {
+                    $(this).css('background-color', '');
+                  });
+                $suggestions.append($item);
+              });
+            }
+
+            if ((data.states && data.states.length > 0) || (data.cities && data.cities.length > 0)) {
+              $suggestions.show();
+            } else {
+              $suggestions.hide();
+            }
+          })
+          .fail(function() {
+            $('#localizacao-suggestions').hide();
+          });
+      }, LOCALIZACAO_DEBOUNCE_MS);
+    });
+
+    // Hide suggestions when clicking outside
+    $(document).on('click', function(e) {
+      if (!$(e.target).closest('#localizacao, #localizacao-suggestions, #localizacao-clear').length) {
+        $('#localizacao-suggestions').hide();
+      }
+    });
+
+
+    // Categoria filter initialization + handler
+    function initializeCategoriaCheckboxes() {
+      const url = new URL(window.location.href);
+      const categoriaParam = url.searchParams.get('categoria') || '';
+      const values = categoriaParam ? categoriaParam.split(',').map(v => v.trim()) : [];
+      // Os checkboxes de categoria usam .form-check-input e id igual ao value
+      values.forEach(function(val) {
+        // Tenta marcar o checkbox pelo id
+        $(".form-check-input[id='" + val + "']").prop('checked', true);
+      });
+    }
+    initializeCategoriaCheckboxes();
 
     // Colors filter initialization + handler
     function initializeCorCheckboxes() {
@@ -1459,7 +2136,7 @@ if ($resultado) {
         } else {
           url.searchParams.set('cor', vals.join(','));
         }
-        window.location.href = url.toString();
+        queueOrNavigate(url);
       }, COR_DEBOUNCE_MS);
     });
 
@@ -1495,7 +2172,7 @@ if ($resultado) {
         } else {
           url.searchParams.set('carroceria', vals.join(','));
         }
-        window.location.href = url.toString();
+        queueOrNavigate(url);
       }, CARROCERIA_DEBOUNCE_MS);
     });
 
@@ -1533,42 +2210,426 @@ if ($resultado) {
           url.searchParams.set('codicao', vals.join(','));
         }
 
-        window.location.href = url.toString();
+        queueOrNavigate(url);
       }, CONDICAO_DEBOUNCE_MS);
     });
 
-    // Auto-expand/collapse accordions based on active filters
-    function updateAccordionState() {
-      const checkAccordion = function(accordionId, checkboxSelector) {
-        const accordion = $(`#${accordionId}`);
-        const button = accordion.prev().find('button');
-        const hasChecked = $(checkboxSelector).is(':checked');
-        
-        if (hasChecked) {
-          // Open accordion
-          accordion.addClass('show');
-          button.removeClass('collapsed').attr('aria-expanded', 'true');
-        } else {
-          // Close accordion
-          accordion.removeClass('show');
-          button.addClass('collapsed').attr('aria-expanded', 'false');
-        }
-      };
-      
-      // Check each accordion
-      checkAccordion('cor', '.cor-input:checked');
-      checkAccordion('carroceria', '.carroceria-input:checked');
-      // propulsão accordion: consider parent or any subtype checked
-      checkAccordion('propulsao', '.propulsao:checked, #comb-tipos input:checked, #hib-tipos input:checked');
-      // Add more accordions here as needed
+    // Accordion state persistence: store open/close state in URL as string like "AAAFF"
+    // Get all accordion-collapse IDs in order
+    const accordionIds = [];
+    $('#filtros-over .accordion-collapse').each(function() {
+      accordionIds.push($(this).attr('id'));
+    });
+
+    // Load accordion state from URL or initialize with default (only "modelo" open)
+    function getAccordionStateFromURL() {
+      const url = new URL(window.location.href);
+      const accParam = url.searchParams.get('acc') || '';
+      if (accParam.length === accordionIds.length && /^[AF]+$/.test(accParam)) {
+        return accParam.split('');
+      }
+      // Default: only "modelo" open, all others closed
+      return accordionIds.map(function(id) {
+        return id === 'modelo' ? 'A' : 'F';
+      });
     }
-    
-    // Initialize on page load
+
+    // Apply accordion state from saved string
+    function applyAccordionState(stateArray) {
+      stateArray.forEach(function(state, idx) {
+        if (idx < accordionIds.length) {
+          const $acc = $('#' + accordionIds[idx]);
+          const $button = $acc.prev().find('button');
+          if (state === 'A') {
+            $acc.addClass('show');
+            $button.removeClass('collapsed').attr('aria-expanded', 'true');
+          } else {
+            $acc.removeClass('show');
+            $button.addClass('collapsed').attr('aria-expanded', 'false');
+          }
+        }
+      });
+    }
+
+    // Get current accordion state from DOM
+    function getCurrentAccordionState() {
+      return accordionIds.map(function(id) {
+        const $acc = $('#' + id);
+        return $acc.hasClass('show') ? 'A' : 'F';
+      }).join('');
+    }
+
+    // Initialize accordion state from URL on page load
+    const initialAccordionState = getAccordionStateFromURL();
+    applyAccordionState(initialAccordionState);
+
+    // Listen to accordion button clicks to update URL
+    $('#filtros-over .accordion-button').on('click', function(e) {
+      setTimeout(function() {
+        const newState = getCurrentAccordionState();
+        const url = new URL(window.location.href);
+        url.searchParams.set('acc', newState);
+        // Use replaceState to avoid reloading the page
+        window.history.replaceState({}, '', url.toString());
+      }, 10);
+    });
+
+    // Auto-expand/collapse accordions based on active filters (generic)
+    let accordionTimer = null;
+    const ACCORDION_DEBOUNCE_MS = 500;
+
+    function updateAccordionState() {
+      // This function now ONLY detects filter state, doesn't close accordions automatically
+      // Accordions stay open/closed based on URL state, not filter content
+    }
+
+    // Initialize on page load (after individual input initializers)
     updateAccordionState();
-    
-    // Update when filters change (include propulsao child/parents)
-    $(document).on('change', '.cor-input, .carroceria-input, .propulsao, #comb-tipos input, #hib-tipos input', function() {
-      updateAccordionState();
+
+    // Update when filters change (no longer auto-closing accordions)
+    $(document).on('change input', '.form-check-input, .form-select, input[type=text], input[type=number], textarea', function() {
+      if (accordionTimer) clearTimeout(accordionTimer);
+      accordionTimer = setTimeout(function() {
+        updateAccordionState();
+      }, ACCORDION_DEBOUNCE_MS);
+    });
+
+    // Initialize cambio and blindagem checkboxes from URL and wire changes to update search params
+    function initializeCambioCheckboxes() {
+      const url = new URL(window.location.href);
+      const cambioParam = url.searchParams.get('cambio') || '';
+      const values = cambioParam ? cambioParam.split(',').map(v => v.trim()) : [];
+      $('#cambio .form-check-input').each(function() {
+        const val = $(this).attr('data-val');
+        const isChecked = values.includes(val);
+        $(this).prop('checked', isChecked);
+      });
+    }
+    initializeCambioCheckboxes();
+
+    let cambioTimer = null;
+    const CAMBIO_DEBOUNCE_MS = 600;
+    $('#cambio .form-check-input').on('change', function() {
+      if (cambioTimer) clearTimeout(cambioTimer);
+      cambioTimer = setTimeout(function() {
+        const vals = [];
+        $('#cambio .form-check-input:checked').each(function() {
+          vals.push($(this).attr('data-val'));
+        });
+        const url = new URL(window.location.href);
+        url.searchParams.delete('page');
+        if (vals.length === 0) {
+          url.searchParams.delete('cambio');
+        } else if (vals.length === 1) {
+          url.searchParams.set('cambio', vals[0]);
+        } else {
+          url.searchParams.set('cambio', vals.join(','));
+        }
+        queueOrNavigate(url);
+      }, CAMBIO_DEBOUNCE_MS);
+    });
+
+    function initializeBlindagemCheckboxes() {
+      const url = new URL(window.location.href);
+      const bliParam = url.searchParams.get('blindagem') || '';
+      const values = bliParam ? bliParam.split(',').map(v => v.trim()) : [];
+      $('#blindagem .form-check-input').each(function() {
+        const val = $(this).attr('data-val');
+        const isChecked = values.includes(val);
+        $(this).prop('checked', isChecked);
+      });
+    }
+    initializeBlindagemCheckboxes();
+
+    let blindagemTimer = null;
+    const BLINDAGEM_DEBOUNCE_MS = 600;
+    $('#blindagem .form-check-input').on('change', function() {
+      if (blindagemTimer) clearTimeout(blindagemTimer);
+      blindagemTimer = setTimeout(function() {
+        const vals = [];
+        $('#blindagem .form-check-input:checked').each(function() {
+          vals.push($(this).attr('data-val'));
+        });
+        const url = new URL(window.location.href);
+        url.searchParams.delete('page');
+        if (vals.length === 0) {
+          url.searchParams.delete('blindagem');
+        } else if (vals.length === 1) {
+          url.searchParams.set('blindagem', vals[0]);
+        } else {
+          url.searchParams.set('blindagem', vals.join(','));
+        }
+        queueOrNavigate(url);
+      }, BLINDAGEM_DEBOUNCE_MS);
+    });
+
+    // helpers for numeric sanitization and BRL formatting
+    const toNum = (s) => {
+      if (!s) return '';
+      const cleaned = String(s).replace(/\D/g, '');
+      return cleaned === '' ? '' : cleaned;
+    };
+
+    const formatBRL = (s) => {
+      if (!s) return '';
+      const digits = String(s).replace(/\D/g, '');
+      if (digits === '') return '';
+      return 'R$ ' + digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    };
+
+    // format kilometers like "1.234 km"
+    const formatKM = (s) => {
+      if (!s) return '';
+      const digits = String(s).replace(/\D/g, '');
+      if (digits === '') return '';
+      return digits.replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' km';
+    };
+
+    // Initialize price/km/ano inputs from URL (format price as BRL)
+    function initializeRangeInputs() {
+      const url = new URL(window.location.href);
+      const pmin = url.searchParams.get('preco_min');
+      const pmax = url.searchParams.get('preco_max');
+      const kmin = url.searchParams.get('km_min');
+      const kmax = url.searchParams.get('km_max');
+      const amin = url.searchParams.get('ano_min');
+      const amax = url.searchParams.get('ano_max');
+
+      if (pmin) $('#preco-min').val(formatBRL(pmin));
+      else $('#preco-min').val('');
+      // preço máximo: show when provided in URL, otherwise start empty
+      if (pmax) $('#preco-max').val(formatBRL(pmax));
+      else $('#preco-max').val('');
+
+      if (kmin) $('#km-min').val(formatKM(kmin));
+      else $('#km-min').val('');
+      if (kmax) $('#km-max').val(formatKM(kmax));
+      else $('#km-max').val('');
+      if (amin) $('#ano-min').val(amin);
+      else $('#ano-min').val('');
+      if (amax) $('#ano-max').val(amax);
+      else $('#ano-max').val('');
+    }
+    initializeRangeInputs();
+
+    // Build a full URL from the current state of all filter inputs in the DOM.
+    window.buildFilterUrlFromDom = function() {
+      try {
+        const url = new URL(window.location.href);
+        // Remove page
+        url.searchParams.delete('page');
+
+        // marca / modelo / versao
+        const marcaVal = $('#marca-select').val();
+        const modeloVal = $('#modelo-select').val();
+        const versaoVal = $('#versao-select').val();
+        if (marcaVal) url.searchParams.set('marca', marcaVal);
+        else {
+          url.searchParams.delete('marca');
+          url.searchParams.delete('modelo');
+          url.searchParams.delete('versao');
+        }
+        if (modeloVal) url.searchParams.set('modelo', modeloVal);
+        else {
+          url.searchParams.delete('modelo');
+          url.searchParams.delete('versao');
+        }
+        if (versaoVal) url.searchParams.set('versao', versaoVal);
+        else url.searchParams.delete('versao');
+
+        // condicao
+        const conds = [];
+        $('.condicao-input:checked').each(function() {
+          conds.push($(this).attr('data-val'));
+        });
+        if (conds.length === 0) url.searchParams.delete('codicao');
+        else url.searchParams.set('codicao', conds.join(','));
+
+        // localizacao (use vars if present)
+        if (typeof localizacaoEstado !== 'undefined' && localizacaoEstado) url.searchParams.set('estado_local', localizacaoEstado);
+        else url.searchParams.delete('estado_local');
+        if (typeof localizacaoCidade !== 'undefined' && localizacaoCidade) url.searchParams.set('cidade', localizacaoCidade);
+        else url.searchParams.delete('cidade');
+
+        // cor
+        const cors = [];
+        $('.cor-input:checked').each(function() {
+          cors.push($(this).attr('data-val'));
+        });
+        if (cors.length === 0) url.searchParams.delete('cor');
+        else url.searchParams.set('cor', cors.join(','));
+
+        // carroceria
+        const carrocerias = [];
+        $('.carroceria-input:checked').each(function() {
+          carrocerias.push($(this).attr('data-val'));
+        });
+        if (carrocerias.length === 0) url.searchParams.delete('carroceria');
+        else url.searchParams.set('carroceria', carrocerias.join(','));
+
+        // propulsao parents and combustivel subtypes
+        const parents = [];
+        $('.propulsao:checked').each(function() {
+          parents.push($(this).attr('id'));
+        });
+        if (parents.length === 0) url.searchParams.delete('propulsao');
+        else url.searchParams.set('propulsao', parents.join(','));
+        const subs = [];
+        $('#comb-tipos input:checked, #hib-tipos input:checked').each(function() {
+          subs.push($(this).attr('id'));
+        });
+        if (subs.length === 0) url.searchParams.delete('combustivel');
+        else url.searchParams.set('combustivel', subs.join(','));
+
+        // cambio
+        const cambios = [];
+        $('#cambio .form-check-input:checked').each(function() {
+          cambios.push($(this).attr('data-val'));
+        });
+        if (cambios.length === 0) url.searchParams.delete('cambio');
+        else url.searchParams.set('cambio', cambios.join(','));
+
+        // blindagem
+        const blis = [];
+        $('#blindagem .form-check-input:checked').each(function() {
+          blis.push($(this).attr('data-val'));
+        });
+        if (blis.length === 0) url.searchParams.delete('blindagem');
+        else url.searchParams.set('blindagem', blis.join(','));
+
+        // preco, km, ano (use helper toNum if present)
+        const pmin = (typeof toNum === 'function') ? toNum($('#preco-min').val()) : ($('#preco-min').val() || '').replace(/\D/g, '');
+        const pmax = (typeof toNum === 'function') ? toNum($('#preco-max').val()) : ($('#preco-max').val() || '').replace(/\D/g, '');
+        if (!pmin && !pmax) {
+          url.searchParams.delete('preco_min');
+          url.searchParams.delete('preco_max');
+        } else {
+          if (pmin) url.searchParams.set('preco_min', pmin);
+          else url.searchParams.delete('preco_min');
+          if (pmax) url.searchParams.set('preco_max', pmax);
+          else url.searchParams.delete('preco_max');
+        }
+
+        const kmin = ($('#km-min').val() || '').replace(/\D/g, '');
+        const kmax = ($('#km-max').val() || '').replace(/\D/g, '');
+        if (!kmin && !kmax) {
+          url.searchParams.delete('km_min');
+          url.searchParams.delete('km_max');
+        } else {
+          if (kmin) url.searchParams.set('km_min', kmin);
+          else url.searchParams.delete('km_min');
+          if (kmax) url.searchParams.set('km_max', kmax);
+          else url.searchParams.delete('km_max');
+        }
+
+        const amin = ($('#ano-min').val() || '').replace(/\D/g, '');
+        const amax = ($('#ano-max').val() || '').replace(/\D/g, '');
+        if (!amin && !amax) {
+          url.searchParams.delete('ano_min');
+          url.searchParams.delete('ano_max');
+        } else {
+          if (amin) url.searchParams.set('ano_min', amin);
+          else url.searchParams.delete('ano_min');
+          if (amax) url.searchParams.set('ano_max', amax);
+          else url.searchParams.delete('ano_max');
+        }
+
+        // search query (global/navbar)
+        const qv = ($('#global-search').val() || $('#navbar-search').val() || (typeof pageSearchQ !== 'undefined' ? pageSearchQ : '')).trim();
+        if (qv) url.searchParams.set('q', qv);
+        else url.searchParams.delete('q');
+
+        return url.toString();
+      } catch (e) {
+        console.error('buildFilterUrlFromDom failed', e);
+        return window.location.href;
+      }
+    };
+
+    // After all initializers, ensure accordions reflect current state
+    updateAccordionState();
+
+    // Handler to update range filters (price, km, ano) with debounce
+    let rangeTimer = null;
+    const RANGE_DEBOUNCE_MS = 700;
+    $(document).on('input change', '#preco-min, #preco-max, #km-min, #km-max, #ano-min, #ano-max', function() {
+      if (rangeTimer) clearTimeout(rangeTimer);
+      rangeTimer = setTimeout(function() {
+        const pmin = toNum($('#preco-min').val());
+        const pmax = toNum($('#preco-max').val());
+        const kmin = toNum($('#km-min').val());
+        const kmax = toNum($('#km-max').val());
+        const amin = toNum($('#ano-min').val());
+        const amax = toNum($('#ano-max').val());
+
+        const url = new URL(window.location.href);
+        url.searchParams.delete('page');
+
+        // price
+        if (!pmin && !pmax) {
+          url.searchParams.delete('preco_min');
+          url.searchParams.delete('preco_max');
+        } else {
+          if (pmin) url.searchParams.set('preco_min', pmin);
+          else url.searchParams.delete('preco_min');
+          if (pmax) url.searchParams.set('preco_max', pmax);
+          else url.searchParams.delete('preco_max');
+        }
+
+        // km
+        if (!kmin && !kmax) {
+          url.searchParams.delete('km_min');
+          url.searchParams.delete('km_max');
+        } else {
+          if (kmin) url.searchParams.set('km_min', kmin);
+          else url.searchParams.delete('km_min');
+          if (kmax) url.searchParams.set('km_max', kmax);
+          else url.searchParams.delete('km_max');
+        }
+
+        // ano
+        if (!amin && !amax) {
+          url.searchParams.delete('ano_min');
+          url.searchParams.delete('ano_max');
+        } else {
+          if (amin) url.searchParams.set('ano_min', amin);
+          else url.searchParams.delete('ano_min');
+          if (amax) url.searchParams.set('ano_max', amax);
+          else url.searchParams.delete('ano_max');
+        }
+
+        queueOrNavigate(url);
+      }, RANGE_DEBOUNCE_MS);
+    });
+
+    // Format price inputs on blur for better UX (show BRL formatting)
+    $(document).on('blur', '#preco-min, #preco-max', function() {
+      const raw = $(this).val();
+      const digits = toNum(raw);
+      $(this).val(digits ? formatBRL(digits) : '');
+    });
+
+    // Un-format price inputs on focus so the user can edit/clear them
+    $(document).on('focus', '#preco-min, #preco-max', function() {
+      const raw = $(this).val();
+      const digits = toNum(raw);
+      // If empty string from toNum, leave field empty (allows clearing)
+      $(this).val(digits === '' ? '' : digits);
+    });
+
+    // Live-format KM inputs as user types (display with thousands and ' km')
+    $(document).on('input', '#km-min, #km-max', function() {
+      const $el = $(this);
+      const digits = toNum($el.val());
+      $el.val(digits ? formatKM(digits) : '');
+    });
+
+    // Ensure year inputs accept only up to 4 digits
+    $(document).on('input', '#ano-min, #ano-max', function() {
+      const $el = $(this);
+      let digits = String($el.val()).replace(/\D/g, '');
+      if (digits.length > 4) digits = digits.slice(0, 4);
+      $el.val(digits);
     });
 
   });
@@ -1590,6 +2651,55 @@ if ($resultado) {
       }, function(resposta) {
         console.log("Resposta do servidor:", resposta);
       }, 'json');
+    });
+  })();
+</script>
+
+<script>
+  (function() {
+    // Move the existing sidebar filters into the offcanvas on small screens
+    const offEl = document.getElementById('offcanvasBottom');
+    const filtrosOver = document.getElementById('filtros-over');
+    const filtrosCol = document.getElementById('filtros-col');
+
+    if (!offEl || !filtrosOver || !filtrosCol) return;
+
+    offEl.addEventListener('show.bs.offcanvas', function() {
+      // Only move on small screens (Bootstrap lg breakpoint = 992px)
+      if (window.innerWidth >= 992) return;
+      // append filtrosOver into offcanvas body (moves node, preserving event handlers)
+      const body = offEl.querySelector('.offcanvas-body');
+      if (body && filtrosOver.parentElement !== body) {
+        body.appendChild(filtrosOver);
+      }
+      // mark open state for navigation queuing
+      window.filterOffcanvasOpen = true;
+    });
+
+    offEl.addEventListener('hidden.bs.offcanvas', function() {
+      // Move back into sidebar column when offcanvas closes
+      if (filtrosCol && filtrosOver.parentElement !== filtrosCol) {
+        filtrosCol.appendChild(filtrosOver);
+      }
+      // offcanvas closed: clear open flag and apply queued navigation if any
+      window.filterOffcanvasOpen = false;
+      if (typeof window.applyPendingFilterNavigation === 'function') {
+        window.applyPendingFilterNavigation();
+      }
+    });
+
+    // If user resizes from large -> small while offcanvas open, ensure it contains the filters
+    window.addEventListener('resize', function() {
+      if (!offEl || !filtrosOver || !filtrosCol) return;
+      if (window.innerWidth < 992) {
+        if (offEl && filtrosOver.parentElement !== offEl.querySelector('.offcanvas-body')) {
+          offEl.querySelector('.offcanvas-body').appendChild(filtrosOver);
+        }
+      } else {
+        if (filtrosCol && filtrosOver.parentElement !== filtrosCol) {
+          filtrosCol.appendChild(filtrosOver);
+        }
+      }
     });
   })();
 </script>

@@ -18,7 +18,7 @@ $page = $_GET['page'] ?? 1;
 
 $id = $_SESSION['id'];
 
-$sql = "SELECT carros.*, marcas.nome as marca_nome FROM anuncios_carros carros INNER JOIN marcas ON carros.marca = marcas.id WHERE carros.id_vendedor = $id";
+ $sql = "SELECT carros.*, marcas.nome as marca_nome FROM anuncios_carros carros INNER JOIN marcas ON carros.marca = marcas.id WHERE carros.id_vendedor = $id AND carros.tipo_vendedor = 0";
 $resultado = mysqli_query($conexao, $sql);
 
 $carros = [];

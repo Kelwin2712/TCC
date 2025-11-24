@@ -12,6 +12,14 @@ header('Content-Type: application/json; charset=utf-8');
 
 $uid = (int) $_SESSION['id'];
 
+// Verify user exists in `usuarios` table. If not, return JSON error instead of letting a DB constraint raise.
+$resU = mysqli_query($conexao, "SELECT id FROM usuarios WHERE id = " . $uid . " LIMIT 1");
+if (!($resU && mysqli_num_rows($resU) > 0)) {
+    echo json_encode(['success' => false, 'message' => 'Usuário inválido ou não encontrado. Por favor, faça login novamente.']);
+    mysqli_close($conexao);
+    exit;
+}
+
 // Gather values from session (these are set in previous steps: infos/condicao/preco etc.)
 $modelo = isset($_SESSION['modelo']) ? mysqli_real_escape_string($conexao, $_SESSION['modelo']) : '';
 $marca = isset($_SESSION['marca']) ? (int) $_SESSION['marca'] : 'NULL';
@@ -62,13 +70,20 @@ if (isset($_SESSION['loja_id']) && (int)$_SESSION['loja_id'] > 0) {
 
 // If seller is a loja, prefer loja's contact info (email_corporativo / whatsapp or telefone_fixo)
 if ($tipo_vendedor === 1 && $loja_id) {
-    $resL = mysqli_query($conexao, "SELECT email_corporativo, whatsapp, telefone_fixo FROM lojas WHERE id = " . $loja_id . " LIMIT 1");
+    $resL = mysqli_query($conexao, "SELECT email_corporativo, whatsapp, telefone_fixo, estado, cidade FROM lojas WHERE id = " . $loja_id . " LIMIT 1");
     if ($resL && mysqli_num_rows($resL) > 0) {
         $rl = mysqli_fetch_assoc($resL);
         if (!empty($rl['email_corporativo'])) $email = mysqli_real_escape_string($conexao, $rl['email_corporativo']);
         // prefer whatsapp, then telefone_fixo
         $tel = !empty($rl['whatsapp']) ? $rl['whatsapp'] : $rl['telefone_fixo'];
         if (!empty($tel)) $telefone = mysqli_real_escape_string($conexao, $tel);
+        // Prefer loja's location over session-provided location when vendedor is loja
+        if (isset($rl['estado'])) {
+            $estado_local = mysqli_real_escape_string($conexao, $rl['estado']);
+        }
+        if (isset($rl['cidade'])) {
+            $cidade = mysqli_real_escape_string($conexao, $rl['cidade']);
+        }
     }
 }
 
@@ -143,7 +158,10 @@ $values[] = (int) $blindagem;
 $values[] = is_numeric($portas_qtd) ? (int) $portas_qtd : 'NULL';
 $values[] = is_numeric($assentos_qtd) ? (int) $assentos_qtd : 'NULL';
 $values[] = "'" . $descricao . "'";
-$values[] = (int) $uid;
+// Set id_vendedor: when anuncio is a Loja (tipo_vendedor === 1) and a loja_id was provided,
+// store the loja id in id_vendedor so pages can resolve loja info without requiring a separate loja_id column.
+// Otherwise store the user's id as before.
+$values[] = (($tipo_vendedor === 1 && $loja_id) ? (int) $loja_id : (int) $uid);
 $values[] = (int) $preco;
 $values[] = "'" . $condicao . "'";
 $values[] = "'" . $quilometragem . "'";
@@ -189,10 +207,16 @@ if ($has_loja) {
 
 $sql = "INSERT INTO anuncios_carros(" . implode(',', $cols) . ") VALUES (" . implode(',', $values) . ")";
 
-if (!mysqli_query($conexao, $sql)) {
-    $err = mysqli_error($conexao);
-    // return informative JSON for debugging
-    echo json_encode(['success' => false, 'message' => 'Erro ao inserir anúncio: ' . $err]);
+try {
+    if (!mysqli_query($conexao, $sql)) {
+        $err = mysqli_error($conexao);
+        echo json_encode(['success' => false, 'message' => 'Erro ao inserir anúncio: ' . $err]);
+        mysqli_close($conexao);
+        exit;
+    }
+} catch (mysqli_sql_exception $e) {
+    // Catch exceptions (if mysqli is configured to throw) and return JSON instead of crashing
+    echo json_encode(['success' => false, 'message' => 'Erro ao inserir anúncio: ' . $e->getMessage()]);
     mysqli_close($conexao);
     exit;
 }

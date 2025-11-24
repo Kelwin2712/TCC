@@ -33,7 +33,6 @@ if (mysqli_num_rows($resultado) > 0) {
         $combustivel = $linha['combustivel'];
         $blindagem = $linha['blindagem'];
         $id_vendedor = $linha['id_vendedor'];
-        $leilao = $linha['leilao'];
         $portas_qtd = $linha['portas_qtd'];
         $assentos_qtd = $linha['assentos_qtd'];
         $placa = $linha['placa'];
