@@ -335,10 +335,11 @@ mysqli_close($conexao);
           </div>
       </div>
     </div>
-    <div class="container py-4">
-      <div class="row mb-4 align-items-center">
-        <h4 class="col-8 fw-semibold">Carros mais procurados</h4>
-        <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 small link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php"">
+    <?php if (!empty($carros_populares)): ?>
+      <div class="container py-4">
+        <div class="row mb-4 align-items-center">
+          <h4 class="col-8 fw-semibold">Carros mais procurados</h4>
+          <a class="col-4 link-secondary text-end link-underline link-underline-opacity-0 link-opacity-75 small link-underline-opacity-100-hover link-opacity-100-hover" href="compras.php"">
           (Ver todos os carros)
         </a>
       </div>
