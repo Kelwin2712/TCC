@@ -7,9 +7,21 @@ $id = $_SESSION['id'] ?? null;
 $tipo = $_GET['tipo'] ?? 'carro';
 $codicao = $_GET['codicao'] ?? 'usado';
 $categoria = $_GET['categoria'] ?? null;
-$vendedor = $_GET['vendedor'] ?? null;
-$vendedor_img = $_GET['vendedor_img'] ?? null;
-$vendedor_seg = $_GET['vendedor_seg'] ?? null;
+$vendedor_id = isset($_GET['vendedor_id']) ? (int)$_GET['vendedor_id'] : null;
+
+// If vendedor_id is present, fetch vendedor info from database
+$vendedor = null;
+$vendedor_img = null;
+$vendedor_seg = 0;
+if ($vendedor_id) {
+    $q_vend = mysqli_query($conexao, "SELECT usuarios.nome, usuarios.sobrenome, usuarios.avatar, COALESCE(usuarios.seguidores, 0) AS seguidores FROM usuarios WHERE id = $vendedor_id");
+    if ($q_vend && mysqli_num_rows($q_vend) > 0) {
+        $vend_row = mysqli_fetch_assoc($q_vend);
+        $vendedor = trim($vend_row['nome'] . ' ' . $vend_row['sobrenome']);
+        $vendedor_img = $vend_row['avatar'] ?: 'img/usuarios/avatares/user.png';
+        $vendedor_seg = (int)$vend_row['seguidores'];
+    }
+}
 
 // Get URL params for lateral filters (marca, modelo, versao)
 $url_marca = $_GET['marca'] ?? '';
@@ -39,6 +51,11 @@ if ($sort === 'preco') {
 
 $whereParts = [];
 $whereParts[] = "ativo = 'A'";
+
+// If vendedor_id is set, filter by this vendor
+if ($vendedor_id) {
+    $whereParts[] = "carros.id_vendedor = $vendedor_id";
+}
 
 // optional codicao filter (accept single or comma-separated values: novo,seminovo,usado)
 if (isset($_GET['codicao']) && trim($_GET['codicao']) !== '') {
@@ -2262,6 +2279,22 @@ if ($resultado) {
     // Initialize accordion state from URL on page load
     const initialAccordionState = getAccordionStateFromURL();
     applyAccordionState(initialAccordionState);
+
+    // If vendedor_id is present, force the vendedor accordion to stay open
+    <?php if ($vendedor_id): ?>
+      const vendedorAccordion = $('#vendedor');
+      if (vendedorAccordion.length) {
+        vendedorAccordion.addClass('show');
+        vendedorAccordion.prev().find('button').removeClass('collapsed').attr('aria-expanded', 'true');
+        // Update state in URL to reflect vendedor accordion open
+        setTimeout(function() {
+          const newState = getCurrentAccordionState();
+          const url = new URL(window.location.href);
+          url.searchParams.set('acc', newState);
+          window.history.replaceState({}, '', url.toString());
+        }, 50);
+      }
+    <?php endif; ?>
 
     // Listen to accordion button clicks to update URL
     $('#filtros-over .accordion-button').on('click', function(e) {

@@ -94,6 +94,9 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
   .recomendacao-link:hover .recomendacao-text {
     text-decoration: underline;
   }
+  /* Select sizing: let Bootstrap manage widths to preserve original appearance.
+     If needed, we will implement a JS fallback that preserves computed width
+     while options are populated. */
 </style>
 
 <body>
@@ -141,7 +144,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
           <div class="row position-relative">
             <input id="global-search" type="text" class="form-control border-0 my-3" placeholder="Encontre o modelo que você procura...">
             <button class="btn d-lg-none me-3 w-auto p-0 border-0 position-absolute translate-middle-y top-50 end-0"><i class="bi bi-search"></i></button>
-            <div class="search-suggestions dropdown-menu p-2" style="width:100%; max-height:300px; overflow:auto; display:none;"></div>
+            <div class="search-suggestions dropdown-menu p-2 mt-5" style="width:100%; max-height:300px; overflow:auto; display:none; position:absolute; top:100%;"></div>
           </div>
           <div class="d-lg-none d-flex">
             <button type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBottom" aria-controls="offcanvasBottom" class="btn btn-sm border rounded-pill px-3"><i class="bi bi-funnel me-2"></i></i>Filtros</button>
@@ -202,14 +205,14 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                 </div>
                 <div class="d-flex mt-auto flex-column gap-2">
                   <button type="button" class="btn border rounded-pill px-4 me-3 w-100" data-bs-dismiss="offcanvas">Cancelar</button>
-                  <button type="button" data-bs-dismiss="offcanvas" aria-label="Close" class="btn btn-dark rounded-pill px-4 w-100">Aplicar</button>
+                  <button id="btn-aplicar-filtros" type="button" data-bs-dismiss="offcanvas" aria-label="Close" class="btn btn-dark rounded-pill px-4 w-100">Aplicar</button>
                 </div>
               </div>
             </div>
           </div>
           <div class="d-lg-flex flex-wrap gap-3 gap-xl-4 align-items-center d-none">
             <div class="d-flex gap-1 gap-xl-2">
-              <div class="col col-xl-auto">
+              <div class="col">
                 <div class="d-flex align-items-center position-relative">
                   <label for="marca-select" class="d-flex align-items-center"><i class="bi bi-buildings position-absolute px-3"></i></label>
                   <select id="marca-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
@@ -220,7 +223,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                   </select>
                 </div>
               </div>
-              <div class="col col-xl-auto">
+              <div class="col">
                 <div class="d-flex align-items-center position-relative">
                   <label for="modelo-select" class="d-flex align-items-center"><i class="bi bi-car-front position-absolute px-3"></i></label>
                   <select id="modelo-select" class="form-select rounded-pill shadow-sm bg-transparent" disabled style="padding-left: 3rem;">
@@ -234,7 +237,7 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                   </select>
                 </div>
               </div>
-              <div class="col col-xl-auto">
+              <div class="col">
                 <div class="d-flex align-items-center position-relative">
                   <label for="estado-select" class="d-flex align-items-center"><i class="bi bi-pin-map position-absolute px-3"></i></label>
                   <select id="estado-select" class="form-select rounded-pill shadow-sm bg-transparent" style="padding-left: 3rem;">
@@ -258,8 +261,8 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
                 </div>
               </div>
             </div>
-            <div class="col ms-auto">
-              <a href="compras.php" class="btn text-white rounded-pill btn-dark shadow-sm px-3 w-100"><i class="bi bi-search me-2"></i>Pesquisar</a>
+            <div class="w-100 mt-3">
+              <a id="btn-pesquisar-index" href="compras.php" class="btn text-white rounded-pill btn-dark shadow-sm px-3 w-100"><i class="bi bi-search me-2"></i>Pesquisar</a>
             </div>
           </div>
         </div>
@@ -506,15 +509,114 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
       }, 'json');
     });
 
-    $("#marca-select").change(function() {
-      var selectedMarca = $(this).val();
-      if (selectedMarca) {
-        $("#modelo-select").prop("disabled", false);
-      } else {
-        $("#modelo-select").prop("disabled", true);
-        $("#modelo-select").val("");
-      }
+    // Enhanced marca/modelo interaction: populate modelos only when marca selected
+    function populateModelsOnIndex(marcaVal, preselectModelo) {
+      if (!marcaVal) return;
+      // enable all modelo selects (mobile + desktop)
+      $('select#modelo-select').prop('disabled', false);
+      // Capture computed width for each select and set it inline to avoid
+      // browser reflow/shrink when options are replaced. We'll keep the
+      // inline width until the user resizes the window (then we clear it).
+      $('select#modelo-select').each(function() {
+        const $this = $(this);
+        const currentWidth = $this.outerWidth();
+        if (currentWidth) {
+          $this.css({ width: currentWidth + 'px', 'box-sizing': 'border-box' });
+          $this.data('fixedWidth', true);
+        }
+        $this.empty();
+        $this.append($('<option>', { value: '', text: 'Carregando modelos...', selected: true, hidden: true }));
+      });
+
+      $.getJSON('controladores/filters/get_models.php', { marca: marcaVal })
+        .done(function(data) {
+          $('select#modelo-select').each(function() {
+            const $sel = $(this);
+            // keep inline width (if set) to avoid visible jump; replace options
+            $sel.empty();
+            $sel.append($('<option>', { value: '', text: 'Modelo', selected: true }));
+            if (Array.isArray(data) && data.length) {
+              data.forEach(function(m) {
+                $sel.append($('<option>', { value: m, text: m }));
+              });
+              // if a preselect value provided, try to set it
+              if (preselectModelo) {
+                $sel.val(preselectModelo);
+              }
+            } else {
+              $sel.append($('<option>', { value: '', text: 'Nenhum modelo', disabled: true }));
+            }
+            // leave the inline width in place; it will be cleared on window resize
+          });
+        })
+        .fail(function() {
+          // on failure, restore selects to default state
+          $('select#modelo-select').each(function() {
+            const $sel = $(this);
+            $sel.empty();
+            $sel.append($('<option>', { value: '', text: 'Modelo', selected: true }));
+            // clear inline width if we set one
+            if ($sel.data('fixedWidth')) {
+              $sel.css('width', '');
+              $sel.data('fixedWidth', false);
+            }
+          });
+        });
+    }
+
+    // Clear fixed inline width on window resize so selects can adapt responsively
+    $(window).on('resize', function() {
+      $('select#modelo-select').each(function() {
+        const $sel = $(this);
+        if ($sel.data('fixedWidth')) {
+          $sel.css('width', '');
+          $sel.data('fixedWidth', false);
+        }
+      });
     });
+
+    // Bind change using delegated event so both mobile/desktop selects trigger
+    $(document).on('change', '#marca-select', function(e) {
+      const isUser = !!(e && e.originalEvent);
+      const marcaVal = $(this).val();
+      if (!marcaVal) {
+        // clear and disable all modelo selects
+        $('select#modelo-select').each(function() {
+          $(this).val('');
+          $(this).prop('disabled', true);
+          // reset options to default
+          $(this).empty().append($('<option>', { value: '', text: 'Modelo', selected: true }));
+        });
+        return;
+      }
+
+      // If user selected the brand, navigate to compras with marca (preserve UX)
+      if (isUser) {
+        // For index page we prefer to let the user click 'Pesquisar' to navigate,
+        // but still populate models immediately for selection
+        populateModelsOnIndex(marcaVal, null);
+        return;
+      }
+
+      // programmatic change (if any) should populate models as well
+      populateModelsOnIndex(marcaVal, null);
+    });
+
+    // On page load: if URL contains marca (e.g., user arrived via link), prepopulate models
+    (function initializeIndexFromUrl() {
+      try {
+        const url = new URL(window.location.href);
+        const marcaParam = url.searchParams.get('marca');
+        const modeloParam = url.searchParams.get('modelo');
+        if (marcaParam) {
+          // set marca selects and populate models
+          $('select#marca-select').val(marcaParam);
+          populateModelsOnIndex(marcaParam, modeloParam);
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
 
     $("#recomendacao .btn-close").click(function() {
       $("#recomendacao").remove();
@@ -548,6 +650,171 @@ if ($resultado && mysqli_num_rows($resultado) > 0) {
       // use full navigation to ensure filters are applied
       window.location.href = href;
     });
+
+    // Build compras.php URL from index filters (marca, modelo, estado)
+    function buildIndexFilterUrl() {
+      // Prefer visible inputs (desktop vs mobile). If none visible, fallback to any.
+      const firstNonEmpty = function(selector) {
+        let v = '';
+        // try visible first
+        const vis = $(selector).filter(':visible');
+        if (vis.length) {
+          vis.each(function() {
+            const val = $(this).val();
+            if (val && String(val).trim() !== '') {
+              v = val;
+              return false; // break
+            }
+          });
+          if (v) return v;
+        }
+        // fallback to any matching element in DOM order
+        $(selector).each(function() {
+          const val = $(this).val();
+          if (val && String(val).trim() !== '') {
+            v = val;
+            return false; // break
+          }
+        });
+        return v;
+      };
+
+      const marca = firstNonEmpty('select#marca-select');
+      const modelo = firstNonEmpty('select#modelo-select');
+      const estado = firstNonEmpty('select#estado-select');
+      
+      // Simple approach: collect all #preco-de and #preco-ate, skip any that are "R$ 0"
+      const precoDeEls = Array.from(document.querySelectorAll('#preco-de'));
+      const precoAteEls = Array.from(document.querySelectorAll('#preco-ate'));
+      
+      let precoDeRaw = '';
+      let precoAteRaw = '';
+      
+      // For preco-de: find first non-zero value, else take first
+      for (const el of precoDeEls) {
+        if (el.value && el.value.trim() && el.value !== 'R$ 0') {
+          precoDeRaw = el.value;
+          break;
+        }
+      }
+      if (!precoDeRaw && precoDeEls.length > 0) {
+        precoDeRaw = precoDeEls[0].value || '';
+      }
+      
+      // For preco-ate: find first non-zero value, else take first
+      for (const el of precoAteEls) {
+        if (el.value && el.value.trim() && el.value !== 'R$ 0') {
+          precoAteRaw = el.value;
+          break;
+        }
+      }
+      if (!precoAteRaw && precoAteEls.length > 0) {
+        precoAteRaw = precoAteEls[0].value || '';
+      }
+
+      const parsePrice = function(v) {
+        if (!v) return null;
+        const s = String(v).trim();
+        if (s === '') return null;
+        let cleaned = s.replace(/[^0-9.,]/g, '');
+        if (cleaned === '') return null;
+        cleaned = cleaned.replace(/[\.]/g, '');
+        cleaned = cleaned.replace(/,/g, '');
+        const digits = cleaned.replace(/[^0-9]/g, '');
+        if (!digits) return null;
+        const n = parseInt(digits, 10);
+        return Number.isNaN(n) ? null : n;
+      };
+
+      const precoMin = parsePrice(precoDeRaw);
+      const precoMax = parsePrice(precoAteRaw);
+
+      // Determinar accordions que devem ficar abertos
+      // No compras.php, quando não há vendedor_id, a ordem é:
+      // 0: modelo (contém localização, marca, modelo)
+      // 1: preco
+      // 2: ano
+      // 3: km
+      // 4: cor
+      // 5: carroceria
+      // 6: propulsao
+      // 7: cambio
+      // 8: blindagem
+      
+      const hasLocation = estado !== '';
+      const hasMarcaModelo = marca !== '' || modelo !== '';
+      const hasPrice = precoMin !== null || precoMax !== null;
+      
+      // Criar string com 9 F's
+      let accState = 'FFFFFFFFF';
+      if (hasLocation || hasMarcaModelo || hasPrice) {
+        const acc = Array(9).fill('F');
+        // accordion 0 (modelo): abre sempre que há filtro (seja localização, marca/modelo ou preço)
+        if (hasLocation || hasMarcaModelo || hasPrice) acc[0] = 'A';
+        // accordion 1 (preco): abre se houver preço
+        if (hasPrice) acc[1] = 'A';
+        accState = acc.join('');
+      }
+
+      const params = new URLSearchParams();
+      if (marca) params.set('marca', marca);
+      if (modelo) params.set('modelo', modelo);
+      // compras.php expects estado_local as the parameter name
+      if (estado) params.set('estado_local', estado);
+      if (precoMin !== null) params.set('preco_min', precoMin);
+      if (precoMax !== null) params.set('preco_max', precoMax);
+      // Adicionar estado dos accordions
+      if (accState !== 'FFFFFFFFF') params.set('acc', accState);
+
+      let url = 'compras.php';
+      const qs = params.toString();
+      if (qs) url += '?' + qs;
+      return url;
+    }
+
+    // Desktop: intercept pesquisar click and navigate with built URL
+    $(document).on('click', '#btn-pesquisar-index', function(e) {
+      e.preventDefault();
+      try {
+        const url = buildIndexFilterUrl();
+        window.location.href = url;
+      } catch (err) {
+        console.error('Failed to build index URL, falling back to default link', err);
+        const href = $(this).attr('href') || 'compras.php';
+        window.location.href = href;
+      }
+    });
+
+    // Mobile/offcanvas: queue navigation until offcanvas is hidden
+    let _pendingIndexNav = null;
+    $(document).on('click', '#btn-aplicar-filtros', function() {
+      try {
+        _pendingIndexNav = buildIndexFilterUrl();
+      } catch (err) {
+        console.error('Failed to build index URL for offcanvas apply, clearing pending nav', err);
+        _pendingIndexNav = null;
+      }
+      // offcanvas will be dismissed automatically due to data-bs-dismiss; wait for hidden event
+    });
+
+    $('#offcanvasBottom').on('hidden.bs.offcanvas', function() {
+      if (_pendingIndexNav) {
+        window.location.href = _pendingIndexNav;
+        _pendingIndexNav = null;
+      }
+    });
+
+    // Preview URL and live console logs while user edits filters (so console doesn't clear on navigation)
+    function updateIndexPreview() {
+      // Placeholder: removed debug preview
+    }
+
+    // Update preview on input/change of price fields and selects
+    $(document).on('input change', '#preco-de, #preco-ate, #preco-min, #preco-max, select#marca-select, select#modelo-select, select#estado-select', function() {
+      updateIndexPreview();
+    });
+
+
   });
 </script>
 

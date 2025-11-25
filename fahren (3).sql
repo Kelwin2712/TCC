@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 24/11/2025 às 01:14
+-- Tempo de geração: 25/11/2025 às 02:21
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -75,25 +75,30 @@ CREATE TABLE `anuncios_carros` (
 --
 
 INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`, `marca`, `versao`, `carroceria`, `preco`, `condicao`, `quilometragem`, `ano_fabricacao`, `ano_modelo`, `propulsao`, `combustivel`, `cambio`, `blindagem`, `id_vendedor`, `tipo_vendedor`, `portas_qtd`, `assentos_qtd`, `placa`, `data_criacao`, `cor`, `quant_proprietario`, `revisao`, `vistoria`, `sinistro`, `ipva`, `licenciamento`, `estado_conservacao`, `uso_anterior`, `aceita_troca`, `email`, `telefone`, `garantia`, `descricao`, `clicks`) VALUES
-(43, 'A', 'amg gt', 'DF', 'Brasília', 40, '4.0 V8 TURBO GASOLINA R 7G-DCT', 3, 1600000, 'S', 15000, 2017, 2018, 'abarth', 'abarth', 'M', '0', 6, '0', 4, 5, 'AAA1111', '2025-10-28 19:29:33', 5, '1', '2', 'F', '0', 'D', 'D', '4', 'O', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 0),
-(45, 'A', 'mustang', 'MS', 'Bela Vista', 18, '4.0 COUPÉ V6 12V GASOLINA 2P AUTOMÁTICO', 3, 249900, 'U', 113000, 2009, 2010, 'abarth', 'abarth', 'M', '0', 6, '0', 4, 5, 'FGR8A41', '2025-10-29 20:11:49', 2, '3', '1', 'F', 'L', 'D', 'D', '3', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 2),
-(46, 'A', '911', 'MS', 'Anaurilândia', 47, '3.0 24V H6 GASOLINA CARRERA S PDK', 8, 970000, 'S', 4000, 2022, 2023, 'combustao', 'Gasolina', 'A', '0', 7, '0', 2, 2, 'FQA9Q76', '2025-10-29 20:41:35', 10, '1', '2', 'F', '0', 'D', 'D', '4', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
-(47, 'A', 'rs5', 'PE', 'Água Preta', 4, '2.9 V6 TFSI GASOLINA SPORTBACK COMPETITION PLUS QUATTRO TIPTRONIC', 1, 620000, 'N', 0, 2023, 2024, 'combustao', 'Gasolina', 'A', '0', 7, '0', 4, 5, 'QTT1F11', '2025-10-30 21:16:39', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 0),
-(48, 'A', 'camry', 'MA', 'Açailândia', 56, '2.5 VVT-IE HYBRID XLE eCVT', 1, 259900, 'U', 108000, 2022, 2023, 'combustao', 'Flex', 'A', '0', 7, '0', 4, 5, 'FAF9A96', '2025-10-30 21:24:24', 2, '2', '2', 'F', 'L', 'D', 'D', '3', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 2),
-(49, 'A', 'c 63 amg', 'TO', 'Palmas', 40, '2.0 TURBO PHEV S E PERFORMANCE F1 EDITION 4MATIC+ SPEEDSHIFT\n', 3, 869000, 'N', 0, 2023, 2024, 'abarth', 'abarth', 'M', '0', 6, '0', 4, 5, 'HWS9G83', '2025-11-11 14:43:56', 1, '1', '2', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, 'Outros Opcionais: Comando de áudio no volante, Controle de estabilidade, Direção Elétrica, Distribuição eletrônica de frenagem, Kit Multimídia, Pára-choques na cor do veículo.', 0),
-(50, 'A', '320i', 'PB', 'João Pessoa', 6, '2.0 16V TURBO FLEX SPORT GP AUTOMÁTICO', NULL, 215900, 'S', 65000, 2021, 2022, NULL, NULL, 'M', '0', 6, '0', 4, 5, 'HIU7S68', '2025-11-11 16:27:21', 1, '2', '1', 'F', '0', 'D', 'D', '3', 'P', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, 'Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste', 1),
+(43, 'A', 'amg gt', 'DF', 'Brasília', 40, '4.0 V8 TURBO GASOLINA R 7G-DCT', 3, 1600000, 'S', 15000, 2017, 2018, 'combustao', 'Gasolina', 'M', '0', 6, '0', 4, 5, 'AAA1111', '2025-10-28 19:29:33', 5, '1', '2', 'F', '0', 'D', 'D', '4', 'O', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
+(45, 'A', 'mustang', 'MS', 'Bela Vista', 18, '4.0 COUPÉ V6 12V GASOLINA 2P AUTOMÁTICO', 8, 249900, 'U', 113000, 2009, 2010, 'combustao', 'Gasolina', 'M', '0', 6, '0', 4, 5, 'FGR8A41', '2025-10-29 20:11:49', 2, '3', '1', 'F', 'L', 'D', 'D', '3', 'A', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 4),
+(46, 'A', '911', 'MS', 'Anaurilândia', 47, '3.0 24V H6 GASOLINA CARRERA S PDK', 8, 970000, 'S', 4000, 2022, 2023, 'combustao', 'Gasolina', 'A', '0', 7, '0', 2, 2, 'FQA9Q76', '2025-10-29 20:41:35', 10, '1', '2', 'F', '0', 'D', 'D', '4', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 3, '', 2),
+(47, 'A', 'rs5', 'PE', 'Água Preta', 4, '2.9 V6 TFSI GASOLINA SPORTBACK COMPETITION PLUS QUATTRO TIPTRONIC', 1, 620000, 'N', 0, 2023, 2024, 'combustao', 'Gasolina', 'A', '0', 7, '0', 4, 5, 'QTT1F11', '2025-10-30 21:16:39', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
+(48, 'A', 'camry', 'MA', 'Açailândia', 56, '2.5 VVT-IE HYBRID XLE eCVT', 1, 259900, 'U', 108000, 2022, 2023, 'combustao', 'Flex', 'A', '0', 7, '0', 4, 5, 'FAF9A96', '2025-10-30 21:24:24', 2, '2', '2', 'F', 'L', 'D', 'D', '3', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 3),
+(49, 'A', 'c 63 amg', 'TO', 'Palmas', 40, '2.0 TURBO PHEV S E PERFORMANCE F1 EDITION 4MATIC+ SPEEDSHIFT\n', 3, 869000, 'N', 0, 2023, 2024, 'abarth', 'abarth', 'M', '0', 6, '0', 4, 5, 'HWS9G83', '2025-11-11 14:43:56', 1, '1', '2', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 0),
+(50, 'A', '320i', 'PB', 'João Pessoa', 6, '2.0 16V TURBO FLEX SPORT GP AUTOMÁTICO', 1, 215900, 'S', 65000, 2021, 2022, 'combustao', 'Flex', 'A', '0', 6, '0', 4, 5, 'HIU7S68', '2025-11-11 16:27:21', 1, '2', '1', 'F', '0', 'D', 'D', '3', 'P', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 1),
 (56, 'A', 'm5', 'GO', 'Abadia de Goiás', 6, '4.4 V8 TWINPOWER GASOLINA COMPETITION M XDRIVE STEPTRONIC', 3, 700000, 'N', 0, 2021, 2022, 'abarth', 'abarth', 'M', '0', 6, '1', 4, 5, 'GHA0G75', '2025-11-11 19:58:03', 2, '2', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 1),
-(57, 'A', '911', 'MG', 'Belo Horizonte', 47, '3.0 24V H6 GASOLINA CARRERA 4 GTS CABRIOLET PDK', NULL, 1160000, 'N', 0, 2024, 2024, NULL, NULL, 'M', '0', 6, '0', 4, 5, 'UYD9F88', '2025-11-12 20:43:47', 1, '1', '4', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
+(57, 'A', '911', 'MG', 'Belo Horizonte', 47, '3.0 24V H6 GASOLINA CARRERA 4 GTS CABRIOLET PDK', 10, 1160000, 'N', 0, 2024, 2025, 'combustao', 'Gasolina', 'M', '0', 6, '0', 4, 5, 'UYD9F88', '2025-11-12 20:43:47', 1, '1', '4', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
 (58, 'A', 'v60', 'CE', 'Aiuaba', 58, '2.0 T5 GASOLINA MOMENTUM GEARTRONIC', 5, 149890, 'U', 82000, 2019, 2020, 'combustao', 'Diesel', 'A', '0', 7, '0', 4, 5, 'FAF8A76', '2025-11-16 22:56:25', 5, '2', '1', 'F', '0', 'D', 'D', '4', 'P', '1', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 1),
-(59, 'A', 'rs e-tron gt', 'ES', 'Águia Branca', 4, 'ELÉTRICO QUATTRO', 1, 484900, 'N', 0, 2021, 2022, 'eletrico', 'Elétrico', 'A', '0', 7, '0', 4, 5, 'UBW7G12', '2025-11-16 23:09:59', 6, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 0),
+(59, 'A', 'rs e-tron gt', 'ES', 'Águia Branca', 4, 'ELÉTRICO QUATTRO', 1, 484900, 'N', 0, 2021, 2022, 'eletrico', 'Elétrico', 'A', '0', 7, '0', 4, 5, 'UBW7G12', '2025-11-16 23:09:59', 6, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 1),
 (60, 'A', 'q5', 'BA', 'Abaré', 4, '2.0 55 TFSIE PHEV PERFORMANCE BLACK QUATTRO S TRONIC', 2, 299900, 'S', 30000, 2023, 2024, 'hibrido', 'HEV', 'A', '0', 7, '0', 4, 5, 'RUU9R90', '2025-11-16 23:20:27', 5, '1', '1', 'F', '0', 'D', 'D', '4', 'P', '1', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 0),
 (61, 'A', 'cayenne', 'GO', 'Goiânia', 47, '3.0 V6 E-HYBRID AWD TIPTRONIC S', 2, 759900, 'N', 0, 2022, 2023, 'hibrido', 'HEV', 'A', '1', 7, '0', 4, 5, 'GYG9A99', '2025-11-17 19:55:18', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 0),
-(63, 'A', 'pulse', 'SC', 'Agronômica', 1, '1.3 TURBO 270 FLEX ABARTH AT6', 2, 134900, 'N', 0, 2024, 2025, 'combustao', 'Álcool', 'A', '0', 6, '0', 4, 5, 'FAF6A69', '2025-11-20 20:25:50', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
-(64, 'A', 'giulietta', 'SP', 'Caçapava', 2, '1.3 SPIDER GASOLINA 2P MANUAL', 10, 680000, 'U', 248567, 1968, 1968, 'combustao', 'Gasolina', 'M', '0', 6, '0', 2, 2, 'FYI7F09', '2025-11-20 20:41:44', 1, '5', '5', 'F', 'L', 'I', 'D', '3', 'P', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 2),
+(63, 'A', 'pulse', 'SC', 'Agronômica', 1, '1.3 TURBO 270 FLEX ABARTH AT6', 2, 134900, 'N', 0, 2024, 2025, 'combustao', 'Flex', 'A', '0', 6, '0', 4, 5, 'FAF6A69', '2025-11-20 20:25:50', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 1, '', 1),
+(64, 'A', 'giulietta', 'SP', 'Caçapava', 2, '1.3 SPIDER GASOLINA 2P MANUAL', 10, 680000, 'U', 248567, 1968, 1969, 'combustao', 'Gasolina', 'M', '0', 6, '0', 2, 2, 'FYI7F09', '2025-11-20 20:41:44', 1, '5', '5', 'F', 'L', 'I', 'D', '3', 'P', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 2),
 (65, 'A', 'vanquish', 'PA', 'Maracanã', 3, '5.2 V12 TURBO GASOLINA COUPÉ AUTOMÁTICO', 8, 5850000, 'N', 0, 2024, 2025, 'combustao', 'Álcool', 'A', '0', 6, '0', 2, 2, 'FIA9U97', '2025-11-20 20:45:50', 3, '1', '2', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
-(66, 'A', 'passat', 'RJ', 'Belford Roxo', 57, '2.0 16V TSI BLUEMOTION GASOLINA HIGHLINE 4P DSG', 1, 179900, 'U', 123264, 2018, 2019, 'combustao', 'Gasolina', 'A', '0', 6, '0', 4, 5, 'OIG6G78', '2025-11-20 20:49:58', 4, '2', '2', 'F', '0', 'D', 'D', '3', 'P', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
-(67, 'A', 'flying spur', 'PI', 'Caxingó', 5, '2.9 V6 HYBRID AUTOMÁTICO', 1, 2299000, 'N', 0, 2022, 2022, 'hibrido', 'HEV', 'A', '0', 6, '0', 4, 5, 'QRQ7Y80', '2025-11-21 11:35:47', 2, '1', '0', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
-(71, 'A', 'shark', 'MS', 'Bodoquena', 8, '1.5 TURBO PHEV GS AWD AUTOMÁTICO', 4, 465000, 'N', 0, 2024, 2025, 'hibrido', 'HEV', 'A', '0', 6, '1', 4, 5, 'GJA9G90', '2025-11-23 19:41:12', 1, '1', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 1);
+(66, 'A', 'passat', 'RJ', 'Belford Roxo', 57, '2.0 16V TSI BLUEMOTION GASOLINA HIGHLINE 4P DSG', 1, 179900, 'U', 123264, 2018, 2019, 'combustao', 'Gasolina', 'A', '0', 6, '0', 4, 5, 'OIG6G78', '2025-11-20 20:49:58', 4, '2', '2', 'F', '0', 'D', 'D', '3', 'P', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 2),
+(67, 'A', 'flying spur', 'PI', 'Caxingó', 5, '2.9 V6 HYBRID AUTOMÁTICO', 1, 2299000, 'N', 0, 2022, 2023, 'hibrido', 'HEV', 'A', '0', 6, '0', 4, 5, 'QRQ7Y80', '2025-11-21 11:35:47', 2, '1', '0', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 3, '', 1),
+(71, 'A', 'shark', 'MS', 'Bodoquena', 8, '1.5 TURBO PHEV GS AWD AUTOMÁTICO', 4, 465000, 'N', 0, 2024, 2025, 'hibrido', 'HEV', 'A', '0', 6, '1', 4, 5, 'GJA9G90', '2025-11-23 19:41:12', 1, '1', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 1),
+(72, 'A', 'kardian', 'MS', 'Bodoquena', 49, '1.0 TCE FLEX PREMIÉRE EDITION EDC', 2, 116900, 'N', 0, 2024, 2025, 'combustao', 'Álcool', 'M', '0', 6, '1', 4, 5, 'YTF6799', '2025-11-24 17:28:15', 1, '1', '0', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 1),
+(73, 'A', 'civic', 'MS', 'Bodoquena', 22, '2.0 DI VTEC TURBO GASOLINA TYPE R MANUAL', 3, 434900, 'N', 0, 2024, 2024, 'combustao', 'Gasolina', 'M', '0', 6, '1', 4, 5, 'UFH8F89', '2025-11-24 17:35:01', 4, '1', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 1),
+(74, 'A', 'camaro', 'SP', 'São Paulo', 10, '6.2 V8 GASOLINA SS COLLECTION EDITION CONVERSÍVEL AUTOMÁTICO', 8, 487500, 'N', 0, 2023, 2024, 'combustao', 'Gasolina', 'A', '0', 6, '0', 2, 2, 'FAF9A89', '2025-11-24 17:39:50', 2, '1', '3', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
+(75, 'A', 'niro', 'MS', 'Bodoquena', 29, '1.6 GDI HEV SX PRESTIGE DCT', 2, 239900, 'N', 0, 2024, 2025, 'hibrido', 'HEV', 'A', '0', 6, '1', 4, 5, 'HGI0A99', '2025-11-24 17:59:06', 1, '1', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 1),
+(76, 'A', 'mustang', 'SC', 'Brusque', 18, '5.0 FASTBACK V8 GASOLINA 2P AUTOMÁTICO', 7, 600000, 'U', 335600, 1969, 1969, 'combustao', 'Gasolina', 'M', '0', 6, '0', 2, 2, 'GHY7Y78', '2025-11-24 21:01:12', 6, '3', '5', 'F', '0', 'D', 'D', '4', 'P', '1', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1);
 
 -- --------------------------------------------------------
 
@@ -138,6 +143,13 @@ CREATE TABLE `conversas` (
   `nao_lidas_comprador` int(11) DEFAULT 0,
   `nao_lidas_vendedor` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `conversas`
+--
+
+INSERT INTO `conversas` (`id`, `comprador_id`, `vendedor_id`, `anuncio_id`, `ultima_mensagem`, `data_ultima_mensagem`, `nao_lidas_comprador`, `nao_lidas_vendedor`) VALUES
+(92, 7, 6, 45, 'Daora', '2025-11-24 21:19:46', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -462,7 +474,53 @@ INSERT INTO `fotos_carros` (`id`, `carro_id`, `caminho_foto`, `ordem`) VALUES
 (232, 71, '1763937672_5aee9a889a05.jpg', 2),
 (233, 71, '1763937672_a1699e0af729.jpg', 3),
 (234, 71, '1763937672_45588b7bf11c.jpg', 4),
-(235, 71, '1763937672_1cf0bad4770f.jpg', 5);
+(235, 71, '1763937672_1cf0bad4770f.jpg', 5),
+(236, 72, '1764016095_1f794d94af59.jpg', 0),
+(237, 72, '1764016095_afcbb64814da.jpg', 1),
+(238, 72, '1764016095_8128bbab3352.jpg', 2),
+(239, 72, '1764016095_c1e95a7353dc.jpg', 3),
+(240, 72, '1764016095_62f19136a540.jpg', 4),
+(241, 72, '1764016095_f7a1aa39b4eb.jpg', 5),
+(242, 72, '1764016095_80ad0df57513.jpg', 6),
+(243, 72, '1764016095_dfe5c1f516cd.jpg', 7),
+(244, 72, '1764016095_50421c89326c.jpg', 8),
+(245, 73, '1764016501_61b24d8a633e.webp', 0),
+(246, 73, '1764016501_897eac2df536.webp', 1),
+(247, 73, '1764016501_c3baae2e425e.webp', 2),
+(248, 73, '1764016501_06da066bfbd7.webp', 3),
+(249, 73, '1764016501_92e0b22314ed.webp', 4),
+(250, 73, '1764016501_e65892297093.webp', 5),
+(251, 73, '1764016501_157bf562ae27.webp', 6),
+(252, 73, '1764016501_3bec119be3e0.webp', 7),
+(253, 73, '1764016501_87fc6e7bb5cf.webp', 8),
+(254, 73, '1764016501_80811294a951.webp', 9),
+(255, 73, '1764016501_9e1d8b52fd90.webp', 10),
+(256, 74, '1764016790_e8e501c2eada.jpg', 0),
+(257, 74, '1764016790_cc351f8c2f3a.jpg', 1),
+(258, 74, '1764016790_4d39d768ed61.jpg', 2),
+(259, 74, '1764016790_52ed0f8830f3.jpg', 3),
+(260, 74, '1764016790_3d56f9687c90.jpg', 4),
+(261, 74, '1764016790_c2065f0d38a8.jpg', 5),
+(262, 75, '1764017946_29aadc645d9d.jpg', 0),
+(263, 75, '1764017946_36a07d213b55.jpg', 1),
+(264, 75, '1764017946_3d10aa7eb18f.jpg', 2),
+(265, 75, '1764017946_7de7fab625be.jpg', 3),
+(266, 75, '1764017946_cf48aeea4852.jpg', 4),
+(267, 75, '1764017946_4178d688259b.jpg', 5),
+(268, 75, '1764017946_ceac5b451c4a.jpg', 6),
+(269, 75, '1764017946_b3a6952ead5e.jpg', 7),
+(270, 75, '1764017946_ae2e4a023451.jpg', 8),
+(271, 75, '1764017946_6ebbdc7806fc.jpg', 9),
+(272, 75, '1764017946_6b086f0e39ef.jpg', 10),
+(273, 75, '1764017946_94bc555b0c97.jpg', 11),
+(274, 76, '1764028872_50905f85c457.jpg', 0),
+(275, 76, '1764028872_d24f5b517d95.jpg', 1),
+(276, 76, '1764028872_b7b71c5b1d68.jpg', 2),
+(277, 76, '1764028872_c28d471dc6d4.jpg', 3),
+(278, 76, '1764028872_81adfad9a527.jpg', 4),
+(279, 76, '1764028872_d5e6e6f06dc7.jpg', 5),
+(280, 76, '1764028872_f4635f1239b8.jpg', 6),
+(281, 76, '1764028872_b9ae581016d7.jpg', 7);
 
 -- --------------------------------------------------------
 
@@ -505,7 +563,7 @@ CREATE TABLE `lojas` (
 --
 
 INSERT INTO `lojas` (`id`, `owner_id`, `nome`, `razao_social`, `cnpj`, `inscricao_estadual`, `endereco`, `numero`, `seguidores`, `cep`, `bairro`, `cidade`, `estado`, `telefone_fixo`, `whatsapp`, `email_corporativo`, `site`, `instagram`, `facebook`, `logo`, `capa`, `descricao_loja`, `hora_abre`, `hora_fecha`, `dias_funcionamento`, `created_at`, `horarios`) VALUES
-(6, 6, 'M8 Imports', '', '', '', '', '', 0, '', '', 'Bodoquena', 'MS', '', '(12) 98827-3730', 'kelwin@gmail.com', '', '', '', 'logo-6921ef7dc5652.jpeg', 'capa-6921ef7dc5ac1.jpeg', 'Teste', '14:20:00', '20:20:00', '1,2,7', '2025-11-22 17:14:21', '[{\"aberto\":1,\"abre\":\"14:20:00\",\"fecha\":\"20:20:00\"},{\"aberto\":1,\"abre\":\"14:20:00\",\"fecha\":\"20:20:00\"},{\"aberto\":0,\"abre\":null,\"fecha\":null},{\"aberto\":0,\"abre\":null,\"fecha\":null},{\"aberto\":0,\"abre\":null,\"fecha\":null},{\"aberto\":0,\"abre\":null,\"fecha\":null},{\"aberto\":1,\"abre\":\"14:20:00\",\"fecha\":\"20:30\"}]');
+(6, 6, 'M8 Imports', '', '', '', '', '', 1, '', '', 'Bodoquena', 'MS', '', '(12) 98827-3730', 'kelwin@gmail.com', '', '', '', 'logo-6921ef7dc5652.jpeg', 'capa-6921ef7dc5ac1.jpeg', 'Teste', '14:20:00', '20:20:00', '1,2,7', '2025-11-22 17:14:21', '[{\"aberto\":1,\"abre\":\"14:20:00\",\"fecha\":\"20:20:00\"},{\"aberto\":1,\"abre\":\"14:20:00\",\"fecha\":\"20:20:00\"},{\"aberto\":0,\"abre\":null,\"fecha\":null},{\"aberto\":0,\"abre\":null,\"fecha\":null},{\"aberto\":0,\"abre\":null,\"fecha\":null},{\"aberto\":0,\"abre\":null,\"fecha\":null},{\"aberto\":1,\"abre\":\"14:20:00\",\"fecha\":\"20:30\"}]');
 
 -- --------------------------------------------------------
 
@@ -628,6 +686,23 @@ CREATE TABLE `mensagens_chat` (
   `resposta_id` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Despejando dados para a tabela `mensagens_chat`
+--
+
+INSERT INTO `mensagens_chat` (`id`, `de_usuario`, `para_usuario`, `anuncio`, `texto`, `data_envio`, `lida`, `apagada_de`, `double_apagada_de`, `apagada_para`, `double_apagada_para`, `resposta_id`) VALUES
+(39, 7, 6, 45, 'Oi, isso é um texte', '2025-11-24 18:03:14', 1, 0, 1, 1, 1, 0),
+(40, 7, 6, 45, 'Blz?', '2025-11-24 18:09:27', 1, 0, 1, 1, 1, 0),
+(41, 6, 7, 45, 'Teste', '2025-11-24 18:28:17', 1, 1, 1, 0, 0, 0),
+(42, 6, 7, 45, 'abu', '2025-11-24 18:28:21', 1, 1, 1, 0, 0, 0),
+(43, 6, 7, 45, 'teste', '2025-11-24 18:34:29', 1, 1, 1, 0, 0, 0),
+(44, 6, 7, 45, 'TEste', '2025-11-24 18:38:52', 1, 1, 1, 0, 0, 0),
+(45, 7, 6, 45, 'Opa', '2025-11-24 19:05:33', 1, 1, 0, 0, 1, 0),
+(46, 7, 6, 45, 'Teste', '2025-11-24 21:16:07', 1, 0, 0, 0, 0, 0),
+(47, 7, 6, 45, 'Teste', '2025-11-24 21:16:10', 1, 0, 0, 0, 0, 0),
+(48, 6, 7, 45, 'Oxe', '2025-11-24 21:19:40', 1, 0, 0, 0, 0, 0),
+(49, 6, 7, 45, 'Daora', '2025-11-24 21:19:46', 1, 0, 0, 0, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -684,7 +759,8 @@ CREATE TABLE `seguidores` (
 --
 
 INSERT INTO `seguidores` (`id`, `seguidor_id`, `seguido_id`, `criado_em`) VALUES
-(1, 6, 7, '2025-11-21 11:46:01');
+(4, 6, 7, '2025-11-24 19:19:30'),
+(20, 7, 6, '2025-11-24 20:31:41');
 
 -- --------------------------------------------------------
 
@@ -713,7 +789,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `senha`, `data_criacao_conta`, `data_nascimento`, `avatar`, `estado_local`, `cidade`, `seguidores`) VALUES
-(6, 'Kelwin', 'Silva', 12988273730, '', 'kelwin@gmail.com', '1', '2025-09-20 20:44:02', '2025-10-14', 'img/usuarios/avatares/usuario_6_1763928878.webp', 'MS', 'Bodoquena', 0),
+(6, 'Kelwin', 'Silva', 12988273730, '', 'kelwin@gmail.com', '1', '2025-09-20 20:44:02', '2025-10-14', 'img/usuarios/avatares/usuario_6_1763928878.webp', 'MS', 'Bodoquena', 1),
 (7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1', '2025-10-02 22:40:54', NULL, 'img/usuarios/avatares/usuario_7_1763928864.jpg', NULL, NULL, 1);
 
 --
@@ -844,7 +920,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `anuncios_carros`
 --
 ALTER TABLE `anuncios_carros`
-  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(12) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 
 --
 -- AUTO_INCREMENT de tabela `carrocerias`
@@ -856,7 +932,7 @@ ALTER TABLE `carrocerias`
 -- AUTO_INCREMENT de tabela `conversas`
 --
 ALTER TABLE `conversas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT de tabela `cores`
@@ -880,7 +956,7 @@ ALTER TABLE `favoritos`
 -- AUTO_INCREMENT de tabela `fotos_carros`
 --
 ALTER TABLE `fotos_carros`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=236;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=282;
 
 --
 -- AUTO_INCREMENT de tabela `lojas`
@@ -904,7 +980,7 @@ ALTER TABLE `marcas`
 -- AUTO_INCREMENT de tabela `mensagens_chat`
 --
 ALTER TABLE `mensagens_chat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
 
 --
 -- AUTO_INCREMENT de tabela `reservas`
@@ -916,7 +992,7 @@ ALTER TABLE `reservas`
 -- AUTO_INCREMENT de tabela `seguidores`
 --
 ALTER TABLE `seguidores`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`

@@ -96,10 +96,14 @@ mysqli_close($conexao);
             <div id="dropzone" class="mb-3 w-100 d-flex flex-column justify-content-center align-items-center p-5 border rounded-5 text-muted bg-body-secondary bg-opacity-25" style="cursor:pointer">
               <span class="fs-1"><i class="bi bi-image"></i></span>
               <span><a href="#" id="dropzone-click">Clique aqui</a> para escolher sua imagem ou arraste e solte</span>
-              <small>Máx. 8 por vez, 5MB por arquivo</small>
+              <small>5MB por arquivo</small>
             </div>
 
             <hr class="my-5">
+
+            <div class="alert alert-info" role="alert">
+              <i class="bi bi-info-circle"></i> É necessário adicionar no mínimo <strong>5 fotos</strong> para finalizar o anúncio.
+            </div>
 
             <h6>Imagens atuais</h6>
             <div id="gallery" class="mt-3">
@@ -151,19 +155,21 @@ mysqli_close($conexao);
     </main>
   </div>
   <!-- Confirmation modal -->
-  <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="confirmModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Confirmar publicação</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        <div class="modal-body p-5">
+          <div class="bg-success-subtle rounded-circle d-flex text-success justify-content-center align-items-center mb-3 mx-auto fs-5" style="width: 60px; height: 60px;">
+            <i class="bi bi-check-lg"></i>
+          </div>
+          <div class="text-center">
+            <h4>Confirmar publicação</h4>
+            <p class="text-muted">Deseja finalizar e publicar o anúncio agora? Verifique se a descrição e as fotos estão corretas.</p>
+          </div>
         </div>
-        <div class="modal-body">
-          <p>Deseja finalizar e publicar o anúncio agora? Verifique se a descrição e as fotos estão corretas.</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" id="confirm-finalize" class="btn btn-primary">Sim, publicar</button>
+        <div class="modal-footer d-flex flex-column border-top-0">
+          <button type="button" id="confirm-finalize" class="btn btn-success w-100">Sim, publicar</button>
+          <button type="button" class="btn bg-body-secondary w-100" data-bs-dismiss="modal">Cancelar</button>
         </div>
       </div>
     </div>
@@ -192,9 +198,17 @@ mysqli_close($conexao);
         const count = $('#gallery .thumb-wrap').length;
         const $final = $('#finalizar-btn');
         if ($final.length === 0) return; // not in temp mode
+        
+        // If there are thumb-wraps, hide the "Nenhuma imagem" message
+        if (count > 0) {
+          $('#gallery > .text-muted').hide();
+        } else {
+          $('#gallery > .text-muted').show();
+        }
+        
         const descLen = ($('#descricao').val() || '').trim().length;
   // require at least 5 photos, and description is optional; if present must be at most 1000 chars
-        if (count >= 5 && (descLen === 0 || (descLen >= 100 && descLen <= 1000))) {
+        if (count >= 5 && descLen <= 1000) {
           $final.prop('disabled', false);
         } else {
           $final.prop('disabled', true);
@@ -247,7 +261,6 @@ mysqli_close($conexao);
 
       function handleSelectedFiles(files) {
         if (!files || files.length === 0) return;
-        if (files.length > 8) { showAlert('danger', 'Envie no máximo 8 arquivos por vez.'); return; }
         // validate each and add preview
         for (let i = 0; i < files.length; i++) {
           const f = files[i];

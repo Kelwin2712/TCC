@@ -559,7 +559,7 @@ if (precoInputRS.length > 0) {
       const $input = $(this);
       let $box = $input.siblings('.search-suggestions');
       if ($box.length === 0) {
-        $box = $('<div class="search-suggestions dropdown-menu p-2"></div>');
+        $box = $('<div class="search-suggestions dropdown-menu p-2" style="width:100%; max-height:300px; overflow:auto; position:absolute; top:100%; z-index:1000;"></div>');
         $input.after($box);
       }
 
@@ -645,3 +645,30 @@ if (precoInputRS.length > 0) {
     attachAutocomplete('#navbar-search');
   });
 })();
+
+// Verificar mensagens não lidas - funciona em qualquer página
+function verificarMensagensNaoLidas() {
+  $.get('/sites/TCC/controladores/mensagens/contar-nao-lidas.php', function(data) {
+    const total = data.total || 0;
+    const badge = $('#msg-badge');
+    
+    if (total > 0) {
+      badge.show();
+    } else {
+      badge.hide();
+    }
+  });
+}
+
+// Verificar na inicialização
+$(document).ready(function() {
+  // Apenas verificar se o elemento badge existe (user está logado)
+  if ($('#msg-badge').length > 0) {
+    verificarMensagensNaoLidas();
+    
+    // Verificar periodicamente (a cada 5 segundos)
+    setInterval(function() {
+      verificarMensagensNaoLidas();
+    }, 5000);
+  }
+});

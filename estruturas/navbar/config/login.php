@@ -10,7 +10,7 @@
     <a href="menu/favoritos.php" class="btn px-2 border-0"><i class="bi bi-heart"></i></a>
     <a href="menu/mensagens.php" class="btn px-2 border-0">
         <i class="bi bi-chat-left-text position-relative">
-            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" style="padding: 0;">
+            <span id="msg-badge" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" style="padding: 0; display: none;">
                 <span class="visually-hidden">New alerts</span>
             </span>
         </i>

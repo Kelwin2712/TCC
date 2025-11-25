@@ -1,7 +1,4 @@
 <aside class="border-end d-flex flex-column position-fixed vh-100" style="width: calc(200px + 5vw);">
-    <div class="position-relative">
-        <button class="btn bg-white border position-absolute start-100 rounded-start-0 rounded-top-0"><i class="bi bi-layout-sidebar-inset"></i></button>
-    </div>
     <a href="../index.php" class="d-flex mx-4 mt-4 mb-3 text-decoration-none text-dark">
         <img src="/sites/TCC/img/logo-fahren.png" class="d-inline-block align-text-center" width="23" height="38" alt="logo" style="filter: invert(1);">
         <span class="fw-semibold fs-3">&nbsp;Fahren</span>
@@ -12,9 +9,6 @@
             <a class="nav-link <?php if ($selected == 'config') {
                                     echo 'active';
                                 } ?>" aria-current="page" href="configuracoes.php"><i class="bi bi-gear-fill"></i>&nbsp;Configurações</a>
-            <a class="nav-link <?php if ($selected == 'compras') {
-                                    echo 'active';
-                                } ?>" href="compras.php"><i class="bi bi-bag-fill"></i>&nbsp;Compras</a>
             <a class="nav-link <?php if ($selected == 'fav') {
                                     echo 'active';
                                 } ?>" href="favoritos.php"><i class="bi bi-heart-fill"></i>&nbsp;Favoritos</a>

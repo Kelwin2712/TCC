@@ -56,16 +56,10 @@ while ($linha = mysqli_fetch_array($resultado)) {
         include_once '../estruturas/sidebar/sidebar.php' ?>
         <div class="col" style="margin-left: calc(200px + 5vw);">
             <div class="container-fluid p-5 d-flex flex-column h-100 overflow-auto">
-                <div class="row">
+                <div class="row mb-5">
                     <h2 class="pb-2 fw-semibold mb-0">Favoritos</h2>
                     <p class="text-muted">Veja todos os seus veículos favoritos</p>
 
-                </div>
-                <div class="mb-5 d-flex flex-wrap gap-2">
-                    <input type="radio" class="btn-check" name="telas" id="tela-1" autocomplete="off" checked>
-                    <label class="btn btn-outline-dark w-auto rounded-pill px-3" for="tela-1">Carros</label>
-                    <input type="radio" class="btn-check" name="telas" id="tela-2" autocomplete="off">
-                    <label class="btn btn-outline-dark w-auto rounded-pill px-3" for="tela-2">Motos</label>
                 </div>
                 <div class="row row-cols-1 row-cols-xl-2 g-3">
                     <?php foreach ($carros as $carro): ?>

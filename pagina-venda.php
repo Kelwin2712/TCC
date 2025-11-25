@@ -19,7 +19,7 @@ $sql = "SELECT carros.*,
     INNER JOIN cores ON carros.cor = cores.id
     INNER JOIN marcas ON carros.marca = marcas.id
     LEFT JOIN usuarios ON carros.id_vendedor = usuarios.id
-    LEFT JOIN lojas ON carros.id_vendedor = lojas.id
+    LEFT JOIN lojas ON carros.id_vendedor = lojas.owner_id
     WHERE carros.id = $id_veiculo";
 $resultado = mysqli_query($conexao, $sql);
 
@@ -79,21 +79,48 @@ if (isset($carro['tipo_vendedor']) && (int)$carro['tipo_vendedor'] === 1 && !emp
         $dias = ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'];
         $now = new DateTime();
         $today_idx = (int)$now->format('w'); // 0 (Sunday) - 6 (Saturday)
+
+        // helper: format time string to HH:MM (strip seconds if present)
+        function _format_short_time($s) {
+            if (!$s) return null;
+            if (preg_match('/^(\d{1,2}):(\d{2})/', $s, $m)) {
+                return sprintf('%02d:%02d', (int)$m[1], (int)$m[2]);
+            }
+            return $s;
+        }
+
+        // helper: parse a time string into a DateTime for today, robust to H:i or H:i:s
+        function _parse_time_for_today($time_str, $now_dt) {
+            if (!$time_str) return false;
+            $formats = ['H:i:s', 'H:i'];
+            foreach ($formats as $fmt) {
+                $dt = DateTime::createFromFormat($fmt, $time_str);
+                if ($dt !== false) {
+                    $dt->setDate((int)$now_dt->format('Y'), (int)$now_dt->format('m'), (int)$now_dt->format('d'));
+                    return $dt;
+                }
+            }
+            try {
+                $dt = new DateTime($time_str);
+                $dt->setDate((int)$now_dt->format('Y'), (int)$now_dt->format('m'), (int)$now_dt->format('d'));
+                return $dt;
+            } catch (Exception $e) {
+                return false;
+            }
+        }
+
         $entry = isset($loja_horarios[$today_idx]) ? $loja_horarios[$today_idx] : null;
         if ($entry && !empty($entry['aberto'])) {
             $abre = isset($entry['abre']) ? $entry['abre'] : null;
             $fecha = isset($entry['fecha']) ? $entry['fecha'] : null;
-            if ($abre) $loja_today_open = $abre;
-            if ($fecha) $loja_today_close = $fecha;
+            if ($abre) $loja_today_open = _format_short_time($abre);
+            if ($fecha) $loja_today_close = _format_short_time($fecha);
 
             if ($abre && $fecha) {
-                // build DateTime for today
-                $dt_abre = DateTime::createFromFormat('H:i', $abre);
-                $dt_fecha = DateTime::createFromFormat('H:i', $fecha);
+                // build DateTime for today (robust parsing)
+                $dt_abre = _parse_time_for_today($abre, $now);
+                $dt_fecha = _parse_time_for_today($fecha, $now);
                 if ($dt_abre && $dt_fecha) {
-                    // attach today's date
-                    $dt_abre->setDate((int)$now->format('Y'), (int)$now->format('m'), (int)$now->format('d'));
-                    $dt_fecha->setDate((int)$now->format('Y'), (int)$now->format('m'), (int)$now->format('d'));
                     // if fecha <= abre assume closing next day
                     if ($dt_fecha <= $dt_abre) {
                         $dt_fecha->modify('+1 day');
@@ -121,7 +148,20 @@ if ($user_id) {
 // ensure seguidores table exists and check if current user follows this vendedor
 $seguindo = 0;
 $vendedor_id = isset($carro['id_vendedor']) ? (int)$carro['id_vendedor'] : 0;
-if ($user_id && $vendedor_id) {
+
+// If this is a loja (tipo_vendedor=1) and loja exists, use loja_id instead
+$seguir_id = $vendedor_id; // default to user id
+
+if (isset($carro['tipo_vendedor']) && (int)$carro['tipo_vendedor'] === 1) {
+    // For lojas, we need to get the loja ID
+    $loja_query = mysqli_query($conexao, "SELECT id FROM lojas WHERE owner_id = $vendedor_id LIMIT 1");
+    if ($loja_query && mysqli_num_rows($loja_query) > 0) {
+        $loja_row = mysqli_fetch_assoc($loja_query);
+        $seguir_id = (int)$loja_row['id'];
+    }
+}
+
+if ($user_id && $seguir_id) {
         // create table if needed (no-op if already exists)
         $create = "CREATE TABLE IF NOT EXISTS seguidores (
             id INT NOT NULL AUTO_INCREMENT,
@@ -134,8 +174,10 @@ if ($user_id && $vendedor_id) {
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
         @mysqli_query($conexao, $create);
 
-        $q = @mysqli_query($conexao, "SELECT id FROM seguidores WHERE seguidor_id = " . (int)$user_id . " AND seguido_id = " . $vendedor_id . " LIMIT 1");
-        if ($q && mysqli_num_rows($q) > 0) $seguindo = 1;
+        $q = @mysqli_query($conexao, "SELECT id FROM seguidores WHERE seguidor_id = " . (int)$user_id . " AND seguido_id = " . (int)$seguir_id . " LIMIT 1");
+        if ($q && mysqli_num_rows($q) > 0) {
+            $seguindo = 1;
+        }
 }
 ?>
 
@@ -289,32 +331,15 @@ if ($user_id && $vendedor_id) {
                                     <p class="fs-1 fw-semibold mb-0">R$ <?= number_format((int)$carro['preco'], 0, ',', '.'); ?></p>
                                 </div>
                                 <div class="col-auto">
-                                    <span class="badge text-bg-primary py-2 user-select-none rounded-3"><i class="bi bi-shield-check"></i> Confiável</span>
+                                    <span class="badge text-white py-2 user-select-none rounded-3" style="background-color: var(--cor-verde-escuro);"><i class="bi bi-shield-check"></i> Confiável</span>
                                 </div>
                                 <p>Envie uma mensagem para o vendedor</p>
                             </div>
                             <?php if (!isset($_SESSION['id'])): ?>
                                 <div class="row">
-                                    <div class="mb-2">
-                                        <label for="nome-input" class="form-label form-text mb-0">Nome<sup class="text-danger">*</sup></label>
-                                        <input type="text" class="form-control shadow-sm rounded-4" id="nome-input" placeholder="Nome" required>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="email-input" class="form-label form-text mb-0">Email<sup class="text-danger">*</sup></label>
-                                        <input type="email" class="form-control shadow-sm rounded-4" id="email-input" placeholder="Email" required>
-                                    </div>
-                                    <div class="mb-2">
-                                        <label for="telefone-input" class="form-label form-text mb-0">Telefone<sup class="text-danger">*</sup></label>
-                                        <input type="email" class="form-control shadow-sm rounded-4" id="telefone-input" placeholder="Telefone" required>
-                                    </div>
                                     <div class="mb-3">
-                                        <div class="d-flex justify-content-between mb-0">
-                                            <label for="mensagem-input" class="form-label form-text">
-                                                Mensagem<sup class="text-danger">*</sup>
-                                            </label>
-                                            <small id="max-mensagem" class="form-text" style="font-size: .75rem;">0/500</small>
-                                        </div>
-                                        <textarea class="form-control shadow-sm rounded-4" id="mensagem-input" placeholder="Mensagem" maxlength="500" minlength="10" required></textarea>
+                                        <p class="mb-2 text-muted">Para enviar uma mensagem você precisa fazer login.</p>
+                                        <a href="sign-in.php" class="btn btn-dark rounded-4 w-100">Entrar</a>
                                     </div>
                                 </div>
                             <?php else: ?>
@@ -330,11 +355,13 @@ if ($user_id && $vendedor_id) {
                                     </div>
                                 </div>
                             <?php endif; ?>
+                            <?php if (isset($_SESSION['id'])): ?>
                             <div class="row">
-                                <div class="col" <?= isset($_SESSION['id']) && $carro['id_vendedor'] == $_SESSION['id'] ? " title=\"Você não pode enviar mensagem para si mesmo\"" : '' ?>>
-                                    <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2 shadow-sm" <?= isset($_SESSION['id']) && $carro['id_vendedor'] == $_SESSION['id'] ? 'disabled' : '' ?>>Enviar mensagem</button>
+                                <div class="col" <?= $carro['id_vendedor'] == $_SESSION['id'] ? " title=\"Você não pode enviar mensagem para si mesmo\"" : '' ?>>
+                                    <button type="submit" class="btn rounded-4 btn-dark w-100 mb-3 py-2 shadow-sm" <?= $carro['id_vendedor'] == $_SESSION['id'] ? 'disabled' : '' ?>>Enviar mensagem</button>
                                 </div>
                             </div>
+                            <?php endif; ?>
                         </form>
                     </div>
                 </div>
@@ -345,12 +372,13 @@ if ($user_id && $vendedor_id) {
                         <div class="card-body py-4">
                             <div class="row mb-4 d-flex justify-content-between px-4">
                                 <div class="col-auto pe-0">
-                                    <h2 class="fw-bold mb-0 text-uppercase"><?= $carro['marca_nome'] ?> <span class="text-success-emphasis"><?= $carro['modelo'] ?></span></h2>
+                                    <h2 class="fw-bold mb-0 text-uppercase"><?= $carro['marca_nome'] ?> <span style="color: var(--cor-verde-escuro);"><?= $carro['modelo'] ?></span></h2>
                                     <p class="text-uppercase"><?= $carro['versao'] ?></p>
                                 </div>
                                 <div class="col">
                                     <p class="text-capitalize text-end"><i class="bi bi-geo-alt"></i> <?= $carro['cidade'] . ' - '  . $carro['estado_local'] ?></p>
                                 </div>
+                                <?php if (isset($_SESSION['id'])): ?>
                                 <div class="col-auto">
                                     <?php
                                     $heart_class = $favoritado ? 'bi-heart-fill text-danger' : 'bi-heart text-secondary';
@@ -359,6 +387,7 @@ if ($user_id && $vendedor_id) {
                                         <i class="bi <?= $heart_class ?> fs-5"></i>
                                     </button>
                                 </div>
+                                <?php endif; ?>
                             </div>
                             <div class="row px-4 pt-3">
                                 <p>Informações</p>
@@ -449,7 +478,7 @@ if ($user_id && $vendedor_id) {
                                     <p>Vendedor</p>
                                 </div>
                                 <div class="col">
-                                    <?php if (!isset($_SESSION['id']) || $_SESSION['id'] != $carro['id_vendedor']): ?>
+                                    <?php if (isset($_SESSION['id']) && $_SESSION['id'] != $carro['id_vendedor']): ?>
                                         <?php
                                         // render initial follow button text based on $seguindo
                                         $seguir_text = $seguindo ? 'Seguindo <i class="bi bi-check"></i>' : 'Seguir';
@@ -461,7 +490,7 @@ if ($user_id && $vendedor_id) {
                                     <?php endif; ?>
                                 </div>
                             </div>
-                            <a href="compras.php?vendedor=<?= $vendedor ?>&vendedor_img=<?= $vendedor_img ?>&vendedor_seg=<?= $vendedor_seg ?>" class="row mb-3 px-2 text-decoration-none text-dark">
+                            <a href="compras.php?vendedor_id=<?= $carro['id_vendedor'] ?>" class="row mb-3 px-2 text-decoration-none text-dark">
                                 <div class="rounded-3 border-2">
                                     <div class="row">
                                         <div class="col-2 p-2 d-flex align-items-center justify-content-center">
@@ -504,10 +533,13 @@ if ($user_id && $vendedor_id) {
                                                 $line = '<span class="me-auto">' . $dias[$d] . ':</span>';
                                                 $display = 'Fechado';
                                                 if (is_array($loja_horarios) && isset($loja_horarios[$d]) && !empty($loja_horarios[$d]['aberto'])) {
-                                                    $a = $loja_horarios[$d]['abre'] ?? null;
-                                                    $f = $loja_horarios[$d]['fecha'] ?? null;
-                                                    if ($a && $f) $display = htmlspecialchars($a) . ' - ' . htmlspecialchars($f);
-                                                    else $display = ($a || $f) ? htmlspecialchars($a ?? $f) : 'Horário não informado';
+                                                        $a = $loja_horarios[$d]['abre'] ?? null;
+                                                        $f = $loja_horarios[$d]['fecha'] ?? null;
+                                                        // format times to HH:MM (strip seconds) for display
+                                                        $a_fmt = function_exists('_format_short_time') ? _format_short_time($a) : (preg_match('/^(\d{1,2}):(\d{2})/', $a, $m) ? sprintf('%02d:%02d',(int)$m[1],(int)$m[2]) : $a);
+                                                        $f_fmt = function_exists('_format_short_time') ? _format_short_time($f) : (preg_match('/^(\d{1,2}):(\d{2})/', $f, $m) ? sprintf('%02d:%02d',(int)$m[1],(int)$m[2]) : $f);
+                                                        if ($a && $f) $display = htmlspecialchars($a_fmt) . ' - ' . htmlspecialchars($f_fmt);
+                                                        else $display = ($a || $f) ? htmlspecialchars($a_fmt ?? $f_fmt) : 'Horário não informado';
                                                 }
                                         ?>
                                             <div class="list-group-item d-flex text-muted<?= $d === 6 ? ' rounded-bottom-2' : '' ?>">
@@ -599,7 +631,7 @@ if ($user_id && $vendedor_id) {
 
         const seguir_info = $("#seguir-btn");
         const seguir_btn = $('#seguir-action-btn');
-        const vendedorId = <?= json_encode($vendedor_id) ?>;
+        const vendedorId = <?= json_encode($seguir_id) ?>;
 
         const progress = $('.progress-bar.bg-transparent').parent();
 
@@ -612,15 +644,22 @@ if ($user_id && $vendedor_id) {
             // disable button briefly to prevent double clicks
             seguir_btn.prop('disabled', true);
 
+            console.log('Enviando seguir para ID:', vendedorId);
+            
             $.post('controladores/usuarios/seguir.php', { seguido: vendedorId }, function(res) {
+                console.log('Resposta do servidor:', res);
+                
                 if (!res || !res.success) {
                     // error: re-enable and optionally show message
                     seguir_btn.prop('disabled', false);
+                    console.log('Erro:', res ? res.message : 'Sem resposta');
                     return;
                 }
 
                 const action = res.action; // 'follow' or 'unfollow'
                 const count = typeof res.seguidores !== 'undefined' ? res.seguidores : null;
+
+                console.log('Action:', action, 'Count:', count);
 
                 if (action === 'follow') {
                     seguir_info.html('Seguindo <i class="bi bi-check"></i>');
@@ -638,7 +677,8 @@ if ($user_id && $vendedor_id) {
 
                 // re-enable
                 seguir_btn.prop('disabled', false);
-            }, 'json').fail(function() {
+            }, 'json').fail(function(xhr, status, error) {
+                console.log('Erro na requisição:', status, error);
                 seguir_btn.prop('disabled', false);
             });
         });

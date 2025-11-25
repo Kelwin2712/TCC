@@ -81,7 +81,8 @@ $sql = "SELECT conversas.*,
        usuarios.*, 
        carros.modelo AS modelo, 
        carros.versao AS versao, 
-       marcas.nome AS marca
+       marcas.nome AS marca,
+       (SELECT MAX(data_envio) FROM mensagens_chat WHERE anuncio = conversas.anuncio_id AND ((de_usuario = conversas.comprador_id AND para_usuario = conversas.vendedor_id) OR (de_usuario = conversas.vendedor_id AND para_usuario = conversas.comprador_id))) AS data_ultima_mensagem
 FROM conversas
 INNER JOIN usuarios 
     ON conversas.vendedor_id = usuarios.id
@@ -104,7 +105,8 @@ $sql = "SELECT conversas.*,
        usuarios.*, 
        carros.modelo AS modelo, 
        carros.versao AS versao, 
-       marcas.nome AS marca
+       marcas.nome AS marca,
+       (SELECT MAX(data_envio) FROM mensagens_chat WHERE anuncio = conversas.anuncio_id AND ((de_usuario = conversas.comprador_id AND para_usuario = conversas.vendedor_id) OR (de_usuario = conversas.vendedor_id AND para_usuario = conversas.comprador_id))) AS data_ultima_mensagem
 FROM conversas
 INNER JOIN usuarios 
     ON conversas.comprador_id = usuarios.id
@@ -209,9 +211,13 @@ $msg_pos = 0;
         font-size: calc(.5rem + .2vw);
     }
 
-    .chat-container.selecionando .mensagem:not(.bg-primary-subtle):hover {
+    .chat-container.selecionando .mensagem:not(.bg-verde-escuro-subtle):hover {
         --bs-bg-opacity: 1;
         background-color: rgba(var(--bs-secondary-bg-rgb), var(--bs-bg-opacity)) !important;
+    }
+    
+    .bg-verde-escuro-subtle {
+        background-color: rgba(52, 79, 25, 0.15) !important;
     }
 </style>
 
@@ -283,8 +289,11 @@ $msg_pos = 0;
                             </div>
                             <ul id="comprando-tab" class="list-group list-group-flush flex-grow-1 overflow-y-auto <?= isset($_GET['vendendo']) && $_GET['vendendo'] == 'true'  ? 'd-none' : '' ?>">
                                 <?php
-                                foreach ($conversas_comp as $user): ?>
-                                    <li class="list-group-item <?= isset($_GET['anuncio_id']) && $_GET['anuncio_id'] == $user['anuncio_id'] ? 'active' : '' ?>" data-id-conversa="<?= $user['id'] ?>">
+                                foreach ($conversas_comp as $user): 
+                                    date_default_timezone_set('America/Sao_Paulo');
+                                    $lastMessageTime = isset($user['data_ultima_mensagem']) && !empty($user['data_ultima_mensagem']) ? strtotime($user['data_ultima_mensagem']) : time();
+                                ?>
+                                    <li class="list-group-item <?= isset($_GET['anuncio_id']) && $_GET['anuncio_id'] == $user['anuncio_id'] ? 'active' : '' ?>" data-id-conversa="<?= $user['id'] ?>" data-timestamp="<?= $lastMessageTime ?>" data-next-update="0">
                                         <a href="mensagens.php?anuncio_id=<?= $user['anuncio_id'] ?>&id=<?= $user['id'] ?>" class="d-flex align-items-center py-0 gap-3 text-decoration-none text-black">
                                             <div class="col-auto flex-shrink-0">
                                                 <div class="ratio ratio-1x1" style="width: calc(30px + .5vw);">
@@ -294,14 +303,14 @@ $msg_pos = 0;
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <div class="d-flex justify-content-between align-items-start">
                                                     <p class="mb-0 me-2 fs-6 fw-semibold text-truncate"><?= $user['nome'] . ' ' . $user['sobrenome'] ?></p>
-                                                    <small class="text-muted text-nowrap">3 dias</small>
+                                                    <small class="text-muted text-nowrap tempo-relativo">agora</small>
                                                 </div>
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="d-flex flex-column small text-truncate me-3">
                                                         <p class="mb-1 text-uppercase"><?= $user['marca'] . ' ' . $user['modelo'] . ' ' . $user['versao'] ?? 'Veículo não disponível' ?></p>
                                                         <p class="mb-0 text-muted"><?= $user['ultima_mensagem'] ?? '' ?></p>
                                                     </div>
-                                                    <span class="badge bg-primary rounded-circle" <?= $user['nao_lidas_comprador'] > 0 ? '' : 'style="display: none;"' ?>><?= $user['nao_lidas_comprador'] ?></span>
+                                                    <span class="badge rounded-circle" style="background-color: var(--cor-verde-escuro);" <?= $user['nao_lidas_comprador'] > 0 ? '' : 'style="display: none;"' ?>><?= $user['nao_lidas_comprador'] ?></span>
                                                 </div>
                                             </div>
                                         </a>
@@ -310,8 +319,11 @@ $msg_pos = 0;
                             </ul>
                             <ul id="vendendo-tab" class="list-group list-group-flush flex-grow-1 overflow-y-auto <?= isset($_GET['vendendo']) && $_GET['vendendo'] == 'true'  ? '' : 'd-none' ?>">
                                 <?php
-                                foreach ($conversas_vend as $user): ?>
-                                    <li class="list-group-item <?= isset($_GET['anuncio_id']) && $_GET['anuncio_id'] == $user['anuncio_id'] ? 'active' : '' ?>" data-id-conversa="<?= $user['id'] ?>">
+                                foreach ($conversas_vend as $user): 
+                                    date_default_timezone_set('America/Sao_Paulo');
+                                    $lastMessageTime = isset($user['data_ultima_mensagem']) && !empty($user['data_ultima_mensagem']) ? strtotime($user['data_ultima_mensagem']) : time();
+                                ?>
+                                    <li class="list-group-item <?= isset($_GET['anuncio_id']) && $_GET['anuncio_id'] == $user['anuncio_id'] ? 'active' : '' ?>" data-id-conversa="<?= $user['id'] ?>" data-timestamp="<?= $lastMessageTime ?>" data-next-update="0">
                                         <a href="mensagens.php?vendendo=true&anuncio_id=<?= $user['anuncio_id'] ?>&id=<?= $user['id'] ?>" class="d-flex align-items-center py-0 gap-3 text-decoration-none text-black">
                                             <div class="col-auto flex-shrink-0">
                                                 <div class="ratio ratio-1x1" style="width: calc(30px + .5vw);">
@@ -321,14 +333,14 @@ $msg_pos = 0;
                                             <div class="flex-grow-1 overflow-hidden">
                                                 <div class="d-flex justify-content-between align-items-start">
                                                     <p class="mb-0 me-2 fs-6 fw-semibold text-truncate"><?= $user['nome'] . ' ' . $user['sobrenome'] ?></p>
-                                                    <small class="text-muted text-nowrap">3 dias</small>
+                                                    <small class="text-muted text-nowrap tempo-relativo">agora</small>
                                                 </div>
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div class="d-flex flex-column small text-truncate me-3">
                                                         <p class="mb-1 text-uppercase"><i class="bi bi-eye-fill"></i>&nbsp;<?= $user['marca'] . ' ' . $user['modelo'] . ' ' . $user['versao'] ?? 'Veículo não disponível' ?></p>
                                                         <p class="mb-0 text-muted"><?= $user['ultima_mensagem'] ?? '' ?></p>
                                                     </div>
-                                                    <span class="badge bg-primary rounded-circle" <?= $user['nao_lidas_vendedor'] > 0 ? '' : 'style="display: none;"' ?>><?= $user['nao_lidas_vendedor'] ?></span>
+                                                    <span class="badge rounded-circle" style="background-color: var(--cor-verde-escuro);" <?= $user['nao_lidas_vendedor'] > 0 ? '' : 'style="display: none;"' ?>><?= $user['nao_lidas_vendedor'] ?></span>
                                                 </div>
                                             </div>
                                         </a>
@@ -349,12 +361,10 @@ $msg_pos = 0;
                                         </div>
                                         <div class="col-auto">
                                             <h6 class="mb-0 text-capitalize"><?= $dest['nome'] . ' ' . $dest['sobrenome'] ?></h6>
-                                            <small class="text-muted"><span><i class="bi bi-circle-fill align-middle text-success" style="font-size: .4rem;"></i></span>&nbsp;Online</small>
                                         </div>
                                     </div>
                                     <div id="topbar" class="col-auto d-flex align-items-center gap-2">
-                                        <button title="Ligar" class="btn border-0 btn-sm"><i class="bi bi-telephone-fill" data-action=""></i></button>
-                                        <button title="Whatsapp" class="btn border-0 btn-sm"><i class="bi bi-whatsapp" data-action=""></i></button>
+                                        <button title="Whatsapp" class="btn border-0 btn-sm btn-whatsapp" <?= !empty($dest['telefone']) ? 'onclick="window.open(\'https://wa.me/' . preg_replace('/[^0-9]/', '', $dest['telefone']) . '\', \'_blank\')"' : 'style="display: none;"' ?>><i class="bi bi-whatsapp" data-action=""></i></button>
                                         <div class="dropdown">
                                             <button title="Mais" class="btn border-0 btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="bi bi-three-dots-vertical" data-action=""></i>
@@ -363,9 +373,7 @@ $msg_pos = 0;
                                                 <li>
                                                     <h6 class="dropdown-header">Mensagem</h6>
                                                 </li>
-                                                <li><a class="dropdown-item" href="#"><i class="bi bi-flag"></i> Denunciar usuário</a></li>
-                                                <li><a class="dropdown-item" href="#"><i class="bi bi-ban"></i> Bloquear usuário</a></li>
-                                                <li><a class="dropdown-item" href="#"><i class="bi bi-trash"></i> Apagar mensagens</a></li>
+                                                <li><a class="dropdown-item" href="#" data-action="apagar-todas"><i class="bi bi-trash"></i> Apagar mensagens</a></li>
                                                 <li>
                                                     <h6 class="dropdown-divider"></h6>
                                                 </li>
@@ -417,7 +425,7 @@ $msg_pos = 0;
                                                     <div class="form-check me-auto align-items-center" style="display: none;">
                                                         <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
                                                     </div>
-                                                    <div class="bg-primary rounded-start-4 rounded-bottom-4 px-3 py-2 shadow-sm my-2">
+                                                    <div class="rounded-start-4 rounded-bottom-4 px-3 py-2 shadow-sm my-2" style="background-color: var(--cor-verde-escuro);">
                                                         <?php if ($msg['apagada_de'] == 0): ?>
                                                             <?php if ($msg['resposta_id'] != 0): ?>
                                                                 <div class="d-flex justify-content-between w-100 mb-2 bg-opacity-25 bg-body-secondary rounded-2 p-2 pe-5 border-start border-white border-4">
@@ -466,7 +474,7 @@ $msg_pos = 0;
                                 </div>
                                 <div class="card-footer px-3 py-2 border-0 bg-transparent">
                                     <div class="border rounded-2 shadow-sm p-2 d-flex flex-column align-items-center">
-                                        <div class="d-none justify-content-between w-100 mb-2 bg-body-secondary rounded-2 p-2 border-start border-primary border-4">
+                                        <div class="d-none justify-content-between w-100 mb-2 bg-body-secondary rounded-2 p-2 border-start border-4" style="border-color: var(--cor-verde-escuro) !important;">
                                             <div class="d-flex flex-column">
                                                 <div class="fw-semibold text-muted">Kelwin</div>
                                                 <div class="text-muted">Bom dia</div>
@@ -478,7 +486,7 @@ $msg_pos = 0;
                                         <form id="msg-form" class="d-flex gap-1 align-items-center w-100">
                                             <button class="btn" type="button" id="anexar"><i class="bi bi-plus-lg"></i></button>
                                             <input id="mensagem-input" type="text" class="form-control border-0 px-1" placeholder="Digite uma mensagem..." aria-label="Digite uma mensagem..." aria-describedby="button-send">
-                                            <button class="btn btn-primary" type="submit" id="button-send" disabled><i class="bi bi-send-fill"></i></button>
+                                            <button class="btn" type="submit" id="button-send" disabled style="background-color: var(--cor-verde-escuro); color: white;"><i class="bi bi-send-fill"></i></button>
                                         </form>
                                     </div>
                                 </div>
@@ -493,19 +501,7 @@ $msg_pos = 0;
                         <div class="modal-body p-5 pb-4">
                             <div class="text-start">
                                 <h4>Você tem certeza?</h4>
-                                <p class="text-muted">Essa ação não pode ser desfeita. Todos os dados serão perdidos.</p>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="radioDefault" id="apagar-mim" checked>
-                                <label class="form-check-label" for="apagar-mim">
-                                    Apagar para mim
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="radioDefault" id="apagar-todos">
-                                <label class="form-check-label" for="apagar-todos">
-                                    Apagar para todos
-                                </label>
+                                <p class="text-muted">Essa ação não pode ser desfeita. Todas as suas mensagens nesta conversa serão apagadas.</p>
                             </div>
                         </div>
                         <div class="modal-footer d-flex border-top-0 mt-0">
@@ -545,6 +541,27 @@ $msg_pos = 0;
                     sendBtn.prop('disabled', true)
                 }
             })
+
+            // Handler para "Apagar mensagens" do menu dropdown
+            $('[data-action="apagar-todas"]').on('click', function(e) {
+                e.preventDefault();
+                
+                // Coletar TODAS as mensagens (tanto enviadas quanto recebidas)
+                const todasAsMensagens = [];
+                $('.mensagem').each(function() {
+                    todasAsMensagens.push($(this).data('id-msg'));
+                });
+
+                if (todasAsMensagens.length === 0) {
+                    mostrarAlerta('danger', 'Nenhuma mensagem para apagar');
+                    return;
+                }
+
+                $('#apagar-form').data('msg-ids', todasAsMensagens);
+                const apagarModal = new bootstrap.Modal(document.getElementById('apaga-modal'));
+                apagarModal.show();
+            });
+
 
             msgForm.on('submit', function(e) {
                 e.preventDefault();
@@ -632,35 +649,27 @@ $msg_pos = 0;
             e.preventDefault();
 
             const action = $(this).data('action');
-            const mensagemId = $(dropdownElement).data('mensagem-id');
-            const textoMensagem = $(dropdownElement).data('mensagem-texto');
-            const isSuaMensagem = $(dropdownElement).data('sua-mensagem');
-            const apagadaDe = $(dropdownElement).data('apagada-de') == '1';
 
-            if (action != 'apagar') {
+            if (action === 'apagar-todas') {
+                // Coletar TODAS as mensagens da conversa
+                const todasAsMensagens = [];
+                $('.mensagem').each(function() {
+                    todasAsMensagens.push($(this).data('id-msg'));
+                });
+
+                if (todasAsMensagens.length === 0) {
+                    mostrarAlerta('danger', 'Nenhuma mensagem para apagar');
+                    return;
+                }
+
+                $('#apagar-form').data('msg-ids', todasAsMensagens);
+                const apagarModal = new bootstrap.Modal(document.getElementById('apaga-modal'));
+                apagarModal.show();
+            } else if (action != 'apagar') {
+                const mensagemId = $(dropdownElement).data('mensagem-id');
+                const textoMensagem = $(dropdownElement).data('mensagem-texto');
+                const isSuaMensagem = $(dropdownElement).data('sua-mensagem');
                 executarAcaoMensagem(action, mensagemId, textoMensagem, isSuaMensagem);
-            } else {
-
-                $('#apagar-form').data('mensagem-id', mensagemId);
-                $('#apagar-mim').prop('checked', true);
-
-                let podeApagarParaTodos = false;
-
-                if (isSuaMensagem && !apagadaDe) {
-                    podeApagarParaTodos = true;
-                }
-
-                $('#apagar-todos').prop('disabled', !podeApagarParaTodos);
-
-                if (!podeApagarParaTodos) {
-                    $('#apagar-todos').parent().hide();
-                    $('#apagar-mim').parent().hide();
-                    $('#apaga-btn').text('Apagar para mim');
-                } else {
-                    $('#apagar-todos').parent().show();
-                    $('#apagar-mim').parent().show();
-                    $('#apaga-btn').text('Apagar');
-                }
             }
 
             if (dropdownInstance) {
@@ -672,15 +681,11 @@ $msg_pos = 0;
         $('#apagar-form').on('submit', function(e) {
             e.preventDefault();
 
-            const mensagemId = $(this).data('mensagem-id');
-            const apagarParaTodos = $('#apagar-todos').is(':checked');
+            const msgIds = $(this).data('msg-ids');
 
-            if (mensagemId) {
-                if (apagarParaTodos) {
-                    executarAcaoMensagem('apagar', mensagemId, '', 1);
-                } else {
-                    executarAcaoMensagem('apagar', mensagemId, '', 0);
-                }
+            if (msgIds && msgIds.length > 0) {
+                // Sempre usar tipo=0 para double apagar
+                apagarMultiplasMensagens(msgIds, 0);
             }
 
             // Fechar modal
@@ -720,7 +725,7 @@ $msg_pos = 0;
             $('#topbar').find('button').hide();
             $('#topbar').find('.sel-group').show();
             $('.mensagem').find('.form-check').css('display', 'flex');
-            msgElement.addClass('bg-primary-subtle');
+            msgElement.addClass('bg-verde-escuro-subtle');
             msgElement.find('input[type="checkbox"]').prop('checked', true);
 
             const msgId = msgElement.data('id-msg');
@@ -750,7 +755,7 @@ $msg_pos = 0;
 
             if ($(e.target).is('input[type="checkbox"]') || $(e.target).is('label')) {
                 if (isChecked) {
-                    $(this).addClass('bg-primary-subtle');
+                    $(this).addClass('bg-verde-escuro-subtle');
                     addSelectedMessage({
                         id: msgId,
                         senderName: senderName,
@@ -759,12 +764,12 @@ $msg_pos = 0;
                         msgPos: msgPos
                     });
                 } else {
-                    $(this).removeClass('bg-primary-subtle');
+                    $(this).removeClass('bg-verde-escuro-subtle');
                     removeSelectedMessageById(msgId);
                 }
             } else {
                 if (isChecked) {
-                    $(this).removeClass('bg-primary-subtle');
+                    $(this).removeClass('bg-verde-escuro-subtle');
                     $(this).find('input[type="checkbox"]').prop('checked', false);
                     removeSelectedMessageById(msgId);
                 } else {
@@ -794,20 +799,72 @@ $msg_pos = 0;
             console.log('selectedMessages cleared', selectedMessages);
         });
 
-        // Topbar copy button (copies selected messages)
+        // Função para mostrar alerta
+        function mostrarAlerta(tipo, mensagem) {
+            const alertHtml = `
+                <div class="position-fixed d-flex justify-content-center start-50 translate-middle-x mb-5 z-3 bottom-0">
+                    <div class="alert alert-${tipo} alert-dismissible h-100 rounded-2" role="alert">
+                        <div>
+                            <span>
+                                <i class="bi ${tipo === 'danger' ? 'bi-exclamation-triangle' : 'bi-check'}"></i>
+                            </span> 
+                            ${mensagem}
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            
+            const $alert = $(alertHtml);
+            $('body').append($alert);
+            
+            $alert.delay(1500).fadeOut(1500, function() {
+                $alert.remove();
+            });
+        }
+
+        // Topbar buttons (copy and delete)
         $('#topbar').on('click', '.sel-group', function(e) {
             // detect copy button by icon
             if ($(this).find('.bi-copy').length) {
                 if (selectedMessages.length === 0) {
-                    mostrarFeedback('Nenhuma mensagem selecionada');
+                    mostrarAlerta('danger', 'Nenhuma mensagem selecionada');
                     return;
                 }
 
                 if (selectedMessages.length === 1) {
                     const text = selectedMessages[0].text;
                     // use existing copiarTexto function for single
-                    copiarTexto(text);
-                    mostrarFeedback('✅ Mensagem copiada');
+                    navigator.clipboard.writeText(text).then(function() {
+                        mostrarAlerta('success', 'Mensagem copiada');
+                        // Deselecionar
+                        selecionando = false;
+                        $('.chat-container').removeClass('selecionando');
+                        $('.mensagem').removeClass('bg-primary-subtle');
+                        $('.mensagem').find('input[type="checkbox"]').prop('checked', false);
+                        $('.mensagem').find('.form-check').css('display', 'none');
+                        $('#topbar').find('button').show();
+                        $('#topbar').find('.sel-group').hide();
+                        selectedMessages.length = 0;
+                    }).catch(function() {
+                        // Fallback para navegadores antigos
+                        const textArea = document.createElement('textarea');
+                        textArea.value = text;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        mostrarAlerta('success', 'Mensagem copiada');
+                        // Deselecionar
+                        selecionando = false;
+                        $('.chat-container').removeClass('selecionando');
+                        $('.mensagem').removeClass('bg-primary-subtle');
+                        $('.mensagem').find('input[type="checkbox"]').prop('checked', false);
+                        $('.mensagem').find('.form-check').css('display', 'none');
+                        $('#topbar').find('button').show();
+                        $('#topbar').find('.sel-group').hide();
+                        selectedMessages.length = 0;
+                    });
                     return;
                 }
 
@@ -819,7 +876,16 @@ $msg_pos = 0;
                 // try clipboard API
                 if (navigator.clipboard && navigator.clipboard.writeText) {
                     navigator.clipboard.writeText(finalText).then(function() {
-                        mostrarFeedback('✅ Mensagens copiadas');
+                        mostrarAlerta('success', 'Mensagens copiadas');
+                        // Deselecionar
+                        selecionando = false;
+                        $('.chat-container').removeClass('selecionando');
+                        $('.mensagem').removeClass('bg-primary-subtle');
+                        $('.mensagem').find('input[type="checkbox"]').prop('checked', false);
+                        $('.mensagem').find('.form-check').css('display', 'none');
+                        $('#topbar').find('button').show();
+                        $('#topbar').find('.sel-group').hide();
+                        selectedMessages.length = 0;
                     }).catch(function() {
                         // fallback
                         const ta = document.createElement('textarea');
@@ -828,7 +894,16 @@ $msg_pos = 0;
                         ta.select();
                         document.execCommand('copy');
                         document.body.removeChild(ta);
-                        mostrarFeedback('✅ Mensagens copiadas');
+                        mostrarAlerta('success', 'Mensagens copiadas');
+                        // Deselecionar
+                        selecionando = false;
+                        $('.chat-container').removeClass('selecionando');
+                        $('.mensagem').removeClass('bg-primary-subtle');
+                        $('.mensagem').find('input[type="checkbox"]').prop('checked', false);
+                        $('.mensagem').find('.form-check').css('display', 'none');
+                        $('#topbar').find('button').show();
+                        $('#topbar').find('.sel-group').hide();
+                        selectedMessages.length = 0;
                     });
                 } else {
                     const ta = document.createElement('textarea');
@@ -837,8 +912,48 @@ $msg_pos = 0;
                     ta.select();
                     document.execCommand('copy');
                     document.body.removeChild(ta);
-                    mostrarFeedback('✅ Mensagens copiadas');
+                    mostrarAlerta('success', 'Mensagens copiadas');
+                    // Deselecionar
+                    selecionando = false;
+                    $('.chat-container').removeClass('selecionando');
+                    $('.mensagem').removeClass('bg-primary-subtle');
+                    $('.mensagem').find('input[type="checkbox"]').prop('checked', false);
+                    $('.mensagem').find('.form-check').css('display', 'none');
+                    $('#topbar').find('button').show();
+                    $('#topbar').find('.sel-group').hide();
+                    selectedMessages.length = 0;
                 }
+            } else if ($(this).find('.bi-trash').length) {
+                // Delete button
+                if (selectedMessages.length === 0) {
+                    mostrarAlerta('danger', 'Nenhuma mensagem selecionada');
+                    return;
+                }
+
+                // Verificar se há alguma mensagem que NÃO é do usuário
+                const temMensagemDoDestinatario = selectedMessages.some(msg => !$(`.mensagem[data-id-msg="${msg.id}"]`).hasClass('mensagem-sua'));
+                
+                $('#apagar-form').data('msg-ids', selectedMessages.map(m => m.id));
+                $('#apagar-mim').prop('checked', true);
+
+                // Se há mensagem do destinatário, não permite apagar para todos
+                const podeApagarParaTodos = !temMensagemDoDestinatario;
+
+                $('#apagar-todos').prop('disabled', !podeApagarParaTodos);
+
+                if (!podeApagarParaTodos) {
+                    $('#apagar-todos').parent().hide();
+                    $('#apagar-mim').parent().hide();
+                    $('#apaga-btn').text('Apagar para mim');
+                } else {
+                    $('#apagar-todos').parent().show();
+                    $('#apagar-mim').parent().show();
+                    $('#apaga-btn').text('Apagar');
+                }
+
+                // Mostrar modal
+                const apagarModal = new bootstrap.Modal(document.getElementById('apaga-modal'));
+                apagarModal.show();
             }
         });
 
@@ -862,21 +977,6 @@ $msg_pos = 0;
             }
         }
 
-        function copiarTexto(texto) {
-            navigator.clipboard.writeText(texto).then(function() {
-                mostrarFeedback('✅ Texto copiado!');
-            }).catch(function() {
-                // Fallback para navegadores antigos
-                const textArea = document.createElement('textarea');
-                textArea.value = texto;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                mostrarFeedback('✅ Texto copiado!');
-            });
-        }
-
         function responderMensagem(mensagemId, texto) {
             // Adicionar citação no input de mensagem
             const inputMensagem = $('#input-mensagem');
@@ -884,28 +984,182 @@ $msg_pos = 0;
             inputMensagem.val(resposta + inputMensagem.val());
             inputMensagem.focus();
 
-            mostrarFeedback('↩️ Respondendo à mensagem...');
+            mostrarAlerta('info', '↩️ Respondendo à mensagem...');
         }
 
         function apagarMensagem(mensagemId, tipo) {
             $.post('../controladores/mensagens/apagar-msg.php', {
-                msg_id: mensagemId,
+                msg_ids: JSON.stringify([mensagemId]),
                 tipo: tipo
             }).done(function(response) {
                 location.reload();
                 if (response.success) {
-                    //mostrarFeedback('✅ Mensagem apagada!');
-                    // Remover mensagem visualmente
                     $(`.mensagem[data-id-msg="${mensagemId}"]`).fadeOut(300, function() {
                         $(this).remove();
                     });
-                } else {
-                    //mostrarFeedback('❌ Erro ao apagar');
                 }
             }).fail(function() {
                 //mostrarFeedback('❌ Erro de conexão');
             });
         }
+
+        function apagarMultiplasMensagens(msgIds, tipo) {
+            $.post('../controladores/mensagens/apagar-msg.php', {
+                msg_ids: JSON.stringify(msgIds),
+                tipo: tipo
+            }).done(function(response) {
+                location.reload();
+                if (response.success) {
+                    msgIds.forEach(id => {
+                        $(`.mensagem[data-id-msg="${id}"]`).fadeOut(300, function() {
+                            $(this).remove();
+                        });
+                    });
+                }
+            }).fail(function() {
+                mostrarAlerta('danger', 'Erro ao apagar mensagens');
+            });
+        }
+
+        // ===== SISTEMA DE TIMESTAMP GLOBAL OTIMIZADO =====
+        // Configurar timezone para São Paulo
+        const timezoneSaoPaulo = 'America/Sao_Paulo';
+        
+        function getTimestampSaoPaulo() {
+            // Pega o timestamp atual e converte para São Paulo
+            const agora = new Date();
+            // Criar um formatter para São Paulo
+            const formatter = new Intl.DateTimeFormat('pt-BR', {
+                timeZone: timezoneSaoPaulo,
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            
+            const parts = formatter.formatToParts(agora);
+            const valores = {};
+            parts.forEach(part => {
+                valores[part.type] = part.value;
+            });
+            
+            // Converter de volta para timestamp
+            const dataSP = new Date(
+                valores.year,
+                parseInt(valores.month) - 1,
+                valores.day,
+                valores.hour,
+                valores.minute,
+                valores.second
+            );
+            
+            return Math.floor(dataSP.getTime() / 1000);
+        }
+        
+        function formatarTempoRelativo(timestampMensagem) {
+            const agora = getTimestampSaoPaulo();
+            const diferenca = agora - timestampMensagem;
+            
+            // Menos de 1 minuto
+            if (diferenca < 60) {
+                return 'agora';
+            }
+            
+            // Minutos
+            if (diferenca < 3600) {
+                const minutos = Math.floor(diferenca / 60);
+                return minutos === 1 ? '1 min' : minutos + ' min';
+            }
+            
+            // Horas
+            if (diferenca < 86400) {
+                const horas = Math.floor(diferenca / 3600);
+                return horas === 1 ? '1 h' : horas + ' h';
+            }
+            
+            // Dias
+            if (diferenca < 604800) {
+                const dias = Math.floor(diferenca / 86400);
+                return dias === 1 ? '1 dia' : dias + ' dias';
+            }
+            
+            // Semanas
+            if (diferenca < 2592000) {
+                const semanas = Math.floor(diferenca / 604800);
+                return semanas === 1 ? '1 sem' : semanas + ' sem';
+            }
+            
+            // Meses (aproximado)
+            if (diferenca < 31536000) {
+                const meses = Math.floor(diferenca / 2592000);
+                return meses === 1 ? '1 mês' : meses + ' mês';
+            }
+            
+            // Anos
+            const anos = Math.floor(diferenca / 31536000);
+            return anos === 1 ? '1 ano' : anos + ' anos';
+        }
+        
+        function calcularProximaAtualizacao(timestampMensagem) {
+            const agora = getTimestampSaoPaulo();
+            const diferenca = agora - timestampMensagem;
+            
+            // Se é "agora" (< 1 min), próxima atualização em 60 - diferenca segundos
+            if (diferenca < 60) {
+                return 60 - diferenca;
+            }
+            
+            // Se é minutos (< 60 min), próxima atualização em 60 segundos
+            if (diferenca < 3600) {
+                return 60;
+            }
+            
+            // Se é horas (< 24 h), próxima atualização em 3600 segundos (1 hora)
+            if (diferenca < 86400) {
+                return 3600;
+            }
+            
+            // Se é dias (< 7 dias), próxima atualização em 86400 segundos (1 dia)
+            if (diferenca < 604800) {
+                return 86400;
+            }
+            
+            // Caso contrário, não precisa atualizar
+            return Infinity;
+        }
+        
+        function atualizarTemposRelativos() {
+            const agora = getTimestampSaoPaulo();
+            let proximaAtualizacao = Infinity;
+            
+            $('.list-group-item').each(function() {
+                const $item = $(this);
+                const timestamp = parseInt($item.data('timestamp'));
+                const $tempo = $item.find('.tempo-relativo');
+                
+                // Calcular próxima atualização para este item
+                const tempoProximo = calcularProximaAtualizacao(timestamp);
+                
+                // Atualizar o texto do tempo
+                $tempo.text(formatarTempoRelativo(timestamp));
+                
+                // Manter registro da próxima atualização mais próxima
+                if (tempoProximo < proximaAtualizacao) {
+                    proximaAtualizacao = tempoProximo;
+                }
+            });
+            
+            // Agendar próxima atualização (com margem de 100ms para precisão)
+            if (proximaAtualizacao !== Infinity) {
+                setTimeout(atualizarTemposRelativos, proximaAtualizacao * 1000 + 100);
+            }
+        }
+        
+        // Inicializar tempos ao carregar a página
+        atualizarTemposRelativos();
 
         let ultimoEstado = ""; // para comparar mudanças
 

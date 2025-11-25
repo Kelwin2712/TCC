@@ -97,7 +97,6 @@ mysqli_close($conexao);
               <div class="col-md-6 mb-2">
                 <div class="d-flex justify-content-between mb-2 form-text">
                   <label for="marca-select">Marca<sup>*</sup></label>
-                  <a href="#" class="link-dark">Não encontrou a marca?</a>
                 </div>
                 <select class="form-select shadow-sm" id="marca-select" aria-label="Default select example" name="marca" required>
                   <option value="" selected hidden>Escolha uma marca</option>
@@ -109,7 +108,6 @@ mysqli_close($conexao);
               <div class="col-md-6 mb-2">
                 <div class="d-flex justify-content-between mb-2 form-text">
                   <label for="modelo-input">Modelo<sup>*</sup></label>
-                  <a href="#" class="link-dark">Não encontrou o modelo?</a>
                 </div>
                 <input type="text" autocomplete="off" class="form-control" id="modelo-input" name="modelo" placeholder="Escolha um modelo" required>
               </div>
@@ -134,14 +132,12 @@ mysqli_close($conexao);
               <div class="col-xl-6 mb-2">
                 <div class="d-flex justify-content-between mb-2 form-text">
                   <label for="versao-input">Versão<sup>*</sup></label>
-                  <a href="#" class="link-dark">Não encontrou a versão?</a>
                 </div>
                 <input type="text" class="form-control" autocomplete="off" id="versao-input" name="versao" placeholder="Escolha uma versão" required>
               </div>
               <div class="col-xl-6 mb-2">
                 <div class="d-flex justify-content-between mb-2 form-text">
                   <label for="cor-select">Cor<sup>*</sup></label>
-                  <a href="#" class="link-dark">Não encontrou a cor?</a>
                 </div>
                 <select class="form-select shadow-sm" id="cor-select" aria-label="Default select example" name="cor" required>
                   <option value="" selected hidden>Escolha uma cor</option>

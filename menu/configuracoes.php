@@ -53,15 +53,9 @@ mysqli_close($conexao);
         include_once '../estruturas/sidebar/sidebar.php' ?>
         <div class="col" style="margin-left: calc(200px + 5vw);">
             <div class="container-fluid p-5">
-                <div class="row">
+                <div class="row mb-5">
                     <h2 class="pb-2 fw-semibold mb-0">Configurações</h2>
                     <p class="text-muted">Gerencie sua conta e suas preferências</p>
-                </div>
-                <div class="mb-5 d-flex flex-wrap gap-2">
-                    <input type="radio" class="btn-check" name="telas" id="tela-1" autocomplete="off" checked>
-                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-1">Suas informações</label>
-                    <input type="radio" class="btn-check" name="telas" id="tela-2" autocomplete="off">
-                    <label class="btn btn-outline-dark w-auto rounded-pill px-3 shadow-sm" for="tela-2">Segurança e Privacidade</label>
                 </div>
                 <form action="../controladores/mudar-infos.php" class="row d-flex align-items-stretch" id="info-form" method="POST" enctype="multipart/form-data">
                     <div class="col-4">

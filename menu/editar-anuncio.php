@@ -53,6 +53,7 @@ if (mysqli_num_rows($resultado) > 0) {
         $ativo = $linha['ativo'];
         $condicao = $linha['condicao'] ?? 'N';
         $descricao = $linha['descricao'];
+        $cambio = $linha['cambio'] ?? '';
     } else {
         header('Location: anuncios.php');
     }
@@ -434,8 +435,8 @@ if ($qr) {
                                     <label for="cambio-select" class="form-label">Câmbio</label>
                                     <select class="form-select shadow-sm" id="cambio-select" aria-label="Default select example" name="cambio" required>
                                         <option value="">Selecione o câmbio</option>
-                                        <option value="A" <?php if (isset($linha) && $linha['cambio'] === 'A') echo 'selected'; ?>>Automático</option>
-                                        <option value="M" <?php if (isset($linha) && $linha['cambio'] === 'M') echo 'selected'; ?>>Manual</option>
+                                        <option value="A" <?php if ($cambio === 'A') echo 'selected'; ?>>Automático</option>
+                                        <option value="M" <?php if ($cambio === 'M') echo 'selected'; ?>>Manual</option>
                                     </select>
                                 </div>
                                 <div class="col">
@@ -1046,6 +1047,7 @@ if ($qr) {
         $("#proprietario-select option[value='<?= $proprietario ?>']").prop('selected', true);
         $("#troca-select option[value='<?= $troca ?>']").prop('selected', true);
         $("#condicao-select option[value='<?= $condicao ?? 'N' ?>']").prop('selected', true);
+        $("#cambio-select option[value='<?= $cambio ?>']").prop('selected', true);
 
         imgCard.hover(
             function() {
