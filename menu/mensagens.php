@@ -310,7 +310,7 @@ $msg_pos = 0;
                                                         <p class="mb-1 text-uppercase"><?= $user['marca'] . ' ' . $user['modelo'] . ' ' . $user['versao'] ?? 'Veículo não disponível' ?></p>
                                                         <p class="mb-0 text-muted"><?= $user['ultima_mensagem'] ?? '' ?></p>
                                                     </div>
-                                                    <span class="badge rounded-circle" style="background-color: var(--cor-verde-escuro);" <?= $user['nao_lidas_comprador'] > 0 ? '' : 'style="display: none;"' ?>><?= $user['nao_lidas_comprador'] ?></span>
+                                                    <span class="badge rounded-circle <?= $user['nao_lidas_comprador'] > 0 ? '' : 'd-none' ?>" style="background-color: var(--cor-verde-escuro);"><?= $user['nao_lidas_comprador'] ?></span>
                                                 </div>
                                             </div>
                                         </a>
@@ -340,7 +340,7 @@ $msg_pos = 0;
                                                         <p class="mb-1 text-uppercase"><i class="bi bi-eye-fill"></i>&nbsp;<?= $user['marca'] . ' ' . $user['modelo'] . ' ' . $user['versao'] ?? 'Veículo não disponível' ?></p>
                                                         <p class="mb-0 text-muted"><?= $user['ultima_mensagem'] ?? '' ?></p>
                                                     </div>
-                                                    <span class="badge rounded-circle" style="background-color: var(--cor-verde-escuro);" <?= $user['nao_lidas_vendedor'] > 0 ? '' : 'style="display: none;"' ?>><?= $user['nao_lidas_vendedor'] ?></span>
+                                                    <span class="badge rounded-circle <?= $user['nao_lidas_vendedor'] > 0 ? '' : 'd-none' ?>" style="background-color: var(--cor-verde-escuro);"><?= $user['nao_lidas_vendedor'] ?></span>
                                                 </div>
                                             </div>
                                         </a>
@@ -455,9 +455,6 @@ $msg_pos = 0;
                                             <div class="dropdown-menu" id="dropdown-mensagem" aria-labelledby="contextMenuTrigger">
                                                 <button class="dropdown-item" type="button" data-action="copiar">
                                                     <i class="bi bi-clipboard"></i> Copiar
-                                                </button>
-                                                <button class="dropdown-item" type="button" data-action="responder">
-                                                    <i class="bi bi-reply"></i> Responder
                                                 </button>
                                                 <button class="dropdown-item" type="button" data-action="selecionar">
                                                     <i class="bi bi-check2-square"></i> Selecionar
@@ -725,7 +722,7 @@ $msg_pos = 0;
             $('#topbar').find('button').hide();
             $('#topbar').find('.sel-group').show();
             $('.mensagem').find('.form-check').css('display', 'flex');
-            msgElement.addClass('bg-verde-escuro-subtle');
+            msgElement.addClass('bg-primary-subtle');
             msgElement.find('input[type="checkbox"]').prop('checked', true);
 
             const msgId = msgElement.data('id-msg');
@@ -755,7 +752,7 @@ $msg_pos = 0;
 
             if ($(e.target).is('input[type="checkbox"]') || $(e.target).is('label')) {
                 if (isChecked) {
-                    $(this).addClass('bg-verde-escuro-subtle');
+                    $(this).addClass('bg-primary-subtle');
                     addSelectedMessage({
                         id: msgId,
                         senderName: senderName,
@@ -764,12 +761,12 @@ $msg_pos = 0;
                         msgPos: msgPos
                     });
                 } else {
-                    $(this).removeClass('bg-verde-escuro-subtle');
+                    $(this).removeClass('bg-primary-subtle');
                     removeSelectedMessageById(msgId);
                 }
             } else {
                 if (isChecked) {
-                    $(this).removeClass('bg-verde-escuro-subtle');
+                    $(this).removeClass('bg-primary-subtle');
                     $(this).find('input[type="checkbox"]').prop('checked', false);
                     removeSelectedMessageById(msgId);
                 } else {
@@ -789,7 +786,7 @@ $msg_pos = 0;
         $('#topbar').find('button[data-action="cancelar"]').on('click', function() {
             selecionando = false;
             $('.chat-container').removeClass('selecionando');
-            $('.mensagem').removeClass('bg-primary-subtle');
+            $('.mensagem').removeClass('bg-primary-subtle bg-verde-escuro-subtle');
             $('.mensagem').find('input[type="checkbox"]').prop('checked', false);
             $('.mensagem').find('.form-check').css('display', 'none');
             $('#topbar').find('button').show();
@@ -963,10 +960,6 @@ $msg_pos = 0;
                     copiarTexto(textoMensagem);
                     break;
 
-                case 'responder':
-                    responderMensagem(mensagemId, textoMensagem);
-                    break;
-
                 case 'apagar':
                     apagarMensagem(mensagemId, tipo);
                     break;
@@ -975,16 +968,6 @@ $msg_pos = 0;
                     ativarSelecao(mensagemId);
                     break;
             }
-        }
-
-        function responderMensagem(mensagemId, texto) {
-            // Adicionar citação no input de mensagem
-            const inputMensagem = $('#input-mensagem');
-            const resposta = `> ${texto}\n\n`;
-            inputMensagem.val(resposta + inputMensagem.val());
-            inputMensagem.focus();
-
-            mostrarAlerta('info', '↩️ Respondendo à mensagem...');
         }
 
         function apagarMensagem(mensagemId, tipo) {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 25/11/2025 às 02:21
+-- Tempo de geração: 25/11/2025 às 11:21
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -84,7 +84,7 @@ INSERT INTO `anuncios_carros` (`id`, `ativo`, `modelo`, `estado_local`, `cidade`
 (50, 'A', '320i', 'PB', 'João Pessoa', 6, '2.0 16V TURBO FLEX SPORT GP AUTOMÁTICO', 1, 215900, 'S', 65000, 2021, 2022, 'combustao', 'Flex', 'A', '0', 6, '0', 4, 5, 'HIU7S68', '2025-11-11 16:27:21', 1, '2', '1', 'F', '0', 'D', 'D', '3', 'P', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 1),
 (56, 'A', 'm5', 'GO', 'Abadia de Goiás', 6, '4.4 V8 TWINPOWER GASOLINA COMPETITION M XDRIVE STEPTRONIC', 3, 700000, 'N', 0, 2021, 2022, 'abarth', 'abarth', 'M', '0', 6, '1', 4, 5, 'GHA0G75', '2025-11-11 19:58:03', 2, '2', '1', 'F', '0', 'D', 'D', '4', '', '1', 'kelwin@gmail.com', '(12) 98827-3730', 0, '', 1),
 (57, 'A', '911', 'MG', 'Belo Horizonte', 47, '3.0 24V H6 GASOLINA CARRERA 4 GTS CABRIOLET PDK', 10, 1160000, 'N', 0, 2024, 2025, 'combustao', 'Gasolina', 'M', '0', 6, '0', 4, 5, 'UYD9F88', '2025-11-12 20:43:47', 1, '1', '4', 'F', '0', 'D', 'D', '4', '', '0', 'kelwin@gmail.com', '(11) 11111-1111', 0, '', 1),
-(58, 'A', 'v60', 'CE', 'Aiuaba', 58, '2.0 T5 GASOLINA MOMENTUM GEARTRONIC', 5, 149890, 'U', 82000, 2019, 2020, 'combustao', 'Diesel', 'A', '0', 7, '0', 4, 5, 'FAF8A76', '2025-11-16 22:56:25', 5, '2', '1', 'F', '0', 'D', 'D', '4', 'P', '1', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 1),
+(58, 'A', 'v60', 'CE', 'Aiuaba', 58, '2.0 T5 GASOLINA MOMENTUM GEARTRONIC', 5, 149890, 'U', 82000, 2019, 2020, 'combustao', 'Diesel', 'A', '0', 7, '0', 4, 5, 'FAF8A76', '2025-11-16 22:56:25', 5, '2', '1', 'F', '0', 'D', 'D', '4', 'P', '1', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 2),
 (59, 'A', 'rs e-tron gt', 'ES', 'Águia Branca', 4, 'ELÉTRICO QUATTRO', 1, 484900, 'N', 0, 2021, 2022, 'eletrico', 'Elétrico', 'A', '0', 7, '0', 4, 5, 'UBW7G12', '2025-11-16 23:09:59', 6, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 1),
 (60, 'A', 'q5', 'BA', 'Abaré', 4, '2.0 55 TFSIE PHEV PERFORMANCE BLACK QUATTRO S TRONIC', 2, 299900, 'S', 30000, 2023, 2024, 'hibrido', 'HEV', 'A', '0', 7, '0', 4, 5, 'RUU9R90', '2025-11-16 23:20:27', 5, '1', '1', 'F', '0', 'D', 'D', '4', 'P', '1', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 0),
 (61, 'A', 'cayenne', 'GO', 'Goiânia', 47, '3.0 V6 E-HYBRID AWD TIPTRONIC S', 2, 759900, 'N', 0, 2022, 2023, 'hibrido', 'HEV', 'A', '1', 7, '0', 4, 5, 'GYG9A99', '2025-11-17 19:55:18', 2, '1', '1', 'F', '0', 'D', 'D', '4', '', '0', 'vinicius@gmail.com', '(11) 11111-1111', 0, '', 0),
@@ -143,13 +143,6 @@ CREATE TABLE `conversas` (
   `nao_lidas_comprador` int(11) DEFAULT 0,
   `nao_lidas_vendedor` int(11) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `conversas`
---
-
-INSERT INTO `conversas` (`id`, `comprador_id`, `vendedor_id`, `anuncio_id`, `ultima_mensagem`, `data_ultima_mensagem`, `nao_lidas_comprador`, `nao_lidas_vendedor`) VALUES
-(92, 7, 6, 45, 'Daora', '2025-11-24 21:19:46', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -686,23 +679,6 @@ CREATE TABLE `mensagens_chat` (
   `resposta_id` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `mensagens_chat`
---
-
-INSERT INTO `mensagens_chat` (`id`, `de_usuario`, `para_usuario`, `anuncio`, `texto`, `data_envio`, `lida`, `apagada_de`, `double_apagada_de`, `apagada_para`, `double_apagada_para`, `resposta_id`) VALUES
-(39, 7, 6, 45, 'Oi, isso é um texte', '2025-11-24 18:03:14', 1, 0, 1, 1, 1, 0),
-(40, 7, 6, 45, 'Blz?', '2025-11-24 18:09:27', 1, 0, 1, 1, 1, 0),
-(41, 6, 7, 45, 'Teste', '2025-11-24 18:28:17', 1, 1, 1, 0, 0, 0),
-(42, 6, 7, 45, 'abu', '2025-11-24 18:28:21', 1, 1, 1, 0, 0, 0),
-(43, 6, 7, 45, 'teste', '2025-11-24 18:34:29', 1, 1, 1, 0, 0, 0),
-(44, 6, 7, 45, 'TEste', '2025-11-24 18:38:52', 1, 1, 1, 0, 0, 0),
-(45, 7, 6, 45, 'Opa', '2025-11-24 19:05:33', 1, 1, 0, 0, 1, 0),
-(46, 7, 6, 45, 'Teste', '2025-11-24 21:16:07', 1, 0, 0, 0, 0, 0),
-(47, 7, 6, 45, 'Teste', '2025-11-24 21:16:10', 1, 0, 0, 0, 0, 0),
-(48, 6, 7, 45, 'Oxe', '2025-11-24 21:19:40', 1, 0, 0, 0, 0, 0),
-(49, 6, 7, 45, 'Daora', '2025-11-24 21:19:46', 1, 0, 0, 0, 0, 0);
-
 -- --------------------------------------------------------
 
 --
@@ -789,8 +765,8 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`id`, `nome`, `sobrenome`, `telefone`, `cpf`, `email`, `senha`, `data_criacao_conta`, `data_nascimento`, `avatar`, `estado_local`, `cidade`, `seguidores`) VALUES
-(6, 'Kelwin', 'Silva', 12988273730, '', 'kelwin@gmail.com', '1', '2025-09-20 20:44:02', '2025-10-14', 'img/usuarios/avatares/usuario_6_1763928878.webp', 'MS', 'Bodoquena', 1),
-(7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1', '2025-10-02 22:40:54', NULL, 'img/usuarios/avatares/usuario_7_1763928864.jpg', NULL, NULL, 1);
+(6, 'Kelwin', 'Silva', 11111111111, '42142141421', 'kelwin@gmail.com', '1234AAAA', '2025-09-20 20:44:02', '2025-10-14', 'img/usuarios/avatares/usuario_6_1763928878.webp', 'MS', 'Bodoquena', 1),
+(7, 'Vinicius', 'Souza', NULL, NULL, 'vinicius@gmail.com', '1234AAAA', '2025-10-02 22:40:54', NULL, 'img/usuarios/avatares/usuario_7_1763928864.jpg', NULL, NULL, 1);
 
 --
 -- Índices para tabelas despejadas
@@ -932,7 +908,7 @@ ALTER TABLE `carrocerias`
 -- AUTO_INCREMENT de tabela `conversas`
 --
 ALTER TABLE `conversas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- AUTO_INCREMENT de tabela `cores`
@@ -980,7 +956,7 @@ ALTER TABLE `marcas`
 -- AUTO_INCREMENT de tabela `mensagens_chat`
 --
 ALTER TABLE `mensagens_chat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=50;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT de tabela `reservas`
