@@ -4,6 +4,18 @@ if (!isset($_SESSION['id'])) {
   header('Location: sign-in.php');
   exit();
 }
+
+// Verificar se o usuário tem os dados obrigatórios preenchidos
+$telefone = $_SESSION['telefone'] ?? '';
+$cpf = $_SESSION['cpf'] ?? '';
+$email = $_SESSION['email'] ?? '';
+$data_nascimento = $_SESSION['data_nascimento'] ?? '';
+
+if (empty($telefone) || empty($cpf) || empty($email) || empty($data_nascimento)) {
+  $_SESSION['msg_alert'] = ['warning', 'Preencha seus dados pessoais (Telefone, CPF, Email e Data de nascimento) antes de registrar um veículo.'];
+  header('Location: menu/configuracoes.php');
+  exit();
+}
 ?>
 
 <!DOCTYPE html>

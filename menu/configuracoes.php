@@ -134,8 +134,8 @@ mysqli_close($conexao);
                         </div>
                     </div>
                 </div>
-                <hr class="my-5">
-                <div class="row d-flex align-items-center flex-nowrap">
+                <hr class="my-5 d-none">
+                <div class="row align-items-center flex-nowrap" style="display: none;">
                     <div class="col">
                         <h5>Deletar conta</h5>
                         <p class="text-muted">Delete a sua conta permanentemente</p>

@@ -97,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $_SESSION['email'] = $email;
     $_SESSION['telefone'] = $telefone;
 
-    $_SESSION['msg_alert'] = ['success', 'Alterações feitas com sucesso! Telefone: '.$_SESSION['telefone']];
+    $_SESSION['msg_alert'] = ['success', 'Alterações feitas com sucesso!'];
     header('Location: ../menu/configuracoes.php');
     exit();
 } else {

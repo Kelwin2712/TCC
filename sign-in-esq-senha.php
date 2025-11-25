@@ -32,14 +32,14 @@ if (isset($_SESSION['id'])) {
               <div class="row h-100 g-0">
                 <div class="col-6 px-5 py-4">
                   <div class="row w-100 h-100 d-flex align-items-center">
-                    <form action="" class="w-100 h-100 d-flex flex-column justify-content-between">
+                    <form action="controladores/recuperacao-senha/verificar-email.php" method="POST" class="w-100 h-100 d-flex flex-column justify-content-between">
                       <div class="row mt-5">
                         <h3 class="mb-1 text-center">Esqueceu sua senha?</h3>
                         <p class="mb-5 text-secondary text-center">Sem problemas, iremos enviar instruções para troca-la</p>
                       </div>
                       <div class="mb-5">
                         <label for="email-input" class="form-label mb-0">Email</label>
-                        <input type="email" class="form-control rounded-3 border-2" id="email-input" placeholder="Email" required>
+                        <input type="email" class="form-control rounded-3 border-2" id="email-input" name="email" placeholder="Email" required>
                       </div>
                       <div class="row">
                         <div class="col">
@@ -47,7 +47,7 @@ if (isset($_SESSION['id'])) {
                             < Voltar</a>
                         </div>
                         <div class="col">
-                          <a href="sign-in-code-senha.php" class="btn btn-dark w-auto mb-3 float-end">Próximo ></a>
+                          <button type="submit" class="btn btn-dark w-auto mb-3 float-end">Próximo ></button>
                         </div>
                       </div>
                     </form>
@@ -75,12 +75,12 @@ if (isset($_SESSION['id'])) {
         <!-- Mobile -->
         <div class="col-12 d-lg-none d-block">
           <div class="row w-100">
-            <form action="">
+            <form action="controladores/recuperacao-senha/verificar-email.php" method="POST">
               <h3 class="mb-1 text-center">Esqueceu sua senha?</h3>
               <p class="mb-5 text-secondary text-center">Sem problemas, iremos enviar instruções para troca-la</p>
               <div class="mb-5">
-                <label for="email-input" class="form-label mb-0">Email</label>
-                <input type="email" class="form-control rounded-3 border-2" id="mobile-email-input" placeholder="Email" required>
+                <label for="mobile-email-input" class="form-label mb-0">Email</label>
+                <input type="email" class="form-control rounded-3 border-2" id="mobile-email-input" name="email" placeholder="Email" required>
               </div>
               <div class="row">
                 <div class="col">
@@ -88,7 +88,7 @@ if (isset($_SESSION['id'])) {
                     < Voltar</a>
                 </div>
                 <div class="col">
-                  <a href="sign-in-code-senha.php" class="btn btn-dark w-auto mb-3 float-end">Próximo ></a>
+                  <button type="submit" class="btn btn-dark w-auto mb-3 float-end">Próximo ></button>
                 </div>
               </div>
             </form>

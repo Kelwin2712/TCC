@@ -32,17 +32,17 @@ if (isset($_SESSION['id'])) {
               <div class="row h-100 g-0">
                 <div class="col-6 px-5 py-4 d-flex align-items-center">
                   <div class="row w-100 h-100 d-flex align-items-center">
-                    <form action="" class="w-100 h-100 d-flex flex-column justify-content-between">
+                    <form action="controladores/recuperacao-senha/verificar-codigo.php" method="POST" class="w-100 h-100 d-flex flex-column justify-content-between">
                       <div class="row mt-5">
                         <h3 class="mb-1 text-center">Insira o código</h3>
                         <p class="mb-5 text-secondary text-center">Coloque o código recebido no email</p>
                       </div>
                       <div class="row mb-5 px-lg-2 px-xxl-4">
                         <div class="input-group rounded-3">
-                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-1" required>
-                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-2" required>
-                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-3" required>
-                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-4" required>
+                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-1" name="num1" required>
+                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-2" name="num2" required>
+                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-3" name="num3" required>
+                          <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-4" name="num4" required>
                         </div>
                       </div>
                       <div class="row">
@@ -51,7 +51,7 @@ if (isset($_SESSION['id'])) {
                             < Voltar</a>
                         </div>
                         <div class="col">
-                          <a href="sign-in-code-senha.php" class="btn btn-dark w-auto mb-3 float-end">Próximo ></a>
+                          <button type="submit" class="btn btn-dark w-auto mb-3 float-end">Próximo ></button>
                         </div>
                       </div>
                     </form>
@@ -79,17 +79,17 @@ if (isset($_SESSION['id'])) {
         <!-- Mobile -->
         <div class="col-12 d-lg-none d-block">
           <div class="row w-100 h-100 d-flex align-items-center">
-            <form action="" class="w-100 h-100 d-flex flex-column justify-content-between">
+            <form action="controladores/recuperacao-senha/verificar-codigo.php" method="POST" class="w-100 h-100 d-flex flex-column justify-content-between">
               <div class="row mt-5">
                 <h3 class="mb-1 text-center">Insira o código</h3>
                 <p class="mb-5 text-secondary text-center">Coloque o código recebido no email</p>
               </div>
               <div class="row mb-5 px-lg-2 px-xxl-4">
                 <div class="input-group rounded-3">
-                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-1" required>
-                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-2" required>
-                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-3" required>
-                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-4" required>
+                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-1" name="num1" required>
+                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-2" name="num2" required>
+                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-3" name="num3" required>
+                  <input type="text" class="form-control py-2 code text-center fs-1 fw-semibold border-2" maxlength="1" id="num-4" name="num4" required>
                 </div>
               </div>
               <div class="row">
@@ -98,7 +98,7 @@ if (isset($_SESSION['id'])) {
                     < Voltar</a>
                 </div>
                 <div class="col">
-                  <a href="sign-in-code-senha.php" class="btn btn-dark w-auto mb-3 float-end">Próximo ></a>
+                  <button type="submit" class="btn btn-dark w-auto mb-3 float-end">Próximo ></button>
                 </div>
               </div>
             </form>

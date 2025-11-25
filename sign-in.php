@@ -38,7 +38,7 @@ if (isset($_SESSION['id'])) {
                       <p class="mb-5 text-secondary text-center">Utilize o seu email para ter acesso</p>
                       <div class="mb-3">
                         <label for="email-input" class="form-label mb-0">Email</label>
-                        <input type="email" class="form-control rounded-3 border-2" id="email-input" name="email" placeholder="Email" required <?php if (isset(
+                        <input type="email" autocomplete="off" class="form-control rounded-3 border-2" id="email-input" name="email" placeholder="Email" required <?php if (isset(
     $_SESSION['email'])) {echo 'value="'.$_SESSION['email'].'"'; unset($_SESSION['email']);}?>>
                       </div>
                       <div class="mb-1">
